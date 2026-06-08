@@ -1,0 +1,8 @@
+console::sysinit:/etc/init.d/rcS
+#ttyS0::respawn:/sbin/getty -n -l/bin/sh -L ttyS0 115200 vt100 # GENERIC_SERIAL
+ttymxc0::respawn:/sbin/getty -n -l/bin/sh -L ttymxc0 115200 vt100
+::askfirst:-/bin/sh
+::restart:/sbin/init
+::ctrlaltdel:/sbin/reboot
+#::shutdown:bin/umount -a -r
+::shutdown:/script/after_shutdown.sh

@@ -1,0 +1,34 @@
+#!/bin/sh
+. /etc/profile
+umask 022
+echo "----------------start ssh----------------"
+mkdir /dev/pts
+mount -a
+dropbear
+/bin/busybox telnetd -l /bin/sh -p 23 &
+echo "---------------Start mdev-------------"
+echo /sbin/mdev>/proc/sys/kernel/hotplug
+mdev -s
+echo "-------------up network--------------"
+ifconfig lo up
+echo "**************************************"
+echo "CPC200-CCPA  kernel `uname -r`"
+echo "**************************************"
+/bin/hostname -F /etc/hostname
+echo Software Version: `cat /etc/software_version`
+echo "Start Main Service!!!"
+/script/start_main_service.sh &
+
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+echo 1 > /proc/sys/net/ipv4/tcp_orphan_retries   #for FIN_WAIT1
+#for recv buf size
+echo 16777216 > /proc/sys/net/core/rmem_max
+echo 2097152 > /proc/sys/net/core/rmem_default
+echo 16777216 > /proc/sys/net/core/wmem_max
+echo 2097152 > /proc/sys/net/core/wmem_default
+echo 4096 87380 16777216 > /proc/sys/net/ipv4/tcp_rmem
+echo 4096 65536 16777216 > /proc/sys/net/ipv4/tcp_wmem
+echo 10000000 10000000 10000000 > /proc/sys/net/ipv4/tcp_mem
+echo 65536 > /proc/sys/net/core/netdev_max_backlog
+echo 0 > /proc/sys/net/ipv4/tcp_timestamps
+echo 1 > /proc/sys/vm/overcommit_memory
