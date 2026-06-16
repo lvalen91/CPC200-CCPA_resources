@@ -19,6 +19,7 @@ centralized documentation, and binary patches.
 | `custom/scripts/` | Custom scripts / script changes |
 | `custom/patches/` | Binary patches - WIP |
 | `custom/docs/` | Custom-firmware docs (USB-NCM quick start, etc.) |
+| **`web_interface/`** | Replacement web UI for the adapter's Boa config server — vanilla-JS drop-in (~70 KB) + SSH installer + unpacked OEM backup; requires the SSH custom firmware. See [`documentation/01_Firmware_Architecture/web_interface.md`](documentation/01_Firmware_Architecture/web_interface.md) |
 | **`flash_dumps/`** | Raw 16 MB SPI flash IC dumps, date-versioned (stock + post-custom `.ncm`) |
 | **`documentation/`** | Centralized research docs (numbered sections + `_evidence/`, `_index/`) |
 | **`hardware/`** | Device reference: `cpc200-ccpa_spec.md`, `MX25L12835F_datasheet.pdf`, `photos/` |
