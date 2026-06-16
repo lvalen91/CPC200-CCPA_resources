@@ -1,3 +1,15 @@
-custom_firmware/.DS_Store
+# macOS Finder artifacts — matched at ANY depth (a bare pattern with no slash
+# applies in every directory, so one entry covers the whole repo)
 .DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.fseventsd
+.DocumentRevisions-V100
+.TemporaryItems
+.VolumeIcon.icns
+
+# tooling
 .serena/

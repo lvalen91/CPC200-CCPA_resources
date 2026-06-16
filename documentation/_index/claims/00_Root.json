@@ -1,0 +1,2550 @@
+{
+ "cluster": "00_Root",
+ "method": "re-synced 1:1 to current documentation",
+ "generated_from": [
+  "CPC200-CCPA_SSH_over_USB_NCM.md",
+  "README.md"
+ ],
+ "claim_count": 221,
+ "claims": [
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#1",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 1,
+   "statement": "The method provides a full root shell on the Carlinkit CPC200-CCPA / A15W adapter's Linux rootfs over the USB cable only, with no Wi-Fi association required.",
+   "topic": "ssh-over-usb-overview",
+   "source_lines": "3",
+   "confidence": "high",
+   "signals": [],
+   "quote": "a full root shell on the adapter's Linux rootfs over the **USB cable only** — no Wi‑Fi association required"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#2",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 2,
+   "statement": "The adapter exposes a USB CDC-NCM ('USB Ethernet') gadget; the host gets a network interface on the same link, and the adapter's dropbear SSH daemon (listening on all interfaces) is reachable over it.",
+   "topic": "cdc-ncm-gadget",
+   "source_lines": "3",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The adapter exposes a USB CDC‑NCM (\"USB Ethernet\") gadget; your host gets a network interface on the same link, and the adapter's `dropbear` SSH daemon (already listening on all interfaces) is reachable over it."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#3",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 3,
+   "statement": "Verified live on 2026-05-30 with firmware build 2025.09.26.",
+   "topic": "firmware-version",
+   "source_lines": "5",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "Verified live on 2026‑05‑30: firmware build `2025.09.26`"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#4",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 4,
+   "statement": "The kernel is 3.14.52+g94d07bb (armv7l architecture).",
+   "topic": "kernel-version",
+   "source_lines": "5",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "kernel `3.14.52+g94d07bb` (armv7l)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#5",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 5,
+   "statement": "The adapter hostname is sk_mainboard.",
+   "topic": "hostname",
+   "source_lines": "5",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "hostname `sk_mainboard`"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#6",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 6,
+   "statement": "The verification host was macOS (Apple Silicon); the same approach works on Linux; Windows needs a CDC-NCM driver.",
+   "topic": "host-platform",
+   "source_lines": "5",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "Host: macOS (Apple Silicon). The same approach works on Linux; Windows needs a CDC‑NCM driver (see notes)."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#7",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 7,
+   "statement": "After arming, you connect from the host with: ssh root@192.168.50.2.",
+   "topic": "ssh-connection",
+   "source_lines": "12",
+   "confidence": "high",
+   "signals": [],
+   "quote": "On the adapter (one-time per boot), then from the host:  ssh root@192.168.50.2"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#8",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 8,
+   "statement": "Everything in the procedure is volatile (RAM/sysfs/tmp); a reboot restores normal CarPlay/Android Auto operation.",
+   "topic": "volatility",
+   "source_lines": "14",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Everything is volatile (RAM/sysfs/tmp) — a **reboot restores normal CarPlay/Android Auto operation**."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#9",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 9,
+   "statement": "The adapter has two USB device controllers (ChipIdea) and two Android-gadget instances.",
+   "topic": "usb-controllers",
+   "source_lines": "20",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The adapter has **two USB device controllers** (ChipIdea) and **two Android‑gadget instances**"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#10",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 10,
+   "statement": "The sysfs gadget class /sys/class/android_usb_accessory/android0 maps to controller ci_hdrc.1 and is the external port (the plug that goes into the car/host); its default state is AOA 'accessory' gadget with VID 1314 PID 1521 ('Auto Box').",
+   "topic": "external-gadget",
+   "source_lines": "24",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`/sys/class/android_usb_accessory/android0` | `ci_hdrc.1` | **external** port (the plug that goes into the car / your host) | AOA \"accessory\" gadget, VID `1314` PID `1521` (\"Auto Box\")"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#11",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 11,
+   "statement": "The sysfs gadget class /sys/class/android_usb/android0 maps to controller ci_hdrc.0 and is the phone-side port; its default state is an iap2,ncm composite with VID 08e4 PID 01c0 (only active with a phone).",
+   "topic": "phone-gadget",
+   "source_lines": "25",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`/sys/class/android_usb/android0` | `ci_hdrc.0` | phone‑side port | `iap2,ncm` composite, VID `08e4` PID `01c0` (only active with a phone)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#12",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 12,
+   "statement": "A userspace daemon ARMadb-driver is started by /script/start_main_service.sh, which spawns /script/phone_link_deamon.sh CarPlay start.",
+   "topic": "armadb-driver",
+   "source_lines": "27",
+   "confidence": "high",
+   "signals": [],
+   "quote": "A userspace daemon, **`ARMadb-driver`** (started by `/script/start_main_service.sh`, which spawns `/script/phone_link_deamon.sh CarPlay start`)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#13",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 13,
+   "statement": "ARMadb-driver continuously cycles the external gadget looking for a CarPlay head unit or Android Auto host; a generic computer is neither, so the port stays in accessory/AOA mode and the host never sees an Ethernet interface.",
+   "topic": "gadget-cycling",
+   "source_lines": "27",
+   "confidence": "high",
+   "signals": [],
+   "quote": "continuously **cycles the external gadget** looking for a CarPlay head unit or an Android Auto host. A generic computer is neither, so the port stays in accessory/AOA mode and your host never sees an Ethernet interface."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#14",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 14,
+   "statement": "The f_ncm function binds cleanly on either gadget.",
+   "topic": "f_ncm",
+   "source_lines": "30",
+   "confidence": "high",
+   "signals": [],
+   "quote": "the `f_ncm` function binds cleanly on either gadget"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#15",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 15,
+   "statement": "/script/start_ncm.sh assigns ncm0 = 192.168.50.2/24 at boot.",
+   "topic": "ncm0-ip",
+   "source_lines": "31",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`/script/start_ncm.sh` already assigns **`ncm0 = 192.168.50.2/24`** at boot"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#16",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 16,
+   "statement": "dropbear listens on 0.0.0.0:22 and :::22, so it answers on ncm0 too.",
+   "topic": "dropbear",
+   "source_lines": "32",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`dropbear` listens on `0.0.0.0:22` **and** `:::22`, so it answers on `ncm0` too"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#17",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 17,
+   "statement": "The overall task is to stop the cycler, switch the external gadget to NCM, and hand the host an IP.",
+   "topic": "approach-summary",
+   "source_lines": "34",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**stop the cycler, switch the external gadget to NCM, hand the host an IP.**"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#18",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 18,
+   "statement": "A control channel to the adapter is needed to issue setup commands the first time; easiest is the adapter's own Wi-Fi AP.",
+   "topic": "prerequisites",
+   "source_lines": "40",
+   "confidence": "high",
+   "signals": [],
+   "quote": "A **control channel to the adapter** to issue the setup commands the first time. Easiest is the adapter's own Wi‑Fi AP"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#19",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 19,
+   "statement": "SSH to the adapter over Wi-Fi is at root@192.168.43.1 with a blank password (just press Enter).",
+   "topic": "wifi-ssh",
+   "source_lines": "41",
+   "confidence": "high",
+   "signals": [],
+   "quote": "SSH: `ssh root@192.168.43.1` (password is **blank** — just press Enter)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#20",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 20,
+   "statement": "On macOS, non-interactive Wi-Fi SSH login uses: sshpass -p '' ssh -o StrictHostKeyChecking=no root@192.168.43.1.",
+   "topic": "wifi-ssh",
+   "source_lines": "41",
+   "confidence": "high",
+   "signals": [],
+   "quote": "On macOS, non‑interactive: `sshpass -p '' ssh -o StrictHostKeyChecking=no root@192.168.43.1`"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#21",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 21,
+   "statement": "Alternatively a serial/UART console can be used as the control channel.",
+   "topic": "prerequisites",
+   "source_lines": "42",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "Or a serial/UART console if you have one."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#22",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 22,
+   "statement": "The adapter must be connected to the host via the USB data cable (the normal connector that plugs into the car).",
+   "topic": "prerequisites",
+   "source_lines": "43",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The adapter connected to your host via the **USB data cable** (the normal connector that plugs into the car)."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#23",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 23,
+   "statement": "sshpass is optional but handy for the blank password; install on macOS via brew install hudochenkov/sshpass/sshpass.",
+   "topic": "prerequisites",
+   "source_lines": "44",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`sshpass` is optional but handy for the blank password (`brew install hudochenkov/sshpass/sshpass`)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#24",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 24,
+   "statement": "The Wi-Fi control channel is only needed once to arm NCM; after that the USB link stands on its own.",
+   "topic": "prerequisites",
+   "source_lines": "46",
+   "confidence": "high",
+   "signals": [],
+   "quote": "You only need the Wi‑Fi control channel **once** to arm NCM. After that the USB link stands on its own."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#25",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 25,
+   "statement": "The arming commands are safe and volatile.",
+   "topic": "arming",
+   "source_lines": "52",
+   "confidence": "high",
+   "signals": [],
+   "quote": "They are safe and volatile."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#26",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 26,
+   "statement": "The gadget cycler must be stopped or it reverts NCM within ~2 seconds; ARMadb-driver is NOT auto-respawned, so killing it makes NCM stick.",
+   "topic": "gadget-cycling",
+   "source_lines": "55",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Stop the gadget cycler (otherwise it reverts NCM within ~2 s).\n#      ARMadb-driver is NOT auto-respawned, so killing it makes NCM stick."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#27",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 27,
+   "statement": "To stop the cycler, run: killall ARMadb-driver ARMiPhoneIAP2 fakeiOSDevice 2>/dev/null and pkill -f phone_link_deamon 2>/dev/null.",
+   "topic": "arming-commands",
+   "source_lines": "57",
+   "confidence": "high",
+   "signals": [],
+   "quote": "killall ARMadb-driver ARMiPhoneIAP2 fakeiOSDevice 2>/dev/null\npkill -f phone_link_deamon 2>/dev/null"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#28",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 28,
+   "statement": "The phone-side composite that owns the ncm0 netdev is released with: echo 0 > /sys/class/android_usb/android0/enable.",
+   "topic": "arming-commands",
+   "source_lines": "60",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Release the phone-side composite that owns the ncm0 netdev.\necho 0 > /sys/class/android_usb/android0/enable"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#29",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 29,
+   "statement": "To switch the external gadget to pure CDC-NCM, set bDeviceClass=239 (0xEF Miscellaneous IAD), bDeviceSubClass=2, bDeviceProtocol=1, functions=ncm, after disabling and then re-enabling via $A/enable, where A=/sys/class/android_usb_accessory/android0.",
+   "topic": "arming-commands",
+   "source_lines": "64",
+   "confidence": "high",
+   "signals": [],
+   "quote": "A=/sys/class/android_usb_accessory/android0\necho 0   > $A/enable\necho 239 > $A/bDeviceClass      # 0xEF Miscellaneous (IAD)\necho 2   > $A/bDeviceSubClass\necho 1   > $A/bDeviceProtocol\necho ncm > $A/functions\necho 1   > $A/enable"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#30",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 30,
+   "statement": "The netdev address is set with: busybox ifconfig ncm0 192.168.50.2 netmask 255.255.255.0 mtu 1500 up.",
+   "topic": "arming-commands",
+   "source_lines": "73",
+   "confidence": "high",
+   "signals": [],
+   "quote": "busybox ifconfig ncm0 192.168.50.2 netmask 255.255.255.0 mtu 1500 up"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#31",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 31,
+   "statement": "Verification: cat /sys/class/android_usb_accessory/android0/functions should return 'ncm'.",
+   "topic": "verification",
+   "source_lines": "79",
+   "confidence": "high",
+   "signals": [],
+   "quote": "cat /sys/class/android_usb_accessory/android0/functions   # -> ncm"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#32",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 32,
+   "statement": "Verification: cat /sys/class/android_usb_accessory/android0/state should return 'CONFIGURED'.",
+   "topic": "verification",
+   "source_lines": "80",
+   "confidence": "high",
+   "signals": [],
+   "quote": "cat /sys/class/android_usb_accessory/android0/state        # -> CONFIGURED"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#33",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 33,
+   "statement": "Verification: cat /sys/class/udc/ci_hdrc.1/state should return 'configured'.",
+   "topic": "verification",
+   "source_lines": "81",
+   "confidence": "high",
+   "signals": [],
+   "quote": "cat /sys/class/udc/ci_hdrc.1/state                         # -> configured"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#34",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 34,
+   "statement": "dmesg should show: android_enable_function: ncm, ncm_function_bind_config MAC: …, and ncm0: HOST MAC <xx>; that HOST MAC is the MAC the host uses for its new interface.",
+   "topic": "verification",
+   "source_lines": "83",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`dmesg` should show: `android_enable_function: ncm`, `ncm_function_bind_config MAC: …`, `ncm0: HOST MAC <xx>`. That `HOST MAC` is the MAC your host will use for its new interface."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#35",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 35,
+   "statement": "By default /etc/udhcpd.conf serves only wlan0 (the 'interface ncm0' line is commented out).",
+   "topic": "udhcpd-config",
+   "source_lines": "87",
+   "confidence": "high",
+   "signals": [],
+   "quote": "By default `/etc/udhcpd.conf` serves **only `wlan0`** (the `interface ncm0` line is commented out)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#36",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 36,
+   "statement": "To serve DHCP on ncm0 without disturbing the Wi-Fi one, start a second independent udhcpd bound to ncm0 using a /tmp/udhcpd_ncm.conf with start 192.168.50.100, end 192.168.50.150, interface ncm0, router 192.168.50.2, subnet 255.255.255.0, dns 192.168.50.2, lease 86400, lease_file /tmp/udhcpd_ncm.leases, pidfile /tmp/udhcpd_ncm.pid, max_leases 20.",
+   "topic": "udhcpd-config",
+   "source_lines": "91",
+   "confidence": "high",
+   "signals": [],
+   "quote": "start       192.168.50.100\nend         192.168.50.150\ninterface   ncm0\nopt router  192.168.50.2\nopt subnet  255.255.255.0\nopt dns     192.168.50.2\nopt lease   86400\nlease_file  /tmp/udhcpd_ncm.leases\npidfile     /tmp/udhcpd_ncm.pid\nmax_leases  20"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#37",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 37,
+   "statement": "The DHCP server is started with: setsid busybox udhcpd -f /tmp/udhcpd_ncm.conf after touching /tmp/udhcpd_ncm.leases.",
+   "topic": "udhcpd-config",
+   "source_lines": "102",
+   "confidence": "high",
+   "signals": [],
+   "quote": "touch /tmp/udhcpd_ncm.leases\nsetsid busybox udhcpd -f /tmp/udhcpd_ncm.conf >/tmp/udhcpd_ncm.log 2>&1 </dev/null &"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#38",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 38,
+   "statement": "Without DHCP you can still connect via IPv6 link-local.",
+   "topic": "connection-options",
+   "source_lines": "105",
+   "confidence": "high",
+   "signals": [],
+   "quote": "(Without this you can still connect via IPv6 link‑local — see §4b.)"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#39",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 39,
+   "statement": "Bouncing the gadget once (echo 0 > $A/enable; sleep 2; echo 1 > $A/enable) makes the host tear down and re-create the interface, triggering a fresh DHCP request that picks up the lease immediately.",
+   "topic": "dhcp-tip",
+   "source_lines": "107",
+   "confidence": "high",
+   "signals": [],
+   "quote": "bouncing the gadget once (`echo 0 > $A/enable; sleep 2; echo 1 > $A/enable`) makes the host tear down and re‑create the interface, which triggers a fresh DHCP request and picks up the lease immediately"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#40",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 40,
+   "statement": "When the NCM gadget enumerates, macOS and modern Linux create a new Ethernet interface automatically with no driver install (both have a built-in CDC-NCM driver).",
+   "topic": "host-driver",
+   "source_lines": "115",
+   "confidence": "high",
+   "signals": [],
+   "quote": "no driver install on macOS or modern Linux — both have a built‑in CDC‑NCM driver"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#41",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 41,
+   "statement": "The new host interface's MAC equals the adapter's 'HOST MAC' from dmesg; on macOS list interfaces with ifconfig -l / ifconfig enX, on Linux with ip -br link.",
+   "topic": "host-interface",
+   "source_lines": "118",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Find the new interface: its MAC equals the adapter's \"HOST MAC\" from dmesg.\n#   macOS: ifconfig -l ; ifconfig enX        Linux: ip -br link"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#42",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 42,
+   "statement": "With the §3.5 DHCP running the host gets an address in 192.168.50.100-150 automatically, then ssh root@192.168.50.2 (blank password).",
+   "topic": "dhcp-connection",
+   "source_lines": "120",
+   "confidence": "high",
+   "signals": [],
+   "quote": "With §3.5 DHCP running it gets 192.168.50.100-150 automatically:\nssh root@192.168.50.2          # password: blank"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#43",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 43,
+   "statement": "To confirm the connection went over USB not Wi-Fi: route -n get 192.168.50.2 | grep interface (macOS, should show the USB enX), and inside the session echo $SSH_CONNECTION should read 192.168.50.100 … 192.168.50.2 22.",
+   "topic": "verification",
+   "source_lines": "125",
+   "confidence": "high",
+   "signals": [],
+   "quote": "route -n get 192.168.50.2 | grep interface   # macOS -> the USB enX\n# inside the session:  echo $SSH_CONNECTION   -> 192.168.50.100 … 192.168.50.2 22"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#44",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 44,
+   "statement": "dropbear listens on IPv6 too, and IPv6 link-local needs no address config (no DHCP, no admin rights).",
+   "topic": "ipv6-link-local",
+   "source_lines": "131",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`dropbear` listens on IPv6 too, and link‑local needs no address config"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#45",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 45,
+   "statement": "The adapter's ncm0 IPv6 link-local address is derived from its MAC, e.g. fe80::c08e:30ff:fe52:e9a3; connect with ssh -6 root@fe80::c08e:30ff:fe52:e9a3%en7 where the host scope is the new enX (e.g. en7 on macOS, enpXsY on Linux).",
+   "topic": "ipv6-link-local",
+   "source_lines": "134",
+   "confidence": "high",
+   "signals": [],
+   "quote": "adapter ncm0 IPv6-LL is derived from its MAC, e.g. fe80::c08e:30ff:fe52:e9a3\n# host interface scope is the new enX (e.g. en7 on macOS, enpXsY on Linux)\nssh -6 root@fe80::c08e:30ff:fe52:e9a3%en7"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#46",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 46,
+   "statement": "The adapter's IPv6-LL value can be obtained with busybox ifconfig ncm0 | grep inet6 over the control channel.",
+   "topic": "ipv6-link-local",
+   "source_lines": "138",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Get the adapter's value with `busybox ifconfig ncm0 | grep inet6` over your control channel."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#47",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 47,
+   "statement": "Static IPv4 on macOS: sudo ifconfig en7 192.168.50.1 netmask 255.255.255.0 up; on Linux: sudo ip addr add 192.168.50.1/24 dev enpXsY && sudo ip link set enpXsY up; then ssh root@192.168.50.2.",
+   "topic": "static-ipv4",
+   "source_lines": "143",
+   "confidence": "high",
+   "signals": [],
+   "quote": "sudo ifconfig en7 192.168.50.1 netmask 255.255.255.0 up   # macOS\nsudo ip addr add 192.168.50.1/24 dev enpXsY && sudo ip link set enpXsY up  # Linux\nssh root@192.168.50.2"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#48",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 48,
+   "statement": "Windows doesn't ship a generic CDC-NCM class driver; either install a CDC-NCM/usb_ncm INF or have the adapter present RNDIS instead (echo rndis > $A/functions) which Windows binds natively.",
+   "topic": "windows",
+   "source_lines": "150",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Windows doesn't ship a generic CDC‑NCM class driver. Either install a CDC‑NCM/usb_ncm INF, or have the adapter present **RNDIS** instead (`echo rndis > $A/functions`) which Windows binds natively."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#49",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 49,
+   "statement": "With RNDIS the adapter appears as a 'USB Ethernet/RNDIS Gadget' NIC on Windows; use DHCP or static 192.168.50.1.",
+   "topic": "windows",
+   "source_lines": "150",
+   "confidence": "high",
+   "signals": [],
+   "quote": "the adapter appears as a \"USB Ethernet/RNDIS Gadget\" NIC; use DHCP (§3.5) or static `192.168.50.1`"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#50",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 50,
+   "statement": "macOS does not support RNDIS; keep ncm for Apple hosts.",
+   "topic": "windows",
+   "source_lines": "150",
+   "confidence": "high",
+   "signals": [],
+   "quote": "macOS does **not** support RNDIS — keep `ncm` for Apple hosts."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#51",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 51,
+   "statement": "To restore normal operation, run reboot on the adapter; boot re-runs start_main_service / start_iap2_ncm / start_ncm.",
+   "topic": "restore",
+   "source_lines": "159",
+   "confidence": "high",
+   "signals": [],
+   "quote": "reboot          # on the adapter — boot re-runs start_main_service / start_iap2_ncm / start_ncm"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#52",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 52,
+   "statement": "There is no clean 'undo' short of reboot, because killing ARMadb-driver tears down the projection state machine.",
+   "topic": "restore",
+   "source_lines": "161",
+   "confidence": "high",
+   "signals": [],
+   "quote": "There is no clean \"undo\" short of reboot, because killing `ARMadb-driver` tears down the projection state machine."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#53",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 53,
+   "statement": "start_main_service.sh runs 'test -e /script/custom_init.sh && /script/custom_init.sh' early in boot; a custom_init.sh could arm a management NCM link automatically.",
+   "topic": "persistence",
+   "source_lines": "167",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`start_main_service.sh` runs `test -e /script/custom_init.sh && /script/custom_init.sh` early in boot. A `custom_init.sh` could arm a management NCM link automatically."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#54",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 54,
+   "statement": "The external port ci_hdrc.1 is single-gadget: a dedicated management-NCM conflicts with the CarPlay/AOA gadget on that same port; both cannot run simultaneously unless NCM is composited into the projection gadget (e.g. iap2,ncm or rndis,ncm multifunction) or NCM is only armed when not actively projecting.",
+   "topic": "persistence-caveat",
+   "source_lines": "168",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The external port `ci_hdrc.1` is single‑gadget: a dedicated management‑NCM **conflicts** with the CarPlay/AOA gadget the box wants on that same port. You can't have both simultaneously unless NCM is **composited into** the projection gadget"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#55",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 55,
+   "statement": "/script may live on a read-only rootfs; persisting a file there can require remounting rw or repacking firmware, and the A15W image is AES-encrypted.",
+   "topic": "persistence-caveat",
+   "source_lines": "169",
+   "confidence": "high",
+   "signals": [
+    "hedging"
+   ],
+   "quote": "`/script` may live on a read‑only rootfs; persisting a file there can require remounting rw or repacking firmware (the A15W image is AES‑encrypted — see your firmware tooling)."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#56",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 56,
+   "statement": "During a normal wired-CarPlay session against a real head unit, the box brings up iap2,ncm and ncm0 carries the CarPlay IPv6 session; because dropbear listens on ncm0, SSH over USB is reachable from the head-unit side with no modification and no Wi-Fi, the head unit being the NCM peer.",
+   "topic": "head-unit-ssh",
+   "source_lines": "171",
+   "confidence": "high",
+   "signals": [],
+   "quote": "during a **normal wired‑CarPlay session against a real head unit**, the box already brings up `iap2,ncm` and `ncm0` carries the CarPlay IPv6 session. Because `dropbear` is listening on `ncm0`, SSH over USB is reachable **from the head‑unit side with no modification and no Wi‑Fi at all**"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#57",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 57,
+   "statement": "Troubleshooting: NCM flips back to 'Auto Box' after ~2 s when ARMadb-driver is still running; fix with killall ARMadb-driver and pkill -f phone_link_deamon; it is not auto-respawned.",
+   "topic": "troubleshooting",
+   "source_lines": "179",
+   "confidence": "high",
+   "signals": [],
+   "quote": "NCM flips back to \"Auto Box\" after ~2 s | `ARMadb-driver` still running — `killall ARMadb-driver` (and `pkill -f phone_link_deamon`). It is **not** auto‑respawned."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#58",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 58,
+   "statement": "Troubleshooting: if echo 1 > .../enable reads back 0, the other gadget still holds ncm0; run echo 0 > /sys/class/android_usb/android0/enable first.",
+   "topic": "troubleshooting",
+   "source_lines": "180",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`echo 1 > .../enable` reads back `0` | The other gadget still holds `ncm0`. Run `echo 0 > /sys/class/android_usb/android0/enable` first (§3.2)."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#59",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 59,
+   "statement": "Troubleshooting: if the host interface appears but stays on 169.254.x / no IP, there is no DHCP on ncm0; start udhcpd and bounce the gadget, or use IPv6-LL / static IPv4.",
+   "topic": "troubleshooting",
+   "source_lines": "181",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Host interface appears but stays on `169.254.x` / no IP | No DHCP on `ncm0`. Start udhcpd (§3.5) and bounce the gadget"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#60",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 60,
+   "statement": "Troubleshooting: if no new interface appears on the host, check state is CONFIGURED and ci_hdrc.1 state is configured, replug the USB cable, and on Windows use RNDIS.",
+   "topic": "troubleshooting",
+   "source_lines": "182",
+   "confidence": "high",
+   "signals": [],
+   "quote": "No new interface on the host at all | Check `cat .../state` is `CONFIGURED` and `cat /sys/class/udc/ci_hdrc.1/state` is `configured`; replug the USB cable; on Windows use RNDIS (§4d)."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#61",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 61,
+   "statement": "Troubleshooting: 'busybox udhcpd: not found' occurs because it's a busybox applet; call it as 'busybox udhcpd …', not 'udhcpd'.",
+   "topic": "troubleshooting",
+   "source_lines": "183",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`busybox udhcpd: not found` | It's a busybox applet — call it as `busybox udhcpd …`, not `udhcpd`."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#62",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 62,
+   "statement": "The .50.x subnet only exists on the USB-NCM link, so ssh root@192.168.50.2 and checking echo $SSH_CONNECTION proves the connection is over USB.",
+   "topic": "troubleshooting",
+   "source_lines": "184",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`ssh root@192.168.50.2` (the `.50.x` subnet only exists on the USB‑NCM link) and check `echo $SSH_CONNECTION`."
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#63",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 63,
+   "statement": "A one-shot helper script can be saved as /tmp/ncm_ssh.sh and run with sh /tmp/ncm_ssh.sh; it includes a re-DHCP nudge (echo 0 > $A/enable; sleep 2; echo ncm > $A/functions; echo 1 > $A/enable) and prints the resulting state.",
+   "topic": "helper-script",
+   "source_lines": "190",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Save as `/tmp/ncm_ssh.sh`, then `sh /tmp/ncm_ssh.sh`"
+  },
+  {
+   "gid": "CPC200-CCPA_SSH_over_USB_NCM.md#64",
+   "file": "CPC200-CCPA_SSH_over_USB_NCM.md",
+   "local_id": 64,
+   "statement": "After arming, connecting from the host is done with ssh root@192.168.50.2 using a blank password, giving a root shell over USB without Wi-Fi.",
+   "topic": "ssh-connection",
+   "source_lines": "225",
+   "confidence": "high",
+   "signals": [],
+   "quote": "on the host: **`ssh root@192.168.50.2`** (blank password). Done — root shell over USB, no Wi‑Fi."
+  },
+  {
+   "gid": "README.md#1",
+   "file": "README.md",
+   "local_id": 1,
+   "statement": "Command 500 (0x1F4) is RequestVideoFocus, A→H, adapter requests host display video",
+   "topic": "command-500-requestvideofocus",
+   "source_lines": "42",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 500 | RequestVideoFocus | A→H | Adapter requests host display video |"
+  },
+  {
+   "gid": "README.md#2",
+   "file": "README.md",
+   "local_id": 2,
+   "statement": "The firmware binaries analyzed are located at /Users/zeno/Downloads/misc/cpc200_ccpa_firmware_binaries/old_firmware/.",
+   "topic": "references",
+   "source_lines": "1",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Firmware binaries: `/Users/zeno/Downloads/misc/cpc200_ccpa_firmware_binaries/old_firmware/`"
+  },
+  {
+   "gid": "README.md#3",
+   "file": "README.md",
+   "local_id": 3,
+   "statement": "The adapter model is the Carlinkit CPC200-CCPA (A15W), a wireless CarPlay/Android Auto adapter.",
+   "topic": "hardware-model",
+   "source_lines": "3",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**Model:** Carlinkit CPC200-CCPA (A15W) Wireless CarPlay/Android Auto Adapter"
+  },
+  {
+   "gid": "README.md#4",
+   "file": "README.md",
+   "local_id": 4,
+   "statement": "The documentation was consolidated on 2026-01-16.",
+   "topic": "meta",
+   "source_lines": "4",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**Consolidated:** 2026-01-16"
+  },
+  {
+   "gid": "README.md#5",
+   "file": "README.md",
+   "local_id": 5,
+   "statement": "Sources for the documentation are firmware extraction, session captures, and live reverse engineering.",
+   "topic": "meta",
+   "source_lines": "5",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**Sources:** Firmware extraction, session captures, and live RE"
+  },
+  {
+   "gid": "README.md#6",
+   "file": "README.md",
+   "local_id": 6,
+   "statement": "The evidence base comprises 25+ controlled capture sessions, deep r2 binary analysis of 7 main executables plus 10 shared libraries, and 40+ analysis documents.",
+   "topic": "meta-evidence",
+   "source_lines": "19",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**Evidence Base:** 25+ controlled capture sessions, deep r2 binary analysis of 7 main executables + 10 shared libraries, 40+ analysis documents"
+  },
+  {
+   "gid": "README.md#7",
+   "file": "README.md",
+   "local_id": 7,
+   "statement": "The CPC200-CCPA is a protocol bridge, not a media endpoint.",
+   "topic": "adapter-role",
+   "source_lines": "25",
+   "confidence": "high",
+   "signals": null,
+   "quote": "The CPC200-CCPA is a **protocol bridge**, not a media endpoint."
+  },
+  {
+   "gid": "README.md#8",
+   "file": "README.md",
+   "local_id": 8,
+   "statement": "In the data flow, the iPhone/Android (CarPlay UI, H.264 encoded) connects via AirPlay/iAP2/AA to the adapter (TUNNEL/forward), which connects via USB to the Host App (DECODER/policy).",
+   "topic": "adapter-role",
+   "source_lines": "28",
+   "confidence": "high",
+   "signals": null,
+   "quote": "iPhone/Android                    Adapter                         Host App"
+  },
+  {
+   "gid": "README.md#9",
+   "file": "README.md",
+   "local_id": 9,
+   "statement": "The adapter performs protocol handshake and authentication.",
+   "topic": "adapter-function",
+   "source_lines": "36",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Protocol handshake and authentication"
+  },
+  {
+   "gid": "README.md#10",
+   "file": "README.md",
+   "local_id": 10,
+   "statement": "The adapter performs session establishment with the phone.",
+   "topic": "adapter-function",
+   "source_lines": "37",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Session establishment with phone"
+  },
+  {
+   "gid": "README.md#11",
+   "file": "README.md",
+   "local_id": 11,
+   "statement": "The adapter forwards H.264 video verbatim with no decode and no transcode.",
+   "topic": "adapter-function-video",
+   "source_lines": "38",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Forward H.264 video verbatim (no decode, no transcode)"
+  },
+  {
+   "gid": "README.md#12",
+   "file": "README.md",
+   "local_id": 12,
+   "statement": "The adapter forwards PCM audio verbatim in the playback direction.",
+   "topic": "adapter-function-audio",
+   "source_lines": "39",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Forward PCM audio verbatim (playback direction)"
+  },
+  {
+   "gid": "README.md#13",
+   "file": "README.md",
+   "local_id": 13,
+   "statement": "The adapter processes microphone audio using WebRTC AGC, AECM echo cancellation, and NS noise suppression.",
+   "topic": "adapter-function-audio",
+   "source_lines": "40",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Process microphone audio (WebRTC AGC, AECM echo cancellation, NS noise suppression)"
+  },
+  {
+   "gid": "README.md#14",
+   "file": "README.md",
+   "local_id": 14,
+   "statement": "The adapter prepends USB headers to data streams.",
+   "topic": "adapter-function",
+   "source_lines": "41",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Prepend USB headers to data streams"
+  },
+  {
+   "gid": "README.md#15",
+   "file": "README.md",
+   "local_id": 15,
+   "statement": "The adapter responds to keyframe requests.",
+   "topic": "adapter-function-video",
+   "source_lines": "42",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Respond to keyframe requests"
+  },
+  {
+   "gid": "README.md#16",
+   "file": "README.md",
+   "local_id": 16,
+   "statement": "The adapter does NOT buffer video for quality.",
+   "topic": "adapter-limitation",
+   "source_lines": "45",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Buffer video for quality"
+  },
+  {
+   "gid": "README.md#17",
+   "file": "README.md",
+   "local_id": 17,
+   "statement": "The adapter does NOT pace or smooth frames.",
+   "topic": "adapter-limitation",
+   "source_lines": "46",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Pace or smooth frames"
+  },
+  {
+   "gid": "README.md#18",
+   "file": "README.md",
+   "local_id": 18,
+   "statement": "The adapter does NOT correct timing or sync.",
+   "topic": "adapter-limitation",
+   "source_lines": "47",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Correct timing or sync"
+  },
+  {
+   "gid": "README.md#19",
+   "file": "README.md",
+   "local_id": 19,
+   "statement": "The adapter does NOT reset the decoder on errors.",
+   "topic": "adapter-limitation",
+   "source_lines": "48",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Reset decoder on errors"
+  },
+  {
+   "gid": "README.md#20",
+   "file": "README.md",
+   "local_id": 20,
+   "statement": "The adapter does NOT compensate for jitter.",
+   "topic": "adapter-limitation",
+   "source_lines": "49",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Compensate for jitter"
+  },
+  {
+   "gid": "README.md#21",
+   "file": "README.md",
+   "local_id": 21,
+   "statement": "The adapter does NOT make video policy decisions.",
+   "topic": "adapter-limitation",
+   "source_lines": "50",
+   "confidence": "high",
+   "signals": null,
+   "quote": "- Make video policy decisions"
+  },
+  {
+   "gid": "README.md#22",
+   "file": "README.md",
+   "local_id": 22,
+   "statement": "All correctness decisions are the host application's responsibility.",
+   "topic": "adapter-role",
+   "source_lines": "52",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**All correctness decisions are the host application's responsibility.**"
+  },
+  {
+   "gid": "README.md#23",
+   "file": "README.md",
+   "local_id": 23,
+   "statement": "The adapter provides raw H.264 NAL units; the host must handle H.264 decoding.",
+   "topic": "host-responsibility",
+   "source_lines": "58",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Raw H.264 NAL units | H.264 decoding |"
+  },
+  {
+   "gid": "README.md#24",
+   "file": "README.md",
+   "local_id": 24,
+   "statement": "The adapter provides USB frame headers with PTS; the host must handle timing policy (or ignore PTS).",
+   "topic": "host-responsibility",
+   "source_lines": "59",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| USB frame headers with PTS | Timing policy (or ignore PTS) |"
+  },
+  {
+   "gid": "README.md#25",
+   "file": "README.md",
+   "local_id": 25,
+   "statement": "The adapter provides passthrough without buffering; the host must handle jitter absorption.",
+   "topic": "host-responsibility",
+   "source_lines": "60",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Passthrough without buffering | Jitter absorption |"
+  },
+  {
+   "gid": "README.md#26",
+   "file": "README.md",
+   "local_id": 26,
+   "statement": "The adapter provides keyframe on request (100-200ms); the host must handle error detection and recovery.",
+   "topic": "host-responsibility",
+   "source_lines": "61",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Keyframe on request (100-200ms) | Error detection and recovery |"
+  },
+  {
+   "gid": "README.md#27",
+   "file": "README.md",
+   "local_id": 27,
+   "statement": "The adapter provides no quality assessment; the host must handle corruption detection and reset.",
+   "topic": "host-responsibility",
+   "source_lines": "62",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| No quality assessment | Corruption detection and reset |"
+  },
+  {
+   "gid": "README.md#28",
+   "file": "README.md",
+   "local_id": 28,
+   "statement": "The adapter is neutral; if video corrupts, the host app's policy is wrong.",
+   "topic": "adapter-role",
+   "source_lines": "64",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**The adapter is neutral. If video corrupts, the host app's policy is wrong.**"
+  },
+  {
+   "gid": "README.md#29",
+   "file": "README.md",
+   "local_id": 29,
+   "statement": "The processor is an NXP i.MX6UL (ARM Cortex-A7, 32-bit).",
+   "topic": "hardware-cpu",
+   "source_lines": "72",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| **Processor** | NXP i.MX6UL (ARM Cortex-A7, 32-bit) |"
+  },
+  {
+   "gid": "README.md#30",
+   "file": "README.md",
+   "local_id": 30,
+   "statement": "The adapter has 128MB of RAM.",
+   "topic": "hardware-ram",
+   "source_lines": "73",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| **RAM** | 128MB |"
+  },
+  {
+   "gid": "README.md#31",
+   "file": "README.md",
+   "local_id": 31,
+   "statement": "The adapter has 16MB of Flash storage.",
+   "topic": "hardware-storage",
+   "source_lines": "74",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| **Storage** | 16MB Flash |"
+  },
+  {
+   "gid": "README.md#32",
+   "file": "README.md",
+   "local_id": 32,
+   "statement": "The WiFi chip is a Realtek RTL88x2CS (5GHz 802.11ac); hardware revisions are known to use others.",
+   "topic": "hardware-wifi",
+   "source_lines": "75",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| **WiFi** | Realtek RTL88x2CS (5GHz 802.11ac); hardware revisions are known to use others |"
+  },
+  {
+   "gid": "README.md#33",
+   "file": "README.md",
+   "local_id": 33,
+   "statement": "The Bluetooth is a Realtek HCI UART supporting BR/EDR and BLE.",
+   "topic": "hardware-bluetooth",
+   "source_lines": "76",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| **Bluetooth** | Realtek HCI UART (BR/EDR + BLE) |"
+  },
+  {
+   "gid": "README.md#34",
+   "file": "README.md",
+   "local_id": 34,
+   "statement": "The USB protocol uses magic 0x55AA55AA, a 16-byte header size, and a maximum payload of 1MB.",
+   "topic": "usb-protocol-framing",
+   "source_lines": "138",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 0x55AA55AA | 16 bytes | 1MB |"
+  },
+  {
+   "gid": "README.md#35",
+   "file": "README.md",
+   "local_id": 35,
+   "statement": "Message type 1 (0x01) is Open: session init with a 28-byte 7×uint32-LE payload [width,height,fps,format,packetMax,boxVersion,phoneMode]; handler ProceessCmdOpen.",
+   "topic": "usb-msgtype-open",
+   "source_lines": "146",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Session init — 28-byte 7×uint32-LE payload `[width,height,fps,format,packetMax,boxVersion,phoneMode]`; handler `ProceessCmdOpen`"
+  },
+  {
+   "gid": "README.md#36",
+   "file": "README.md",
+   "local_id": 36,
+   "statement": "Message type 6 (0x06) is VideoData: H.264 main video frames.",
+   "topic": "usb-msgtype-video",
+   "source_lines": "147",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 6 | 0x06 | VideoData | H.264 main video frames |"
+  },
+  {
+   "gid": "README.md#37",
+   "file": "README.md",
+   "local_id": 37,
+   "statement": "Message type 7 (0x07) is AudioData: PCM audio or commands (1-byte cmd).",
+   "topic": "usb-msgtype-audio",
+   "source_lines": "148",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 7 | 0x07 | AudioData | PCM audio or commands (1-byte cmd) |"
+  },
+  {
+   "gid": "README.md#38",
+   "file": "README.md",
+   "local_id": 38,
+   "statement": "Message type 8 (0x08) is Command: control commands, bidirectional — host→adapter (e.g. 12 keyFrame, 508 nav-screen focus) AND adapter→host (e.g. 18/19 GNSS start/stop, 506/507 audio nav focus), including on wired CarPlay.",
+   "topic": "usb-msgtype-command",
+   "source_lines": "149",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**bidirectional**: host→adapter (e.g. 12 keyFrame, 508 nav-screen focus) AND adapter→host (e.g. 18/19 GNSS start/stop, 506/507 audio nav focus), incl. on wired CarPlay"
+  },
+  {
+   "gid": "README.md#39",
+   "file": "README.md",
+   "local_id": 39,
+   "statement": "Message type 23 (0x17) is MultiTouch: touch input host→adapter with 16-byte payload [float x(0..1), float y(0..1), uint32 action(0=up,1=down,2=move), uint32 fingerId].",
+   "topic": "usb-msgtype-touch",
+   "source_lines": "150",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Touch input host→adapter — 16-byte `[float x(0..1), float y(0..1), uint32 action(0=up,1=down,2=move), uint32 fingerId]`"
+  },
+  {
+   "gid": "README.md#40",
+   "file": "README.md",
+   "local_id": 40,
+   "statement": "Message type 25 (0x19) is BoxSettings: JSON config parsed by ARMadb-driver FUN_00016c20, with a 29-entry map at 0x93f90.",
+   "topic": "usb-msgtype-boxsettings",
+   "source_lines": "151",
+   "confidence": "high",
+   "signals": null,
+   "quote": "JSON config — parsed by ARMadb-driver `FUN_00016c20`, 29-entry map at `0x93f90`"
+  },
+  {
+   "gid": "README.md#41",
+   "file": "README.md",
+   "local_id": 41,
+   "statement": "Message type 41 (0x29) is GnssData: GPS/GNSS to phone (NMEA).",
+   "topic": "usb-msgtype-gnss",
+   "source_lines": "152",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 41 | 0x29 | GnssData | GPS/GNSS to phone (NMEA) |"
+  },
+  {
+   "gid": "README.md#42",
+   "file": "README.md",
+   "local_id": 42,
+   "statement": "Message type 42 (0x2A) is MetaData: plaintext JSON telemetry adapter→host, with a leading uint32 subtype and null-terminated JSON; subtype 1=Media (MediaSongPlayTime, MediaPlayStatus), subtype 200=Navi turn-by-turn (NaviStatus, NaviTimeToDestination, NaviDestinationName, NaviRemainDistance, NaviRoadName).",
+   "topic": "usb-msgtype-metadata",
+   "source_lines": "153",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Plaintext JSON telemetry adapter→host — leading uint32 subtype + null-terminated JSON. Subtype 1=Media (`MediaSongPlayTime`,`MediaPlayStatus`), 200=Navi turn-by-turn"
+  },
+  {
+   "gid": "README.md#43",
+   "file": "README.md",
+   "local_id": 43,
+   "statement": "Message type 44 (0x2C) is NaviVideoData: secondary navigation / instrument-cluster H.264 stream (CarPlay, iOS 13+), using the same 36-byte header as 0x06.",
+   "topic": "usb-msgtype-navivideo",
+   "source_lines": "154",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Secondary navigation / instrument-cluster H.264 stream (CarPlay, iOS 13+). Same 36-byte header as 0x06."
+  },
+  {
+   "gid": "README.md#44",
+   "file": "README.md",
+   "local_id": 44,
+   "statement": "Message type 153 (0x99) is SendFile: flat-file plus HU_* struct upload, staging at /tmp/uploadFileTmp, runs as root.",
+   "topic": "usb-msgtype-sendfile",
+   "source_lines": "155",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Flat-file + `HU_*` struct upload (staging `/tmp/uploadFileTmp`, runs as root)"
+  },
+  {
+   "gid": "README.md#45",
+   "file": "README.md",
+   "local_id": 45,
+   "statement": "Message type 170 (0xAA) is HeartBeat: keep-alive at 2s interval, host→adapter, with 0-byte payload.",
+   "topic": "usb-msgtype-heartbeat",
+   "source_lines": "156",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Keep-alive (2s interval), host→adapter, 0-byte payload"
+  },
+  {
+   "gid": "README.md#46",
+   "file": "README.md",
+   "local_id": 46,
+   "statement": "The 0x17, 0x2A, and 0x2C message-type rows were added 2026-06-14 from macOS-host captures; they were live in every session but missing from the master table.",
+   "topic": "doc-provenance",
+   "source_lines": "158",
+   "confidence": "high",
+   "signals": [
+    "dated finding",
+    "provenance note"
+   ],
+   "quote": "The 0x17 / 0x2A / 0x2C rows above were added 2026-06-14 from macOS-host captures (they were live in every session but missing from this master table)."
+  },
+  {
+   "gid": "README.md#47",
+   "file": "README.md",
+   "local_id": 47,
+   "statement": "Doc provenance note: entries span both the carlink_macOS (macOS host) and carlink_native (Android host) apps plus multiple adapter firmware revisions; some quirks/comments may be host- or firmware-specific and may no longer apply.",
+   "topic": "doc-provenance",
+   "source_lines": "158",
+   "confidence": "medium",
+   "signals": [
+    "staleness note",
+    "hedging"
+   ],
+   "quote": "Some quirks/comments are host- or firmware-specific and may no longer apply. Prefer dated \"Verified findings\" blocks; treat undated claims with caution."
+  },
+  {
+   "gid": "README.md#48",
+   "file": "README.md",
+   "local_id": 48,
+   "statement": "decode_type 2 is 44.1kHz Stereo and is dual-purpose: Commands (13 bytes) OR 44.1kHz audio (non-default, only when mediaSound=0); status VERIFIED.",
+   "topic": "audio-decodetype-2",
+   "source_lines": "164",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "**Dual-purpose:** Commands (13 bytes) OR 44.1kHz audio (non-default, only when `mediaSound=0`)"
+  },
+  {
+   "gid": "README.md#49",
+   "file": "README.md",
+   "local_id": 49,
+   "statement": "decode_type 3 is 8kHz Mono for phone call (narrowband), active for Android Auto phone calls (8kHz narrowband via HFP/SCO), not used by CarPlay (which uses 16kHz).",
+   "topic": "audio-decodetype-3",
+   "source_lines": "165",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Active for Android Auto phone calls (8kHz narrowband via HFP/SCO). Not used by CarPlay (uses 16kHz)."
+  },
+  {
+   "gid": "README.md#50",
+   "file": "README.md",
+   "local_id": 50,
+   "statement": "decode_type 4 is 48kHz Stereo, the standard media audio default for both CarPlay and Android Auto; status VERIFIED.",
+   "topic": "audio-decodetype-4",
+   "source_lines": "166",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "Standard media audio (default for both CarPlay and Android Auto)"
+  },
+  {
+   "gid": "README.md#51",
+   "file": "README.md",
+   "local_id": 51,
+   "statement": "decode_type 5 is 16kHz Mono for voice (Siri, phone calls); status VERIFIED.",
+   "topic": "audio-decodetype-5",
+   "source_lines": "167",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| 5 | 16kHz Mono | Voice (Siri, phone calls) | VERIFIED |"
+  },
+  {
+   "gid": "README.md#52",
+   "file": "README.md",
+   "local_id": 52,
+   "statement": "The adapter is transparent and passes through whatever sample rate the phone negotiates; CarPlay and AA both default to 48kHz (decodeType=4), and 44.1kHz (decodeType=2) only appears when explicitly configured via mediaSound=0.",
+   "topic": "audio-passthrough",
+   "source_lines": "170",
+   "confidence": "high",
+   "signals": null,
+   "quote": "The adapter is transparent — it passes through whatever sample rate the phone negotiates. CarPlay and AA both default to 48kHz (decodeType=4). 44.1kHz (decodeType=2) only appears when explicitly configured via `mediaSound=0`."
+  },
+  {
+   "gid": "README.md#53",
+   "file": "README.md",
+   "local_id": 53,
+   "statement": "decode_type=2 behavior depends on payload size.",
+   "topic": "audio-decodetype-2",
+   "source_lines": "171",
+   "confidence": "high",
+   "signals": null,
+   "quote": "decode_type=2 behavior depends on payload size"
+  },
+  {
+   "gid": "README.md#54",
+   "file": "README.md",
+   "local_id": 54,
+   "statement": "The CallQuality Web UI setting has a firmware bug and does not affect the sample rate.",
+   "topic": "audio-callquality-bug",
+   "source_lines": "173",
+   "confidence": "high",
+   "signals": [
+    "firmware bug"
+   ],
+   "quote": "CallQuality Web UI setting has a **firmware bug** and does not affect sample rate"
+  },
+  {
+   "gid": "README.md#55",
+   "file": "README.md",
+   "local_id": 55,
+   "statement": "audio_type 1 is Main channel, Playback direction.",
+   "topic": "audio-type-1",
+   "source_lines": "177",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 1 | Main | Playback |"
+  },
+  {
+   "gid": "README.md#56",
+   "file": "README.md",
+   "local_id": 56,
+   "statement": "audio_type 2 is Navigation channel, Playback direction (ducking).",
+   "topic": "audio-type-2",
+   "source_lines": "178",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 2 | Navigation | Playback (ducking) |"
+  },
+  {
+   "gid": "README.md#57",
+   "file": "README.md",
+   "local_id": 57,
+   "statement": "audio_type 3 is Microphone channel, Capture direction.",
+   "topic": "audio-type-3",
+   "source_lines": "179",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| 3 | Microphone | Capture |"
+  },
+  {
+   "gid": "README.md#58",
+   "file": "README.md",
+   "local_id": 58,
+   "statement": "Heartbeat must start BEFORE sending initialization messages.",
+   "topic": "heartbeat-timing",
+   "source_lines": "187",
+   "confidence": "high",
+   "signals": [
+    "CRITICAL"
+   ],
+   "quote": "Heartbeat must start **BEFORE** sending initialization messages:"
+  },
+  {
+   "gid": "README.md#59",
+   "file": "README.md",
+   "local_id": 59,
+   "statement": "The initialization sequence is: USB Reset, 3-second wait, Open USB connection, START HEARTBEAT IMMEDIATELY, Send initialization messages, Start reading loop.",
+   "topic": "initialization-sequence",
+   "source_lines": "190",
+   "confidence": "high",
+   "signals": null,
+   "quote": "1. USB Reset\n2. 3-second wait\n3. Open USB connection\n4. START HEARTBEAT IMMEDIATELY  ← Critical\n5. Send initialization messages\n6. Start reading loop"
+  },
+  {
+   "gid": "README.md#60",
+   "file": "README.md",
+   "local_id": 60,
+   "statement": "Failure to start heartbeat before initialization causes cold start failures, taking about 11.7 seconds to disconnect.",
+   "topic": "heartbeat-timing",
+   "source_lines": "198",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Failure to do this causes cold start failures (~11.7 seconds to disconnect)."
+  },
+  {
+   "gid": "README.md#61",
+   "file": "README.md",
+   "local_id": 61,
+   "statement": "There are 15 verified audio commands in the range 0x01-0x10.",
+   "topic": "audio-commands",
+   "source_lines": "202",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "15 verified audio commands (0x01-0x10):"
+  },
+  {
+   "gid": "README.md#62",
+   "file": "README.md",
+   "local_id": 62,
+   "statement": "No SIRI_STOP command exists; sessions end via OUTPUT_STOP.",
+   "topic": "audio-commands",
+   "source_lines": "203",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**No SIRI_STOP exists** - sessions end via OUTPUT_STOP"
+  },
+  {
+   "gid": "README.md#63",
+   "file": "README.md",
+   "local_id": 63,
+   "statement": "NAVI_STOP (0x08) activates Siri mode (a misleading name).",
+   "topic": "audio-commands",
+   "source_lines": "204",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**NAVI_STOP (0x08)** activates Siri mode (misleading name)"
+  },
+  {
+   "gid": "README.md#64",
+   "file": "README.md",
+   "local_id": 64,
+   "statement": "NAVI_COMPLETE (0x10) signals navigation prompt finished.",
+   "topic": "audio-commands",
+   "source_lines": "205",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**NAVI_COMPLETE (0x10)** signals navigation prompt finished"
+  },
+  {
+   "gid": "README.md#65",
+   "file": "README.md",
+   "local_id": 65,
+   "statement": "To request an IDR keyframe, send the Frame command (0x0C); the adapter responds within 100-200ms with SPS + PPS + IDR frame.",
+   "topic": "keyframe-recovery",
+   "source_lines": "209",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Send Frame command (0x0C) to request IDR. Adapter responds within 100-200ms with SPS + PPS + IDR frame."
+  },
+  {
+   "gid": "README.md#66",
+   "file": "README.md",
+   "local_id": 66,
+   "statement": "Video session start: 100% begin with SPS+PPS+IDR, across 10/10 sessions.",
+   "topic": "video-stats",
+   "source_lines": "215",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Session start | 100% begin with SPS+PPS+IDR | 10/10 sessions |"
+  },
+  {
+   "gid": "README.md#67",
+   "file": "README.md",
+   "local_id": 67,
+   "statement": "SPS/PPS bundling: always with IDR, never standalone, across 538+ IDRs.",
+   "topic": "video-stats",
+   "source_lines": "216",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| SPS/PPS bundling | Always with IDR, never standalone | 538+ IDRs |"
+  },
+  {
+   "gid": "README.md#68",
+   "file": "README.md",
+   "local_id": 68,
+   "statement": "IDR interval: median 2000ms (range 83-2117ms), from 538 intervals.",
+   "topic": "video-stats",
+   "source_lines": "217",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| IDR interval | Median 2000ms (range 83-2117ms) | 538 intervals |"
+  },
+  {
+   "gid": "README.md#69",
+   "file": "README.md",
+   "local_id": 69,
+   "statement": "Jitter standard deviation is 25.6ms (85% within ±40ms), from 215K frames.",
+   "topic": "video-stats",
+   "source_lines": "218",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Jitter std dev | 25.6ms (85% within ±40ms) | 215K frames |"
+  },
+  {
+   "gid": "README.md#70",
+   "file": "README.md",
+   "local_id": 70,
+   "statement": "Frame sizes: IDR averages 49KB, P-frames average 23KB, from 215K frames.",
+   "topic": "video-stats",
+   "source_lines": "219",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Frame sizes | IDR: 49KB avg, P: 23KB avg | 215K frames |"
+  },
+  {
+   "gid": "README.md#71",
+   "file": "README.md",
+   "local_id": 71,
+   "statement": "Verification status: USB Protocol is VERIFIED with evidence from 25+ capture sessions.",
+   "topic": "verification-status",
+   "source_lines": "242",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| USB Protocol | VERIFIED | 25+ capture sessions |"
+  },
+  {
+   "gid": "README.md#72",
+   "file": "README.md",
+   "local_id": 72,
+   "statement": "Verification status: Audio Commands is VERIFIED with evidence from 21 controlled sessions.",
+   "topic": "verification-status",
+   "source_lines": "243",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| Audio Commands | VERIFIED | 21 controlled sessions |"
+  },
+  {
+   "gid": "README.md#73",
+   "file": "README.md",
+   "local_id": 73,
+   "statement": "Verification status: Video Protocol is VERIFIED with evidence from frame timing analysis.",
+   "topic": "verification-status",
+   "source_lines": "244",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| Video Protocol | VERIFIED | Frame timing analysis |"
+  },
+  {
+   "gid": "README.md#74",
+   "file": "README.md",
+   "local_id": 74,
+   "statement": "Verification status: Initialization is VERIFIED with evidence from cold start testing.",
+   "topic": "verification-status",
+   "source_lines": "245",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| Initialization | VERIFIED | Cold start testing |"
+  },
+  {
+   "gid": "README.md#75",
+   "file": "README.md",
+   "local_id": 75,
+   "statement": "Verification status: GPS/GNSS Pipeline is VERIFIED with evidence from binary analysis plus live config testing.",
+   "topic": "verification-status",
+   "source_lines": "246",
+   "confidence": "high",
+   "signals": [
+    "VERIFIED"
+   ],
+   "quote": "| GPS/GNSS Pipeline | VERIFIED | Binary analysis + live config testing |"
+  },
+  {
+   "gid": "README.md#76",
+   "file": "README.md",
+   "local_id": 76,
+   "statement": "Verification status: Crypto Stack is DOCUMENTED with evidence from binary analysis.",
+   "topic": "verification-status",
+   "source_lines": "247",
+   "confidence": "high",
+   "signals": [
+    "DOCUMENTED"
+   ],
+   "quote": "| Crypto Stack | DOCUMENTED | Binary analysis |"
+  },
+  {
+   "gid": "README.md#77",
+   "file": "README.md",
+   "local_id": 77,
+   "statement": "config_key_analysis.md analyzes 106 config keys classified as 85 ALIVE / 12 DEAD / 9 PASS-THROUGH.",
+   "topic": "config-keys",
+   "source_lines": "127",
+   "confidence": "high",
+   "signals": null,
+   "quote": "config_key_analysis.md      # 106 config keys deep analysis (85 ALIVE / 12 DEAD / 9 PASS-THROUGH)"
+  },
+  {
+   "gid": "README.md#78",
+   "file": "README.md",
+   "local_id": 78,
+   "statement": "iap2_message_catalog.md documents the iAP2 0x5201/0x5202 RouteGuidance field map based on Apple R14G17 SDK plus RE.",
+   "topic": "iap2-catalog",
+   "source_lines": "103",
+   "confidence": "high",
+   "signals": null,
+   "quote": "iap2_message_catalog.md      # iAP2 0x5201/0x5202 RouteGuidance field map (Apple R14G17 SDK + RE)"
+  },
+  {
+   "gid": "README.md#79",
+   "file": "README.md",
+   "local_id": 79,
+   "statement": "carkit_ios26_master.md documents the iOS 26.5 CarPlay/CarKit master capability surface with 60+ feature flags, gating model, and patching recipes, 3-agent verified.",
+   "topic": "carkit-ios26",
+   "source_lines": "105",
+   "confidence": "high",
+   "signals": [
+    "3-agent verified"
+   ],
+   "quote": "iOS 26.5 CarPlay/CarKit master capability surface — 60+ feature flags, gating model, patching recipes, 3-agent verified"
+  },
+  {
+   "gid": "README.md#80",
+   "file": "README.md",
+   "local_id": 80,
+   "statement": "command_ids.md documents the Command ID reference for 0x08 payloads.",
+   "topic": "command-ids",
+   "source_lines": "106",
+   "confidence": "high",
+   "signals": null,
+   "quote": "command_ids.md              # Command ID reference (0x08 payloads)"
+  },
+  {
+   "gid": "README.md#81",
+   "file": "README.md",
+   "local_id": 81,
+   "statement": "iap2_sdk_delta_r14g17_to_ios26.md is a hybrid changelog from R14G17 (2017) to iOS 26.5 covering post-2017 fields plus capability negotiation.",
+   "topic": "iap2-sdk-delta",
+   "source_lines": "104",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Hybrid changelog R14G17 (2017) → iOS 26.5 — covers post-2017 fields + capability negotiation"
+  },
+  {
+   "gid": "README.md#82",
+   "file": "README.md",
+   "local_id": 82,
+   "statement": "External reference: ludwig-v/wireless-carplay-dongle-reverse-engineering GitHub repository.",
+   "topic": "external-ref",
+   "source_lines": "269",
+   "confidence": "high",
+   "signals": null,
+   "quote": "[ludwig-v/wireless-carplay-dongle-reverse-engineering](https://github.com/ludwig-v/wireless-carplay-dongle-reverse-engineering)"
+  },
+  {
+   "gid": "README.md#83",
+   "file": "README.md",
+   "local_id": 83,
+   "statement": "Change log 2026-06-13: Android Auto ViewArea/SafeArea binary-confirmed via radare2 — ARMAndroidAuto's embedded VideoConfigData.proto descriptor (aasdk openauto-v2 SDK) defines VideoConfig with only video_resolution, video_fps, margin_width, margin_height, density, additional_depth, real_density — no ui_config, no content_insets, no Insets.",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": [
+    "binary-confirmed",
+    "corrects an earlier same-day draft"
+   ],
+   "quote": "`ARMAndroidAuto`'s embedded `VideoConfigData.proto` descriptor (aasdk **openauto-v2** SDK) defines `VideoConfig` with only `video_resolution, video_fps, margin_width, margin_height, density, additional_depth, real_density` — **no `ui_config`, no `content_insets`, no `Insets`**"
+  },
+  {
+   "gid": "README.md#84",
+   "file": "README.md",
+   "local_id": 84,
+   "statement": "Android Auto can emit only a symmetric letterbox margin; a content-inset SafeArea is structurally impossible.",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": null,
+   "quote": "So AA can emit only a symmetric letterbox margin; a content-inset SafeArea is *structurally impossible*."
+  },
+  {
+   "gid": "README.md#85",
+   "file": "README.md",
+   "local_id": 85,
+   "statement": "The AA view rect is sized from androidAutoSizeW/H keys, not HU_VIEWAREA_INFO (whose only ARMadb-driver xref is ProceessCmdOpen, the CarPlay/Open handler).",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": null,
+   "quote": "AA view rect is sized from `androidAutoSizeW/H` keys, **not** `HU_VIEWAREA_INFO` (whose only `ARMadb-driver` xref is `ProceessCmdOpen`, the CarPlay/Open handler)"
+  },
+  {
+   "gid": "README.md#86",
+   "file": "README.md",
+   "local_id": 86,
+   "statement": "Bare HU_SAFEAREA_INFO is read only by AppleCarPlay, meaning main-screen SafeArea is CarPlay-only; the Carlinkit dongle does not give Android Auto view-area/safe-area via HU_* files.",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Bare `HU_SAFEAREA_INFO` is read only by `AppleCarPlay` ⇒ **main-screen SafeArea is CarPlay-only**; the Carlinkit dongle does **not** give Android Auto view-area/safe-area via `HU_*` files"
+  },
+  {
+   "gid": "README.md#87",
+   "file": "README.md",
+   "local_id": 87,
+   "statement": "Cluster HU_NAVISCREEN_* is a separate shared path; a genuine AA SafeArea needs a host speaking AAP directly (e.g. LIVI's own stack), not the dongle.",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Cluster `HU_NAVISCREEN_*` is a separate shared path. A genuine AA SafeArea needs a host speaking AAP directly (e.g. LIVI's own stack), not the dongle."
+  },
+  {
+   "gid": "README.md#88",
+   "file": "README.md",
+   "local_id": 88,
+   "statement": "The 2026-06-13 finding supersedes an earlier draft that claimed ARMAndroidAuto maps HU_SAFEAREA_INFO to content_insets; it updated configuration.md, ARMAndroidAuto.md, and host_app_guide.md.",
+   "topic": "aa-viewarea",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": [
+    "supersedes earlier draft"
+   ],
+   "quote": "Supersedes the earlier draft claiming `ARMAndroidAuto` maps `HU_SAFEAREA_INFO` → `content_insets`. Updated `configuration.md`, `ARMAndroidAuto.md`, `host_app_guide.md`."
+  },
+  {
+   "gid": "README.md#89",
+   "file": "README.md",
+   "local_id": 89,
+   "statement": "Change log 2026-05-21: Live wireless CarPlay pairing capture (MFi_research/capture/carplay-20260521-101016) confirmed the RTSP control port is 5000, not 7000.",
+   "topic": "carplay-rtsp",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": [
+    "live capture",
+    "corrected"
+   ],
+   "quote": "RTSP control port confirmed 5000 (not 7000)"
+  },
+  {
+   "gid": "README.md#90",
+   "file": "README.md",
+   "local_id": 90,
+   "statement": "The CarPlay pairing capture showed HomeKit /pair-setup ×3 plus /pair-verify ×2, with no FairPlay.",
+   "topic": "carplay-homekit",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": null,
+   "quote": "HomeKit `/pair-setup`×3 + `/pair-verify`×2; no FairPlay"
+  },
+  {
+   "gid": "README.md#91",
+   "file": "README.md",
+   "local_id": 91,
+   "statement": "A real MFi coprocessor on I2C-1 at address 0x11 was exercised twice per pairing.",
+   "topic": "carplay-mfi",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": [
+    "live capture"
+   ],
+   "quote": "real MFi coprocessor on I2C-1 `0x11` exercised twice/pairing"
+  },
+  {
+   "gid": "README.md#92",
+   "file": "README.md",
+   "local_id": 92,
+   "statement": "HU_* struct layouts were verified on-device during the 2026-05-21 capture.",
+   "topic": "carplay-hu-structs",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": [
+    "verified on-device"
+   ],
+   "quote": "`HU_*` struct layouts verified on-device"
+  },
+  {
+   "gid": "README.md#93",
+   "file": "README.md",
+   "local_id": 93,
+   "statement": "The iAP2 0x1D01 component table was captured during the 2026-05-21 pairing capture.",
+   "topic": "iap2-component-table",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": null,
+   "quote": "iAP2 `0x1D01` component table captured"
+  },
+  {
+   "gid": "README.md#94",
+   "file": "README.md",
+   "local_id": 94,
+   "statement": "The DuckPosition HU_VIEWAREA_INFO field order was corrected; a new doc carplay_handshake.md was created.",
+   "topic": "carplay-viewarea",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "DuckPosition `HU_VIEWAREA_INFO` field order corrected. New doc: `02_Protocol_Reference/carplay_handshake.md`."
+  },
+  {
+   "gid": "README.md#95",
+   "file": "README.md",
+   "local_id": 95,
+   "statement": "Change log 2026-03-14: comprehensive verification pass where 50+ agents cross-checked all docs against firmware binary, APK decompilation, and carlink_native source, fixing about 40 errors.",
+   "topic": "verification-pass",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "verification pass"
+   ],
+   "quote": "50+ agents cross-checked all docs against firmware binary, APK decompilation, and carlink_native source. ~40 errors fixed"
+  },
+  {
+   "gid": "README.md#96",
+   "file": "README.md",
+   "local_id": 96,
+   "statement": "decode_type=3 was corrected from 'vestigial' to 'active for AA phone calls' across 4 files.",
+   "topic": "audio-decodetype-3",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "decode_type=3 corrected from \"vestigial\" to \"active for AA phone calls\" (4 files)"
+  },
+  {
+   "gid": "README.md#97",
+   "file": "README.md",
+   "local_id": 97,
+   "statement": "wireless_carplay.md encryption key/algorithm was corrected to AES-128-CBC with key SkBRDy3gmrw1ieH0.",
+   "topic": "crypto-wireless-carplay",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "wireless_carplay.md encryption key/algorithm corrected (AES-128-CBC, `SkBRDy3gmrw1ieH0`)"
+  },
+  {
+   "gid": "README.md#98",
+   "file": "README.md",
+   "local_id": 98,
+   "statement": "inbound_session_sequence.md type IDs were rewritten (10+ wrong IDs corrected).",
+   "topic": "session-sequence",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "inbound_session_sequence.md type IDs rewritten (10+ wrong IDs)"
+  },
+  {
+   "gid": "README.md#99",
+   "file": "README.md",
+   "local_id": 99,
+   "statement": "host_app_guide.md touch format and VID/PID were updated in the 2026-03-14 pass.",
+   "topic": "host-app-guide",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "updated"
+   ],
+   "quote": "host_app_guide.md touch format and VID/PID updated"
+  },
+  {
+   "gid": "README.md#100",
+   "file": "README.md",
+   "local_id": 100,
+   "statement": "firmware_update.md status codes were updated to 2025.10.",
+   "topic": "firmware-update",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "updated"
+   ],
+   "quote": "firmware_update.md status codes updated to 2025.10"
+  },
+  {
+   "gid": "README.md#101",
+   "file": "README.md",
+   "local_id": 101,
+   "statement": "In the 2026-03-14 pass, video_protocol.md had a manufacturer frame-drop reference added and a mic delay note was added to host_app_guide.md.",
+   "topic": "video-protocol",
+   "source_lines": "279",
+   "confidence": "medium",
+   "signals": [
+    "added"
+   ],
+   "quote": "manufacturer frame-drop reference added to video_protocol.md; mic delay note added to host_app_guide.md"
+  },
+  {
+   "gid": "README.md#102",
+   "file": "README.md",
+   "local_id": 102,
+   "statement": "In the 2026-03-14 pass, key_binaries.md binary sizes were corrected and config_key_analysis.md classification fixes were made.",
+   "topic": "binary-analysis",
+   "source_lines": "279",
+   "confidence": "medium",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "key_binaries.md binary sizes corrected; config_key_analysis.md classification fixes"
+  },
+  {
+   "gid": "README.md#103",
+   "file": "README.md",
+   "local_id": 103,
+   "statement": "In the 2026-03-14 pass, Box Code Taxonomy and SoftwareVersion format were added to configuration.md, and MultiTouch/StModeChange/Camera structs and UseBTPhone were added to usb_protocol.md.",
+   "topic": "configuration-docs",
+   "source_lines": "279",
+   "confidence": "medium",
+   "signals": [
+    "added"
+   ],
+   "quote": "Box Code Taxonomy and SoftwareVersion format added to configuration.md; MultiTouch/StModeChange/Camera structs and UseBTPhone added to usb_protocol.md"
+  },
+  {
+   "gid": "README.md#104",
+   "file": "README.md",
+   "local_id": 104,
+   "statement": "Change log 2026-02-18: g_bSupportViewarea is NOT set by AdvancedFeatures — it is set from HU_VIEWAREA_INFO file content (r2 init at ~0x16ca2).",
+   "topic": "viewarea-flag",
+   "source_lines": "280",
+   "confidence": "high",
+   "signals": [
+    "verified",
+    "corrected",
+    "hedging (~)"
+   ],
+   "quote": "`g_bSupportViewarea` is NOT set by AdvancedFeatures — it's set from `HU_VIEWAREA_INFO` file content (r2 init at ~0x16ca2)"
+  },
+  {
+   "gid": "README.md#105",
+   "file": "README.md",
+   "local_id": 105,
+   "statement": "Writing HU_VIEWAREA_INFO (24B) plus HU_SAFEAREA_INFO (20B) to /etc/RiddleBoxData/ plus reboot enables main screen SafeArea.",
+   "topic": "viewarea-config",
+   "source_lines": "280",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Writing `HU_VIEWAREA_INFO` (24B) + `HU_SAFEAREA_INFO` (20B) to `/etc/RiddleBoxData/` + reboot enables main screen SafeArea"
+  },
+  {
+   "gid": "README.md#106",
+   "file": "README.md",
+   "local_id": 106,
+   "statement": "Live test: 100px inset on 2400×960, CarPlay correctly inset interactive UI while wallpaper rendered full-screen (drawUIOutsideSafeArea=true).",
+   "topic": "viewarea-test",
+   "source_lines": "280",
+   "confidence": "high",
+   "signals": [
+    "live test"
+   ],
+   "quote": "Live test: 100px inset on 2400×960, CarPlay correctly inset interactive UI while wallpaper rendered full-screen (`drawUIOutsideSafeArea=true`)"
+  },
+  {
+   "gid": "README.md#107",
+   "file": "README.md",
+   "local_id": 107,
+   "statement": "AdvancedFeatures was corrected back to Boolean (0-1, max enforced by riddleBoxCfg), with only bit 0 tested in firmware (tst.w sb, 1).",
+   "topic": "advancedfeatures",
+   "source_lines": "280",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "AdvancedFeatures corrected back to Boolean (0-1, max enforced by riddleBoxCfg), only bit 0 tested in firmware (`tst.w sb, 1`)"
+  },
+  {
+   "gid": "README.md#108",
+   "file": "README.md",
+   "local_id": 108,
+   "statement": "Change log 2026-02-18 riddleBoxCfg feature gate analysis: HudGPSSwitch factory default corrected to 0 (--info shows current value, not factory).",
+   "topic": "hudgpsswitch",
+   "source_lines": "281",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "HudGPSSwitch factory default corrected to 0 (--info shows current value, not factory)"
+  },
+  {
+   "gid": "README.md#109",
+   "file": "README.md",
+   "local_id": 109,
+   "statement": "A performance warning was added for AdvancedFeatures (second H.264 stream).",
+   "topic": "advancedfeatures",
+   "source_lines": "281",
+   "confidence": "high",
+   "signals": null,
+   "quote": "added performance warning for AdvancedFeatures (second H.264 stream)"
+  },
+  {
+   "gid": "README.md#110",
+   "file": "README.md",
+   "local_id": 110,
+   "statement": "9 MiddleMan IPC interfaces were documented: CarPlay, AA, HiCar, ICCOA, DVR, AndroidMirror, iOS, NoAirPlay.",
+   "topic": "middleman-ipc",
+   "source_lines": "281",
+   "confidence": "high",
+   "signals": null,
+   "quote": "documented 9 MiddleMan IPC interfaces (CarPlay, AA, HiCar, ICCOA, DVR, AndroidMirror, iOS, NoAirPlay)"
+  },
+  {
+   "gid": "README.md#111",
+   "file": "README.md",
+   "local_id": 111,
+   "statement": "15 adapter filesystem config paths were documented and 7 AppleCarPlay runtime global flags were added.",
+   "topic": "config-paths",
+   "source_lines": "281",
+   "confidence": "high",
+   "signals": null,
+   "quote": "documented 15 adapter filesystem config paths; added 7 AppleCarPlay runtime global flags"
+  },
+  {
+   "gid": "README.md#112",
+   "file": "README.md",
+   "local_id": 112,
+   "statement": "Change log 2026-02-18 binary strings: PBAP support confirmed (PCE+PSE roles in bluetoothDaemon SDP).",
+   "topic": "bluetooth-pbap",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": [
+    "confirmed"
+   ],
+   "quote": "PBAP support confirmed (PCE+PSE roles in bluetoothDaemon SDP)"
+  },
+  {
+   "gid": "README.md#113",
+   "file": "README.md",
+   "local_id": 113,
+   "statement": "hfpd provenance identified as nohands HFP 1.6 (net.sf.nohands.hfpd).",
+   "topic": "bluetooth-hfp",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": null,
+   "quote": "hfpd provenance identified (nohands HFP 1.6, `net.sf.nohands.hfpd`)"
+  },
+  {
+   "gid": "README.md#114",
+   "file": "README.md",
+   "local_id": 114,
+   "statement": "AirPlay-layer features documented: 4 focus domains, app launch commands (Maps/Music/NowPlaying/Phone), haptic feedback, fake iPhone mode, limitedUI.",
+   "topic": "airplay-features",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": null,
+   "quote": "AirPlay-layer features documented (4 focus domains, app launch commands: Maps/Music/NowPlaying/Phone, haptic feedback, fake iPhone mode, limitedUI)"
+  },
+  {
+   "gid": "README.md#115",
+   "file": "README.md",
+   "local_id": 115,
+   "statement": "6 internal audio channel states discovered: Media/Navi/PhoneCall/Siri/Alert/InputConfig.",
+   "topic": "audio-channel-states",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": null,
+   "quote": "6 internal audio channel states discovered (Media/Navi/PhoneCall/Siri/Alert/InputConfig)"
+  },
+  {
+   "gid": "README.md#116",
+   "file": "README.md",
+   "local_id": 116,
+   "statement": "Media metadata format clarified as iAP2Type_PlistBinary, not parsed JSON.",
+   "topic": "media-metadata",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": [
+    "clarified"
+   ],
+   "quote": "media metadata format clarified (iAP2Type_PlistBinary, not parsed JSON)"
+  },
+  {
+   "gid": "README.md#117",
+   "file": "README.md",
+   "local_id": 117,
+   "statement": "Change log 2026-02-17 iPhone GPS fusion: iPhone-side GPS pipeline is accessoryd → locationd → CL-fusion, using a best-accuracy-wins model.",
+   "topic": "iphone-gps",
+   "source_lines": "283",
+   "confidence": "high",
+   "signals": [
+    "live testing"
+   ],
+   "quote": "`accessoryd` → `locationd` → `CL-fusion` pipeline, best-accuracy-wins model"
+  },
+  {
+   "gid": "README.md#118",
+   "file": "README.md",
+   "local_id": 118,
+   "statement": "iPhone GPS interpretation includes numHypothesis/isPassthrough; debugging is via idevicesyslog.",
+   "topic": "iphone-gps",
+   "source_lines": "283",
+   "confidence": "high",
+   "signals": null,
+   "quote": "`numHypothesis`/`isPassthrough` interpretation, practical scenarios for vehicle GPS priority, debugging via `idevicesyslog`"
+  },
+  {
+   "gid": "README.md#119",
+   "file": "README.md",
+   "local_id": 119,
+   "statement": "DashboardInfo/GNSSCapability relationship was corrected in configuration.md.",
+   "topic": "dashboardinfo",
+   "source_lines": "283",
+   "confidence": "high",
+   "signals": [
+    "corrected"
+   ],
+   "quote": "corrected DashboardInfo/GNSSCapability relationship in configuration.md"
+  },
+  {
+   "gid": "README.md#120",
+   "file": "README.md",
+   "local_id": 120,
+   "statement": "Change log 2026-02-18 deep r2 (5 binaries): complete iAP2 engine field catalogs for 9 engines — CallState 14+6, Communication 11, MediaPlayer 27+17, RouteGuidance/NaviJSON, Power 8, VehicelStat 3, WiFiConfig 4.",
+   "topic": "iap2-engines",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "9 engines with all fields: CallState 14+6, Communication 11, MediaPlayer 27+17, RouteGuidance/NaviJSON, Power 8, VehicelStat 3, WiFiConfig 4"
+  },
+  {
+   "gid": "README.md#121",
+   "file": "README.md",
+   "local_id": 121,
+   "statement": "A 60+ iAP2 message dispatch table was documented along with HUD broadcast aliases (MediaSongName→mediaItemTitle etc.).",
+   "topic": "iap2-dispatch",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "60+ iAP2 message dispatch table, HUD broadcast aliases (MediaSongName→mediaItemTitle etc.)"
+  },
+  {
+   "gid": "README.md#122",
+   "file": "README.md",
+   "local_id": 122,
+   "statement": "A dual data path architecture exists (AirPlay parallel to iAP2).",
+   "topic": "data-path-architecture",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "dual data path architecture (AirPlay ‖ iAP2 parallel)"
+  },
+  {
+   "gid": "README.md#123",
+   "file": "README.md",
+   "local_id": 123,
+   "statement": "The CarPlay mode state machine has 5 channels: screen/mainAudio/speech/phoneCall/turnByTurn.",
+   "topic": "carplay-state-machine",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "CarPlay mode state machine (5 channels: screen/mainAudio/speech/phoneCall/turnByTurn)"
+  },
+  {
+   "gid": "README.md#124",
+   "file": "README.md",
+   "local_id": 124,
+   "statement": "The complete audio codec table is PCM/ALAC/AAC-LC/AAC-ELD.",
+   "topic": "audio-codecs",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "complete audio codec table (PCM/ALAC/AAC-LC/AAC-ELD)"
+  },
+  {
+   "gid": "README.md#125",
+   "file": "README.md",
+   "local_id": 125,
+   "statement": "13 supported link types were documented along with a core library stack of 7 DMSDP libraries with roles.",
+   "topic": "dmsdp-libraries",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "13 supported link types, core library stack (7 DMSDP libraries with roles)"
+  },
+  {
+   "gid": "README.md#126",
+   "file": "README.md",
+   "local_id": 126,
+   "statement": "ARMAndroidAuto uses a custom LZMA packer with magic 0x55225522.",
+   "topic": "aa-lzma",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": null,
+   "quote": "ARMAndroidAuto custom LZMA packer (magic 0x55225522)"
+  },
+  {
+   "gid": "README.md#127",
+   "file": "README.md",
+   "local_id": 127,
+   "statement": "Encryption key derivation labels and libboxtrans/libmanagement key exports were documented in the 2026-02-18 deep r2 (5 binaries) analysis.",
+   "topic": "crypto-key-derivation",
+   "source_lines": "284",
+   "confidence": "medium",
+   "signals": null,
+   "quote": "libboxtrans/libmanagement key exports, ... encryption key derivation labels"
+  },
+  {
+   "gid": "README.md#128",
+   "file": "README.md",
+   "local_id": 128,
+   "statement": "Change log 2026-02-18 deep r2 (GPS): CiAP2LocationEngine has a full object layout of 0x1F4+ bytes with flags at 0x1F0-0x1F3.",
+   "topic": "gps-location-engine",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": null,
+   "quote": "CiAP2LocationEngine full object layout (0x1F4+ bytes, flags 0x1F0-0x1F3)"
+  },
+  {
+   "gid": "README.md#129",
+   "file": "README.md",
+   "local_id": 129,
+   "statement": "GNSSCapability bitmask: bit 0=GPGGA, bit 1=GPRMC, bit 3=PASCD.",
+   "topic": "gnss-capability",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": null,
+   "quote": "GNSSCapability bitmask (bit 0=GPGGA, 1=GPRMC, 3=PASCD)"
+  },
+  {
+   "gid": "README.md#130",
+   "file": "README.md",
+   "local_id": 130,
+   "statement": "DashboardInfo correction: bit 1 = vehicleStatus, NOT location.",
+   "topic": "dashboardinfo",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": [
+    "correction"
+   ],
+   "quote": "**DashboardInfo correction** (bit 1=vehicleStatus NOT location)"
+  },
+  {
+   "gid": "README.md#131",
+   "file": "README.md",
+   "local_id": 131,
+   "statement": "ARMadb-driver type 0x29 handler does strstr plus file write to HU_GPS_DATA and forwards as 0x22.",
+   "topic": "gnss-handler",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": null,
+   "quote": "ARMadb-driver type 0x29 handler (strstr+file write to HU_GPS_DATA, forward as 0x22)"
+  },
+  {
+   "gid": "README.md#132",
+   "file": "README.md",
+   "local_id": 132,
+   "statement": "VirtualBoxGPS NMEA parser parses GPGGA/GPRMC/PASCD and generates $GPVAI/$RMTINFO, with a speed thread.",
+   "topic": "virtualboxgps",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": null,
+   "quote": "VirtualBoxGPS NMEA parser (GPGGA/GPRMC/PASCD parsing, $GPVAI/$RMTINFO generation, speed thread)"
+  },
+  {
+   "gid": "README.md#133",
+   "file": "README.md",
+   "local_id": 133,
+   "statement": "libdmsdpdvgps.so is ENCRYPTED.",
+   "topic": "gps-library",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": [
+    "encrypted"
+   ],
+   "quote": "libdmsdpdvgps.so ENCRYPTED"
+  },
+  {
+   "gid": "README.md#134",
+   "file": "README.md",
+   "local_id": 134,
+   "statement": "The complete iAP2 identification component table has 26 components, with 7 AskStartItems sub-types.",
+   "topic": "iap2-identification",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": null,
+   "quote": "complete iAP2 identification component table (26 components), 7 AskStartItems sub-types"
+  },
+  {
+   "gid": "README.md#135",
+   "file": "README.md",
+   "local_id": 135,
+   "statement": "r2 PLT mislabel fix: 0x14e3c is strstr, not dbus_bus_add_match.",
+   "topic": "r2-plt-fix",
+   "source_lines": "285",
+   "confidence": "high",
+   "signals": [
+    "fix"
+   ],
+   "quote": "r2 PLT mislabel fix (0x14e3c=strstr not dbus_bus_add_match)"
+  },
+  {
+   "gid": "README.md#136",
+   "file": "README.md",
+   "local_id": 136,
+   "statement": "Change log 2026-02-17 GPS/GNSS forwarding: GnssData (0x29) payload format has dual delivery paths — USB direct plus /tmp/gnss_info.",
+   "topic": "gnss-forwarding",
+   "source_lines": "286",
+   "confidence": "high",
+   "signals": null,
+   "quote": "GnssData (0x29) payload format with dual delivery paths (USB direct + /tmp/gnss_info)"
+  },
+  {
+   "gid": "README.md#137",
+   "file": "README.md",
+   "local_id": 137,
+   "statement": "Per-binary GPS pipeline roles: ARMadb-driver → ARMiPhoneIAP2 CiAP2LocationEngine → iPhone.",
+   "topic": "gps-pipeline",
+   "source_lines": "286",
+   "confidence": "high",
+   "signals": null,
+   "quote": "per-binary GPS pipeline roles (ARMadb-driver → ARMiPhoneIAP2 CiAP2LocationEngine → iPhone)"
+  },
+  {
+   "gid": "README.md#138",
+   "file": "README.md",
+   "local_id": 138,
+   "statement": "iAP2 Location Registration Flow disassembly and GNSSCapability=0 blocking discovery were documented.",
+   "topic": "gnss-capability",
+   "source_lines": "286",
+   "confidence": "high",
+   "signals": null,
+   "quote": "iAP2 Location Registration Flow disassembly, GNSSCapability=0 blocking discovery"
+  },
+  {
+   "gid": "README.md#139",
+   "file": "README.md",
+   "local_id": 139,
+   "statement": "Change log 2026-01-20: device_identification.md verified phoneType 3=CarPlay both USB/Wireless, 5=AndroidAuto USB, with the wifi field determining transport.",
+   "topic": "phonetype",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "phoneType analysis (verified: 3=CarPlay both USB/Wireless, 5=AndroidAuto USB, wifi field determines transport)"
+  },
+  {
+   "gid": "README.md#140",
+   "file": "README.md",
+   "local_id": 140,
+   "statement": "cpuTemp was verified to be the adapter temperature.",
+   "topic": "cputemp",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "verified cpuTemp is adapter temperature"
+  },
+  {
+   "gid": "README.md#141",
+   "file": "README.md",
+   "local_id": 141,
+   "statement": "SessionToken (0xA3) decryption was verified using the USB key with AES-128-CBC.",
+   "topic": "sessiontoken",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "verified SessionToken (0xA3) decryption using USB key with AES-128-CBC"
+  },
+  {
+   "gid": "README.md#142",
+   "file": "README.md",
+   "local_id": 142,
+   "statement": "A CallQuality→VoiceQuality firmware bug was documented.",
+   "topic": "audio-callquality-bug",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": [
+    "firmware bug"
+   ],
+   "quote": "documented CallQuality→VoiceQuality firmware bug"
+  },
+  {
+   "gid": "README.md#143",
+   "file": "README.md",
+   "local_id": 143,
+   "statement": "web_interface.md documents the 2025.10 firmware Boa web server, server.cgi API (MD5 signed), Vue.js frontend, and all configurable settings via HTTP.",
+   "topic": "web-interface",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": null,
+   "quote": "documenting 2025.10 firmware Boa web server, server.cgi API (MD5 signed), Vue.js frontend, all configurable settings via HTTP"
+  },
+  {
+   "gid": "README.md#144",
+   "file": "README.md",
+   "local_id": 144,
+   "statement": "Change log 2026-01-18: added cpc200_ccpa_firmware_binaries source covering boot scripts, timeout constants, and a custom init hook.",
+   "topic": "firmware-binaries-source",
+   "source_lines": "288",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Added cpc200_ccpa_firmware_binaries source: boot scripts, timeout constants, custom init hook"
+  },
+  {
+   "gid": "README.md#145",
+   "file": "README.md",
+   "local_id": 145,
+   "statement": "Change log 2026-01-16: initial consolidation from 4 source directories.",
+   "topic": "meta",
+   "source_lines": "289",
+   "confidence": "high",
+   "signals": null,
+   "quote": "Initial consolidation from 4 source directories"
+  },
+  {
+   "gid": "README.md#146",
+   "file": "README.md",
+   "local_id": 146,
+   "statement": "A CiAP2LocationEngine GPS gating mechanism (3-stage) and GNSSCapability bitmask were documented.",
+   "topic": "gps-gating",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": [
+    "3-stage"
+   ],
+   "quote": "CiAP2LocationEngine GPS gating mechanism, GNSSCapability bitmask"
+  },
+  {
+   "gid": "README.md#147",
+   "file": "README.md",
+   "local_id": 147,
+   "statement": "audio_formats.md documents firmware audio format analysis for decodeType 1-7.",
+   "topic": "audio-formats-doc",
+   "source_lines": "110",
+   "confidence": "high",
+   "signals": null,
+   "quote": "audio_formats.md                # Firmware audio format analysis (decodeType 1-7)"
+  },
+  {
+   "gid": "README.md#148",
+   "file": "README.md",
+   "local_id": 148,
+   "statement": "The Android MediaCodec reference is an implementation reference for H.264 video decoding on Android.",
+   "topic": "doc-metadata",
+   "source_lines": "113",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Implementation reference for H.264 video decoding on Android"
+  },
+  {
+   "gid": "README.md#149",
+   "file": "README.md",
+   "local_id": 149,
+   "statement": "This directory contains Android MediaCodec implementation guidance specific to CarPlay/Android Auto video decoding.",
+   "topic": "scope",
+   "source_lines": "3",
+   "confidence": "high",
+   "signals": [],
+   "quote": "This directory contains Android MediaCodec implementation guidance specific to CarPlay/Android Auto video decoding."
+  },
+  {
+   "gid": "README.md#150",
+   "file": "README.md",
+   "local_id": 150,
+   "statement": "For H.264/AVC codec-specific data, csd-0 holds the SPS (Sequence Parameter Set).",
+   "topic": "h264-csd",
+   "source_lines": "88",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| csd-0 | SPS | Sequence Parameter Set |"
+  },
+  {
+   "gid": "README.md#151",
+   "file": "README.md",
+   "local_id": 151,
+   "statement": "CSD Method 2 Option B (two separate buffers) is used by carlink_native H264Renderer.feedSplitCsd: queue concatenated SPS+PPS in one buffer with BUFFER_FLAG_CODEC_CONFIG, then queue the IDR data in a second buffer as a regular frame (flag 0).",
+   "topic": "h264-csd-method2-carlink",
+   "source_lines": "158",
+   "confidence": "high",
+   "signals": [],
+   "quote": "// Option B: Two separate buffers (used by carlink_native H264Renderer.feedSplitCsd)"
+  },
+  {
+   "gid": "README.md#152",
+   "file": "README.md",
+   "local_id": 152,
+   "statement": "For H.264, H.265, VP8 and VP9, it is possible to change the picture size or configuration mid-stream by packaging the entire new codec-specific configuration data together with the key frame into a single buffer (including any start codes) and submitting it as a regular input buffer.",
+   "topic": "mediacodec-midstream-config",
+   "source_lines": "16",
+   "confidence": "high",
+   "signals": [],
+   "quote": "For H.264, H.265, VP8 and VP9, it is possible to change the picture size or configuration mid-stream."
+  },
+  {
+   "gid": "README.md#153",
+   "file": "README.md",
+   "local_id": 153,
+   "statement": "H.264 profile Extended has constant AVCProfileExtended with value 4.",
+   "topic": "h264-profiles",
+   "source_lines": "282",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| Extended | AVCProfileExtended | 4 |"
+  },
+  {
+   "gid": "README.md#154",
+   "file": "README.md",
+   "local_id": 154,
+   "statement": "Android Developer Documentation for MediaCodec is at https://developer.android.com/reference/android/media/MediaCodec.",
+   "topic": "references",
+   "source_lines": "253",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Android Developer Documentation: https://developer.android.com/reference/android/media/MediaCodec"
+  },
+  {
+   "gid": "README.md#155",
+   "file": "README.md",
+   "local_id": 155,
+   "statement": "The research date is December 2025.",
+   "topic": "metadata",
+   "source_lines": "1",
+   "confidence": "high",
+   "signals": null,
+   "quote": "**Research Date:** December 2025"
+  },
+  {
+   "gid": "README.md#156",
+   "file": "README.md",
+   "local_id": 156,
+   "statement": "The document provides hardware specifications for the GM Infotainment 3.7 system, intended for optimizing CarPlay/Android Auto implementations on this platform.",
+   "topic": "document_purpose",
+   "source_lines": "3",
+   "confidence": "high",
+   "signals": null,
+   "quote": "This document provides hardware specifications for the GM Infotainment 3.7 system, useful for optimizing CarPlay/Android Auto implementations on this platform."
+  },
+  {
+   "gid": "README.md#157",
+   "file": "README.md",
+   "local_id": 157,
+   "statement": "The display resolution is 2400 x 960 pixels.",
+   "topic": "display",
+   "source_lines": "277",
+   "confidence": "high",
+   "signals": null,
+   "quote": "| Resolution | **2400 x 960** pixels |"
+  }
+ ]
+}
