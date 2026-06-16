@@ -1125,7 +1125,7 @@ Host applications configure navigation video via BoxSettings JSON:
 1. The adapter must have had `AdvancedFeatures=1` set at least once in its lifetime — the file `/etc/RiddleBoxData/HU_NAVISCREEN_INFO` must exist (persistent unlock — see above). On a virgin adapter, run `riddleBoxCfg -s AdvancedFeatures 1 && riddleBoxCfg --upConfig` once via SSH. After that, `AdvancedFeatures` can be left at 0 and Path A continues to work.
 2. Host must send `naviScreenInfo` in BoxSettings (0x19) JSON.
 3. Host must handle NaviVideoData (Type 0x2C) messages.
-4. Command 508 (start iOS nav video encoder): for **wireless CarPlay** the host must proactively send the 508 kick — `naviScreenInfo` alone is **not** sufficient to start the nav video encoder. (Command 509 stops nav audio by turning off its encoder.)
+4. Command 508 (RequestNaviScreenFocus): for **wireless CarPlay** the host must proactively send the 508 kick — `naviScreenInfo` alone is **not** sufficient to start the 0x2C nav-screen video stream. (Command 509, ReleaseNaviScreenFocus, stops that nav-screen video stream — a video-focus release, not audio.)
 
 **Note:** `naviScreenInfo` bypasses the `AdvancedFeatures` check **only in the JSON parser** (firmware branch at `0x16e64` → HU_SCREEN_INFO path). It does NOT bypass the AppleCarPlay session-init check on `g_bSupportNaviScreen`, which reads the persistent `/etc/RiddleBoxData/HU_NAVISCREEN_INFO` file. See "Persistent Unlock" above.
 

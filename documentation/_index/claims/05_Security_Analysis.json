@@ -6,7 +6,7 @@
   "05_Security_Analysis/kernel_encryption.md",
   "05_Security_Analysis/security_findings.md"
  ],
- "claim_count": 442,
+ "claim_count": 441,
  "claims": [
   {
    "gid": "05_Security_Analysis/crypto_stack.md#1",
@@ -100,12 +100,12 @@
    "gid": "05_Security_Analysis/crypto_stack.md#9",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 9,
-   "statement": "USB Protocol Payload encryption uses AES-128-CBC with key SkBRDy3gmrw1ieH0 for USB message payload encryption.",
+   "statement": "USB Protocol Payload encryption uses AES-128-CFB128 with key SkBRDy3gmrw1ieH0 for USB message payload encryption.",
    "topic": "usb-protocol-crypt",
    "source_lines": "20",
    "confidence": "high",
    "signals": null,
-   "quote": "| USB Protocol Payload | AES-128-CBC | USB message payload encryption (key: `SkBRDy3gmrw1ieH0`) |"
+   "quote": "| USB Protocol Payload | AES-128-CFB128 | USB message payload encryption (key: `SkBRDy3gmrw1ieH0`) |"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#10",
@@ -259,7 +259,7 @@
    "source_lines": "279",
    "confidence": "high",
    "signals": null,
-   "quote": "0x06 (Video), 0x07 (Audio), 0x2A (Dashboard), 0x2C (AltVideo) — always cleartext for performance"
+   "quote": "0x06 (Video), 0x07 (Audio), 0x2A (Dashboard), 0x2C (AltVideo)"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#24",
@@ -267,10 +267,10 @@
    "local_id": 24,
    "statement": "Magic marker 0x55BB55BB marks encrypted payloads, versus 0x55AA55AA for cleartext.",
    "topic": "usb-protocol-crypt",
-   "source_lines": "77",
+   "source_lines": "281",
    "confidence": "high",
    "signals": null,
-   "quote": "`0x55BB55BB` marks encrypted payloads (vs `0x55AA55AA` for cleartext)"
+   "quote": "`0x55BB55BB` = encrypted, `0x55AA55AA` = cleartext"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#25",
@@ -292,7 +292,7 @@
    "source_lines": "515",
    "confidence": "high",
    "signals": null,
-   "quote": "`/dev/hwaes` kernel module (misc device 10:0, confirmed on live firmware)"
+   "quote": "misc device 10:0, confirmed on live firmware"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#27",
@@ -306,20 +306,20 @@
     "correction",
     "deprecated"
    ],
-   "quote": "Previous documentation listed AES-128-CTR with key `W2EC1X1NbZ58TXtn`"
+   "quote": "AES-128-CTR with key `W2EC1X1NbZ58TXtn`"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#28",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 28,
-   "statement": "Binary analysis reveals protocol-level encryption uses AES-128-CBC with key SkBRDy3gmrw1ieH0.",
+   "statement": "The protocol payload encryption uses AES-128-CFB128 with key SkBRDy3gmrw1ieH0.",
    "topic": "usb-protocol-crypt",
-   "source_lines": "5",
+   "source_lines": "260",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "the protocol-level encryption actually uses **AES-128-CBC** with a **different key** `SkBRDy3gmrw1ieH0`"
+   "quote": "The protocol payload encryption uses **AES-128-CFB128** with key **`SkBRDy3gmrw1ieH0`**."
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#29",
@@ -327,10 +327,10 @@
    "local_id": 29,
    "statement": "The W2EC1X1NbZ58TXtn key is used only for SessionToken (type 0xA3) encryption.",
    "topic": "sessiontoken-crypt",
-   "source_lines": "55",
+   "source_lines": "267",
    "confidence": "high",
    "signals": null,
-   "quote": "The `W2EC1X1NbZ58TXtn` key is used only for SessionToken (type 0xA3) encryption"
+   "quote": "SessionToken (type 0xA3) encryption only"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#30",
@@ -413,12 +413,12 @@
    "gid": "05_Security_Analysis/crypto_stack.md#37",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 37,
-   "statement": "Key SkBRDy3gmrw1ieH0 uses AES-128-CBC for runtime USB protocol payload encryption.",
+   "statement": "Key SkBRDy3gmrw1ieH0 uses AES-128-CFB128 for runtime USB protocol payload encryption.",
    "topic": "key-summary",
    "source_lines": "72",
    "confidence": "high",
    "signals": null,
-   "quote": "| `SkBRDy3gmrw1ieH0` | AES-128-CBC | USB protocol payload encryption (runtime) |"
+   "quote": "| `SkBRDy3gmrw1ieH0` | AES-128-CFB128 | USB protocol payload encryption (runtime) |"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#38",
@@ -561,7 +561,7 @@
    "source_lines": "127",
    "confidence": "high",
    "signals": null,
-   "quote": "A fresh wireless CarPlay pairing was captured (`MFi_research/capture/carplay-20260521-101016/`)"
+   "quote": "A fresh wireless CarPlay pairing was captured"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#51",
@@ -708,7 +708,7 @@
    "source_lines": "152",
    "confidence": "high",
    "signals": null,
-   "quote": "See `MFi_research/docs/register_map.md`"
+   "quote": "See `_evidence/MFi_research/docs/register_map.md`"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#64",
@@ -945,7 +945,7 @@
    "gid": "05_Security_Analysis/crypto_stack.md#85",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 85,
-   "statement": "Previous documentation described AES-128-CTR with key W2EC1X1NbZ58TXtn for protocol payload encryption; corrected to AES-128-CBC with key SkBRDy3gmrw1ieH0.",
+   "statement": "An older analysis labeled the protocol payload encryption AES-128-CTR with key W2EC1X1NbZ58TXtn; that was incorrect, as the cipher is AES-128-CFB128 and W2EC1X1NbZ58TXtn is the SessionToken key only.",
    "topic": "usb-protocol-crypt",
    "source_lines": "260",
    "confidence": "high",
@@ -953,18 +953,18 @@
     "correction",
     "deprecated"
    ],
-   "quote": "Previous documentation described AES-128-CTR with key `W2EC1X1NbZ58TXtn`"
+   "quote": "An older analysis labeled this AES-128-CTR with key `W2EC1X1NbZ58TXtn`; that was incorrect"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#86",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 86,
-   "statement": "Key SkBRDy3gmrw1ieH0 (AES-128-CBC) at 0x6d0d4 is for protocol payload encryption of all non-exempt types.",
+   "statement": "Key SkBRDy3gmrw1ieH0 (AES-128-CFB128) at 0x6d0d4 in the unpacked binary is for protocol payload encryption of all non-exempt types.",
    "topic": "usb-protocol-crypt",
    "source_lines": "266",
    "confidence": "high",
    "signals": null,
-   "quote": "| `SkBRDy3gmrw1ieH0` | AES-128-CBC | Protocol payload encryption (all non-exempt types) | `0x6d0d4` in unpacked binary |"
+   "quote": "| `SkBRDy3gmrw1ieH0` | AES-128-CFB128 | Protocol payload encryption (all non-exempt types) | `0x6d0d4` in unpacked binary |"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#87",
@@ -981,12 +981,12 @@
    "gid": "05_Security_Analysis/crypto_stack.md#88",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 88,
-   "statement": "Firmware protocol encryption algorithm is AES-128-CBC via OpenSSL AES_set_encrypt_key and AES_cbc_encrypt.",
+   "statement": "Firmware protocol payload encryption algorithm is AES-128-CFB128 (via OpenSSL AES_cfb128_encrypt).",
    "topic": "usb-protocol-crypt",
-   "source_lines": "5",
+   "source_lines": "273",
    "confidence": "high",
    "signals": null,
-   "quote": "AES-128-CBC (via OpenSSL `AES_set_encrypt_key`, `AES_cbc_encrypt`)"
+   "quote": "AES-128-CFB128 (via OpenSSL `AES_cfb128_encrypt`)"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#89",
@@ -1085,29 +1085,29 @@
    "source_lines": "489",
    "confidence": "high",
    "signals": null,
-   "quote": "`/dev/hwaes` kernel module (misc 10:0, confirmed live)"
+   "quote": "`/dev/hwaes` kernel module available"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#98",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 98,
-   "statement": "CRITICAL discrepancy (Mar 2026): firmware binary uses AES_cbc_encrypt (OpenSSL CBC) but AutoKit app v2025.03.19.1126 uses AES/CFB/NoPadding (Java CFB); both use the same 128-bit key, IV, and key derivation formula.",
+   "statement": "Both firmware and app use AES-CFB128 (no discrepancy): the firmware AES path runs through OpenSSL AES_cfb128_encrypt and the AutoKit app uses Cipher.getInstance(\"AES/CFB/NoPadding\"); an older analysis mislabeled the firmware side AES_cbc_encrypt.",
    "topic": "cbc-cfb-discrepancy",
-   "source_lines": "421",
+   "source_lines": "286",
    "confidence": "high",
    "signals": null,
-   "quote": "The firmware binary uses `AES_cbc_encrypt` (OpenSSL CBC mode), but the manufacturer's AutoKit app (v2025.03.19.1126) uses `AES/CFB/NoPadding` (Java CFB mode)"
+   "quote": "Both ends use **AES-CFB128**, which is why they interoperate."
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#99",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 99,
-   "statement": "Firmware CBC evidence: ARM assembly at 0x17ee4 calls AES_cbc_encrypt via PLT 0x14a60; OpenSSL function name unambiguous.",
+   "statement": "Firmware CFB128 evidence: the AES call chain at 0x17ee4 invokes AES_cfb128_encrypt (in-place payload encryption).",
    "topic": "cbc-cfb-discrepancy",
-   "source_lines": "286",
+   "source_lines": "383",
    "confidence": "high",
    "signals": null,
-   "quote": "ARM assembly at `0x17ee4` calls `AES_cbc_encrypt` via PLT `0x14a60`. OpenSSL function name unambiguous"
+   "quote": "AES_cfb128_encrypt(payload, payload, len, schedule, iv, direction)"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#100",
@@ -1118,26 +1118,12 @@
    "source_lines": "286",
    "confidence": "high",
    "signals": null,
-   "quote": "Java source line 2539: `Cipher.getInstance(\"AES/CFB/NoPadding\")` — string literal, no ambiguity"
+   "quote": "`Cipher.getInstance(\"AES/CFB/NoPadding\")` (Java source line 2539)"
   },
   {
    "gid": "05_Security_Analysis/crypto_stack.md#101",
    "file": "05_Security_Analysis/crypto_stack.md",
    "local_id": 101,
-   "statement": "Possible explanation: version-specific — AutoKit app may target newer firmware versions that switched to CFB, while binary analysis was on firmware 2025.10.15.",
-   "topic": "cbc-cfb-discrepancy",
-   "source_lines": "286",
-   "confidence": "low",
-   "signals": [
-    "speculative",
-    "hedging"
-   ],
-   "quote": "The AutoKit app may target newer firmware versions that switched to CFB, while the binary analysis was performed on firmware 2025.10.15"
-  },
-  {
-   "gid": "05_Security_Analysis/crypto_stack.md#102",
-   "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 102,
    "statement": "CMD_ENABLE_CRYPT is type 0xF0, a standalone message type, NOT a sub-command of 0x08.",
    "topic": "cmd-enable-crypt",
    "source_lines": "294",
@@ -1148,9 +1134,9 @@
    "quote": "`0xF0` (standalone message type, NOT a sub-command of 0x08)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#103",
+   "gid": "05_Security_Analysis/crypto_stack.md#102",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 103,
+   "local_id": 102,
    "statement": "CMD_ENABLE_CRYPT is bidirectional: host sends trigger (4B payload), adapter echoes empty 0xF0 ack.",
    "topic": "cmd-enable-crypt",
    "source_lines": "295",
@@ -1159,9 +1145,9 @@
    "quote": "Bidirectional — host sends trigger (4B payload), adapter echoes empty 0xF0 ack"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#104",
+   "gid": "05_Security_Analysis/crypto_stack.md#103",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 104,
+   "local_id": 103,
    "statement": "The encryption global state variable is at 0x11f408 (.bss, uint32, default 0 = encryption disabled).",
    "topic": "cmd-enable-crypt",
    "source_lines": "296",
@@ -1170,9 +1156,9 @@
    "quote": "`0x11f408` (`.bss`, uint32, default 0 = encryption disabled)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#105",
+   "gid": "05_Security_Analysis/crypto_stack.md#104",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 105,
+   "local_id": 104,
    "statement": "The encryption state variable has 1 write site at 0x1f7ca.",
    "topic": "cmd-enable-crypt",
    "source_lines": "297",
@@ -1181,9 +1167,9 @@
    "quote": "Write site:** 1 (`0x1f7ca`)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#106",
+   "gid": "05_Security_Analysis/crypto_stack.md#105",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 106,
+   "local_id": 105,
    "statement": "The encryption state variable has 4 read sites: 0x1ddbc, 0x17b96, 0x17d4a, 0x18618.",
    "topic": "cmd-enable-crypt",
    "source_lines": "298",
@@ -1192,9 +1178,9 @@
    "quote": "Read sites:** 4 (`0x1ddbc`, `0x17b96`, `0x17d4a`, `0x18618`)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#107",
+   "gid": "05_Security_Analysis/crypto_stack.md#106",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 107,
+   "local_id": 106,
    "statement": "To enable encryption host sends type 0xF0 with 4-byte payload: offset 0x00, size 4, crypto_mode uint32 LE, must be > 0 (e.g., 0x01000000).",
    "topic": "cmd-enable-crypt",
    "source_lines": "306",
@@ -1203,9 +1189,9 @@
    "quote": "0x00    4     crypto_mode  uint32 LE, must be > 0 (e.g., 0x01000000)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#108",
+   "gid": "05_Security_Analysis/crypto_stack.md#107",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 108,
+   "local_id": 107,
    "statement": "Example on-wire host->adapter trigger: magic 55 AA 55 AA, payload length 04 00 00 00, type F0 00 00 00, type check 0F FF FF FF (~0xF0), crypto_mode 01 00 00 00.",
    "topic": "cmd-enable-crypt",
    "source_lines": "314",
@@ -1214,9 +1200,9 @@
    "quote": "0F FF FF FF   type check = ~0xF0"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#109",
+   "gid": "05_Security_Analysis/crypto_stack.md#108",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 109,
+   "local_id": 108,
    "statement": "Adapter validation at 0x1f798: payload length must be exactly 4 bytes (cmp r3, 4; bne 0x1f7d6 reject).",
    "topic": "cmd-enable-crypt",
    "source_lines": "322",
@@ -1225,9 +1211,9 @@
    "quote": "0x1f79a  cmp r3, 4             ; MUST be exactly 4 bytes"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#110",
+   "gid": "05_Security_Analysis/crypto_stack.md#109",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 110,
+   "local_id": 109,
    "statement": "Adapter validation at 0x1f7a4: rejects if crypto_mode value <= 0 (cmp r3, 0; ble 0x1f7d6).",
    "topic": "cmd-enable-crypt",
    "source_lines": "327",
@@ -1236,9 +1222,9 @@
    "quote": "0x1f7a4  ble 0x1f7d6           ; REJECT if value ≤ 0 (no response sent)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#111",
+   "gid": "05_Security_Analysis/crypto_stack.md#110",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 111,
+   "local_id": 110,
    "statement": "Rejection is silent: if payload is wrong size or value <= 0, the adapter exits without sending any response, and the host only knows via absence of an ack.",
    "topic": "cmd-enable-crypt",
    "source_lines": "330",
@@ -1247,9 +1233,9 @@
    "quote": "**Rejection is silent** — if payload is wrong size or value ≤ 0, the adapter exits without sending any response"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#112",
+   "gid": "05_Security_Analysis/crypto_stack.md#111",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 112,
+   "local_id": 111,
    "statement": "On valid request, adapter echoes empty 0xF0 (at 0x1f7a6): fcn.00064650 init message magic=0x55AA55AA, type=0xF0, payload size=0, fcn.00064670 set header, fcn.00018598 send.",
    "topic": "cmd-enable-crypt",
    "source_lines": "340",
@@ -1258,9 +1244,9 @@
    "quote": "0x1f7bc  bl fcn.00018598       ; SEND empty 0xF0 ack to host"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#113",
+   "gid": "05_Security_Analysis/crypto_stack.md#112",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 113,
+   "local_id": 112,
    "statement": "Example on-wire adapter->host ack: magic 55 AA 55 AA, payload length 00 00 00 00 (empty), type F0 00 00 00, type check 0F FF FF FF.",
    "topic": "cmd-enable-crypt",
    "source_lines": "346",
@@ -1269,9 +1255,9 @@
    "quote": "00 00 00 00   payload length = 0 (empty)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#114",
+   "gid": "05_Security_Analysis/crypto_stack.md#113",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 114,
+   "local_id": 113,
    "statement": "State transition at 0x1f7ca: reload crypto_mode from payload (ldr r3,[r3]) and write to global at 0x11f408 (str r3,[r4]).",
    "topic": "cmd-enable-crypt",
    "source_lines": "355",
@@ -1280,9 +1266,9 @@
    "quote": "0x1f7ca  str r3, [r4]         ; WRITE to global at 0x11f408"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#115",
+   "gid": "05_Security_Analysis/crypto_stack.md#114",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 115,
+   "local_id": 114,
    "statement": "Enable crypt logs 'setUSB from HUCMD_ENABLE_CRYPT: %d\\n' at 0x6ed2c.",
    "topic": "cmd-enable-crypt",
    "source_lines": "357",
@@ -1291,9 +1277,9 @@
    "quote": "Log: `\"setUSB from HUCMD_ENABLE_CRYPT: %d\\n\"` (at `0x6ed2c`)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#116",
+   "gid": "05_Security_Analysis/crypto_stack.md#115",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 116,
+   "local_id": 115,
    "statement": "After enabling, all subsequent messages pass through the encryption path in fcn.00017b74.",
    "topic": "cmd-enable-crypt",
    "source_lines": "359",
@@ -1302,9 +1288,9 @@
    "quote": "ALL subsequent messages pass through the encryption path in `fcn.00017b74`"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#117",
+   "gid": "05_Security_Analysis/crypto_stack.md#116",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 117,
+   "local_id": 116,
    "statement": "Key derivation at 0x17d9e-0x17dd0: derived_key[i] = \"SkBRDy3gmrw1ieH0\"[(i + crypto_mode) % 16].",
    "topic": "cmd-enable-crypt",
    "source_lines": "365",
@@ -1313,9 +1299,9 @@
    "quote": "derived_key[i] = \"SkBRDy3gmrw1ieH0\"[(i + crypto_mode) % 16]"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#118",
+   "gid": "05_Security_Analysis/crypto_stack.md#117",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 118,
+   "local_id": 117,
    "statement": "For crypto_mode=1, base key SkBRDy3gmrw1ieH0 derives to kBRDy3gmrw1ieH0S.",
    "topic": "cmd-enable-crypt",
    "source_lines": "371",
@@ -1324,9 +1310,9 @@
    "quote": "Derived: k B R D y 3 g m r w 1 i e H 0 S"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#119",
+   "gid": "05_Security_Analysis/crypto_stack.md#118",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 119,
+   "local_id": 118,
    "statement": "IV construction: iv = [00, mode[0], 00, 00, mode[1], 00, 00, 00, 00, mode[2], 00, 00, mode[3], 00, 00, 00] where mode[n] = (crypto_mode >> (n*8)) & 0xFF.",
    "topic": "cmd-enable-crypt",
    "source_lines": "376",
@@ -1335,9 +1321,9 @@
    "quote": "iv = [00, mode[0], 00, 00, mode[1], 00, 00, 00, 00, mode[2], 00, 00, mode[3], 00, 00, 00]"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#120",
+   "gid": "05_Security_Analysis/crypto_stack.md#119",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 120,
+   "local_id": 119,
    "statement": "AES call chain: AES_set_encrypt_key(derived_key, 128, schedule) at 0x17dd8 via PLT 0x15370; AES_cbc_encrypt(payload, payload, len, schedule, iv, direction) at 0x17ee4 via PLT 0x14a60.",
    "topic": "cmd-enable-crypt",
    "source_lines": "382",
@@ -1346,9 +1332,9 @@
    "quote": "AES_set_encrypt_key(derived_key, 128, schedule)  ; at 0x17dd8 via PLT 0x15370"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#121",
+   "gid": "05_Security_Analysis/crypto_stack.md#120",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 121,
+   "local_id": 120,
    "statement": "AES direction: 1 = encrypt (outbound), 0 = decrypt (inbound), in-place operation.",
    "topic": "cmd-enable-crypt",
    "source_lines": "385",
@@ -1357,9 +1343,9 @@
    "quote": "Direction: `1` = encrypt (outbound), `0` = decrypt (inbound). In-place operation"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#122",
+   "gid": "05_Security_Analysis/crypto_stack.md#121",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 122,
+   "local_id": 121,
    "statement": "Encryption bypass at 0x17d60-0x17d72 checks message type: types 6-7 skip, type 0x2C skip, type 0x2A skip; all others set 0x55BB55BB magic.",
    "topic": "cmd-enable-crypt",
    "source_lines": "396",
@@ -1368,9 +1354,9 @@
    "quote": "0x17d72  bl fcn.00064614       ; all others → SET 0x55BB55BB magic"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#123",
+   "gid": "05_Security_Analysis/crypto_stack.md#122",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 123,
+   "local_id": 122,
    "statement": "Type 0x06 (VideoFrame) is NOT encrypted due to bandwidth/unacceptable latency for 60fps video.",
    "topic": "cmd-enable-crypt",
    "source_lines": "401",
@@ -1379,9 +1365,9 @@
    "quote": "| 0x06 | VideoFrame | **NO** | Bandwidth — unacceptable latency for 60fps video |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#124",
+   "gid": "05_Security_Analysis/crypto_stack.md#123",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 124,
+   "local_id": 123,
    "statement": "Type 0x07 (AudioFrame) is NOT encrypted because real-time audio cannot tolerate AES overhead.",
    "topic": "cmd-enable-crypt",
    "source_lines": "402",
@@ -1390,9 +1376,9 @@
    "quote": "| 0x07 | AudioFrame | **NO** | Real-time audio — cannot tolerate AES overhead |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#125",
+   "gid": "05_Security_Analysis/crypto_stack.md#124",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 125,
+   "local_id": 124,
    "statement": "Type 0x2A (DashBoard_DATA) is NOT encrypted due to frequent metadata updates.",
    "topic": "cmd-enable-crypt",
    "source_lines": "403",
@@ -1401,9 +1387,9 @@
    "quote": "| 0x2A | DashBoard_DATA | **NO** | Frequent metadata updates |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#126",
+   "gid": "05_Security_Analysis/crypto_stack.md#125",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 126,
+   "local_id": 125,
    "statement": "Type 0x2C (AltVideoFrame) is NOT encrypted (navigation video, same latency concern).",
    "topic": "cmd-enable-crypt",
    "source_lines": "404",
@@ -1412,20 +1398,20 @@
    "quote": "| 0x2C | AltVideoFrame | **NO** | Navigation video — same latency concern |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#127",
+   "gid": "05_Security_Analysis/crypto_stack.md#126",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 127,
-   "statement": "All other types are encrypted via AES-128-CBC.",
+   "local_id": 126,
+   "statement": "All other (non-exempt) types have their payload encrypted via AES-128-CFB128.",
    "topic": "cmd-enable-crypt",
    "source_lines": "405",
    "confidence": "high",
    "signals": null,
-   "quote": "| All others | - | **YES** | Payload encrypted via AES-128-CBC |"
+   "quote": "| All others | - | **YES** | Payload encrypted via AES-128-CFB128 |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#128",
+   "gid": "05_Security_Analysis/crypto_stack.md#127",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 128,
+   "local_id": 127,
    "statement": "There is no CMD_DISABLE_CRYPT; encryption cannot be disabled because validation at 0x1f7a4 rejects values <= 0 before the store instruction.",
    "topic": "cmd-enable-crypt",
    "source_lines": "409",
@@ -1434,9 +1420,9 @@
    "quote": "**You cannot.** There is no CMD_DISABLE_CRYPT, and the validation at `0x1f7a4` rejects values ≤ 0 before reaching the store instruction"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#129",
+   "gid": "05_Security_Analysis/crypto_stack.md#128",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 129,
+   "local_id": 128,
    "statement": "The only way to return to cleartext is to restart the adapter process, which reinitializes 0x11f408 to 0 in .bss.",
    "topic": "cmd-enable-crypt",
    "source_lines": "409",
@@ -1445,9 +1431,9 @@
    "quote": "restart the adapter process** (which reinitializes `0x11f408` to 0 in `.bss`)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#130",
+   "gid": "05_Security_Analysis/crypto_stack.md#129",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 130,
+   "local_id": 129,
    "statement": "Disable options: type 0xCD (HUDComand_A_Reboot) full reboot; type 0xCE (HUDComand_A_ResetUSB) USB gadget reset (may restart process); USB disconnect/reconnect (adapter auto-resets on detach).",
    "topic": "cmd-enable-crypt",
    "source_lines": "412",
@@ -1456,9 +1442,9 @@
    "quote": "Send type 0xCD (`HUDComand_A_Reboot`) — full adapter reboot"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#131",
+   "gid": "05_Security_Analysis/crypto_stack.md#130",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 131,
+   "local_id": 130,
    "statement": "The binary does not enforce timing; 0xF0 can be sent at any point after USB connection.",
    "topic": "cmd-enable-crypt",
    "source_lines": "418",
@@ -1467,9 +1453,9 @@
    "quote": "The binary does not enforce timing — 0xF0 can be sent at any point after USB connection"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#132",
+   "gid": "05_Security_Analysis/crypto_stack.md#131",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 132,
+   "local_id": 131,
    "statement": "Do NOT send CMD_ENABLE_CRYPT during active streaming; existing in-flight messages will fail decryption.",
    "topic": "cmd-enable-crypt",
    "source_lines": "419",
@@ -1478,9 +1464,9 @@
    "quote": "Do NOT send during active streaming — existing in-flight messages will fail decryption"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#133",
+   "gid": "05_Security_Analysis/crypto_stack.md#132",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 133,
+   "local_id": 132,
    "statement": "AutoKit app v2025.03.19.1126 sends CMD_ENABLE_CRYPT BEFORE the Open message, as step 2 of the init sequence: 1) AppInfo (0xA0), 2) CMD_ENABLE_CRYPT (0xF0 random positive int32 nonce), 3) SendFile /tmp/screen_dpi, 4) SendFile /etc/android_work_mode, 5) Open (0x01), 6) wait for Open response then BoxSettings.",
    "topic": "cmd-enable-crypt",
    "source_lines": "422",
@@ -1489,9 +1475,9 @@
    "quote": "The AutoKit app sends CMD_ENABLE_CRYPT **BEFORE the Open message**, as step 2 of the initialization sequence"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#134",
+   "gid": "05_Security_Analysis/crypto_stack.md#133",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 134,
+   "local_id": 133,
    "statement": "In AutoKit ordering, all subsequent messages (including Open, BoxSettings, credentials) are encrypted from the start.",
    "topic": "cmd-enable-crypt",
    "source_lines": "430",
@@ -1500,9 +1486,9 @@
    "quote": "all subsequent messages (including Open, BoxSettings, and any credentials) are encrypted from the start"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#135",
+   "gid": "05_Security_Analysis/crypto_stack.md#134",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 135,
+   "local_id": 134,
    "statement": "AutoKit nonce generation (f.java line 1870-1872): while(this.n <= 0) this.n = new Random().nextInt(Integer.MAX_VALUE); nonce is always positive int32 (1 to 2,147,483,647).",
    "topic": "cmd-enable-crypt",
    "source_lines": "438",
@@ -1511,9 +1497,9 @@
    "quote": "The nonce is always a positive int32 (1 to 2,147,483,647)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#136",
+   "gid": "05_Security_Analysis/crypto_stack.md#135",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 136,
+   "local_id": 135,
    "statement": "The AutoKit nonce is passed to the USB layer via d.W(this.n) for the read thread to use for decryption.",
    "topic": "cmd-enable-crypt",
    "source_lines": "438",
@@ -1522,9 +1508,9 @@
    "quote": "It is passed to the USB layer via `d.W(this.n)` for the read thread to use for decryption"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#137",
+   "gid": "05_Security_Analysis/crypto_stack.md#136",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 137,
+   "local_id": 136,
    "statement": "AutoKit receive handler (f.java line 1273-1276): case 240 (CMD_ENABLE_CRYPT response) logs 'BoxProtocol,onCmd: recv CMD_ENABLE_CRYPT' and sets this.m = true (enable encryption flag).",
    "topic": "cmd-enable-crypt",
    "source_lines": "442",
@@ -1533,9 +1519,9 @@
    "quote": "case 240:  // CMD_ENABLE_CRYPT response"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#138",
+   "gid": "05_Security_Analysis/crypto_stack.md#137",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 138,
+   "local_id": 137,
    "statement": "On receiving the adapter's 0xF0 ack the app sets m=true, gating all subsequent encrypt/decrypt calls in the message handler.",
    "topic": "cmd-enable-crypt",
    "source_lines": "447",
@@ -1544,9 +1530,9 @@
    "quote": "the app sets `m=true`, which gates all subsequent encrypt/decrypt calls in the message handler"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#139",
+   "gid": "05_Security_Analysis/crypto_stack.md#138",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 139,
+   "local_id": 138,
    "statement": "AutoKit encrypt/decrypt method is f.java inner class l, method i(boolean z) where z=true is encrypt and z=false is decrypt.",
    "topic": "cmd-enable-crypt",
    "source_lines": "451",
@@ -1555,9 +1541,9 @@
    "quote": "private void i(boolean z) {  // z=true: encrypt, z=false: decrypt"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#140",
+   "gid": "05_Security_Analysis/crypto_stack.md#139",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 140,
+   "local_id": 139,
    "statement": "AutoKit i() skips if not enabled (f.this.m false) or payload empty (this.a.f1462b == 0).",
    "topic": "cmd-enable-crypt",
    "source_lines": "452",
@@ -1566,9 +1552,9 @@
    "quote": "if (!f.this.m || this.a.f1462b == 0) return;  // skip if not enabled or empty"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#141",
+   "gid": "05_Security_Analysis/crypto_stack.md#140",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 141,
+   "local_id": 140,
    "statement": "AutoKit outbound: only types != 6 and != 7 get magic set to 0x55BB55BB (this.a.a()).",
    "topic": "cmd-enable-crypt",
    "source_lines": "454",
@@ -1577,9 +1563,9 @@
    "quote": "if (z && i2 != 6 && i2 != 7) {  // outbound: set 0x55BB magic for non-video/audio"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#142",
+   "gid": "05_Security_Analysis/crypto_stack.md#141",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 142,
+   "local_id": 141,
    "statement": "AutoKit b() checks if magic == 0x55BB55BB before decrypting.",
    "topic": "cmd-enable-crypt",
    "source_lines": "457",
@@ -1588,9 +1574,9 @@
    "quote": "if (this.a.b()) {  // b() checks if magic == 0x55BB55BB"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#143",
+   "gid": "05_Security_Analysis/crypto_stack.md#142",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 143,
+   "local_id": 142,
    "statement": "AutoKit key derivation: key[i3] = (byte) \"SkBRDy3gmrw1ieH0\".charAt((f.this.n + i3) % 16) for i3 0..15.",
    "topic": "cmd-enable-crypt",
    "source_lines": "460",
@@ -1599,9 +1585,9 @@
    "quote": "key[i3] = (byte) \"SkBRDy3gmrw1ieH0\".charAt((f.this.n + i3) % 16);"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#144",
+   "gid": "05_Security_Analysis/crypto_stack.md#143",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 144,
+   "local_id": 143,
    "statement": "AutoKit IV: iv[1]=n&0xFF, iv[4]=(n>>8)&0xFF, iv[9]=(n>>16)&0xFF, iv[12]=(n>>24)&0xFF.",
    "topic": "cmd-enable-crypt",
    "source_lines": "463",
@@ -1610,9 +1596,9 @@
    "quote": "iv[1]  = (byte) (f.this.n & 0xFF);"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#145",
+   "gid": "05_Security_Analysis/crypto_stack.md#144",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 145,
+   "local_id": 144,
    "statement": "AutoKit cipher: Cipher.getInstance(\"AES/CFB/NoPadding\"), init with z?1:2 (encrypt/decrypt), SecretKeySpec(key,\"AES\"), IvParameterSpec(iv).",
    "topic": "cmd-enable-crypt",
    "source_lines": "467",
@@ -1621,9 +1607,9 @@
    "quote": "Cipher cipher = Cipher.getInstance(\"AES/CFB/NoPadding\");"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#146",
+   "gid": "05_Security_Analysis/crypto_stack.md#145",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 146,
+   "local_id": 145,
    "statement": "AutoKit inbound decryption checks b() (magic == 0x55BB55BB) before decrypting; if adapter sends cleartext (0x55AA55AA), no decryption is attempted.",
    "topic": "cmd-enable-crypt",
    "source_lines": "476",
@@ -1632,9 +1618,9 @@
    "quote": "if adapter sends cleartext (0x55AA55AA), no decryption is attempted"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#147",
+   "gid": "05_Security_Analysis/crypto_stack.md#146",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 147,
+   "local_id": 146,
    "statement": "AutoKit error handling catches all exceptions, logs 'handleCryptData: ' + stack trace, and continues without crashing.",
    "topic": "cmd-enable-crypt",
    "source_lines": "477",
@@ -1643,9 +1629,9 @@
    "quote": "catches all exceptions, logs `\"handleCryptData: \"` + stack trace, continues without crashing"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#148",
+   "gid": "05_Security_Analysis/crypto_stack.md#147",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 148,
+   "local_id": 147,
    "statement": "AutoKit encrypt/decrypt is in-place: cipher.doFinal() result is copied back over the original payload buffer.",
    "topic": "cmd-enable-crypt",
    "source_lines": "478",
@@ -1654,9 +1640,9 @@
    "quote": "The encrypt/decrypt is **in-place** — `cipher.doFinal()` result is copied back over the original payload buffer"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#149",
+   "gid": "05_Security_Analysis/crypto_stack.md#148",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 149,
+   "local_id": 148,
    "statement": "Security assessment: key space is 16 rotations of known hardcoded key, rated CRITICAL (trivially brute-forceable).",
    "topic": "security-assessment",
    "source_lines": "484",
@@ -1665,9 +1651,9 @@
    "quote": "| Key space | 16 rotations of known hardcoded key | **CRITICAL** — trivially brute-forceable |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#150",
+   "gid": "05_Security_Analysis/crypto_stack.md#149",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 150,
+   "local_id": 149,
    "statement": "Security assessment: IV is deterministic from crypto_mode, rated HIGH (same mode always produces same IV).",
    "topic": "security-assessment",
    "source_lines": "485",
@@ -1676,9 +1662,9 @@
    "quote": "| IV | Deterministic from crypto_mode | **HIGH** — same mode always produces same IV |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#151",
+   "gid": "05_Security_Analysis/crypto_stack.md#150",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 151,
+   "local_id": 150,
    "statement": "Security assessment: key visibility hidden behind UPX packing, rated LOW (trivial to unpack).",
    "topic": "security-assessment",
    "source_lines": "486",
@@ -1687,9 +1673,9 @@
    "quote": "| Key visibility | Hidden behind UPX packing | **LOW** — trivial to unpack |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#152",
+   "gid": "05_Security_Analysis/crypto_stack.md#151",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 152,
+   "local_id": 151,
    "statement": "Security assessment: all adapters share the same key, rated CRITICAL (universal key for all CPC200 units).",
    "topic": "security-assessment",
    "source_lines": "487",
@@ -1698,9 +1684,9 @@
    "quote": "| All adapters share same key | Yes | **CRITICAL** — universal key for all CPC200 units |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#153",
+   "gid": "05_Security_Analysis/crypto_stack.md#152",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 153,
+   "local_id": 152,
    "statement": "Security assessment: no disable capability, session-scoped (reboot to clear).",
    "topic": "security-assessment",
    "source_lines": "488",
@@ -1709,9 +1695,9 @@
    "quote": "| Disable capability | None | Session-scoped (reboot to clear) |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#154",
+   "gid": "05_Security_Analysis/crypto_stack.md#153",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 154,
+   "local_id": 153,
    "statement": "Security assessment: HW acceleration via /dev/hwaes kernel module available, performance acceptable.",
    "topic": "security-assessment",
    "source_lines": "489",
@@ -1720,9 +1706,9 @@
    "quote": "| HW acceleration | `/dev/hwaes` kernel module available | Performance acceptable |"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#155",
+   "gid": "05_Security_Analysis/crypto_stack.md#154",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 155,
+   "local_id": 154,
    "statement": "libdmsdpplatform.so provides AES_128CTREncry() and AES_128CTRDecrypt() (CTR mode available but NOT used for USB protocol).",
    "topic": "available-functions",
    "source_lines": "494",
@@ -1731,9 +1717,9 @@
    "quote": "AES_128CTREncry()     // CTR mode available but NOT used for USB protocol"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#156",
+   "gid": "05_Security_Analysis/crypto_stack.md#155",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 156,
+   "local_id": 155,
    "statement": "libdmsdpplatform.so provides AES_128OFBEncry() and AES_128OFBDecrypt() (OFB mode available but NOT used).",
    "topic": "available-functions",
    "source_lines": "496",
@@ -1742,20 +1728,20 @@
    "quote": "AES_128OFBEncry()     // OFB mode available but NOT used"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#157",
+   "gid": "05_Security_Analysis/crypto_stack.md#156",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 157,
+   "local_id": 156,
    "statement": "AES-CFB128 support is found in the AppleCarPlay binary and used by the AutoKit app.",
    "topic": "available-functions",
    "source_lines": "498",
    "confidence": "high",
    "signals": null,
-   "quote": "AES-CFB128 support found in AppleCarPlay binary — AND used by AutoKit app"
+   "quote": "AES-CFB128 support found in AppleCarPlay binary"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#158",
+   "gid": "05_Security_Analysis/crypto_stack.md#157",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 158,
+   "local_id": 157,
    "statement": "Complete firmware .img encryption analysis is in 01_Firmware_Architecture/firmware_encryption.md.",
    "topic": "firmware-crypt",
    "source_lines": "505",
@@ -1764,9 +1750,9 @@
    "quote": "see `01_Firmware_Architecture/firmware_encryption.md`"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#159",
+   "gid": "05_Security_Analysis/crypto_stack.md#158",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 159,
+   "local_id": 158,
    "statement": "Firmware encryption is AES-128-CBC with key AutoPlay9uPT4n17 (A15W model), 16-byte IV same as key, no padding (last partial block left unencrypted).",
    "topic": "firmware-crypt",
    "source_lines": "507",
@@ -1775,9 +1761,9 @@
    "quote": "AES-128-CBC with key `AutoPlay9uPT4n17` (A15W model), 16-byte IV same as key, no padding (last partial block left unencrypted)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#160",
+   "gid": "05_Security_Analysis/crypto_stack.md#159",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 160,
+   "local_id": 159,
    "statement": "Model-specific firmware key variants exist for U2W, U2AW, U2AC, and HWFS.",
    "topic": "firmware-crypt",
    "source_lines": "507",
@@ -1786,9 +1772,9 @@
    "quote": "Model-specific key variants exist for U2W, U2AW, U2AC, and HWFS"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#161",
+   "gid": "05_Security_Analysis/crypto_stack.md#160",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 161,
+   "local_id": 160,
    "statement": "Decrypted firmware contents are .tar.gz archives containing firmware files.",
    "topic": "firmware-crypt",
    "source_lines": "507",
@@ -1797,9 +1783,9 @@
    "quote": "Decrypted contents are `.tar.gz` archives containing firmware files"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#162",
+   "gid": "05_Security_Analysis/crypto_stack.md#161",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 162,
+   "local_id": 161,
    "statement": "The /dev/hwaes path provides hardware AES acceleration, optionally used by firmware for improved performance.",
    "topic": "hw-aes",
    "source_lines": "517",
@@ -1808,9 +1794,9 @@
    "quote": "The firmware can optionally use hardware AES for improved performance"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#163",
+   "gid": "05_Security_Analysis/crypto_stack.md#162",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 163,
+   "local_id": 162,
    "statement": "OpenSSL functions used from libcrypto.so.1.1 include AES_set_encrypt_key, AES_set_decrypt_key, AES_cbc_encrypt, HMAC_Init_ex, HMAC_Update, HMAC_Final, SHA256_Init, SHA256_Update, SHA256_Final, SHA512_*.",
    "topic": "openssl-functions",
    "source_lines": "523",
@@ -1819,9 +1805,9 @@
    "quote": "From `libcrypto.so.1.1`:"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#164",
+   "gid": "05_Security_Analysis/crypto_stack.md#163",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 164,
+   "local_id": 163,
    "statement": "Huawei Key Store (HiCar) from libHwKeystoreSDK.so provides HwKeystoreInit(), HwKeystoreGenerateKey(), HwKeystoreSign(), HwKeystoreVerify().",
    "topic": "huawei-keystore",
    "source_lines": "542",
@@ -1830,9 +1816,9 @@
    "quote": "From `libHwKeystoreSDK.so`:"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#165",
+   "gid": "05_Security_Analysis/crypto_stack.md#164",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 165,
+   "local_id": 164,
    "statement": "Source is firmware binary analysis of 2025.10 firmware; binary analysis covered libdmsdpplatform.so and libdmsdpcrypto.so.",
    "topic": "references",
    "source_lines": "555",
@@ -1841,9 +1827,9 @@
    "quote": "Source: Firmware binary analysis (2025.10 firmware)"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#166",
+   "gid": "05_Security_Analysis/crypto_stack.md#165",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 166,
+   "local_id": 165,
    "statement": "The adapter's AirPlay accessory pairing identity (a long-term Ed25519 keypair for HomeKit pair-setup/pair-verify on the AirPlay side) is stored in /Library/Keychains/default.keychain under service com.apple.airplay.pairing.",
    "topic": "key-storage",
    "source_lines": "169",
@@ -1852,9 +1838,9 @@
    "quote": "stored in the keychain `/Library/Keychains/default.keychain`, under service `com.apple.airplay.pairing`"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#167",
+   "gid": "05_Security_Analysis/crypto_stack.md#166",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 167,
+   "local_id": 166,
    "statement": "The keychain label 'AirPlay Pairing Identity: <UUID>' holds the accessory's own Ed25519 keypair (the value data).",
    "topic": "key-storage",
    "source_lines": "173",
@@ -1863,9 +1849,9 @@
    "quote": "`AirPlay Pairing Identity: <UUID>` | the accessory's own Ed25519 keypair"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#168",
+   "gid": "05_Security_Analysis/crypto_stack.md#167",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 168,
+   "local_id": 167,
    "statement": "The keychain label 'Paired AirPlay Accessory: <UUID>' holds one record per paired iPhone/device.",
    "topic": "key-storage",
    "source_lines": "174",
@@ -1874,9 +1860,9 @@
    "quote": "`Paired AirPlay Accessory: <UUID>` | one record per paired iPhone/device"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#169",
+   "gid": "05_Security_Analysis/crypto_stack.md#168",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 169,
+   "local_id": 168,
    "statement": "The AirPlay pairing-identity keychain is distinct from the hardware MFi IC and from the /var/lib/lockdown/ USB host-pairing records.",
    "topic": "key-storage",
    "source_lines": "169",
@@ -1885,15 +1871,15 @@
    "quote": "distinct from the hardware MFi IC above and from the `/var/lib/lockdown/` USB host-pairing records"
   },
   {
-   "gid": "05_Security_Analysis/crypto_stack.md#170",
+   "gid": "05_Security_Analysis/crypto_stack.md#169",
    "file": "05_Security_Analysis/crypto_stack.md",
-   "local_id": 170,
+   "local_id": 169,
    "statement": "Deleting or renaming /Library/Keychains/default.keychain discards the AirPlay pairing identity and forces fresh pairing.",
    "topic": "key-storage",
    "source_lines": "176",
    "confidence": "high",
    "signals": null,
-   "quote": "Deleting or renaming this keychain ... discards the identity and forces fresh pairing"
+   "quote": "discards the identity and forces fresh pairing"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#1",
@@ -1961,18 +1947,18 @@
    "source_lines": "20",
    "confidence": "high",
    "signals": [],
-   "quote": "| Size | 3,407,872 bytes (3.3MB) |"
+   "quote": "3,407,872 bytes (3.3MB)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#7",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 7,
-   "statement": "The kernel flash offset is 0x40000 (256KB from start).",
+   "statement": "The kernel flash offset is 0x100000 (1MB from start).",
    "topic": "kernel-flash-offset",
    "source_lines": "21",
    "confidence": "high",
    "signals": [],
-   "quote": "| Flash Offset | 0x40000 (256KB from start) |"
+   "quote": "Flash Offset | 0x100000 (1MB from start)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#8",
@@ -2162,14 +2148,14 @@
    "gid": "05_Security_Analysis/kernel_encryption.md#24",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 24,
-   "statement": "Key `W2EC1X1NbZ58TXtn` with AES-128-CBC was not tested.",
+   "statement": "Key W2EC1X1NbZ58TXtn with AES-128-CBC: decryption attempt Failed - random output.",
    "topic": "decryption-attempts",
    "source_lines": "62",
    "confidence": "high",
    "signals": [
     "TODO"
    ],
-   "quote": "| `W2EC1X1NbZ58TXtn` | AES-128-CBC | Not tested |"
+   "quote": "| `W2EC1X1NbZ58TXtn` | AES-128-CBC | Failed - random output |"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#25",
@@ -2281,7 +2267,7 @@
    "source_lines": "83",
    "confidence": "high",
    "signals": [],
-   "quote": "sf read 0x80800000 0x100000 0x4F0000    # Read kernel (5MB) to RAM"
+   "quote": "sf read 0x80800000 0x100000 0x4F0000"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#35",
@@ -2457,7 +2443,7 @@
    "source_lines": "126",
    "confidence": "high",
    "signals": [],
-   "quote": "Source: `MFi_research/CAPTURE_SESSION.md` §2, §8."
+   "quote": "Source: `_evidence/MFi_research/CAPTURE_SESSION.md` §2, §8."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#50",
@@ -3608,12 +3594,12 @@
    "gid": "05_Security_Analysis/security_findings.md#45",
    "file": "05_Security_Analysis/security_findings.md",
    "local_id": 45,
-   "statement": "The USB Protocol payload key has the value SkBRDy3gmrw1ieH0 and uses the AES-128-CBC algorithm.",
+   "statement": "The USB Protocol payload key has the value SkBRDy3gmrw1ieH0 and uses the AES-128-CFB128 algorithm.",
    "topic": "usb-keys",
    "source_lines": "96",
    "confidence": "high",
    "signals": null,
-   "quote": "Protocol payload key | `SkBRDy3gmrw1ieH0` | AES-128-CBC"
+   "quote": "Protocol payload key | `SkBRDy3gmrw1ieH0` | AES-128-CFB128"
   },
   {
    "gid": "05_Security_Analysis/security_findings.md#46",
@@ -4574,7 +4560,7 @@
    "source_lines": "316",
    "confidence": "high",
    "signals": null,
-   "quote": "`server.cgi` (48,744 B) and `upload.cgi` (35,916 B) are UPX-packed binaries. These do require MD5-HMAC authentication"
+   "quote": "`server.cgi` (48,744 B) and `upload.cgi` (35,916 B) are UPX-packed binaries that require MD5-HMAC authentication"
   },
   {
    "gid": "05_Security_Analysis/security_findings.md#131",
@@ -4607,7 +4593,7 @@
    "source_lines": "320",
    "confidence": "high",
    "signals": null,
-   "quote": "the shell-script api.cgi endpoints give full administrative control — factory reset, reboot, config dump — to any client on the WiFi network with no credentials required"
+   "quote": "shell-script api.cgi endpoints give full administrative control — factory reset, reboot, config dump — to any client on the WiFi network with no credentials required"
   },
   {
    "gid": "05_Security_Analysis/security_findings.md#134",

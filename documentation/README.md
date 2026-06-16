@@ -146,7 +146,7 @@ RE_Documention/
 | 1 | 0x01 | Open | Session init — 28-byte 7×uint32-LE payload `[width,height,fps,format,packetMax,boxVersion,phoneMode]`; handler `ProceessCmdOpen` |
 | 6 | 0x06 | VideoData | H.264 main video frames |
 | 7 | 0x07 | AudioData | PCM audio or commands (1-byte cmd) |
-| 8 | 0x08 | Command | Control commands — **bidirectional**: host→adapter (e.g. 12 keyFrame, 508 start iOS nav video encoder / 509 stop nav audio encoder) AND adapter→host (e.g. 18/19 GNSS start/stop, 506/507 audio nav focus), incl. on wired CarPlay |
+| 8 | 0x08 | Command | Control commands — **bidirectional**: host→adapter (e.g. 12 keyFrame, 508 RequestNaviScreenFocus / 509 ReleaseNaviScreenFocus = start/stop the 0x2C nav-screen video stream) AND adapter→host (e.g. 18/19 GNSS start/stop, 506/507 audio nav focus), incl. on wired CarPlay |
 | 23 | 0x17 | MultiTouch | Touch input host→adapter — 16-byte `[float x(0..1), float y(0..1), uint32 action(0=up,1=down,2=move), uint32 fingerId]` |
 | 25 | 0x19 | BoxSettings | JSON config — parsed by ARMadb-driver `FUN_00016c20`, 29-entry map at `0x93f90` |
 | 41 | 0x29 | GnssData | GPS/GNSS to phone (NMEA) |

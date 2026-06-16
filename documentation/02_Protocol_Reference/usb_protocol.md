@@ -429,7 +429,7 @@ updates are single messages at ~1/sec.
 
 | Type | Hex | Name | Dir | Payload | Description |
 |------|-----|------|-----|---------|-------------|
-| 163 | 0xA3 | SessionToken | IN | 428-508 | Encrypted session data (see below). Size varies: ~428B wired, ~492B wireless (extra WiFi metadata) |
+| 163 | 0xA3 | SessionToken | IN | 428-508 | Encrypted session data (see below). **Variable length** — the Base64 blob carries per-session JSON (connected-device identifiers, box info, connection stats), so its size changes with the device connected and the test/production environment; ~428-508 B total observed across captures (e.g. ~428B and ~492B) |
 
 **Type 163 (SessionToken) Analysis:**
 
@@ -532,8 +532,8 @@ These are standalone message types for CarPlay navigation video focus, distinct 
 |------|-----|------|-----|---------|-------------|
 | 506 | 0x1FA | NaviFocus | OUT | 0 | Request nav focus |
 | 507 | 0x1FB | NaviRelease | OUT | 0 | Release nav focus |
-| 508 | 0x1FC | RequestNaviScreenFocus | BOTH | 0 | **Starts the iOS nav video encoder** (verified). Adapter sends (IN); host echoes/sends back (OUT). For **wireless CarPlay the host must proactively send the 508 kick** — `naviScreenInfo` alone is not sufficient. See Navigation Video section. |
-| 509 | 0x1FD | ReleaseNaviScreenFocus | OUT | 0 | Release nav screen — **stops nav audio by turning off its encoder** |
+| 508 | 0x1FC | RequestNaviScreenFocus | BOTH | 0 | **Starts the 0x2C nav-screen video stream** (verified). Adapter sends (IN); host echoes/sends back (OUT). For **wireless CarPlay the host must proactively send the 508 kick** — `naviScreenInfo` alone is not sufficient. See Navigation Video section. |
+| 509 | 0x1FD | ReleaseNaviScreenFocus | OUT | 0 | Release nav screen — **stops the 0x2C nav-screen video stream (a video-focus release, not audio)** |
 | 110 | 0x6E | NaviFocusRequest | IN | 0 | Nav requesting focus |
 | 111 | 0x6F | NaviFocusRelease | IN | 0 | Nav released focus |
 
@@ -616,7 +616,7 @@ Offset  Size  Field        Description
 | 300-314 | Phone/DTMF | H→A→P | 15 | CarPlay-specific |
 | 400-403 | App Launch | H→A→P | 4 | CarPlay-specific |
 | 410-412 | UI Control | H→A→P | 3 | CarPlay-specific |
-| 500-509 | Focus (Android Auto) | A→H | 8 | **Android Auto only** -- manages video/audio/nav focus |
+| 500-509 | Focus | A→H / BOTH | 8 | Mainly Android Auto; 506/507 and 508/509 (NaviScreen video focus) also used by CarPlay (wired + wireless) |
 | 600-601 | DVR (Dead Code) | H→A | 2 | Dead code in FW 2025.10 |
 | 700-702 | Custom Commands | H→A→P | 3 | CarPlay-specific |
 | 1000-1013 | Connection Status | Both | 14 | Universal -- pure status notifications, never trigger disconnect |
@@ -1555,7 +1555,7 @@ carlink_native's `NavigationStateManager.kt` reads `NaviManeuverType` for the ma
 
 ### What Is Required (Testing Verified Feb 2026)
 
-Navigation video (Type 0x2C AltVideoFrame) is configured by **sending `naviScreenInfo` in BoxSettings**. This is the only confirmed BoxSettings requirement on wired sessions (no `AdvancedFeatures` needed). For **wireless CarPlay the host must additionally send the 508 kick** to start the iOS nav video encoder — `naviScreenInfo` alone is not sufficient there (see Command 508 Handshake below). The firmware parses `naviScreenInfo` at `0x16e5c` and immediately branches to the `HU_SCREEN_INFO` path at `0x170d6`, **bypassing** the `AdvancedFeatures` config check entirely.
+Navigation video (Type 0x2C AltVideoFrame) is configured by **sending `naviScreenInfo` in BoxSettings**. This is the only confirmed BoxSettings requirement on wired sessions (no `AdvancedFeatures` needed). For **wireless CarPlay the host must additionally send the 508 kick** to start the 0x2C nav-screen video stream — `naviScreenInfo` alone is not sufficient there (see Command 508 Handshake below). The firmware parses `naviScreenInfo` at `0x16e5c` and immediately branches to the `HU_SCREEN_INFO` path at `0x170d6`, **bypassing** the `AdvancedFeatures` config check entirely.
 
 ```json
 {
@@ -1594,7 +1594,7 @@ Navigation video (Type 0x2C AltVideoFrame) is configured by **sending `naviScree
 
 ### Command 508 Handshake
 
-508 (RequestNaviScreenFocus) **starts the iOS nav video encoder** (verified). The adapter sends 508 to the host during session setup; when the host echoes 508 back, the adapter emits the `HU_NEEDNAVI_STREAM` D-Bus signal. **For wireless CarPlay the host must proactively send the 508 kick — `naviScreenInfo` in BoxSettings alone is not sufficient** to start nav video. (Conversely, 509 / ReleaseNaviScreenFocus stops nav audio by turning off its encoder.)
+508 (RequestNaviScreenFocus) **starts the 0x2C nav-screen video stream** (verified). The adapter sends 508 to the host during session setup; when the host echoes 508 back, the adapter emits the `HU_NEEDNAVI_STREAM` D-Bus signal. **For wireless CarPlay the host must proactively send the 508 kick — `naviScreenInfo` in BoxSettings alone is not sufficient** to start nav video. (Conversely, 509 / ReleaseNaviScreenFocus stops the 0x2C nav-screen video stream (a video-focus release, not audio).)
 
 **What the binary shows:**
 - Adapter sends cmd 508 to host during session setup
@@ -2309,7 +2309,7 @@ Commands received as inbound CarPlayControl (type 0x08) messages from the adapte
 | Cmd ID | Name | Required Host Action |
 |--------|------|---------------------|
 | 3 | RequestHostUI | Show native HU UI (hide CarPlay overlay). Session stays active. |
-| 508 | RequestNaviScreenFocus | Echo/send 508 back to adapter — **starts the iOS nav video encoder** (verified); **required for wireless CarPlay** nav video (`naviScreenInfo` alone is not sufficient). See Navigation Video Setup. |
+| 508 | RequestNaviScreenFocus | Echo/send 508 back to adapter — **starts the 0x2C nav-screen video stream** (verified); **required for wireless CarPlay** nav video (`naviScreenInfo` alone is not sufficient). See Navigation Video Setup. |
 
 **Audio Routing (require action):**
 
@@ -2346,7 +2346,7 @@ Cross-referencing firmware binary analysis with the CarLink Native app code (`Ca
 | Gap | Severity | Details |
 |-----|----------|---------|
 | ~~**Phase 0 not detected**~~ | ~~HIGH~~ FIXED | ~~The app does not check for Phase value 0.~~ **Corrected Mar 2026:** CarlinkManager.kt handles Phase 0 in multiple scenarios (negotiation rejection, streaming teardown, normal disconnect). |
-| **NaviFocus 508 not echoed** | LOW (wired) / required (wireless) | Adapter sends cmd 508 (RequestNaviScreenFocus), which **starts the iOS nav video encoder** (verified). For **wireless CarPlay the host must echo/send 508** — `naviScreenInfo` alone is not sufficient. On wired sessions nav video also activates via `naviScreenInfo`. Echo 508 back whenever received. |
+| **NaviFocus 508 not echoed** | LOW (wired) / required (wireless) | Adapter sends cmd 508 (RequestNaviScreenFocus), which **starts the 0x2C nav-screen video stream** (verified). For **wireless CarPlay the host must echo/send 508** — `naviScreenInfo` alone is not sufficient. On wired sessions nav video also activates via `naviScreenInfo`. Echo 508 back whenever received. |
 | ~~**AudioCmd 14 not handled**~~ | ~~LOW~~ FIXED | ~~Missing handler.~~ **Corrected Mar 2026:** CarlinkManager.kt handles `AUDIO_INCOMING_CALL_INIT` (command 14) for incoming call ring routing. |
 | **0x0F/0x15 defined but never sent** | INFO | `DISCONNECT_PHONE` (0x0F) and `CLOSE_DONGLE` (0x15) are defined in MessageTypes but are H→A only commands. The app should never receive them. They can be removed from the inbound parser. |
 

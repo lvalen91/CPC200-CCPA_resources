@@ -15,7 +15,7 @@
   "02_Protocol_Reference/video_protocol.md",
   "02_Protocol_Reference/wireless_carplay.md"
  ],
- "claim_count": 2364,
+ "claim_count": 2365,
  "claims": [
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#1",
@@ -50,7 +50,7 @@
    "source_lines": "6",
    "confidence": "high",
    "signals": [],
-   "quote": "Consolidated from: GM_research, carlink_native"
+   "quote": "**Consolidated from:** GM_research, carlink_native"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#4",
@@ -61,7 +61,7 @@
    "source_lines": "7",
    "confidence": "high",
    "signals": [],
-   "quote": "Last Updated: 2026-02-19"
+   "quote": "**Last Updated:** 2026-02-19"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#5",
@@ -83,7 +83,7 @@
    "source_lines": "13",
    "confidence": "high",
    "signals": [],
-   "quote": "two key identifiers: decode_type and audio_type"
+   "quote": "two key identifiers:"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#7",
@@ -94,7 +94,7 @@
    "source_lines": "14",
    "confidence": "high",
    "signals": [],
-   "quote": "decode_type: Determines audio format/quality (playback vs voice)"
+   "quote": "- **decode_type**: Determines audio format/quality (playback vs voice)"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#8",
@@ -105,7 +105,7 @@
    "source_lines": "15",
    "confidence": "high",
    "signals": [],
-   "quote": "audio_type: Determines audio channel/routing"
+   "quote": "- **audio_type**: Determines audio channel/routing"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#9",
@@ -116,7 +116,7 @@
    "source_lines": "27",
    "confidence": "high",
    "signals": [],
-   "quote": "0x00 | 4 | Magic | 0x55AA55AA (little-endian)"
+   "quote": "│ 0x00    │  4   │ Magic      │ 0x55AA55AA (little-endian)            │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#10",
@@ -127,7 +127,7 @@
    "source_lines": "28",
    "confidence": "high",
    "signals": [],
-   "quote": "0x04 | 4 | PayloadLen | Bytes after this 16-byte header"
+   "quote": "│ 0x04    │  4   │ PayloadLen │ Bytes after this 16-byte header       │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#11",
@@ -138,7 +138,7 @@
    "source_lines": "29",
    "confidence": "high",
    "signals": [],
-   "quote": "0x08 | 4 | MsgType | 7 = AudioData"
+   "quote": "│ 0x08    │  4   │ MsgType    │ 7 = AudioData                         │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#12",
@@ -149,7 +149,7 @@
    "source_lines": "30",
    "confidence": "high",
    "signals": [],
-   "quote": "0x0C | 4 | Checksum | MsgType ^ 0xFFFFFFFF = -8"
+   "quote": "│ 0x0C    │  4   │ Checksum   │ MsgType ^ 0xFFFFFFFF = -8             │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#13",
@@ -168,10 +168,10 @@
    "local_id": 14,
    "statement": "decode_type field is at offset 0x10, 4 bytes",
    "topic": "audio-header-decode-type",
-   "source_lines": "14",
+   "source_lines": "34",
    "confidence": "high",
    "signals": [],
-   "quote": "0x10 | 4 | decode_type"
+   "quote": "│ 0x10    │  4   │ decode_type│ Audio format (2, 3, 4, or 5)           │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#15",
@@ -182,7 +182,7 @@
    "source_lines": "35",
    "confidence": "high",
    "signals": [],
-   "quote": "0x14 | 4 | volume | Float volume multiplier (0.0-1.0)"
+   "quote": "│ 0x14    │  4   │ volume     │ Float volume multiplier (0.0-1.0)     │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#16",
@@ -193,7 +193,7 @@
    "source_lines": "36",
    "confidence": "high",
    "signals": [],
-   "quote": "0x18 | 4 | audio_type | Stream type (1=main, 2=nav, 3=mic)"
+   "quote": "│ 0x18    │  4   │ audio_type │ Stream type (1=main, 2=nav, 3=mic)    │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#17",
@@ -204,7 +204,7 @@
    "source_lines": "40",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1C+ | N | Data | PCM samples OR 1-byte command"
+   "quote": "│ 0x1C+   │  N   │ Data       │ PCM samples OR 1-byte command         │"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#18",
@@ -237,7 +237,7 @@
    "source_lines": "53",
    "confidence": "high",
    "signals": [],
-   "quote": "2 | ALT_MEDIA | 44.1kHz | Stereo"
+   "quote": "| **2** | ALT_MEDIA | 44.1kHz | Stereo | **Dual-purpose:** Commands OR 44.1kHz audio data (non-default; only when `mediaSound=0`) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#21",
@@ -248,7 +248,7 @@
    "source_lines": "53",
    "confidence": "high",
    "signals": [],
-   "quote": "Dual-purpose: Commands OR 44.1kHz audio data (non-default; only when `mediaSound=0`)"
+   "quote": "| **2** | ALT_MEDIA | 44.1kHz | Stereo | **Dual-purpose:** Commands OR 44.1kHz audio data (non-default; only when `mediaSound=0`) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#22",
@@ -259,7 +259,7 @@
    "source_lines": "54",
    "confidence": "high",
    "signals": [],
-   "quote": "4 | PLAYBACK | 48kHz | Stereo"
+   "quote": "| **4** | PLAYBACK | 48kHz | Stereo | Standard media audio (default for both CarPlay and Android Auto) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#23",
@@ -281,7 +281,7 @@
    "source_lines": "55",
    "confidence": "high",
    "signals": [],
-   "quote": "5 | VOICE | 16kHz | Mono"
+   "quote": "| **5** | VOICE | 16kHz | Mono | Voice mode (Siri, phone calls) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#25",
@@ -375,7 +375,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Binary analysis confirms the firmware supports decodeType=3 → 8000 Hz mono at WebRTC AECM (0x2dfa2)"
+   "quote": "**Binary analysis confirms** the firmware supports decodeType=3 → 8000 Hz mono at WebRTC AECM (0x2dfa2). During Android Auto phone calls (HFP/SCO), the adapter sends `INPUT_CONFIG` with decodeType=3, requiring the host to capture and send mic audio at 8kHz. CarPlay phone calls continue to use decodeType=5 (16kHz) exclusively."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#33",
@@ -408,7 +408,7 @@
    "source_lines": "67",
    "confidence": "high",
    "signals": [],
-   "quote": "CarPlay controls the sample rate - The iPhone sends `audioFormat` during stream setup"
+   "quote": "1. **CarPlay controls the sample rate** - The iPhone sends `audioFormat` during stream setup:"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#36",
@@ -430,7 +430,7 @@
    "source_lines": "76",
    "confidence": "high",
    "signals": [],
-   "quote": "CallQuality setting has a firmware bug - The web UI's CallQuality (0-2) fails to translate to internal VoiceQuality"
+   "quote": "2. **CallQuality setting has a firmware bug** - The web UI's CallQuality (0-2) fails to translate to internal VoiceQuality:"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#38",
@@ -449,10 +449,10 @@
    "local_id": 39,
    "statement": "8kHz narrowband path may activate for Bluetooth HFP with CVSD codec, certain carriers forcing narrowband, or legacy devices",
    "topic": "8khz-activation-cases",
-   "source_lines": "81",
+   "source_lines": "82",
    "confidence": "high",
    "signals": [],
-   "quote": "The 8kHz path may only activate for: Bluetooth HFP with CVSD codec (legacy narrowband), Carriers/calls that force narrowband codec, Legacy devices that don't support wideband"
+   "quote": "Bluetooth HFP with CVSD codec (legacy narrowband)"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#40",
@@ -520,7 +520,7 @@
    "source_lines": "98",
    "confidence": "high",
    "signals": [],
-   "quote": "13 bytes | Command packet (STOP/cleanup signal)"
+   "quote": "| **13 bytes** | Command packet (STOP/cleanup signal) | MEDIA_STOP, PHONECALL_STOP |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#46",
@@ -531,7 +531,7 @@
    "source_lines": "99",
    "confidence": "high",
    "signals": [],
-   "quote": "11532 bytes | 44.1kHz stereo PCM audio data | Media when `mediaSound=0` (non-default)"
+   "quote": "| **11532 bytes** | 44.1kHz stereo PCM audio data | Media when `mediaSound=0` (non-default) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#47",
@@ -594,7 +594,7 @@
    "source_lines": "127",
    "confidence": "high",
    "signals": [],
-   "quote": "1 | MAIN | IN | Primary playback (media, alerts, Siri speech, call audio)"
+   "quote": "| **1** | MAIN | IN | Primary playback (media, alerts, Siri speech, call audio) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#52",
@@ -605,7 +605,7 @@
    "source_lines": "128",
    "confidence": "high",
    "signals": [],
-   "quote": "2 | NAVIGATION | IN | Navigation voice prompts (ducking channel)"
+   "quote": "| **2** | NAVIGATION | IN | Navigation voice prompts (ducking channel) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#53",
@@ -616,7 +616,7 @@
    "source_lines": "129",
    "confidence": "high",
    "signals": [],
-   "quote": "3 | MICROPHONE | OUT | Microphone input (Siri listening, phone calls)"
+   "quote": "| **3** | MICROPHONE | OUT | Microphone input (Siri listening, phone calls) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#54",
@@ -848,7 +848,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "INPUT_STOP (byte 4) does NOT exist on the USB wire — firmware internal enum only"
+   "quote": "- ~~INPUT_STOP (byte 4) does NOT exist on the USB wire~~ — firmware internal enum only. Both carlink_native and carlink_macOS assign PHONECALL_START=4 and work correctly. The entire table is shifted by -1 from byte 4 onward vs the previous version."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#72",
@@ -872,7 +872,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "SIRI_STOP (byte 9) EXISTS on wire — previously documented as nonexistent"
+   "quote": "- **SIRI_STOP (byte 9) EXISTS on wire** — previously documented as nonexistent. Captured on both wired (22:56:33.219) and wireless (01:38:25.285) CarPlay sessions. Siri end sequence: CMD 2 (StopRecordMic) → SIRI_STOP → OUTPUT_STOP."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#74",
@@ -911,7 +911,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "TBT_START (byte 15) EXISTS on wire — previously undocumented"
+   "quote": "- **TBT_START (byte 15) EXISTS on wire** — previously undocumented. Captured on wireless CarPlay (01:40:35.441). Precedes NAVI_START in turn-by-turn navigation sequences."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#77",
@@ -937,7 +937,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "NAVI_START first prompt uses dt=2 (not dt=4) — subsequent prompts in the same sequence use dt=4"
+   "quote": "- **NAVI_START first prompt uses dt=2** (not dt=4) — subsequent prompts in the same sequence use dt=4. Confirmed on both wired and wireless."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#79",
@@ -950,7 +950,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "PHONECALL_STOP can fire 2-3 times on incoming call hangup (168-178ms apart)"
+   "quote": "- **PHONECALL_STOP can fire 2-3 times** on incoming call hangup (168-178ms apart). Wireless sessions show more aggressive post-hangup cycling than wired. Apps must handle idempotent stops."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#80",
@@ -983,7 +983,7 @@
    "source_lines": "168",
    "confidence": "high",
    "signals": [],
-   "quote": "Volume restore packets (vol=1.00 dur=0.5) sent after nav prompts on wireless CarPlay"
+   "quote": "- **Volume restore packets (vol=1.00 dur=0.5)** sent after nav prompts on wireless CarPlay — not observed on wired. Explicit unduck signal."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#83",
@@ -1060,7 +1060,7 @@
    "source_lines": "185",
    "confidence": "high",
    "signals": [],
-   "quote": "Media (dt=4): 11520 / 4 bytes / 48000 Hz = 60ms per packet"
+   "quote": "- **Media (dt=4):** 11520 / 4 bytes / 48000 Hz = 60ms per packet"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#90",
@@ -1071,7 +1071,7 @@
    "source_lines": "186",
    "confidence": "high",
    "signals": [],
-   "quote": "Voice (dt=5): 960 / 2 bytes / 16000 Hz = 30ms per packet"
+   "quote": "- **Voice (dt=5):** 960 / 2 bytes / 16000 Hz = 30ms per packet"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#91",
@@ -1156,12 +1156,12 @@
    "local_id": 98,
    "statement": "Media playback command sequence: MEDIA_START, OUTPUT_START, [media packets], MEDIA_STOP, OUTPUT_STOP",
    "topic": "media-sequence",
-   "source_lines": "143",
+   "source_lines": "208",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "MEDIA_START ... OUTPUT_START ... [media audio packets] ... MEDIA_STOP ... OUTPUT_STOP"
+   "quote": "### Media Playback"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#99",
@@ -1508,7 +1508,7 @@
    "source_lines": "401",
    "confidence": "high",
    "signals": [],
-   "quote": "Navigation audio uses a **solid 0xFFFF pattern** as an end marker: ff ff ff ff ff ff ff ff (all samples = -1)"
+   "quote": "Navigation audio uses a **solid 0xFFFF pattern** as an end marker:"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#130",
@@ -1530,7 +1530,7 @@
    "source_lines": "411",
    "confidence": "high",
    "signals": [],
-   "quote": "Sample 4 positions in audio data (after 12-byte header) All must be 0xFFFF for end marker detection"
+   "quote": "Sample 4 positions in audio data (after 12-byte header)"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#132",
@@ -1552,7 +1552,7 @@
    "source_lines": "445",
    "confidence": "high",
    "signals": [],
-   "quote": "Control packets | 58 | Data packets | 4702"
+   "quote": "Control packets | 58 |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#134",
@@ -1580,23 +1580,23 @@
    "gid": "02_Protocol_Reference/audio_protocol.md#136",
    "file": "02_Protocol_Reference/audio_protocol.md",
    "local_id": 136,
-   "statement": "CarPlay audio out: 972-byte packets with 959 PCM bytes, decode_type 5 (16kHz), 3430 count for Voice/Siri",
+   "statement": "CarPlay audio out: 972-byte packets with 960 PCM bytes, decode_type 5 (16kHz), 3430 count for Voice/Siri",
    "topic": "carplay-voice-packets",
    "source_lines": "455",
    "confidence": "high",
    "signals": [],
-   "quote": "972 | 959 | 5 (16kHz) | 3430 | Voice/Siri audio"
+   "quote": "972 | 960 | 5 (16kHz) | 3430 | Voice/Siri audio"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#137",
    "file": "02_Protocol_Reference/audio_protocol.md",
    "local_id": 137,
-   "statement": "CarPlay audio out: 11532-byte packets with 11519 PCM bytes, decode_type 4 (48kHz), 1270 count for Media",
+   "statement": "CarPlay audio out: 11532-byte packets with 11520 PCM bytes, decode_type 4 (48kHz), 1270 count for Media",
    "topic": "carplay-media-packets",
    "source_lines": "456",
    "confidence": "high",
    "signals": [],
-   "quote": "11532 | 11519 | 4 (48kHz) | 1270 | Media audio"
+   "quote": "11532 | 11520 | 4 (48kHz) | 1270 | Media audio"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#138",
@@ -1739,7 +1739,7 @@
    "source_lines": "536",
    "confidence": "high",
    "signals": [],
-   "quote": "~36200 | SSL handshake begin (2348 B) | ~36300 | SSL handshake complete (51 B)"
+   "quote": "~36200 | SSL handshake begin (2348 B) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#151",
@@ -1794,7 +1794,7 @@
    "source_lines": "571",
    "confidence": "high",
    "signals": [],
-   "quote": "WifiAudioFormats is emitted by `AppleCarPlay` during the AirPlay session **SETUP** over **RTSP port 5000** (wireless CarPlay only)"
+   "quote": "`WifiAudioFormats` is emitted by `AppleCarPlay` during the AirPlay session **SETUP** over **RTSP port 5000** (wireless CarPlay only), via the `_getWifiAudioLatencies` path. When `HUDinfo.plist` is empty (`filesize=0 err=kSizeErr`), the adapter falls back to firmware defaults — that default array is what is captured here."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#156",
@@ -1827,7 +1827,7 @@
    "source_lines": "577",
    "confidence": "high",
    "signals": [],
-   "quote": "type 100 = main audio, type 101 = alt audio, type 102 = media audio"
+   "quote": "`type 102` = media audio"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#159",
@@ -1838,7 +1838,7 @@
    "source_lines": "579",
    "confidence": "high",
    "signals": [],
-   "quote": "Earlier documentation omitted the `type` field and the paraphrased TTY excerpt dropped it"
+   "quote": "> **Earlier documentation omitted the `type` field** and the paraphrased TTY excerpt dropped it. It is present in every entry — see the verified 8-entry array below."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#160",
@@ -2054,7 +2054,7 @@
    "source_lines": "628",
    "confidence": "high",
    "signals": [],
-   "quote": "frame_size = 480 aot = 39 line above is **Jan-2026-session-specific** (an AAC-ELD alt-audio stream)"
+   "quote": "The `frame_size = 480 aot = 39` line above is **Jan-2026-session-specific** (an AAC-ELD alt-audio stream that was negotiated in that particular capture). The authoritative format-negotiation reference is the verified 8-entry 2026-05-21 array above."
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#178",
@@ -2087,7 +2087,7 @@
    "source_lines": "638",
    "confidence": "high",
    "signals": [],
-   "quote": "The AirPlay-side `type` (100/101/102) is the **iPhone ↔ adapter** negotiation namespace. It is **not** the same ID space as the USB-side `audio_type` (1/2/3) and `decode_type` (2/4/5)"
+   "quote": ") is the **iPhone ↔ adapter** negotiation namespace. It is **not** the same ID space as the USB-side `audio_type` (1/2/3) and `decode_type` (2/4/5)"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#181",
@@ -2296,7 +2296,7 @@
    "source_lines": "696",
    "confidence": "high",
    "signals": [],
-   "quote": "MediaManager | USAGE_MEDIA (1) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN (1) | MEDIA_START (0x0A)"
+   "quote": "| **MediaManager** | USAGE_MEDIA (1) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN (1) | MEDIA_START (0x0A) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#200",
@@ -2307,7 +2307,7 @@
    "source_lines": "697",
    "confidence": "high",
    "signals": [],
-   "quote": "NavManager | USAGE_ASSISTANCE_NAVIGATION_GUIDANCE (12) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK (3) | NAVI_START (0x07)"
+   "quote": "| **NavManager** | USAGE_ASSISTANCE_NAVIGATION_GUIDANCE (12) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK (3) | NAVI_START (0x07) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#201",
@@ -2318,7 +2318,7 @@
    "source_lines": "698",
    "confidence": "high",
    "signals": [],
-   "quote": "CallManager | USAGE_VOICE_COMMUNICATION (2) | CONTENT_TYPE_SPEECH (1) | AUDIOFOCUS_GAIN_TRANSIENT (2) | PHONECALL_START (0x05)"
+   "quote": "| **CallManager** | USAGE_VOICE_COMMUNICATION (2) | CONTENT_TYPE_SPEECH (1) | AUDIOFOCUS_GAIN_TRANSIENT (2) | PHONECALL_START (0x05) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#202",
@@ -2329,7 +2329,7 @@
    "source_lines": "699",
    "confidence": "high",
    "signals": [],
-   "quote": "RingManager | USAGE_NOTIFICATION_RINGTONE (6) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN_TRANSIENT (2) | ALERT_START (0x0C)"
+   "quote": "| **RingManager** | USAGE_NOTIFICATION_RINGTONE (6) | CONTENT_TYPE_MUSIC (2) | AUDIOFOCUS_GAIN_TRANSIENT (2) | ALERT_START (0x0C) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#203",
@@ -2340,7 +2340,7 @@
    "source_lines": "700",
    "confidence": "high",
    "signals": [],
-   "quote": "VoiceManager | USAGE_VOICE_COMMUNICATION_SIGNALLING (16) | CONTENT_TYPE_SPEECH (1) | AUDIOFOCUS_GAIN_TRANSIENT (2) | SIRI_START (0x09)"
+   "quote": "| **VoiceManager** | USAGE_VOICE_COMMUNICATION_SIGNALLING (16) | CONTENT_TYPE_SPEECH (1) | AUDIOFOCUS_GAIN_TRANSIENT (2) | SIRI_START (0x09) |"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#204",
@@ -2359,10 +2359,10 @@
    "local_id": 205,
    "statement": "On AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK: Android Auto streaming ducks to 0.8f (80%), all other modes duck to 0.2f (20%)",
    "topic": "duck-levels",
-   "source_lines": "708",
+   "source_lines": "707",
    "confidence": "high",
    "signals": [],
-   "quote": "Android Auto streaming: Duck media volume to **0.8f** (80%), All other modes: Duck media volume to **0.2f** (20%)"
+   "quote": "Duck media volume to **0.8f** (80%)"
   },
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#206",
@@ -2688,10 +2688,10 @@
    "local_id": 9,
    "statement": "Layer 3 capability information is persisted to global preferences domain keyed by accessory PPID in CRCarPlayCapabilities.",
    "topic": "capability-persistence",
-   "source_lines": "57",
+   "source_lines": "58",
    "confidence": "high",
    "signals": [],
-   "quote": "CarKit-side capability flags driven from iAP2 components + AirPlay session keys. CRCarPlayCapabilities persisted per accessory PPID in global preferences domain"
+   "quote": "CRCarPlayCapabilities persisted per accessory PPID in global preferences domain"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#10",
@@ -2737,7 +2737,7 @@
    "source_lines": "67",
    "confidence": "high",
    "signals": [],
-   "quote": "CRCarPlayCapabilities.persistCapabilitiesToGlobalDomain caches UI / display sub-state (zoom, insets, album-art mode, deny lists) keyed by accessory PPID"
+   "quote": "- **`CRCarPlayCapabilities.persistCapabilitiesToGlobalDomain`** caches UI / display sub-state (zoom, insets, album-art mode, deny lists) keyed by accessory PPID. Found in `CarKit` at `0x1ca862ca4`."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#14",
@@ -3518,10 +3518,10 @@
    "local_id": 77,
    "statement": "CarKit persistence keys include CapabilitiesDashboardRoundedCornersKey, CapabilitiesLiveActivitiesKey, CapabilitiesLodWidgetsKey, CapabilitiesNowPlayingAlbumArtKey.",
    "topic": "persistence-keys",
-   "source_lines": "186",
+   "source_lines": "183",
    "confidence": "high",
    "signals": [],
-   "quote": "CapabilitiesDashboardRoundedCornersKey, CapabilitiesLiveActivitiesKey, CapabilitiesLodWidgetsKey, CapabilitiesNowPlayingAlbumArtKey"
+   "quote": "CapabilitiesDashboardRoundedCornersKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#78",
@@ -3532,7 +3532,7 @@
    "source_lines": "188",
    "confidence": "high",
    "signals": [],
-   "quote": "CapabilitiesViewAreaInsetKey, CARCapabilitiesiInsets (Apple typo preserved on the wire), CarCapabilities"
+   "quote": "(Apple typo preserved on the wire)"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#79",
@@ -3540,10 +3540,10 @@
    "local_id": 79,
    "statement": "CarKit persistence keys include CarCapabilitiesContentVersion, CarCapabilitiesDefaultIdentifier, CRCapabilitiesVersionKey, CRCapabilitiesDisabledFeatureKey.",
    "topic": "persistence-keys",
-   "source_lines": "193",
+   "source_lines": "191",
    "confidence": "high",
    "signals": [],
-   "quote": "CarCapabilitiesContentVersion, CarCapabilitiesDefaultIdentifier, CRCapabilitiesVersionKey, CRCapabilitiesDisabledFeatureKey"
+   "quote": "CarCapabilitiesDefaultIdentifier"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#80",
@@ -3565,7 +3565,7 @@
    "source_lines": "196",
    "confidence": "high",
    "signals": [],
-   "quote": "CRCapabilitiesRouteSharingKey, CRCapabilitiesPinnedMessagesKey, CRCapabilitiesUserInfoKey — free-form forward-compat bucket"
+   "quote": "— free-form forward-compat bucket"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#82",
@@ -3573,10 +3573,10 @@
    "local_id": 82,
    "statement": "CarKit persistence keys include CRCapabilitiesUserInterfaceStyleKey, CRCapabilitiesZoomFactorKey.",
    "topic": "persistence-keys",
-   "source_lines": "198",
+   "source_lines": "197",
    "confidence": "high",
    "signals": [],
-   "quote": "CRCapabilitiesUserInterfaceStyleKey, CRCapabilitiesZoomFactorKey"
+   "quote": "CRCapabilitiesUserInterfaceStyleKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#83",
@@ -4359,7 +4359,7 @@
    "source_lines": "347",
    "confidence": "high",
    "signals": [],
-   "quote": "USBHostHID, wirelessCarPlayTransport, bluetoothHID, supportedExternalAccessoryProtocol"
+   "quote": "toothHID, supportedExternalAccessoryProtocol"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#150",
@@ -4485,7 +4485,7 @@
    "signals": [
     "TODO"
    ],
-   "quote": "address not yet recovered; sister function to the existing routeGuidanceDisplayComponent declaration table"
+   "quote": "Patch site in firmware: the `routeGuidanceDisplayComponent` registration function in ARMiPhoneIAP2. Address not yet recovered; sister function to the existing routeGuidanceDisplayComponent declaration table."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#160",
@@ -4533,7 +4533,7 @@
    "source_lines": "404",
    "confidence": "high",
    "signals": [],
-   "quote": "ARMiPhoneIAP2 v5 patched binary (deployed `/usr/sbin`, see versionCode 133)"
+   "quote": "The existing `ARMiPhoneIAP2 v5` patched binary (deployed `/usr/sbin`, see versionCode 133) demonstrates the in-flash patching approach. To add the lane-guidance unlock:"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#164",
@@ -4612,7 +4612,7 @@
    "source_lines": "436",
    "confidence": "high",
    "signals": [],
-   "quote": "EgoSpeed | Vehicle speed"
+   "quote": "| `EgoSpeed` | Vehicle speed |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#171",
@@ -4623,7 +4623,7 @@
    "source_lines": "437",
    "confidence": "high",
    "signals": [],
-   "quote": "EgoYawRate | Yaw rate (turning rate)"
+   "quote": "| `EgoYawRate` | Yaw rate (turning rate) |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#172",
@@ -4634,7 +4634,7 @@
    "source_lines": "438",
    "confidence": "high",
    "signals": [],
-   "quote": "Timestamp | Frame timestamp"
+   "quote": "| `Timestamp` | Frame timestamp |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#173",
@@ -4645,7 +4645,7 @@
    "source_lines": "439",
    "confidence": "high",
    "signals": [],
-   "quote": "RoadLane group | Per-lane state"
+   "quote": "| `RoadLane` group | Per-lane state |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#174",
@@ -4656,7 +4656,7 @@
    "source_lines": "440",
    "confidence": "high",
    "signals": [],
-   "quote": "RoadObject group | Detected objects (vehicles, pedestrians)"
+   "quote": "| `RoadObject` group | Detected objects (vehicles, pedestrians) |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#175",
@@ -4667,7 +4667,7 @@
    "source_lines": "441",
    "confidence": "high",
    "signals": [],
-   "quote": "RoadSign group | Detected signs"
+   "quote": "| `RoadSign` group | Detected signs |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#176",
@@ -4678,7 +4678,7 @@
    "source_lines": "445",
    "confidence": "high",
    "signals": [],
-   "quote": "ID, State, TypeLeft, TypeRight, ColorLeft, ColorRight, Width, CurvatureCenter, CurvatureLeft, CurvatureRight"
+   "quote": "`ID`, `State`, `TypeLeft`, `TypeRight`, `ColorLeft`, `ColorRight`, `Width`, `CurvatureCenter`, `CurvatureLeft`, `CurvatureRight`."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#177",
@@ -4689,7 +4689,7 @@
    "source_lines": "449",
    "confidence": "high",
    "signals": [],
-   "quote": "ID, State, Type, IsMoving, ForwardOffset, ForwardSpeed, ForwardAccel, LateralOffset, LateralSpeed, LateralAccel"
+   "quote": "`ID`, `State`, `Type`, `IsMoving`, `ForwardOffset`, `ForwardSpeed`, `ForwardAccel`, `LateralOffset`, `LateralSpeed`, `LateralAccel`."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#178",
@@ -4700,7 +4700,7 @@
    "source_lines": "453",
    "confidence": "high",
    "signals": [],
-   "quote": "ID, State, Type, Value, ForwardOffset, LateralOffset"
+   "quote": "`ID`, `State`, `Type`, `Value`, `ForwardOffset`, `LateralOffset`."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#179",
@@ -4708,10 +4708,10 @@
    "local_id": 179,
    "statement": "ADAS protocol methods are objectDetection:startComponentIdList:objectTypes: and objectDetection:stopComponentIdList:.",
    "topic": "adas-protocol",
-   "source_lines": "459",
+   "source_lines": "458",
    "confidence": "high",
    "signals": [],
-   "quote": "objectDetection:startComponentIdList:objectTypes:, objectDetection:stopComponentIdList:"
+   "quote": "objectDetection:startComponentIdList:objectTypes:"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#180",
@@ -4765,10 +4765,10 @@
    "local_id": 184,
    "statement": "EAVehicleInfo EV/battery/charging keys include EAVehicleInfoCurrentBatteryChargeKey, MaxBatteryChargeKey, MinBatteryChargeKey, DisplayedBatteryPercentageKey.",
    "topic": "eavehicleinfo-ev",
-   "source_lines": "488",
+   "source_lines": "485",
    "confidence": "high",
    "signals": [],
-   "quote": "EAVehicleInfoCurrentBatteryChargeKey, MaxBatteryChargeKey, MinBatteryChargeKey, DisplayedBatteryPercentageKey"
+   "quote": "EAVehicleInfoCurrentBatteryChargeKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#185",
@@ -4779,7 +4779,7 @@
    "source_lines": "491",
    "confidence": "high",
    "signals": [],
-   "quote": "ChargeLevelElectricKey, IsChargingKey, HasLowDistanceRangeElectricKey, MaxRangeElectricKey, RangeElectricKey"
+   "quote": "HasLowDistanceRangeElectricKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#186",
@@ -4787,10 +4787,10 @@
    "local_id": 186,
    "statement": "EAVehicleInfo EV/battery/charging keys include ActiveConnectorKey, SupportedChargingConnectorsBitMaskKey, ChargingParameterKey, ConsumptionParameterKey.",
    "topic": "eavehicleinfo-ev",
-   "source_lines": "497",
+   "source_lines": "495",
    "confidence": "high",
    "signals": [],
-   "quote": "ActiveConnectorKey, SupportedChargingConnectorsBitMaskKey, ChargingParameterKey, ConsumptionParameterKey"
+   "quote": "SupportedChargingConnectorsBitMaskKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#187",
@@ -4801,7 +4801,7 @@
    "source_lines": "501",
    "confidence": "high",
    "signals": [],
-   "quote": "PowerForConnectorTypeCCS1Key / `CCS2`, CHAdeMO, GBT_AC / `GBT_DC`, J1772, Mennekes, NACS_AC / `NACS_DC`, Tesla"
+   "quote": "PowerForConnectorTypeCCS1Key"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#188",
@@ -4809,10 +4809,10 @@
    "local_id": 188,
    "statement": "EAElectricVehicleChargingComponentsKey sub-keys: ChargingInfoConnectorTypeKey, MaximumCurrentKey, MaximumVoltageKey, MinimumVoltageKey, PowerTypeKey.",
    "topic": "eavehicleinfo-ev",
-   "source_lines": "515",
+   "source_lines": "511",
    "confidence": "high",
    "signals": [],
-   "quote": "ChargingInfoConnectorTypeKey, MaximumCurrentKey, MaximumVoltageKey, MinimumVoltageKey, PowerTypeKey"
+   "quote": "ChargingInfoConnectorTypeKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#189",
@@ -4823,7 +4823,7 @@
    "source_lines": "519",
    "confidence": "high",
    "signals": [],
-   "quote": "RangeKey, RangeGasolineKey, RangeDieselKey, RangeCNGKey, RangeElectricKey, plus `MaxRange*Key` and `HasLowDistanceRangeKey` variants"
+   "quote": "`RangeKey`, `RangeGasolineKey`, `RangeDieselKey`, `RangeCNGKey`, `RangeElectricKey`, plus `MaxRange*Key` and `HasLowDistanceRangeKey` variants."
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#190",
@@ -4831,10 +4831,10 @@
    "local_id": 190,
    "statement": "EAVehicleInfo climate/environment keys: EAVehicleInfoInsideTemperatureKey, OutsideTemperatureKey, BarometricPressure, IsColdTemperatureIndicatorOnKey.",
    "topic": "eavehicleinfo-climate",
-   "source_lines": "526",
+   "source_lines": "523",
    "confidence": "high",
    "signals": [],
-   "quote": "EAVehicleInfoInsideTemperatureKey, OutsideTemperatureKey, BarometricPressure, IsColdTemperatureIndicatorOnKey"
+   "quote": "EAVehicleInfoInsideTemperatureKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#191",
@@ -4842,10 +4842,10 @@
    "local_id": 191,
    "statement": "EAVehicleInfo cabin state keys: EAVehicleInfoWiperStatus, WiperStatusWasherOn, WiperStatusWaitDurationMs, WiperStatusWipeDurationMs.",
    "topic": "eavehicleinfo-cabin",
-   "source_lines": "533",
+   "source_lines": "532",
    "confidence": "high",
    "signals": [],
-   "quote": "EAVehicleInfoWiperStatus, WiperStatusWasherOn, WiperStatusWaitDurationMs, WiperStatusWipeDurationMs"
+   "quote": "WiperStatusWaitDurationMs"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#192",
@@ -4856,7 +4856,7 @@
    "source_lines": "534",
    "confidence": "high",
    "signals": [],
-   "quote": "EAVehicleInfoPassengrSeatStatus (Apple typo preserved), EAVehicleInfoAlerts, IsVehicleParkedKey"
+   "quote": "EAVehicleInfoPassengrSeatStatus"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#193",
@@ -4867,7 +4867,7 @@
    "source_lines": "546",
    "confidence": "high",
    "signals": [],
-   "quote": "EAVehicleInfoMakeKey, ModelKey, YearKey, DisplayNameKey, MapsDisplayNameKey, SiriNameKey, VehicleColorHexCodeKey"
+   "quote": "VehicleColorHexCodeKey"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#194",
@@ -4889,7 +4889,7 @@
    "source_lines": "566",
    "confidence": "high",
    "signals": [],
-   "quote": "limitableUserInterfaces / _limitedUIElements / _limitableUserInterfacesFromLimitedUIValues: | Now a bitmask of which UIs are limited. Notification `CARSessionLimitUserInterfacesChangedNotification`"
+   "quote": "| `setLimitedUI:` | `limitableUserInterfaces` / `_limitedUIElements` / `_limitableUserInterfacesFromLimitedUIValues:` | Now a bitmask of which UIs are limited. Notification `CARSessionLimitUserInterfacesChangedNotification`. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#196",
@@ -4900,7 +4900,7 @@
    "source_lines": "567",
    "confidence": "high",
    "signals": [],
-   "quote": "_systemNightMode / _locationBasedNightMode / _fallbackNightMode / _supportsPerDisplayNightMode | Layered resolver. `CARSessionNightModeChangedNotification`. Legacy command honored as fallback"
+   "quote": "| `setNightMode:` | `_systemNightMode` / `_locationBasedNightMode` / `_fallbackNightMode` / `_supportsPerDisplayNightMode` | Layered resolver. `CARSessionNightModeChangedNotification`. Legacy command honored as fallback. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#197",
@@ -4911,7 +4911,7 @@
    "source_lines": "568",
    "confidence": "high",
    "signals": [],
-   "quote": "vehicleInformation / vehicleInformationChanged: / updateVehicle:usingAccessory: | Dictionary-backed; observable via `CARCarKitVehicleInformationEvent`"
+   "quote": "| `updateVehicleInformation:` | `vehicleInformation` / `vehicleInformationChanged:` / `updateVehicle:usingAccessory:` | Dictionary-backed; observable via `CARCarKitVehicleInformationEvent`. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#198",
@@ -4922,7 +4922,7 @@
    "source_lines": "570",
    "confidence": "high",
    "signals": [],
-   "quote": "fetchSupportedAirPlayFeaturesForVehicleIdentifier:completion: | Per-vehicle feature query API"
+   "quote": "| (none) | `fetchSupportedAirPlayFeaturesForVehicleIdentifier:completion:` | Per-vehicle feature query API. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#199",
@@ -4933,7 +4933,7 @@
    "source_lines": "572",
    "confidence": "high",
    "signals": [],
-   "quote": "digitalCarKeyInformation / setDigitalCarKeyInformation: | Wallet CarKey session metadata"
+   "quote": "| (none) | `digitalCarKeyInformation` / `setDigitalCarKeyInformation:` | Wallet CarKey session metadata. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#200",
@@ -4944,7 +4944,7 @@
    "source_lines": "573",
    "confidence": "high",
    "signals": [],
-   "quote": "nowPlayingAlbumArtMode / CapabilitiesNowPlayingAlbumArtKey / albumArtUserPreference | Finer-grained album-art consent"
+   "quote": "| (none) | `nowPlayingAlbumArtMode` / `CapabilitiesNowPlayingAlbumArtKey` / `albumArtUserPreference` | Finer-grained album-art consent. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#201",
@@ -4955,7 +4955,7 @@
    "source_lines": "574",
    "confidence": "high",
    "signals": [],
-   "quote": "viewAreaInset / _viewAreaInsets / _adjacentViewArea / CapabilitiesViewAreaInsetKey / CARScreenViewArea | Multi-region screen carving for curved displays"
+   "quote": "| (none) | `viewAreaInset` / `_viewAreaInsets` / `_adjacentViewArea` / `CapabilitiesViewAreaInsetKey` / `CARScreenViewArea` | Multi-region screen carving for curved displays. |"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#202",
@@ -5098,7 +5098,7 @@
    "source_lines": "748",
    "confidence": "high",
    "signals": [],
-   "quote": "Agent 1 | CarKit framework deep RE | Full 60+ supports* / setSupports* list. CCPA inferred-claim inventory. CRCarPlayCapabilities persistence mechanism + 17 dictionary keys"
+   "quote": ". CCPA inferred-claim inventory. CRCarPlayCapabilities persistence mechanism + 17 dictionary keys"
   },
   {
    "gid": "02_Protocol_Reference/carkit_ios26_master.md#215",
@@ -5196,12 +5196,12 @@
    "local_id": 2,
    "statement": "Three simultaneous data streams were captured: Bluetooth HCI pcap, WiFi pcap, and firmware ttyLog",
    "topic": "capture-method",
-   "source_lines": "3",
+   "source_lines": "4",
    "confidence": "high",
    "signals": [
     "VERIFIED"
    ],
-   "quote": "full fresh wireless CarPlay pairing captured across three simultaneous streams (Bluetooth HCI pcap, WiFi pcap, firmware ttyLog)"
+   "quote": "CarPlay pairing captured across three simultaneous streams (Bluetooth HCI pcap, WiFi pcap,"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#3",
@@ -5214,7 +5214,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "with the adapter pairing record cleared beforehand to force a true `pair-setup`"
+   "quote": "with the adapter pairing record cleared beforehand to force a true"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#4",
@@ -5227,7 +5227,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "Adapter: CPC200-CCPA / A15W, AirPlay/AirTunes 320.17"
+   "quote": "**Adapter:** CPC200-CCPA / A15W, AirPlay/AirTunes 320.17, firmware `2025.02.25` (the genuine"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#5",
@@ -5253,7 +5253,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "iPhone: iPhone18,4, iOS 26.5 (build 23F77), AirPlay 950.7.1"
+   "quote": "**iPhone:** iPhone18,4, iOS 26.5 (build 23F77), AirPlay 950.7.1."
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#7",
@@ -5272,10 +5272,10 @@
    "local_id": 8,
    "statement": "The iAP2 link bring-up, identification, MFi authentication, and WiFi credential handover all run over the iAP2 accessory profile bound to /dev/rfcomm0",
    "topic": "bluetooth-transport",
-   "source_lines": "19",
+   "source_lines": "20",
    "confidence": "high",
    "signals": [],
-   "quote": "the entire iAP2 link bring-up, identification, MFi authentication and WiFi credential handover run over the iAP2 accessory profile bound to `/dev/rfcomm0`"
+   "quote": "WiFi credential handover run over the iAP2 accessory profile bound to `/dev/rfcomm0`"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#9",
@@ -5283,10 +5283,10 @@
    "local_id": 9,
    "statement": "After the iPhone joins the adapter's WPA2 SoftAP, the AirPlay session runs entirely over IP",
    "topic": "wifi-transport",
-   "source_lines": "21",
+   "source_lines": "22",
    "confidence": "high",
    "signals": [],
-   "quote": "after the iPhone joins the adapter's WPA2 SoftAP, the AirPlay session (RTSP control on TCP 5000, then HomeKit pair-setup / pair-verify, then encrypted media streams) runs entirely over IP"
+   "quote": "control on TCP 5000, then HomeKit pair-setup / pair-verify, then encrypted media streams)"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#10",
@@ -5299,7 +5299,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "The MFi coprocessor (a **real Apple MFi auth IC** on `/dev/i2c-1`, 7-bit address `0x11` / 8-bit `0x22`)"
+   "quote": "The MFi coprocessor (a **real Apple MFi auth IC** on `/dev/i2c-1`, 7-bit address `0x11` /"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#11",
@@ -5338,7 +5338,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "no `/auth-setup` endpoint on this firmware"
+   "quote": "no `/auth-setup` endpoint"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#14",
@@ -5346,10 +5346,10 @@
    "local_id": 14,
    "statement": "The iAP2/BT handshake includes ff55 probe, ff5a link-sync, identify commands (0x1D00/01/02), MFi auth (0xAA00..0xAA05), and WiFi handover (0x5702/0x5703 + 0x4E0A/0B/0D/0E)",
    "topic": "protocol-sequence",
-   "source_lines": "31",
+   "source_lines": "32",
    "confidence": "high",
    "signals": [],
-   "quote": "iAP2/BT :  ff55 probe -> ff5a link-sync -> identify(0x1D00/01/02) -> MFi auth(0xAA00..0xAA05) -> WiFi handover(0x5702/0x5703 + 0x4E0A/0B/0D/0E)"
+   "quote": "-> MFi auth(0xAA00..0xAA05) -> WiFi handover(0x5702/0x5703 + 0x4E0A/0B/0D/0E)"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#15",
@@ -5360,7 +5360,7 @@
    "source_lines": "33",
    "confidence": "high",
    "signals": [],
-   "quote": "WiFi    :  AppleCarPlay start -> mDNS _airplay._tcp -> RTSP:5000 -> /pair-setup x3 (HomeKit SRP) -> /pair-verify x2 (Curve25519) -> [MFi chip RSA sign again] -> AirPlay session"
+   "quote": "WiFi    :  AppleCarPlay start -> mDNS _airplay._tcp -> RTSP:5000"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#16",
@@ -5404,7 +5404,7 @@
    "source_lines": "50",
    "confidence": "high",
    "signals": [],
-   "quote": "linkVersion 1, maxOutstandingPackets 127, maxRecvPacketLen 2048 (adapter) / 65535 (iPhone), retransmit timeout 2000 ms"
+   "quote": "linkVersion 1, maxOutstandingPackets 127, maxRecvPacketLen 2048"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#20",
@@ -6032,7 +6032,7 @@
    "source_lines": "133",
    "confidence": "high",
    "signals": [],
-   "quote": "The two 128-byte signatures differ (different inputs); the certificate is the same"
+   "quote": "The two 128-byte signatures differ (different inputs); the"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#76",
@@ -6054,7 +6054,7 @@
    "source_lines": "138",
    "confidence": "high",
    "signals": [],
-   "quote": "the iAP2 `0xAA0x` challenge-response gates the Bluetooth side of the link"
+   "quote": "the iAP2 `0xAA0x` challenge-response gates the Bluetooth side of"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#78",
@@ -6076,7 +6076,7 @@
    "source_lines": "140",
    "confidence": "high",
    "signals": [],
-   "quote": "after HomeKit `pair-verify`, `AppleCarPlay` invokes `MFi auth create signature`"
+   "quote": "after HomeKit `pair-verify`, `AppleCarPlay` invokes"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#80",
@@ -6192,7 +6192,7 @@
    "signals": [
     "VERIFIED"
    ],
-   "quote": "There is **no fixed 7000/7001** for video/audio — those ports are ephemeral and negotiated per session in the AirPlay SETUP response"
+   "quote": "There is **no fixed 7000/7001** for video/audio — those ports are ephemeral and negotiated per"
   },
   {
    "gid": "02_Protocol_Reference/carplay_handshake.md#90",
@@ -6260,6 +6260,17 @@
    "quote": "**No** — the adapter has no screen; pair-setup is transparent, user trust is the iPhone-side \"Use This Car\" prompt"
   },
   {
+   "gid": "02_Protocol_Reference/carplay_handshake.md#95",
+   "file": "02_Protocol_Reference/carplay_handshake.md",
+   "local_id": 95,
+   "statement": "In Phase E2, the adapter registers the screen at 2400×960 @ 60 FPS with uuid e5f7a68d-….",
+   "topic": "screen-registration",
+   "source_lines": "93",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Registers screen `2400×960 @ 60 FPS` (uuid `e5f7a68d-…`)"
+  },
+  {
    "gid": "02_Protocol_Reference/command_details.md#1",
    "file": "02_Protocol_Reference/command_details.md",
    "local_id": 1,
@@ -6268,7 +6279,7 @@
    "source_lines": "5",
    "confidence": "high",
    "signals": null,
-   "quote": "Firmware Version: 2025.10.15.1127 (binary analysis reference version)"
+   "quote": "**Firmware Version:** 2025.10.15.1127 (binary analysis reference version)"
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#2",
@@ -6279,7 +6290,7 @@
    "source_lines": "6",
    "confidence": "high",
    "signals": null,
-   "quote": "Last Updated: 2026-02-19 (Added: firmware trigger points for all 1000-1013 commands, historical 1010 bug analysis"
+   "quote": "**Last Updated:** 2026-02-19 (Added: firmware trigger points for all 1000-1013 commands, historical 1010 bug analysis, session termination signals clarification. Prior: 14 new commands 400-403, 410-412, 502-503, 600-601, 700-702)"
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#3",
@@ -6406,12 +6417,12 @@
    "gid": "02_Protocol_Reference/command_details.md#14",
    "file": "02_Protocol_Reference/command_details.md",
    "local_id": 14,
-   "statement": "DisableBluetooth A→H variant has 21-byte payload with Bluetooth MAC address",
+   "statement": "DisableBluetooth A→H variant has 24-byte payload with Bluetooth MAC address",
    "topic": "command-4-payload-a2h",
    "source_lines": "79",
    "confidence": "high",
    "signals": null,
-   "quote": "**A→H (21-byte payload):** Adapter notifying host of connected phone's Bluetooth MAC address"
+   "quote": "**A→H (24-byte payload):** Adapter notifying host of connected phone's Bluetooth MAC address"
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#15",
@@ -6598,7 +6609,7 @@
    "source_lines": "176",
    "confidence": "high",
    "signals": null,
-   "quote": "Expected Response: Next VideoData (0x06) will contain IDR frame"
+   "quote": "**Expected Response:** Next VideoData (0x06) will contain IDR frame."
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#32",
@@ -6763,7 +6774,7 @@
    "source_lines": "256",
    "confidence": "high",
    "signals": null,
-   "quote": "Data Format: NMEA 0183 sentences ($GPGGA, $GPRMC, $GPGSV)"
+   "quote": "**Data Format:** NMEA 0183 sentences ($GPGGA, $GPRMC, $GPGSV)"
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#47",
@@ -7123,10 +7134,10 @@
    "local_id": 79,
    "statement": "D-Pad usage pattern: send button down command, wait for UI response, send CtrlButtonRelease (105) when button released",
    "topic": "dpad-usage",
-   "source_lines": "429",
+   "source_lines": "430",
    "confidence": "high",
    "signals": null,
-   "quote": "Usage Pattern:\n1. Send button down command (e.g., 100 for left)\n2. Wait for UI response\n3. Send CtrlButtonRelease (105) when button released"
+   "quote": "1. Send button down command (e.g., 100 for left)"
   },
   {
    "gid": "02_Protocol_Reference/command_details.md#80",
@@ -7825,7 +7836,7 @@
    "source_lines": "257",
    "confidence": "high",
    "signals": null,
-   "quote": "| 202 | MusicPause | Pause playback |"
+   "quote": "| MusicPause | Pause"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#2",
@@ -7836,7 +7847,7 @@
    "source_lines": "258",
    "confidence": "high",
    "signals": null,
-   "quote": "| 203 | MusicPlayOrPause | Toggle play/pause |"
+   "quote": "| MusicPlayOrPause | Toggle"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#3",
@@ -7847,7 +7858,7 @@
    "source_lines": "266",
    "confidence": "high",
    "signals": null,
-   "quote": "| 300 | PhoneAnswer | Answer incoming call |"
+   "quote": "| PhoneAnswer | Answer"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#4",
@@ -7858,7 +7869,7 @@
    "source_lines": "269",
    "confidence": "high",
    "signals": null,
-   "quote": "| 314 | CarPlay_PhoneHookSwitch | Hook switch toggle |"
+   "quote": "| CarPlay_PhoneHookSwitch | Hook"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#5",
@@ -7869,7 +7880,7 @@
    "source_lines": "359",
    "confidence": "high",
    "signals": null,
-   "quote": "| 1013 | GetBluetoothOnlineList | Request list of paired Bluetooth devices |"
+   "quote": "| GetBluetoothOnlineList |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#6",
@@ -7880,7 +7891,7 @@
    "source_lines": "352",
    "confidence": "high",
    "signals": null,
-   "quote": "| 1006 | DeviceConnectFailed | Connection attempt failed |"
+   "quote": "| DeviceConnectFailed |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#7",
@@ -7888,10 +7899,10 @@
    "local_id": 7,
    "statement": "Command 1010 (0x3F2) is DeviceWifiNotConnected, sent when no phone connected to WiFi hotspot",
    "topic": "command-1010-devicewifinotconnected",
-   "source_lines": "502",
+   "source_lines": "356",
    "confidence": "high",
    "signals": null,
-   "quote": "| 1010 | DeviceWifiNotConnected | No phone connected to WiFi hotspot |"
+   "quote": "| DeviceWifiNotConnected |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#8",
@@ -7902,7 +7913,7 @@
    "source_lines": "357",
    "confidence": "high",
    "signals": null,
-   "quote": "| 1011 | DeviceBluetoothPairStart | Bluetooth pairing started |"
+   "quote": "| DeviceBluetoothPairStart |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#9",
@@ -7913,7 +7924,7 @@
    "source_lines": "307",
    "confidence": "high",
    "signals": null,
-   "quote": "| 401 | LaunchAppPhone | Launch Phone app on phone |"
+   "quote": "| Launch Phone app on phone |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#10",
@@ -7924,7 +7935,7 @@
    "source_lines": "327",
    "confidence": "high",
    "signals": null,
-   "quote": "| 600 | DVRCommand_RequestPreview | Request DVR camera preview |"
+   "quote": "| DVRCommand_RequestPreview |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#11",
@@ -7935,7 +7946,7 @@
    "source_lines": "338",
    "confidence": "high",
    "signals": null,
-   "quote": "| 702 | CusCommand_HFPCallStop | Notify CarPlay of HFP call end |"
+   "quote": "| Notify CarPlay of HFP call end |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#12",
@@ -7974,12 +7985,12 @@
    "gid": "02_Protocol_Reference/command_ids.md#15",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 15,
-   "statement": "Commands 500-509 are Android Auto focus commands",
+   "statement": "Commands 500-509 are focus commands: 500-505 appear mainly in Android Auto, while 506/507 (audio nav focus) and 508/509 (NaviScreen video focus) are also used by CarPlay — both wired and wireless.",
    "topic": "command-ranges",
    "source_lines": "8",
    "confidence": "high",
    "signals": [],
-   "quote": "Commands 500-509 are Android Auto focus commands"
+   "quote": "508/509 (RequestNaviScreenFocus/ReleaseNaviScreenFocus, the 0x2C nav-screen video stream) are also used by CarPlay"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#16",
@@ -7992,7 +8003,7 @@
    "signals": [
     "reference-version"
    ],
-   "quote": "Firmware Version: 2025.10.15.1127 (binary analysis reference version)"
+   "quote": "**Firmware Version:** 2025.10.15.1127 (binary analysis reference version)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#17",
@@ -8003,7 +8014,7 @@
    "source_lines": "6",
    "confidence": "high",
    "signals": [],
-   "quote": "Last Updated: 2026-02-19 (Added 14 new commands: 400-403, 410-412, 600-601, 700-702; renamed 502/503; updated gap ranges)"
+   "quote": "**Last Updated:** 2026-02-19 (Added 14 new commands: 400-403, 410-412, 600-601, 700-702; renamed 502/503; updated gap ranges)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#18",
@@ -8022,10 +8033,10 @@
    "local_id": 19,
    "statement": "The USB header for a Command message contains the magic value 0x55AA55AA at the first 4 bytes",
    "topic": "usb-header-format",
-   "source_lines": "14",
+   "source_lines": "37",
    "confidence": "high",
    "signals": [],
-   "quote": "0x55AA55AA     |   (magic)"
+   "quote": "0x55AA55AA     |   0x00000004"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#20",
@@ -8036,7 +8047,7 @@
    "source_lines": "37",
    "confidence": "high",
    "signals": [],
-   "quote": "0x00000004     |   (length=4)"
+   "quote": "0x00000004"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#21",
@@ -8047,7 +8058,7 @@
    "source_lines": "37",
    "confidence": "high",
    "signals": [],
-   "quote": "0x00000008     |   (type=8)"
+   "quote": "0x00000008"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#22",
@@ -8055,10 +8066,10 @@
    "local_id": 22,
    "statement": "The USB header type check field contains 0xFFFFFFF7 for the Command message type",
    "topic": "usb-header-format",
-   "source_lines": "38",
+   "source_lines": "37",
    "confidence": "high",
    "signals": [],
-   "quote": "0xFFFFFFF7     |   (type check)"
+   "quote": "0xFFFFFFF7"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#23",
@@ -8099,12 +8110,12 @@
    "gid": "02_Protocol_Reference/command_ids.md#26",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 26,
-   "statement": "Firmware handler at address 0x197a8 performs command name lookup and dispatch",
+   "statement": "The call to fcn.000197a8 at 0x2047e is a command dispatch/forward helper; the command-ID→string-name lookup is the separate function at 0x19244",
    "topic": "firmware-handler",
    "source_lines": "77",
    "confidence": "high",
    "signals": [],
-   "quote": "call fcn.000197a8(r6, r5);               // Command name lookup and dispatch"
+   "quote": "// Command dispatch/forward helper (the command-ID→string-name lookup is the separate function at 0x19244)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#27",
@@ -8352,12 +8363,12 @@
    "gid": "02_Protocol_Reference/command_ids.md#49",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 49,
-   "statement": "Commands 500-509 are adapter-originated focus commands sent to host (A→H), Android Auto only, managing audio/video/navigation focus",
+   "statement": "Command range 500-509 are focus commands; mainly Android Auto, but 506/507 and 508/509 (NaviScreen focus) are also used by CarPlay (wired and wireless).",
    "topic": "command-500-509",
    "source_lines": "136",
    "confidence": "high",
    "signals": [],
-   "quote": "500-509 | Focus (AA only) | RequestVideoFocus, ReleaseVideoFocus, audio focus variants, navi focus — Android Auto only"
+   "quote": "Mainly Android Auto, but 506/507 and 508/509 are also used by CarPlay (wired + wireless)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#50",
@@ -8392,7 +8403,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Command 1010 (`DeviceWifiNotConnected`) is a **WiFi hotspot status notification**, NOT a session termination signal"
+   "quote": "**⚠️ CRITICAL (Binary Verified Feb 2026):** Command 1010 (`DeviceWifiNotConnected`) is a **WiFi hotspot status notification, NOT a session termination signal** — the host should log status / update its UI indicator but **must not terminate active sessions**. For the full interpretation (binary evidence, when it is sent, and USB-vs-Wireless handling), see `command_details.md` (canonical) and the [Command 1010 Binary Analysis Evidence (Feb 2026)](#command-1010-binary-analysis-evidence-feb-2026) section below."
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#53",
@@ -8400,12 +8411,12 @@
    "local_id": 53,
    "statement": "Command 1010's correct name is DeviceWifiNotConnected, verified via ARMadb-driver binary disassembly at address 0x19a64",
    "topic": "command-1010",
-   "source_lines": "429",
+   "source_lines": "451",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "Correct name:** `DeviceWifiNotConnected` (verified via `ARMadb-driver` binary disassembly at `0x19a64`)"
+   "quote": "0x00019a64      ldr r3, str.DeviceWifiNotConnected"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#54",
@@ -8413,10 +8424,10 @@
    "local_id": 54,
    "statement": "Command 1010 meaning: The adapter's WiFi hotspot currently has no phone connected",
    "topic": "command-1010",
-   "source_lines": "356",
+   "source_lines": "502",
    "confidence": "high",
    "signals": [],
-   "quote": "Meaning:** The adapter's WiFi hotspot currently has no phone connected"
+   "quote": "Command 1010 is a **general WiFi hotspot status**"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#55",
@@ -8424,10 +8435,10 @@
    "local_id": 55,
    "statement": "Command 1010 is sent during initialization, periodically while idle, or when WiFi link drops",
    "topic": "command-1010",
-   "source_lines": "481",
+   "source_lines": "480",
    "confidence": "high",
    "signals": [],
-   "quote": "When sent:** During initialization, periodically while idle, or when WiFi link drops"
+   "quote": "eriodically while idle"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#56",
@@ -8438,7 +8449,7 @@
    "source_lines": "484",
    "confidence": "high",
    "signals": [],
-   "quote": "For **USB CarPlay**: This command is completely irrelevant - data flows over USB, not WiFi. Ignore it."
+   "quote": "is completely irrelevant"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#57",
@@ -8449,7 +8460,7 @@
    "source_lines": "485",
    "confidence": "high",
    "signals": [],
-   "quote": "For **Wireless CarPlay**: WiFi dropping doesn't mean the session has ended. Wait for: `Unplugged` (0x04) message"
+   "quote": ": WiFi dropping doesn't"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#58",
@@ -8631,14 +8642,14 @@
    "gid": "02_Protocol_Reference/command_ids.md#74",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 74,
-   "statement": "Command ID to string name mapping is directly disassembled from ARMadb-driver.unpacked function at address 0x19744",
+   "statement": "Command ID to string name mapping is directly disassembled from the ARMadb-driver.unpacked command-name-lookup function at 0x19244; 0x19744 is an interior string-pointer literal of that function, not a separate function",
    "topic": "command-reference-source",
    "source_lines": "197",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "Source:** Direct disassembly of `ARMadb-driver.unpacked` function at `0x19744` (binary verified Feb 2026)"
+   "quote": "command-name-lookup function at `0x19244` (`0x19744` is an interior string-pointer literal of this function, not a separate function)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#75",
@@ -9150,14 +9161,14 @@
    "gid": "02_Protocol_Reference/command_ids.md#121",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 121,
-   "statement": "Commands 500-509 are Android Auto focus commands verified Jan 2026, managing audio/video/navigation focus for Android Auto sessions only",
+   "statement": "Focus commands 500-509 are used mainly by Android Auto; 506/507 (audio nav focus) and 508/509 (NaviScreen video focus) are also used by CarPlay — both wired and wireless.",
    "topic": "command-500-509",
    "source_lines": "273",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "These commands manage audio/video/navigation focus for Android Auto sessions only (not used in CarPlay)"
+   "quote": "506/507 (audio nav focus) and 508/509 (NaviScreen video focus) are also used by CarPlay — both wired and wireless"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#122",
@@ -9260,7 +9271,7 @@
    "source_lines": "285",
    "confidence": "high",
    "signals": [],
-   "quote": "508 | 0x1FC | RequestNaviScreenFocus | BOTH | Three-step handshake: host sends, adapter replies, host echoes. On wireless CarPlay the adapter never initiates, so host must send first."
+   "quote": "508 | 0x1FC | RequestNaviScreenFocus | BOTH | Three-step"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#131",
@@ -9629,12 +9640,12 @@
    "gid": "02_Protocol_Reference/command_ids.md#164",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 164,
-   "statement": "Firmware function at address 0x197a8 maps command ID to string name",
+   "statement": "Firmware function 0x19244 is the command name lookup (switch over command IDs → string name); 0x19744 and 0x197a8 are NOT functions but interior literal-pool string-pointer constants of it",
    "topic": "firmware-handler",
    "source_lines": "369",
    "confidence": "high",
    "signals": [],
-   "quote": "0x197a8 | Command name lookup | Maps command ID to string name"
+   "quote": "**`0x19744` / `0x197a8` are NOT functions** — they are interior literal-pool string-pointer constants of this function"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#165",
@@ -9645,7 +9656,7 @@
    "source_lines": "370",
    "confidence": "high",
    "signals": [],
-   "quote": "0x2047e | CarPlay forward | Forwards commands to CarPlay"
+   "quote": "| `0x2047e` | CarPlay forward | Forwards commands to CarPlay |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#166",
@@ -9656,7 +9667,7 @@
    "source_lines": "371",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1d2fe | D-Bus handler | Receives commands from phone via D-Bus"
+   "quote": "| `0x1d2fe` | D-Bus handler | Receives commands from phone via D-Bus |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#167",
@@ -9667,7 +9678,7 @@
    "source_lines": "372",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1a97e | Audio signal handler | Maps iAP audio events to AudioSignal_*"
+   "quote": "| `0x1a97e` | Audio signal handler | Maps iAP audio events to AudioSignal_* |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#168",
@@ -9678,7 +9689,7 @@
    "source_lines": "378",
    "confidence": "high",
    "signals": [],
-   "quote": "0x6d18b | \"Forward CarPlay control cmd!\" | Command forwarded to CarPlay"
+   "quote": "| `0x6d18b` | \"Forward CarPlay control cmd!\" | Command forwarded to CarPlay |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#169",
@@ -9689,7 +9700,7 @@
    "source_lines": "379",
    "confidence": "high",
    "signals": [],
-   "quote": "0x6d15b | \"Forward AndroidAuto control cmd!\" | Command forwarded to AA"
+   "quote": "| `0x6d15b` | \"Forward AndroidAuto control cmd!\" | Command forwarded to AA |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#170",
@@ -9700,7 +9711,7 @@
    "source_lines": "380",
    "confidence": "high",
    "signals": [],
-   "quote": "0x6bd4d | \"_SendPhoneCommandToCar: %s(%d)\" | Logging forwarded command"
+   "quote": "| `0x6bd4d` | \"_SendPhoneCommandToCar: %s(%d)\" | Logging forwarded command |"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#171",
@@ -9759,7 +9770,7 @@
    "signals": [
     "speculative"
    ],
-   "quote": "21 | 3 | `e8 07 00` | Additional data (possibly year: 2024)"
+   "quote": "21 | 3 | `e8 07 00` | Additional data"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#176",
@@ -9776,14 +9787,14 @@
    "gid": "02_Protocol_Reference/command_ids.md#177",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 177,
-   "statement": "Command 1010 binary evidence: ARMadb-driver.unpacked disassembly at 0x19744 function shows command ID comparisons",
+   "statement": "Command 1010 binary evidence: the command ID → string name mapper is the function at 0x19244; 0x19744 is one of its interior string-pointer literals, not the entry",
    "topic": "command-1010-binary",
    "source_lines": "433",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "The function at `0x19744` is a command ID → string name mapper. Disassembly shows:"
+   "quote": "The command ID → string name mapper is the function at `0x19244` (`0x19744` is one of its interior string-pointer literals, not the entry)."
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#178",
@@ -10025,7 +10036,7 @@
    "source_lines": "42",
    "confidence": "high",
    "signals": [],
-   "quote": "IMPORTANT: The `wifi` field determines USB vs Wireless connection, NOT phoneType"
+   "quote": "**IMPORTANT:** The `wifi` field determines USB vs Wireless connection, NOT phoneType. (Offset `0x04` is the transport `wifi` flag — `0` over USB. A `connected=1` label seen on the same field in a wired `usb_protocol.md` capture is that field mislabeled, not a separate value.)"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#5",
@@ -10785,7 +10796,7 @@
    "source_lines": "142",
    "confidence": "high",
    "signals": [],
-   "quote": "advertises wireless CarPlay capability — it carries the adapter's transports"
+   "quote": "advertises wireless CarPlay capability"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#73",
@@ -10796,7 +10807,7 @@
    "source_lines": "143",
    "confidence": "high",
    "signals": [],
-   "quote": "carries the adapter's transports, vehicle identity and supported message IDs, but **no resolution**"
+   "quote": "carries the adapter's transports, vehicle identity and supported message IDs, but **no"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#74",
@@ -10840,7 +10851,7 @@
    "source_lines": "162",
    "confidence": "high",
    "signals": [],
-   "quote": "A \"none\"-type parameter is a bare 4-byte TLV with no payload"
+   "quote": "A \"none\"-type parameter is a bare 4-byte TLV with"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#78",
@@ -11046,10 +11057,10 @@
    "local_id": 96,
    "statement": "transportSupportsCarPlay is sub-param id 4 inside wirelessCarPlayTransportComponent (component 24)",
    "topic": "iap2-carplay-enable",
-   "source_lines": "188",
+   "source_lines": "189",
    "confidence": "high",
    "signals": [],
-   "quote": "sub-param **id 4** inside the `wirelessCarPlayTransportComponent` (component 24)"
+   "quote": "**id 4** inside the `wirelessCarPlayTransportComponent` (component 24)"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#97",
@@ -11057,10 +11068,10 @@
    "local_id": 97,
    "statement": "transportSupportsCarPlay is an iAP2 'none'-type parameter with no payload",
    "topic": "iap2-carplay-enable",
-   "source_lines": "189",
+   "source_lines": "190",
    "confidence": "high",
    "signals": [],
-   "quote": "an iAP2 **\"none\"-type** parameter (4-byte TLV `[00 04][00 04]`, no payload)"
+   "quote": "**\"none\"-type** parameter (4-byte TLV `[00 04][00 04]`, no payload)"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#98",
@@ -11071,7 +11082,7 @@
    "source_lines": "190",
    "confidence": "high",
    "signals": [],
-   "quote": "its presence is the boolean flag"
+   "quote": "its presence is the"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#99",
@@ -11101,10 +11112,10 @@
    "local_id": 101,
    "statement": "After WiFi handover, bMediumTypeIsBT_ flag flips from 1 to 0",
    "topic": "iap2-wifi-transition",
-   "source_lines": "195",
+   "source_lines": "196",
    "confidence": "high",
    "signals": [],
-   "quote": "After WiFi handover the adapter re-identifies (`bMediumTypeIsBT_` flips 1→0)"
+   "quote": "adapter re-identifies (`bMediumTypeIsBT_` flips 1→0)"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#102",
@@ -11115,7 +11126,7 @@
    "source_lines": "196",
    "confidence": "high",
    "signals": [],
-   "quote": "the **WiFi re-identify pass** carries **16 components**"
+   "quote": "the **WiFi re-identify pass** carries"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#103",
@@ -11126,7 +11137,7 @@
    "source_lines": "197",
    "confidence": "high",
    "signals": [],
-   "quote": "it adds `routeGuidanceDisplayComponent` (id 30) and a larger supported message set"
+   "quote": "it adds `routeGuidanceDisplayComponent` (id 30) and a larger supported"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#104",
@@ -11181,7 +11192,7 @@
    "source_lines": "270",
    "confidence": "high",
    "signals": [],
-   "quote": "IMPORTANT: `cpuTemp` is the **adapter's** CPU temperature, NOT the phone's"
+   "quote": "**IMPORTANT:** `cpuTemp` is the **adapter's** CPU temperature, NOT the phone's."
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#109",
@@ -11479,7 +11490,7 @@
    "source_lines": "363",
    "confidence": "high",
    "signals": [],
-   "quote": "`box.ver` | Firmware version | e.g., 2025.10.15.1127"
+   "quote": "`box.ver` | Firmware version"
   },
   {
    "gid": "02_Protocol_Reference/device_identification.md#135",
@@ -13282,7 +13293,7 @@
    "source_lines": "283",
    "confidence": "high",
    "signals": [],
-   "quote": "There is **no explicit \"missed\" flag**"
+   "quote": "There is **no explicit \"missed\""
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#137",
@@ -13293,7 +13304,7 @@
    "source_lines": "284",
    "confidence": "high",
    "signals": [],
-   "quote": "the \"Missed\" recents entry and voicemail badge seen in CarPlay are **rendered by iOS into the H.264 video stream (pixels)**"
+   "quote": "the \"Missed\" recents entry and voicemail badge seen in CarPlay are **rendered by iOS into the"
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#138",
@@ -13345,10 +13356,10 @@
    "local_id": 142,
    "statement": "The 0x4157 subscribe carries one empty parameter per requested id {0,1,2,4..0x11}, with id 3 deliberately skipped.",
    "topic": "comm-0x4158",
-   "source_lines": "308",
+   "source_lines": "309",
    "confidence": "high",
    "signals": [],
-   "quote": "one empty parameter per requested id `{0,1,2,4,5,6,7,8,9,A,B,C,D,E,F,10,11}` (id 3 deliberately skipped)"
+   "quote": "`{0,1,2,4,5,6,7,8,9,A,B,C,D,E,F,10,11}` (id 3 deliberately skipped)"
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#143",
@@ -13446,7 +13457,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Reference binaries on disk: ~/Downloads/ios26.5_re/23F77__iPhone18,4/"
+   "quote": "**Reference binaries:** the iOS 26.5 `AccessoryNavigation`, `CarKit`, `CoreAccessories`, `AccessoryiAP2Shim`, and `CarKitNavigation` frameworks"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#6",
@@ -13494,7 +13505,7 @@
    "source_lines": "16",
    "confidence": "high",
    "signals": [],
-   "quote": "0x5201 RouteGuidanceUpdate fields | ... | 26"
+   "quote": "0x5201 RouteGuidanceUpdate fields |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#10",
@@ -13516,7 +13527,7 @@
    "source_lines": "17",
    "confidence": "high",
    "signals": [],
-   "quote": "0x5202 ManeuverItemsUpdate fields | ... | 13"
+   "quote": "0x5202 ManeuverItemsUpdate fields |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#12",
@@ -13527,7 +13538,7 @@
    "source_lines": "18",
    "confidence": "high",
    "signals": [],
-   "quote": "Display component capability flags | 7 | ... | 11"
+   "quote": "| Display component capability flags | 7 | 11 | +4 flags |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#13",
@@ -13538,7 +13549,7 @@
    "source_lines": "19",
    "confidence": "high",
    "signals": [],
-   "quote": "iAP2 identification components (NavigationComponent class) | basic Route Guidance only | ... | +5 capability gates"
+   "quote": "iAP2 identification components (NavigationComponent class) | basic Route Guidance only |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#14",
@@ -13718,7 +13729,7 @@
    "source_lines": "54",
    "confidence": "high",
    "signals": [],
-   "quote": "0x10 | `LaneGuidanceCurrentIndex` | Lane Guidance | u16 — which lane-guidance entry is active"
+   "quote": "| **0x10** | `LaneGuidanceCurrentIndex` | Lane Guidance | u16 — which lane-guidance entry is active |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#30",
@@ -13729,7 +13740,7 @@
    "source_lines": "55",
    "confidence": "high",
    "signals": [],
-   "quote": "0x11 | `LaneGuidanceTotalCount` | Lane Guidance | u16 — total lane-guidance entries in route"
+   "quote": "| **0x11** | `LaneGuidanceTotalCount` | Lane Guidance | u16 — total lane-guidance entries in route |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#31",
@@ -13740,7 +13751,7 @@
    "source_lines": "56",
    "confidence": "high",
    "signals": [],
-   "quote": "0x12 | `LaneGuidanceShowing` | Lane Guidance | u8 bool — whether iPhone is currently showing lane guidance"
+   "quote": "| **0x12** | `LaneGuidanceShowing` | Lane Guidance | u8 bool — whether iPhone is currently showing lane guidance |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#32",
@@ -13751,7 +13762,7 @@
    "source_lines": "57",
    "confidence": "high",
    "signals": [],
-   "quote": "0x14 | `SourceSupportsRouteGuidance` | Capability echo | u8 bool — always 1 since source = iPhone"
+   "quote": "| **0x14** | `SourceSupportsRouteGuidance` | Capability echo | u8 bool — always 1 since source = iPhone |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#33",
@@ -13762,7 +13773,7 @@
    "source_lines": "58",
    "confidence": "high",
    "signals": [],
-   "quote": "0x15 | `DestinationTimeZoneOffsetMinutes` | Time Zone | i16 — destination timezone offset in minutes"
+   "quote": "| **0x15** | `DestinationTimeZoneOffsetMinutes` | Time Zone | i16 — destination timezone offset in minutes |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#34",
@@ -13773,7 +13784,7 @@
    "source_lines": "59",
    "confidence": "high",
    "signals": [],
-   "quote": "0x16 | `StopType` | Multi-stop | u8 — type of upcoming stop (waypoint, charging, etc.)"
+   "quote": "| **0x16** | `StopType` | Multi-stop | u8 — type of upcoming stop (waypoint, charging, etc.) |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#35",
@@ -13784,7 +13795,7 @@
    "source_lines": "60",
    "confidence": "high",
    "signals": [],
-   "quote": "0x17 | `ChargingStationInfoList` | EV / Charging | group — list of charging stations along route"
+   "quote": "| **0x17** | `ChargingStationInfoList` | EV / Charging | group — list of charging stations along route |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#36",
@@ -13795,7 +13806,7 @@
    "source_lines": "61",
    "confidence": "high",
    "signals": [],
-   "quote": "0x18 | `ArrivalBatteryLevel` | EV / Battery | u8 % — expected battery at arrival"
+   "quote": "| **0x18** | `ArrivalBatteryLevel` | EV / Battery | u8 % — expected battery at arrival |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#37",
@@ -13806,7 +13817,7 @@
    "source_lines": "62",
    "confidence": "high",
    "signals": [],
-   "quote": "0x19 | `DepartureBatteryLevel` | EV / Battery | u8 % — battery at departure"
+   "quote": "| **0x19** | `DepartureBatteryLevel` | EV / Battery | u8 % — battery at departure |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#38",
@@ -13817,7 +13828,7 @@
    "source_lines": "63",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1a | `FinalWaypointBatteryLevel` | EV / Battery | u8 % — battery at final waypoint"
+   "quote": "| **0x1a** | `FinalWaypointBatteryLevel` | EV / Battery | u8 % — battery at final waypoint |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#39",
@@ -13828,7 +13839,7 @@
    "source_lines": "65",
    "confidence": "high",
    "signals": [],
-   "quote": "ChargingStationInfoList (0x17) is itself a group containing sub-fields recovered via `+[ACCNavigationRouteGuidanceUpdateInfo keyForChargingStationInfoType:]`"
+   "quote": "`ChargingStationInfoList` (0x17) is itself a group containing sub-fields recovered via `+[ACCNavigationRouteGuidanceUpdateInfo keyForChargingStationInfoType:]`:"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#40",
@@ -13993,7 +14004,7 @@
    "source_lines": "94",
    "confidence": "high",
    "signals": [],
-   "quote": "0x0c | `LinkedLaneGuidanceInfo` | group — links maneuver to its lane-guidance block"
+   "quote": "| **0x0c** | `LinkedLaneGuidanceInfo` | group — links maneuver to its lane-guidance block |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#55",
@@ -14004,7 +14015,7 @@
    "source_lines": "95",
    "confidence": "high",
    "signals": [],
-   "quote": "0x0d | `ExitInfo` | group — highway exit number / lane info"
+   "quote": "| **0x0d** | `ExitInfo` | group — highway exit number / lane info |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#56",
@@ -14633,12 +14644,12 @@
    "local_id": 112,
    "statement": "0x5201 integer-to-name table in dyld_shared_cache_arm64e at vaddr 0x226ac5f74.",
    "topic": "jump-table",
-   "source_lines": "206",
+   "source_lines": "207",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "0x5201 integer→name table: ipsw dyld disass dyld_shared_cache_arm64e --vaddr 0x226ac5f74"
+   "quote": "ipsw dyld disass dyld_shared_cache_arm64e --vaddr 0x226ac5f74"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#113",
@@ -14646,12 +14657,12 @@
    "local_id": 113,
    "statement": "0x5202 integer-to-name table in dyld_shared_cache_arm64e at vaddr 0x226ac77ec.",
    "topic": "jump-table",
-   "source_lines": "210",
+   "source_lines": "211",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "0x5202 integer→name table: ipsw dyld disass dyld_shared_cache_arm64e --vaddr 0x226ac77ec"
+   "quote": "ipsw dyld disass dyld_shared_cache_arm64e --vaddr 0x226ac77ec"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#114",
@@ -15443,7 +15454,7 @@
    "source_lines": "338",
    "confidence": "high",
    "signals": [],
-   "quote": "Modern iPhone resolves night mode in this order: 1. Per-display night mode... 2. System night mode... 3. Location-based... 4. Fallback (default OFF)"
+   "quote": "Modern iPhone resolves night mode in this order:"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#186",
@@ -15539,12 +15550,12 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#194",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 194,
-   "statement": "CCPA does NOT claim supportsUSBCarPlay.",
+   "statement": "CCPA currently claims supportsUSBCarPlay (listed under \"Currently claimed (CCPA observed behavior)\")",
    "topic": "ccpa-missing",
-   "source_lines": "238",
+   "source_lines": "352",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsUSBCarPlay` (USB-C iPhones limited)"
+   "quote": "| `supportsCarPlay`, `supportsWirelessCarPlay`, `supportsUSBCarPlay` | _(USB CarPlay relevant for USB-C iPhones)_ |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#195",
@@ -15552,10 +15563,10 @@
    "local_id": 195,
    "statement": "CCPA currently claims supportsAudio and supportsMixableAudio.",
    "topic": "ccpa-claims",
-   "source_lines": "251",
+   "source_lines": "353",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsAudio`, `supportsMixableAudio`"
+   "quote": "| `supportsAudio` | `supportsMixableAudio`, `supportsDolbyAtmos`, `supportsSpatialAudio` |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#196",
@@ -15563,10 +15574,10 @@
    "local_id": 196,
    "statement": "CCPA does NOT claim supportsDolbyAtmos or supportsSpatialAudio.",
    "topic": "ccpa-missing",
-   "source_lines": "253",
+   "source_lines": "353",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsDolbyAtmos`, `supportsSpatialAudio`"
+   "quote": "| `supportsAudio` | `supportsMixableAudio`, `supportsDolbyAtmos`, `supportsSpatialAudio` |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#197",
@@ -15596,10 +15607,10 @@
    "local_id": 199,
    "statement": "CCPA currently claims supportsTemplates and supportsThemeAssets.",
    "topic": "ccpa-claims",
-   "source_lines": "265",
+   "source_lines": "355",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsTemplates`, `supportsThemeAssets`"
+   "quote": "| `supportsTemplates` | `supportsThemeAssets`, `supportsInstrumentClusterContent` ⭐ |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#200",
@@ -15610,7 +15621,7 @@
    "source_lines": "273",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsInstrumentClusterContent` ⭐"
+   "quote": "| `supportsInstrumentClusterContent` | **Cluster-IC content streaming** — gates iPhone sending nav/cluster content to a secondary display |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#201",
@@ -15618,10 +15629,10 @@
    "local_id": 201,
    "statement": "CCPA currently claims supportsMaps and supportsMapContent.",
    "topic": "ccpa-claims",
-   "source_lines": "310",
+   "source_lines": "356",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsMaps`, `supportsMapContent`"
+   "quote": "| `supportsMaps` | `supportsMapContent`, `supportsAccNav` ⭐, `supportsHighFrameRateMaps` |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#202",
@@ -15632,7 +15643,7 @@
    "source_lines": "356",
    "confidence": "medium",
    "signals": [],
-   "quote": "| `supportsAccNav` ⭐, `supportsHighFrameRateMaps`"
+   "quote": "| `supportsMaps` | `supportsMapContent`, `supportsAccNav` ⭐, `supportsHighFrameRateMaps` |"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#203",
@@ -15857,7 +15868,7 @@
    "signals": [
     "Based on observed"
    ],
-   "quote": "Based on observed wireless CarPlay sessions with CPC200-CCPA firmware `2025.10.15.1127CAY` and iPhone 18,4"
+   "quote": "with CPC200-CCPA firmware `2025.10.15.1127CAY` and iPhone 18,4"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#2",
@@ -15879,7 +15890,7 @@
    "source_lines": "6",
    "confidence": "high",
    "signals": [],
-   "quote": "re-verified 2026-04-20 via macOS CarLink client USB capture"
+   "quote": "re-verified 2026-04-20 via macOS"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#4",
@@ -15920,10 +15931,10 @@
    "local_id": 7,
    "statement": "After host sends initialization sequence, adapter responds with ordered series of inbound messages mapping to distinct adapter+phone states",
    "topic": "sequence-overview",
-   "source_lines": "15",
+   "source_lines": "16",
    "confidence": "high",
    "signals": [],
-   "quote": "After the host sends its initialization sequence, the adapter responds with an ordered series of inbound messages that follow a consistent pattern across sessions. These messages map to distinct adapter + phone states"
+   "quote": "series of inbound messages that follow a consistent pattern across sessions. These messages"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#8",
@@ -15934,7 +15945,7 @@
    "source_lines": "19",
    "confidence": "high",
    "signals": [],
-   "quote": "High-frequency data messages (VIDEO_DATA, AUDIO_DATA, HEARTBEAT_ECHO) are excluded — this documents only control/state messages"
+   "quote": "High-frequency data messages (VIDEO_DATA, AUDIO_DATA, HEARTBEAT_ECHO) are excluded —"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#9",
@@ -15956,7 +15967,7 @@
    "source_lines": "31",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /tmp/screen_dpi | 0x99 | 4B (DPI, e.g. `a0 00 00 00` = 160)"
+   "quote": "| +0.381s | `SENDFILE /tmp/screen_dpi` | 0x99 | 4B (DPI, e.g. `a0 00 00 00` = 160) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#11",
@@ -15967,7 +15978,7 @@
    "source_lines": "32",
    "confidence": "high",
    "signals": [],
-   "quote": "OPEN 2400x960@60fps mode=2 | 0x01 | 28B = 7×uint32-LE: width, height, fps, format, packetMax, boxVersion, phoneMode (2=CarPlay)"
+   "quote": "| +0.510s | `OPEN 2400x960@60fps mode=2` | 0x01 | 28B = 7×uint32-LE: width, height, fps, format, packetMax, boxVersion, phoneMode (2=CarPlay) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#12",
@@ -15978,7 +15989,7 @@
    "source_lines": "33",
    "confidence": "high",
    "signals": [],
-   "quote": "BOXSETTINGS (host JSON) | 0x19 | ~280B JSON (CallQuality, DashboardInfo, GNSSCapability, box/bt/wifiName, androidAutoSize, etc.)"
+   "quote": "| +0.636s | `BOXSETTINGS (host JSON)` | 0x19 | ~280B JSON (CallQuality, DashboardInfo, GNSSCapability, box/bt/wifiName, androidAutoSize, etc.) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#13",
@@ -15989,7 +16000,7 @@
    "source_lines": "34",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /etc/RiddleBoxData/HU_VIEWAREA_INFO | 0x99 | 24B (W,H,viewW,viewH,offX,offY)"
+   "quote": "| +0.764s | `SENDFILE /etc/RiddleBoxData/HU_VIEWAREA_INFO` | 0x99 | 24B (W,H,viewW,viewH,offX,offY) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#14",
@@ -16000,7 +16011,7 @@
    "source_lines": "35",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /etc/RiddleBoxData/HU_SAFEAREA_INFO | 0x99 | 20B (w, h, originX, originY, drawUIOutsideSafeArea)"
+   "quote": "| +0.890s | `SENDFILE /etc/RiddleBoxData/HU_SAFEAREA_INFO` | 0x99 | 20B (w, h, originX, originY, drawUIOutsideSafeArea) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#15",
@@ -16011,7 +16022,7 @@
    "source_lines": "36",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /etc/android_work_mode | 0x99 | 4B (LE; `01 00 00 00` = Android Auto enabled, `00 00 00 00` = disabled)"
+   "quote": "| +2.364s | `SENDFILE /etc/android_work_mode` | 0x99 | 4B (LE; `01 00 00 00` = Android Auto enabled, `00 00 00 00` = disabled) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#16",
@@ -16022,7 +16033,7 @@
    "source_lines": "37",
    "confidence": "high",
    "signals": [],
-   "quote": "CMD WIFI_ENABLE | 0x08 | cmdId=1000"
+   "quote": "| +2.523s | `CMD WIFI_ENABLE` | 0x08 | cmdId=1000 |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#17",
@@ -16033,7 +16044,7 @@
    "source_lines": "38",
    "confidence": "high",
    "signals": [],
-   "quote": "CMD WIFI_CONNECT (if autoConn) | 0x08 | cmdId=1002"
+   "quote": "| +2.523s | `CMD WIFI_CONNECT` (if autoConn) | 0x08 | cmdId=1002 |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#18",
@@ -16044,7 +16055,7 @@
    "source_lines": "39",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /tmp/hand_drive_mode | 0x99 | 4B"
+   "quote": "| +2.810s | `SENDFILE /tmp/hand_drive_mode` | 0x99 | 4B |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#19",
@@ -16055,7 +16066,7 @@
    "source_lines": "40",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /etc/box_name | 0x99 | variable (e.g. `CarLink`, 7B)"
+   "quote": "| +2.810s | `SENDFILE /etc/box_name` | 0x99 | variable (e.g. `CarLink`, 7B) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#20",
@@ -16066,7 +16077,7 @@
    "source_lines": "41",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /tmp/charge_mode | 0x99 | 4B"
+   "quote": "| +2.937s | `SENDFILE /tmp/charge_mode` | 0x99 | 4B |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#21",
@@ -16077,7 +16088,7 @@
    "source_lines": "42",
    "confidence": "high",
    "signals": [],
-   "quote": "CMD USE_5G_WIFI | 0x08 | cmdId=25"
+   "quote": "| +2.937s | `CMD USE_5G_WIFI` | 0x08 | cmdId=25 |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#22",
@@ -16088,7 +16099,7 @@
    "source_lines": "43",
    "confidence": "high",
    "signals": [],
-   "quote": "CMD USE_CAR_MIC | 0x08 | cmdId=7"
+   "quote": "| +2.937s | `CMD USE_CAR_MIC` | 0x08 | cmdId=7 |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#23",
@@ -16099,7 +16110,7 @@
    "source_lines": "44",
    "confidence": "high",
    "signals": [],
-   "quote": "CMD USE_BOX_TRANS_AUDIO | 0x08 | cmdId=23"
+   "quote": "| +2.937s | `CMD USE_BOX_TRANS_AUDIO` | 0x08 | cmdId=23 |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#24",
@@ -16110,7 +16121,7 @@
    "source_lines": "45",
    "confidence": "high",
    "signals": [],
-   "quote": "SENDFILE /etc/airplay.conf | 0x99 | 113B (OEM/car-specific AirPlay config)"
+   "quote": "| +3.108s | `SENDFILE /etc/airplay.conf` | 0x99 | 113B (OEM/car-specific AirPlay config) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#25",
@@ -16165,7 +16176,7 @@
    "source_lines": "55",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(WIFI_ENABLE) | 0x08 cmd=1000 | Adapter WiFi radio is on"
+   "quote": "| 1 | `Command(WIFI_ENABLE)` | 0x08 cmd=1000 | Adapter WiFi radio is on |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#30",
@@ -16176,7 +16187,7 @@
    "source_lines": "56",
    "confidence": "high",
    "signals": [],
-   "quote": "BluetoothDeviceName(carlink) | 0x0D | Adapter BT name echo"
+   "quote": "| 2 | `BluetoothDeviceName(carlink)` | 0x0D | Adapter BT name echo |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#31",
@@ -16187,7 +16198,7 @@
    "source_lines": "57",
    "confidence": "high",
    "signals": [],
-   "quote": "WifiDeviceName(carlink) | 0x0E | Adapter WiFi SSID echo"
+   "quote": "| 3 | `WifiDeviceName(carlink)` | 0x0E | Adapter WiFi SSID echo |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#32",
@@ -16198,7 +16209,7 @@
    "source_lines": "58",
    "confidence": "high",
    "signals": [],
-   "quote": "UiBringToForeground | 0x26 | Tells HU to show pairing UI"
+   "quote": "| 4 | `UiBringToForeground` | 0x26 | Tells HU to show pairing UI |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#33",
@@ -16209,7 +16220,7 @@
    "source_lines": "59",
    "confidence": "high",
    "signals": [],
-   "quote": "BluetoothPairedList(...) | 0x12 | Previously paired devices (MAC + name)"
+   "quote": "| 5 | `BluetoothPairedList(...)` | 0x12 | Previously paired devices (MAC + name) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#34",
@@ -16220,7 +16231,7 @@
    "source_lines": "60",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(AUTO_CONNECT_ENABLE) | 0x08 cmd=1001 | Auto-connect feature enabled"
+   "quote": "| 6 | `Command(AUTO_CONNECT_ENABLE)` | 0x08 cmd=1001 | Auto-connect feature enabled |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#35",
@@ -16231,7 +16242,7 @@
    "source_lines": "61",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(MIC) | 0x08 cmd=7 | Mic config echo"
+   "quote": "| 7 | `Command(MIC)` | 0x08 cmd=7 | Mic config echo |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#36",
@@ -16242,7 +16253,7 @@
    "source_lines": "62",
    "confidence": "high",
    "signals": [],
-   "quote": "SoftwareVersion(...) | 0xCC | Firmware version string"
+   "quote": "| 8 | `SoftwareVersion(...)` | 0xCC | Firmware version string |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#37",
@@ -16253,7 +16264,7 @@
    "source_lines": "63",
    "confidence": "high",
    "signals": [],
-   "quote": "BoxSettings(adapter: YA) | 0x19 | Adapter info JSON (uuid, DevList, hwVersion, etc.)"
+   "quote": "| 9 | `BoxSettings(adapter: YA)` | 0x19 | Adapter info JSON (uuid, DevList, hwVersion, etc.) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#38",
@@ -16264,7 +16275,7 @@
    "source_lines": "64",
    "confidence": "high",
    "signals": [],
-   "quote": "OpenEcho(WxH) | 0xFF | Resolution acknowledged (e.g., 2400x788) — CMD_ACK"
+   "quote": "| 10 | `OpenEcho(WxH)` | 0xFF | Resolution acknowledged (e.g., 2400x788) — CMD_ACK |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#39",
@@ -16286,7 +16297,7 @@
    "source_lines": "72",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(SCANNING_DEVICE) | 0x08 cmd=1003 | BT scanning started"
+   "quote": "| 11 | `Command(SCANNING_DEVICE)` | 0x08 cmd=1003 | BT scanning started |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#41",
@@ -16297,7 +16308,7 @@
    "source_lines": "73",
    "confidence": "high",
    "signals": [],
-   "quote": "PeerBluetoothAddress(MAC) | 0x23 | Target device BT MAC for connection (Bluetooth_ConnectStart)"
+   "quote": "| 12 | `PeerBluetoothAddress(MAC)` | 0x23 | Target device BT MAC for connection (Bluetooth_ConnectStart) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#42",
@@ -16319,7 +16330,7 @@
    "source_lines": "81",
    "confidence": "high",
    "signals": [],
-   "quote": "StatusValue(4 / 0x4) | 0xBB | BT page in progress (not always present)"
+   "quote": "| 13 | `StatusValue(4 / 0x4)` | 0xBB | BT page in progress (not always present) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#44",
@@ -16330,7 +16341,7 @@
    "source_lines": "82",
    "confidence": "high",
    "signals": [],
-   "quote": "BoxSettings(phone: ) | 0x19 | Phone connecting — model empty initially"
+   "quote": "| 14 | `BoxSettings(phone: )` | 0x19 | Phone connecting — model empty initially |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#45",
@@ -16341,7 +16352,7 @@
    "source_lines": "83",
    "confidence": "high",
    "signals": [],
-   "quote": "PeerBluetoothAddress(MAC) | 0x24 | Confirmed BT MAC (Bluetooth_Connected)"
+   "quote": "| 15 | `PeerBluetoothAddress(MAC)` | 0x24 | Confirmed BT MAC (Bluetooth_Connected) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#46",
@@ -16352,7 +16363,7 @@
    "source_lines": "84",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(BT_CONNECTED) | 0x08 cmd=1007 | **BT link established**"
+   "quote": "| 16 | `Command(BT_CONNECTED)` | 0x08 cmd=1007 | **BT link established** |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#47",
@@ -16363,7 +16374,7 @@
    "source_lines": "85",
    "confidence": "high",
    "signals": [],
-   "quote": "BluetoothPairedList(...) | 0x12 | Updated paired device list"
+   "quote": "| 17 | `BluetoothPairedList(...)` | 0x12 | Updated paired device list |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#48",
@@ -16374,7 +16385,7 @@
    "source_lines": "86",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(AUTO_CONNECT_ENABLE) | 0x08 cmd=1001 | Re-echo"
+   "quote": "| 18 | `Command(AUTO_CONNECT_ENABLE)` | 0x08 cmd=1001 | Re-echo |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#49",
@@ -16385,7 +16396,7 @@
    "source_lines": "87",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(DEVICE_FOUND) | 0x08 cmd=1004 | Phone found confirmation"
+   "quote": "| 19 | `Command(DEVICE_FOUND)` | 0x08 cmd=1004 | Phone found confirmation |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#50",
@@ -16418,7 +16429,7 @@
    "source_lines": "98",
    "confidence": "high",
    "signals": [],
-   "quote": "BoxSettings(phone: ) | 0x19 | WiFi handshake starting (model still empty)"
+   "quote": "| 20 | `BoxSettings(phone: )` | 0x19 | WiFi handshake starting (model still empty) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#53",
@@ -16429,7 +16440,7 @@
    "source_lines": "99",
    "confidence": "high",
    "signals": [],
-   "quote": "Plugged(phoneType=CARPLAY, wifi=1) | 0x02 | **CarPlay session active, wireless mode**"
+   "quote": "| 21 | `Plugged(phoneType=CARPLAY, wifi=1)` | 0x02 | **CarPlay session active, wireless mode** |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#54",
@@ -16440,7 +16451,7 @@
    "source_lines": "100",
    "confidence": "high",
    "signals": [],
-   "quote": "Phase(7=connecting) | 0x03 | AirPlay protocol negotiation in progress"
+   "quote": "| 22 | `Phase(7=connecting)` | 0x03 | AirPlay protocol negotiation in progress |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#55",
@@ -16451,7 +16462,7 @@
    "source_lines": "104",
    "confidence": "high",
    "signals": [],
-   "quote": "iAP2 identification (`0x1D00/0x1D01/0x1D02`)"
+   "quote": "(`0x1D00/0x1D01/0x1D02`)"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#56",
@@ -16473,7 +16484,7 @@
    "source_lines": "104",
    "confidence": "high",
    "signals": [],
-   "quote": "WiFi credential handover (`0x5702/0x5703`)"
+   "quote": "WiFi credential handover"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#58",
@@ -16495,7 +16506,7 @@
    "source_lines": "106",
    "confidence": "high",
    "signals": [],
-   "quote": "then, over WiFi, AirPlay `/pair-setup` ×3 + `/pair-verify` ×2"
+   "quote": "`/pair-setup` ×3 + `/pair-verify` ×2"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#60",
@@ -16506,7 +16517,7 @@
    "source_lines": "106",
    "confidence": "high",
    "signals": [],
-   "quote": "The long Phase-4 delay corresponds to iPhone-side trust (the \"Use This Car\" prompt) plus pair-setup"
+   "quote": "The long Phase-4 delay corresponds to iPhone-side trust"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#61",
@@ -16539,7 +16550,7 @@
    "source_lines": "116",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(DISABLE_BLUETOOTH) | 0x08 cmd=4 | BT radio off — WiFi Direct handles stream"
+   "quote": "| 23 | `Command(DISABLE_BLUETOOTH)` | 0x08 cmd=4 | BT radio off — WiFi Direct handles stream |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#64",
@@ -16550,7 +16561,7 @@
    "source_lines": "117",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(REQUEST_VIDEO_FOCUS) | 0x08 cmd=500 | Adapter ready to send video frames"
+   "quote": "| 24 | `Command(REQUEST_VIDEO_FOCUS)` | 0x08 cmd=500 | Adapter ready to send video frames |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#65",
@@ -16561,7 +16572,7 @@
    "source_lines": "118",
    "confidence": "high",
    "signals": [],
-   "quote": "BoxSettings(phone: iPhone18,4) | 0x19 | Full phone model now identified"
+   "quote": "| 25 | `BoxSettings(phone: iPhone18,4)` | 0x19 | Full phone model now identified |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#66",
@@ -16572,7 +16583,7 @@
    "source_lines": "119",
    "confidence": "high",
    "signals": [],
-   "quote": "SessionToken(492B encrypted) | 0xA3 | Encrypted session token established"
+   "quote": "| 26 | `SessionToken(492B encrypted)` | 0xA3 | Encrypted session token established |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#67",
@@ -16583,7 +16594,7 @@
    "source_lines": "120",
    "confidence": "high",
    "signals": [],
-   "quote": "Phase(8=streaming) | 0x03 | **Video/audio streaming active**"
+   "quote": "| 27 | `Phase(8=streaming)` | 0x03 | **Video/audio streaming active** |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#68",
@@ -16594,7 +16605,7 @@
    "source_lines": "128",
    "confidence": "high",
    "signals": [],
-   "quote": "UiHidePeerInfo | 0x25 | Hide pairing/connection overlay"
+   "quote": "| 28 | `UiHidePeerInfo` | 0x25 | Hide pairing/connection overlay |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#69",
@@ -16605,7 +16616,7 @@
    "source_lines": "129",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(BT_DISCONNECTED) | 0x08 cmd=1008 | BT radio off (WiFi-only from here)"
+   "quote": "| 29 | `Command(BT_DISCONNECTED)` | 0x08 cmd=1008 | BT radio off (WiFi-only from here) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#70",
@@ -16616,29 +16627,29 @@
    "source_lines": "130",
    "confidence": "high",
    "signals": [],
-   "quote": "MediaData(type=DATA) x6 | 0x2A | Media metadata burst (song/artist/album/cover)"
+   "quote": "| 30 | `MediaData(type=DATA)` x6 | 0x2A | Media metadata burst (song/artist/album/cover) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#71",
    "file": "02_Protocol_Reference/inbound_session_sequence.md",
    "local_id": 71,
-   "statement": "Command(REQUEST_HOST_UI) with type ID 0x08 cmd=600 is triggered when user presses Home/CarPlay button",
+   "statement": "Command with type ID 0x08 cmd=600 is DVRCommand_RequestPreview per binary-verified tables; the original Home/CarPlay-button REQUEST_HOST_UI reading is superseded (RequestHostUI is command 3)",
    "topic": "ongoing-request-host-ui",
    "source_lines": "136",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(REQUEST_HOST_UI) | 0x08 cmd=600 | User pressed Home/CarPlay button"
+   "quote": "Binary-verified tables (`command_ids.md`, `command_details.md`) establish cmd 600 = DVRCommand_RequestPreview; RequestHostUI is command 3 (0x03)."
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#72",
    "file": "02_Protocol_Reference/inbound_session_sequence.md",
    "local_id": 72,
-   "statement": "Command(WIFI_DISCONNECTED) with type ID 0x08 cmd=1006 is WiFi status ping and is informational, not session end",
+   "statement": "Command(DeviceWifiNotConnected) with type ID 0x08 is cmd=1010 (WiFi status ping, informational, not session end); the original cmd=1006 logging was corrected since binary-verified tables map 1006 = DeviceConnectFailed",
    "topic": "ongoing-wifi-status",
    "source_lines": "137",
    "confidence": "high",
    "signals": [],
-   "quote": "Command(WIFI_DISCONNECTED) | 0x08 cmd=1006 | WiFi status ping (informational, not session end)"
+   "quote": "Originally logged here as cmd=1006, but binary-verified tables map 1006 = DeviceConnectFailed; the WiFi-not-connected status is cmd 1010."
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#73",
@@ -16651,7 +16662,7 @@
    "signals": [
     "rare, seen once"
    ],
-   "quote": "Command(WIFI_CONNECTED) | 0x08 cmd=? | WiFi client connected (rare, seen once)"
+   "quote": "| `Command(WIFI_CONNECTED)` | 0x08 cmd=? | WiFi client connected (rare, seen once) |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#74",
@@ -16662,7 +16673,7 @@
    "source_lines": "139",
    "confidence": "high",
    "signals": [],
-   "quote": "MediaData(type=DATA) | 0x2A | Song change, position tick, album art"
+   "quote": "| `MediaData(type=DATA)` | 0x2A | Song change, position tick, album art |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#75",
@@ -16673,7 +16684,7 @@
    "source_lines": "140",
    "confidence": "high",
    "signals": [],
-   "quote": "MediaData(type=NAVI_JSON) | 0x2A | Navigation turn-by-turn data"
+   "quote": "| `MediaData(type=NAVI_JSON)` | 0x2A | Navigation turn-by-turn data |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#76",
@@ -16684,7 +16695,7 @@
    "source_lines": "141",
    "confidence": "high",
    "signals": [],
-   "quote": "Unplugged | 0x04 | **Session terminated by phone/adapter**"
+   "quote": "| `Unplugged` | 0x04 | **Session terminated by phone/adapter** |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#77",
@@ -16695,7 +16706,7 @@
    "source_lines": "142",
    "confidence": "high",
    "signals": [],
-   "quote": "Phase(0) | 0x03 | Session terminated by adapter firmware"
+   "quote": "| `Phase(0)` | 0x03 | Session terminated by adapter firmware |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#78",
@@ -16706,7 +16717,7 @@
    "source_lines": "143",
    "confidence": "high",
    "signals": [],
-   "quote": "Phase(13) | 0x03 | **AirPlay session negotiation failed** — iPhone rejected viewAreasArray"
+   "quote": "| `Phase(13)` | 0x03 | **AirPlay session negotiation failed** — iPhone rejected viewAreasArray (e.g., `viewArea > display`). Causes Phase 7→13 reconnect loop. |"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#79",
@@ -16761,10 +16772,10 @@
    "local_id": 83,
    "statement": "StatusValue(4) is not present when phone was recently connected",
    "topic": "observation-status-value-presence",
-   "source_lines": "148",
+   "source_lines": "149",
    "confidence": "high",
    "signals": [],
-   "quote": "Not present when phone was recently connected"
+   "quote": "when phone was recently connected"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#84",
@@ -16772,10 +16783,10 @@
    "local_id": 84,
    "statement": "BoxSettings(phone:) arrives three times: first empty (BT connecting), second empty (WiFi starting), third with full model string (iPhone18,4) at streaming start",
    "topic": "observation-progressive-id",
-   "source_lines": "151",
+   "source_lines": "152",
    "confidence": "high",
    "signals": [],
-   "quote": "BoxSettings(phone:)` arrives three times: first empty (BT connecting), second empty (WiFi starting), third with full model string (`iPhone18,4`) at streaming start"
+   "quote": "first empty (BT connecting), second empty (WiFi starting), third with full model"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#85",
@@ -16783,10 +16794,10 @@
    "local_id": 85,
    "statement": "Bluetooth is only used for initial device discovery and RFCOMM handshake; once iPhone joins adapter WiFi SoftAP, DISABLE_BLUETOOTH and BT_DISCONNECTED are sent",
    "topic": "observation-bt-transient",
-   "source_lines": "155",
+   "source_lines": "156",
    "confidence": "high",
    "signals": [],
-   "quote": "Bluetooth is only used for initial device discovery and RFCOMM handshake. Once the iPhone has joined the adapter's WiFi SoftAP, `DISABLE_BLUETOOTH` and `BT_DISCONNECTED` are sent"
+   "quote": "RFCOMM handshake. Once the iPhone has joined the adapter's WiFi SoftAP, `DISABLE_BLUETOOTH`"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#86",
@@ -16805,10 +16816,10 @@
    "local_id": 87,
    "statement": "Real session disconnects are signaled via Unplugged (0x04) or Phase(0)",
    "topic": "observation-real-disconnect",
-   "source_lines": "160",
+   "source_lines": "161",
    "confidence": "high",
    "signals": [],
-   "quote": "Real disconnects come via `Unplugged` (0x04) or `Phase(0)`"
+   "quote": "`Unplugged` (0x04) or `Phase(0)`"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#88",
@@ -16816,12 +16827,12 @@
    "local_id": 88,
    "statement": "Typical wireless CarPlay timing: init echo immediate, phone scan +600ms, BT connected +2-3s, Plugged +3-4s, streaming +5-7s from init start",
    "topic": "observation-typical-timing",
-   "source_lines": "164",
+   "source_lines": "169",
    "confidence": "high",
    "signals": [
     "typical"
    ],
-   "quote": "Timing (typical wireless CarPlay): - Init echo: immediate - Phone scan: +600ms - BT connected: +2-3s - Plugged: +3-4s - Streaming: +5-7s from init start"
+   "quote": "- Streaming: +5-7s from init start"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#89",
@@ -16873,10 +16884,10 @@
    "local_id": 93,
    "statement": "Phase 13 is not an internal firmware phase; internal phases are 0-3, 100-106, 200",
    "topic": "observation-phase-13-nature",
-   "source_lines": "173",
+   "source_lines": "174",
    "confidence": "high",
    "signals": [],
-   "quote": "Not an internal firmware phase (internal phases are 0-3, 100-106, 200). Phase 13 is only sent to the host over USB when AirPlay session negotiation fails"
+   "quote": "are 0-3, 100-106, 200). Phase 13 is only sent to the host over USB when AirPlay"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#94",
@@ -16887,7 +16898,7 @@
    "source_lines": "174",
    "confidence": "high",
    "signals": [],
-   "quote": "Phase 13 is only sent to the host over USB when AirPlay session negotiation fails"
+   "quote": "Phase 13 is only sent to the host over USB when AirPlay"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#95",
@@ -16895,10 +16906,10 @@
    "local_id": 95,
    "statement": "Adapter internally transitions through Phase 2 (SCREEN_INFO / AirPlay control connected) then back to Phase 0 (disconnect) during Phase 13 failure",
    "topic": "observation-phase-13-internal",
-   "source_lines": "175",
+   "source_lines": "176",
    "confidence": "high",
    "signals": [],
-   "quote": "The adapter internally transitions through Phase 2 (SCREEN_INFO / AirPlay control connected) then back to Phase 0 (disconnect), but reports 13 to the host instead of 0"
+   "quote": "(SCREEN_INFO / AirPlay control connected) then back to Phase 0 (disconnect),"
   },
   {
    "gid": "02_Protocol_Reference/inbound_session_sequence.md#96",
@@ -16906,10 +16917,10 @@
    "local_id": 96,
    "statement": "iPhone rejects AirPlay session gracefully (Dur=0s, Reason=noErr) when viewAreasArray constraints are violated",
    "topic": "observation-airplay-rejection",
-   "source_lines": "177",
+   "source_lines": "178",
    "confidence": "high",
    "signals": [],
-   "quote": "The iPhone rejects the session gracefully (Dur=0s, Reason=noErr) when `viewAreasArray` constraints are violated"
+   "quote": "(Dur=0s, Reason=noErr) when `viewAreasArray` constraints are violated"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#1",
@@ -18586,12 +18597,12 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#152",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 152,
-   "statement": "Type 163 (0xA3) SessionToken is an IN encrypted session data message of 428-508 bytes, ~428B wired and ~492B wireless.",
+   "statement": "Type 163 (0xA3) SessionToken is an IN encrypted-session-data message of variable length (~428-508 bytes); the size varies with session content (connected device, test/production environment).",
    "topic": "usb-session-token",
    "source_lines": "432",
    "confidence": "high",
    "signals": null,
-   "quote": "SessionToken | IN | 428-508 | Encrypted session data"
+   "quote": "**Variable length** — the Base64 blob carries per-session JSON"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#153",
@@ -18740,25 +18751,25 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#166",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 166,
-   "statement": "Type 508 (0x1FC) RequestNaviScreenFocus is a BOTH-direction message that starts the iOS nav video encoder, and for wireless CarPlay the host must proactively send the 508 kick.",
+   "statement": "Type 508 (0x1FC) RequestNaviScreenFocus is a BOTH-direction message that starts the 0x2C nav-screen video stream, and for wireless CarPlay the host must proactively send the 508 kick.",
    "topic": "usb-navfocus",
    "source_lines": "535",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "**Starts the iOS nav video encoder** (verified)"
+   "quote": "**Starts the 0x2C nav-screen video stream** (verified)"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#167",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 167,
-   "statement": "Type 509 (0x1FD) ReleaseNaviScreenFocus is an OUT message that stops nav audio by turning off its encoder.",
+   "statement": "Type 509 (0x1FD) ReleaseNaviScreenFocus is an OUT message that stops the 0x2C nav-screen video stream (a video-focus release, not audio).",
    "topic": "usb-navfocus",
    "source_lines": "536",
    "confidence": "high",
    "signals": null,
-   "quote": "Release nav screen — **stops nav audio by turning off its encoder**"
+   "quote": "Release nav screen — **stops the 0x2C nav-screen video stream"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#168",
@@ -18791,7 +18802,7 @@
    "source_lines": "542",
    "confidence": "high",
    "signals": null,
-   "quote": "pure status notifications sent by the adapter to report WiFi/Bluetooth internal state"
+   "quote": "Commands 1000-1013 are **pure status notifications** sent by the adapter to report WiFi/Bluetooth internal state. They never indicate session failure and must never trigger disconnect. CMD 1010 (DeviceWifiNotConnected) is the most commonly misinterpreted -- it is a WiFi hotspot status check, completely irrelevant for USB CarPlay sessions. Use `Unplugged` (0x04) or `Phase 0` for session termination detection."
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#171",
@@ -19112,12 +19123,12 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#198",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 198,
-   "statement": "Command ID range 500-509 is Focus, Android Auto only, with 8 commands managing video/audio/nav focus.",
+   "statement": "Command ID range 500-509 are focus commands managing video/audio/nav focus; mainly Android Auto, but 506/507 and 508/509 are also used by CarPlay (wired and wireless).",
    "topic": "usb-cmd-range",
    "source_lines": "619",
    "confidence": "high",
    "signals": null,
-   "quote": "500-509 | Focus (Android Auto) | A→H | 8"
+   "quote": "Mainly Android Auto; 506/507 and 508/509 (NaviScreen video focus) also used by CarPlay (wired + wireless)"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#199",
@@ -21348,7 +21359,7 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#400",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 400,
-   "statement": "For wireless CarPlay the host must additionally send the 508 kick to start the iOS nav video encoder.",
+   "statement": "For wireless CarPlay the host must additionally send the 508 kick to start the 0x2C nav-screen video stream.",
    "topic": "usb-navi-video",
    "source_lines": "1558",
    "confidence": "high",
@@ -21403,7 +21414,7 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#405",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 405,
-   "statement": "Command 508 RequestNaviScreenFocus starts the iOS nav video encoder, and when the host echoes 508 back the adapter emits HU_NEEDNAVI_STREAM D-Bus signal.",
+   "statement": "Command 508 RequestNaviScreenFocus starts the 0x2C nav-screen video stream, and when the host echoes 508 back the adapter emits HU_NEEDNAVI_STREAM D-Bus signal.",
    "topic": "usb-cmd508",
    "source_lines": "1597",
    "confidence": "high",
@@ -22180,7 +22191,7 @@
    "source_lines": "2018",
    "confidence": "high",
    "signals": null,
-   "quote": "after processing type 0x05 \"Open\" for CarPlay session types (at `0x1e110`)"
+   "quote": "**When sent:** The adapter sends 0xFF **after processing type 0x05 \"Open\"** for CarPlay session types (at `0x1e110`). It is the session-open acknowledgment."
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#476",
@@ -22639,14 +22650,14 @@
    "gid": "02_Protocol_Reference/usb_protocol.md#517",
    "file": "02_Protocol_Reference/usb_protocol.md",
    "local_id": 517,
-   "statement": "Inbound Cmd 508 RequestNaviScreenFocus requires echoing 508 back which starts the iOS nav video encoder and is required for wireless CarPlay nav video.",
+   "statement": "Inbound Cmd 508 RequestNaviScreenFocus requires echoing 508 back which starts the 0x2C nav-screen video stream and is required for wireless CarPlay nav video.",
    "topic": "usb-cmd-class",
    "source_lines": "2312",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "**starts the iOS nav video encoder** (verified); **required for wireless CarPlay**"
+   "quote": "**starts the 0x2C nav-screen video stream** (verified); **required for wireless CarPlay**"
   },
   {
    "gid": "02_Protocol_Reference/usb_protocol.md#518",
@@ -22872,7 +22883,7 @@
    "source_lines": "807",
    "confidence": "high",
    "signals": null,
-   "quote": "| 508 | RequestNaviScreenFocus | BOTH | Navigation screen focus handshake |"
+   "quote": "| 508 | RequestNaviScreenFocus | B"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#2",
@@ -22883,7 +22894,7 @@
    "source_lines": "808",
    "confidence": "high",
    "signals": null,
-   "quote": "| 509 | ReleaseNaviScreenFocus | H→A | Release navigation screen focus |"
+   "quote": "| 509 | ReleaseNaviScreenFocus | H→"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#3",
@@ -22894,7 +22905,7 @@
    "source_lines": "5",
    "confidence": "high",
    "signals": [],
-   "quote": "Firmware Version: 2025.10.15.1127 (binary analysis reference version)"
+   "quote": "**Firmware Version:** 2025.10.15.1127 (binary analysis reference version)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#4",
@@ -22905,7 +22916,7 @@
    "source_lines": "6",
    "confidence": "high",
    "signals": [],
-   "quote": "Last Updated: 2026-02-02 (Fixed navigation video header documentation)"
+   "quote": "**Last Updated:** 2026-02-02 (Fixed navigation video header documentation)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#5",
@@ -22918,7 +22929,7 @@
    "signals": [
     "critical"
    ],
-   "quote": "live UI projection — a real-time stream of the phone's screen state transmitted via H.264 encoding"
+   "quote": "It is **live UI projection** — a real-time stream of the phone's screen state transmitted via H.264 encoding. This distinction is critical for host application design."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#6",
@@ -22953,7 +22964,7 @@
    "source_lines": "60",
    "confidence": "high",
    "signals": [],
-   "quote": "Total Header: 36 bytes (16-byte USB header + 20-byte video header)"
+   "quote": "**Total Header: 36 bytes** (16-byte USB header + 20-byte video header)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#9",
@@ -22964,7 +22975,7 @@
    "source_lines": "68",
    "confidence": "high",
    "signals": [],
-   "quote": "Magic | 0x55AA55AA (little-endian)"
+   "quote": "│ 0x00    │  4   │ Magic      │ 0x55AA55AA (little-endian)            │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#10",
@@ -22975,7 +22986,7 @@
    "source_lines": "69",
    "confidence": "high",
    "signals": [],
-   "quote": "PayloadLen | Bytes after this 16-byte header"
+   "quote": "│ 0x04    │  4   │ PayloadLen │ Bytes after this 16-byte header       │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#11",
@@ -22986,7 +22997,7 @@
    "source_lines": "70",
    "confidence": "high",
    "signals": [],
-   "quote": "MsgType | 6 = VideoData"
+   "quote": "│ 0x08    │  4   │ MsgType    │ 6 = VideoData                         │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#12",
@@ -22997,7 +23008,7 @@
    "source_lines": "71",
    "confidence": "high",
    "signals": [],
-   "quote": "Checksum | MsgType ^ 0xFFFFFFFF = 0xFFFFFFF9 (-7)"
+   "quote": "│ 0x0C    │  4   │ Checksum   │ MsgType ^ 0xFFFFFFFF = 0xFFFFFFF9 (-7)│"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#13",
@@ -23008,7 +23019,7 @@
    "source_lines": "75",
    "confidence": "high",
    "signals": [],
-   "quote": "Width | Video width (e.g., 2400)"
+   "quote": "│ 0x10    │  4   │ Width      │ Video width (e.g., 2400)              │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#14",
@@ -23019,7 +23030,7 @@
    "source_lines": "76",
    "confidence": "high",
    "signals": [],
-   "quote": "Height | Video height (e.g., 960)"
+   "quote": "│ 0x14    │  4   │ Height     │ Video height (e.g., 960)              │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#15",
@@ -23030,7 +23041,7 @@
    "source_lines": "77",
    "confidence": "high",
    "signals": [],
-   "quote": "EncoderState| Encoder generation/stream ID (see below)"
+   "quote": "│ 0x18    │  4   │ EncoderState│ Encoder generation/stream ID (see below)│"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#16",
@@ -23041,7 +23052,7 @@
    "source_lines": "78",
    "confidence": "high",
    "signals": [],
-   "quote": "PTS | Presentation timestamp (1kHz clock)"
+   "quote": "│ 0x1C    │  4   │ PTS        │ Presentation timestamp (1kHz clock)   │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#17",
@@ -23052,7 +23063,7 @@
    "source_lines": "79",
    "confidence": "high",
    "signals": [],
-   "quote": "Flags | Usually 0x00000000"
+   "quote": "│ 0x20    │  4   │ Flags      │ Usually 0x00000000                    │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#18",
@@ -23063,7 +23074,7 @@
    "source_lines": "83",
    "confidence": "high",
    "signals": [],
-   "quote": "H.264 Data | NAL units with 00 00 00 01 start code"
+   "quote": "│ 0x24+   │  N   │ H.264 Data │ NAL units with 00 00 00 01 start code │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#19",
@@ -23118,7 +23129,7 @@
    "source_lines": "99",
    "confidence": "high",
    "signals": [],
-   "quote": "3 | 0x00000003 | 1 | Transient state"
+   "quote": "3 | 0x00000003 | 1 | T"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#24",
@@ -23162,7 +23173,7 @@
    "source_lines": "113",
    "confidence": "high",
    "signals": [],
-   "quote": "PTS 146883+: 0x00000007 (normal streaming)"
+   "quote": "PTS 146883+:       0x00000007 (normal streaming)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#28",
@@ -23186,7 +23197,7 @@
    "signals": [
     "correction"
    ],
-   "quote": "wired CarPlay main video was `encoderState=3` for 100% of frames while wireless CarPlay main was `7`"
+   "quote": "frames while wireless CarPlay main"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#30",
@@ -23197,7 +23208,7 @@
    "source_lines": "127",
    "confidence": "high",
    "signals": [],
-   "quote": "decoding this field as a codec selector...misclassifies `3` as H.265, but the bitstream is unambiguously H.264"
+   "quote": ", but the bitstream is unambiguously H.264"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#31",
@@ -23221,7 +23232,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Type 0x2C = `AltVideoFrame` (navigation video). Type 0x2B is `Connection_PINCODE`"
+   "quote": "Type 0x2C = `AltVideoFrame` (navigation video)."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#33",
@@ -23243,7 +23254,7 @@
    "source_lines": "145",
    "confidence": "high",
    "signals": [],
-   "quote": "MsgType | 44 (0x2C) = NaviVideoData"
+   "quote": "│ 0x08    │  4   │ MsgType    │ 44 (0x2C) = NaviVideoData             │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#35",
@@ -23254,7 +23265,7 @@
    "source_lines": "146",
    "confidence": "high",
    "signals": [],
-   "quote": "Checksum | MsgType ^ 0xFFFFFFFF = 0xFFFFFFD3"
+   "quote": "│ 0x0C    │  4   │ Checksum   │ MsgType ^ 0xFFFFFFFF = 0xFFFFFFD3     │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#36",
@@ -23265,7 +23276,7 @@
    "source_lines": "152",
    "confidence": "high",
    "signals": [],
-   "quote": "EncoderState| Always 1 for nav video"
+   "quote": "│ 0x18    │  4   │ EncoderState│ Always 1 for nav video                │"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#37",
@@ -23416,7 +23427,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Main video (0x06) is keyframe-starved by design. It emits one IDR at stream start, then runs on pure P-slices indefinitely"
+   "quote": "1. **Main video (0x06) is keyframe-starved by design.** It emits one IDR at stream start, then runs on pure P-slices indefinitely (captured: 0 IDR in 84 s wireless — capture began after the startup IDR; 1 IDR in 139 s wired @ ~1.3 s, none after). Nav (0x2C) ≈ 1 IDR / 26 s on wired, sparser on wireless. **Implication:** a host decoder cannot self-recover from frame loss/reset by waiting — it must **explicitly request a keyframe** (cmd 12 keyFrame / refresh) after any loss, decoder reset, or window re-create. (Tearing down + recreating a nav decoder mid-stream yields a black window until the next, rare, IDR — observed and fixed on the macOS host by hiding rather than destroying the decoder.)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#49",
@@ -23495,7 +23506,7 @@
    "source_lines": "203",
    "confidence": "high",
    "signals": [],
-   "quote": "0x2A is a plaintext JSON telemetry channel (RX): leading u32 subtype + null-terminated JSON"
+   "quote": "6. **0x2A is a plaintext JSON telemetry channel** (RX): leading u32 subtype + null-terminated JSON. Subtype **1** = Media (`MediaSongPlayTime`, `MediaPlayStatus`), **200** = Navi turn-by-turn (`NaviStatus`, `NaviTimeToDestination`, `NaviDestinationName`, `NaviDistanceToDestination`, `NaviRemainDistance`, `NaviRoadName`…). Navi fields can arrive **combined in one packet** (not always two separate sends). Also: audio 0x07's `volume` field read 0.0 on every data frame (appears unused on the data stream)."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#56",
@@ -23517,7 +23528,7 @@
    "source_lines": "203",
    "confidence": "high",
    "signals": [],
-   "quote": "subtype **200** = Navi turn-by-turn (`NaviStatus`, `NaviTimeToDestination`...)"
+   "quote": "**200** = Navi turn-by-turn (`NaviStatus`, `NaviTimeToDestination`"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#58",
@@ -23586,7 +23597,7 @@
    "source_lines": "314",
    "confidence": "high",
    "signals": [],
-   "quote": "HU_VIEWAREA_INFO is **auto-written by `ARMadb-driver` `ProceessCmdOpen`**"
+   "quote": "2. `HU_VIEWAREA_INFO` is **auto-written by `ARMadb-driver` `ProceessCmdOpen`** from the host's Open (0x01) `width`/`height` fields whenever they differ from the stored value, **or** written directly via the `SendFile` (0x99) USB message."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#64",
@@ -23597,7 +23608,7 @@
    "source_lines": "323",
    "confidence": "high",
    "signals": [],
-   "quote": "type: 110            ← 110 = main display, 111 = alt / cluster"
+   "quote": "type               : 110            ← 110 = main display, 111 = alt / cluster"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#65",
@@ -23608,7 +23619,7 @@
    "source_lines": "356",
    "confidence": "high",
    "signals": [],
-   "quote": "CRITICAL FINDING: Video from CarPlay/Android Auto is **forwarded/passthrough**"
+   "quote": "**CRITICAL FINDING:** Video from CarPlay/Android Auto is **forwarded/passthrough** - the adapter does NOT transcode or re-encode the H.264 stream."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#66",
@@ -23641,7 +23652,7 @@
    "source_lines": "421",
    "confidence": "high",
    "signals": [],
-   "quote": "Profile | High Profile (100)"
+   "quote": "| **Profile** | High Profile (100) |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#69",
@@ -23663,7 +23674,7 @@
    "source_lines": "423",
    "confidence": "high",
    "signals": [],
-   "quote": "NAL Format | Annex B (00 00 00 01 start codes)"
+   "quote": "| **NAL Format** | Annex B (00 00 00 01 start codes) |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#71",
@@ -23674,7 +23685,7 @@
    "source_lines": "424",
    "confidence": "high",
    "signals": [],
-   "quote": "SPS/PPS | In-band with IDR frames"
+   "quote": "| **SPS/PPS** | In-band with IDR frames |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#72",
@@ -23685,7 +23696,7 @@
    "source_lines": "427",
    "confidence": "high",
    "signals": [],
-   "quote": "used **Level 5.0** (avcc `01 64 00 32` — `level_idc = 0x32 = 50`)"
+   "quote": "ed **Level 5.0**"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#73",
@@ -23718,7 +23729,7 @@
    "source_lines": "435",
    "confidence": "high",
    "signals": [],
-   "quote": "airplayd (PID 591) — encoding runs in the AirPlay daemon"
+   "quote": "- **Daemon**: `airplayd` (PID 591) — encoding runs in the AirPlay daemon, not the CarPlay app"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#76",
@@ -23729,7 +23740,7 @@
    "source_lines": "447",
    "confidence": "high",
    "signals": [],
-   "quote": "Fresh AirPlay sessions start with a low-resolution 800×480 encoder (thumbnail/preview...switching to full resolution within 344ms"
+   "quote": "Fresh AirPlay sessions start with a low-resolution 800×480 encoder (thumbnail/preview"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#77",
@@ -23762,7 +23773,7 @@
    "source_lines": "459",
    "confidence": "high",
    "signals": [],
-   "quote": "CSD size | **29 bytes** (vs CarPlay 33B — simpler SPS)"
+   "quote": "| CSD size | **29 bytes** (vs CarPlay 33B — simpler SPS, no scaling lists/transform_8x8) |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#80",
@@ -23781,10 +23792,10 @@
    "local_id": 81,
    "statement": "Frame sync command (0x0C) structure: Magic 55 AA 55 AA, Length 00 00 00 00, Type 0C 00 00 00, Checksum F3 FF FF FF.",
    "topic": "frame-sync-cmd",
-   "source_lines": "489",
+   "source_lines": "490",
    "confidence": "high",
    "signals": [],
-   "quote": "Magic: 55 AA 55 AA / Length: 00 00 00 00 / Type: 0C 00 00 00 / Check: F3 FF FF FF"
+   "quote": "Length: 00 00 00 00"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#82",
@@ -23856,7 +23867,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Run 5 | 27 | 27 | Exact"
+   "quote": "5 | 27 | 27 | Exact"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#88",
@@ -23927,7 +23938,7 @@
    "source_lines": "556",
    "confidence": "high",
    "signals": [],
-   "quote": "**Natural IDR interval: 62-68s** (`sync-frame-interval=60000000` μs)"
+   "quote": "**Natural IDR interval: 62-68s** ("
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#94",
@@ -24304,12 +24315,12 @@
    "local_id": 127,
    "statement": "Navigation video handshake is three-step with host sending 508 twice and adapter replying once.",
    "topic": "nav-handshake",
-   "source_lines": "749",
+   "source_lines": "758",
    "confidence": "high",
    "signals": [
     "discovered"
    ],
-   "quote": "requires the host to send 508 **twice**"
+   "quote": "the host sends 508, the adapter replies with 508, and the host echoes 508 to confirm"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#128",
@@ -24331,7 +24342,7 @@
    "source_lines": "758",
    "confidence": "high",
    "signals": [],
-   "quote": "HU_NEEDNAVI_STREAM D-Bus signal"
+   "quote": "The 508 (RequestNaviScreenFocus) nav-focus handshake is host-initiated and three-step: the host sends 508, the adapter replies with 508, and the host echoes 508 to confirm; the adapter then emits the `HU_NEEDNAVI_STREAM` D-Bus signal and Type 0x2C (NaviVideoData) frames begin. On **wireless** CarPlay (adapter WiFi AP) the adapter never initiates — it sends only 506 (audio nav focus) — so the host must send the first 508 itself (~2 s after PLUGGED, after `naviScreenInfo` BoxSettings has been sent). On **wired** sessions the adapter has historically initiated (echo-only host code works there). Transport-agnostic code should send 508 proactively AND echo any incoming 508 — repeated 508s are idempotent."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#130",
@@ -24342,7 +24353,7 @@
    "source_lines": "762",
    "confidence": "high",
    "signals": [],
-   "quote": "If step 1 is omitted on a wireless session, the adapter never sends step 2"
+   "quote": "If step 1 is omitted on a wireless session, the adapter never"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#131",
@@ -24353,7 +24364,7 @@
    "source_lines": "758",
    "confidence": "high",
    "signals": [],
-   "quote": "send step 1 proactively AND echo any incoming 508"
+   "quote": "proactively AND echo any incoming 508"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#132",
@@ -24361,10 +24372,10 @@
    "local_id": 132,
    "statement": "naviScreenInfo BoxSettings field contains: width (int pixels), height (int pixels), fps (int frame rate).",
    "topic": "nav-settings",
-   "source_lines": "215",
+   "source_lines": "773",
    "confidence": "high",
    "signals": [],
-   "quote": "\"width\": 1200, / \"height\": 500, / \"fps\": 24"
+   "quote": "### naviScreenInfo BoxSettings Field"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#133",
@@ -24469,7 +24480,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "host sends the above JSON in BoxSettings → adapter persists → wireless CarPlay session emits 1920×620@30 H.264"
+   "quote": "sends the above JSON in BoxSettings → adapter persists → wireless CarPlay session emits 1920×620@30 H.264"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#142",
@@ -24681,7 +24692,7 @@
    "source_lines": "906",
    "confidence": "high",
    "signals": [],
-   "quote": "4,733 | 50.96 MB | 1.98 Mbps"
+   "quote": "| 50.96 MB |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#161",
@@ -24689,10 +24700,10 @@
    "local_id": 161,
    "statement": "CarPlay main video effective FPS is 21.9 fps with 11.02 KB average frame size.",
    "topic": "carplay-fps",
-   "source_lines": "909",
+   "source_lines": "908",
    "confidence": "high",
    "signals": [],
-   "quote": "21.9 fps average | 11.02 KB average frame size"
+   "quote": "| Effective FPS | 21.9 fps |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#162",
@@ -24722,10 +24733,10 @@
    "local_id": 164,
    "statement": "CarPlay navigation video: 1200×500, 2,841 frames, 10.31 MB total, 3,804 bytes average frame size, 12.5 fps effective.",
    "topic": "carplay-nav-capture",
-   "source_lines": "940",
+   "source_lines": "943",
    "confidence": "high",
    "signals": [],
-   "quote": "1200×500 / 2,841 / 10.31 MB"
+   "quote": "| Average frame size | 3,804 bytes |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#165",
@@ -24747,7 +24758,7 @@
    "source_lines": "985",
    "confidence": "high",
    "signals": [],
-   "quote": "Baseline (66) / 3.1 / Constraint flags: 0x40"
+   "quote": "Constraint flags: 0x40"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#167",
@@ -24824,7 +24835,7 @@
    "source_lines": "1001",
    "confidence": "high",
    "signals": [],
-   "quote": "More consistent than CarPlay"
+   "quote": "- 86.2% of frames in 20-40ms range (more consistent than CarPlay)"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#174",
@@ -25048,7 +25059,7 @@
    "signals": [
     "corrected"
    ],
-   "quote": "first IDR may be a **boot-screen frame** (1,206B)"
+   "quote": "**Correction (Mar 2026):** While the first packet is always SPS+PPS+IDR, the first IDR may be a **boot-screen frame** (1,206B in Run 6 vs typical 9–52KB). This is the iPhone encoder's thumbnail/preview phase — not a full CarPlay UI render. The decoder initializes correctly but may display a degraded image for up to 2 seconds until the next ForceKeyFrame cycle."
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#194",
@@ -25150,7 +25161,7 @@
    "source_lines": "1286",
    "confidence": "high",
    "signals": [],
-   "quote": "min | 0 (back-to-back IDRs)"
+   "quote": "| P-frames per GOP (min) | 0 (back-to-back IDRs during recovery) |"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#203",
@@ -25251,7 +25262,7 @@
    "source_lines": "1383",
    "confidence": "high",
    "signals": [],
-   "quote": "1800 & 0xFFFE = **1800**"
+   "quote": "- 720p tier: width = `(720 * 2400/960) & 0xFFFE` = `1800 & 0xFFFE` = **1800**, height = **720**"
   },
   {
    "gid": "02_Protocol_Reference/video_protocol.md#212",
@@ -25372,7 +25383,7 @@
    "source_lines": "43",
    "confidence": "high",
    "signals": [],
-   "quote": "Subnet: 192.168.43.0/24"
+   "quote": "| **Subnet** | 192.168.43.0/24 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#9",
@@ -25383,7 +25394,7 @@
    "source_lines": "44",
    "confidence": "high",
    "signals": [],
-   "quote": "Adapter IP: 192.168.43.1"
+   "quote": "| **Adapter IP** | 192.168.43.1 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#10",
@@ -25394,7 +25405,7 @@
    "source_lines": "45",
    "confidence": "high",
    "signals": [],
-   "quote": "Phone IP: 192.168.43.x (DHCP)"
+   "quote": "| **Phone IP** | 192.168.43.x (DHCP) |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#11",
@@ -25405,7 +25416,7 @@
    "source_lines": "46",
    "confidence": "high",
    "signals": [],
-   "quote": "Band: 5GHz 802.11ac (configurable)"
+   "quote": "| **Band** | 5GHz 802.11ac (configurable) |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#12",
@@ -25413,10 +25424,10 @@
    "local_id": 12,
    "statement": "WiFi channel range is 36-165 and is configurable",
    "topic": "network-config-channel",
-   "source_lines": "46",
+   "source_lines": "47",
    "confidence": "high",
    "signals": [],
-   "quote": "Channel: 36-165 (configurable)"
+   "quote": "| **Channel** | 36-165 (configurable) |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#13",
@@ -25438,7 +25449,7 @@
    "source_lines": "55",
    "confidence": "high",
    "signals": [],
-   "quote": "ephemeral high TCP ports negotiated per-session in the AirPlay SETUP response"
+   "quote": "ephemeral high TCP ports negotiated per-session in the"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#15",
@@ -25460,7 +25471,7 @@
    "source_lines": "56",
    "confidence": "high",
    "signals": [],
-   "quote": "stream sockets observed `:49376` / `:49346`"
+   "quote": "stream sockets observed `:49376` /"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#17",
@@ -25523,7 +25534,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "Verified (capture `carplay-20260521-101016`): the accepted RFCOMM service is the iAP2 accessory profile, bound to `/dev/rfcomm0`"
+   "quote": "Verified (capture `carplay-20260521-101016`):"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#22",
@@ -25548,7 +25559,7 @@
    "source_lines": "84",
    "confidence": "high",
    "signals": [],
-   "quote": "Transport: ChaCha20-Poly1305"
+   "quote": "| **Transport** | ChaCha20-Poly1305 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#24",
@@ -25572,7 +25583,7 @@
    "source_lines": "86",
    "confidence": "high",
    "signals": [],
-   "quote": "Symmetric: AES-256-GCM"
+   "quote": "| **Symmetric** | AES-256-GCM |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#26",
@@ -25600,7 +25611,7 @@
     "capture-confirmed",
     "not extracted"
    ],
-   "quote": "Only the round-trip count (3× `pair-setup`) is capture-confirmed; the individual M-message contents below are NOT extracted from this capture"
+   "quote": "capture-confirmed; the individual M-message contents below are NOT extracted from this capture"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#28",
@@ -25608,13 +25619,13 @@
    "local_id": 28,
    "statement": "Session key derivation uses HKDF-SHA512 with shared_secret, salt 'Pair-Setup-Encrypt-Salt', info 'Pair-Setup-Encrypt-Info', and 32-byte output length",
    "topic": "homekit-key-derivation",
-   "source_lines": "106",
+   "source_lines": "108",
    "confidence": "low",
    "signals": [
     "not capture-confirmed",
     "generic HomeKit-spec description"
    ],
-   "quote": "HKDF-SHA512( shared_secret, salt: \"Pair-Setup-Encrypt-Salt\", info: \"Pair-Setup-Encrypt-Info\", length: 32)"
+   "quote": "salt: \"Pair-Setup-Encrypt-Salt\","
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#29",
@@ -25625,7 +25636,7 @@
    "source_lines": "118",
    "confidence": "high",
    "signals": [],
-   "quote": "First-time pairing uses **SRP-6a** (Secure Remote Password). Wireless CarPlay pair-setup is performed transparently over the AirPlay/RTSP channel"
+   "quote": "First-time pairing uses **SRP-6a** (Secure Remote Password). Wireless CarPlay pair-setup is"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#30",
@@ -25633,10 +25644,10 @@
    "local_id": 30,
    "statement": "No PIN is displayed during wireless CarPlay pairing; user trust is handled iPhone-side via 'Use This Car' prompt",
    "topic": "pairing-no-pin",
-   "source_lines": "119",
+   "source_lines": "120",
    "confidence": "high",
    "signals": [],
-   "quote": "no PIN is displayed (the adapter has no screen); user trust is handled iPhone-side via the \"Use This Car\" prompt"
+   "quote": "no screen); user trust is handled iPhone-side via the \"Use This Car\" prompt"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#31",
@@ -25675,7 +25686,7 @@
    "signals": [
     "verified"
    ],
-   "quote": "the sequence is exactly **3× pair-setup then 2× pair-verify**"
+   "quote": "the sequence is exactly **3× pair-setup"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#34",
@@ -25728,7 +25739,7 @@
     "illustrative",
     "unverified"
    ],
-   "quote": "The specific `Content-Length` byte counts shown below (409, 457, 69, 159, 37, 125, 3) are **illustrative / unverified** by this capture"
+   "quote": "shown below (409, 457, 69, 159, 37, 125, 3) are **illustrative / unverified** by this capture"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#38",
@@ -25940,7 +25951,7 @@
    "signals": [
     "correction"
    ],
-   "quote": "the `0x55AA55AA` 16-byte header is **host↔adapter USB framing**, not AirPlay-over-WiFi framing"
+   "quote": "the `0x55AA55AA` 16-byte header is **host↔adapter USB framing**, not"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#56",
@@ -25951,7 +25962,7 @@
    "source_lines": "321",
    "confidence": "high",
    "signals": [],
-   "quote": "Transport: IPv4 WiFi | IPv6 USB-NCM"
+   "quote": "| **Transport** | IPv4 WiFi | IPv6 USB-NCM |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#57",
@@ -25962,7 +25973,7 @@
    "source_lines": "322",
    "confidence": "high",
    "signals": [],
-   "quote": "Port: TCP 5000 | TCP 5000"
+   "quote": "| **Port** | TCP 5000 | TCP 5000 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#58",
@@ -25973,7 +25984,7 @@
    "source_lines": "323",
    "confidence": "high",
    "signals": [],
-   "quote": "Auth Method: HomeKit Pairing v2 + iAP2 MFi auth | MFi Certificate"
+   "quote": "| **Auth Method** | HomeKit Pairing v2 + iAP2 MFi auth | MFi Certificate |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#59",
@@ -25984,7 +25995,7 @@
    "source_lines": "324",
    "confidence": "high",
    "signals": [],
-   "quote": "Auth Endpoint: `/pair-setup`, `/pair-verify` (HomeKit) + iAP2 `0xAA0x` MFi auth over BT | MFi cert exchange"
+   "quote": "| **Auth Endpoint** | `/pair-setup`, `/pair-verify` (HomeKit) + iAP2 `0xAA0x` MFi auth over BT | MFi cert exchange |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#60",
@@ -25995,7 +26006,7 @@
    "source_lines": "325",
    "confidence": "high",
    "signals": [],
-   "quote": "Pairing Storage: Ed25519 keys in keychain | Certificate trust"
+   "quote": "| **Pairing Storage** | Ed25519 keys in keychain | Certificate trust |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#61",
@@ -26006,7 +26017,7 @@
    "source_lines": "326",
    "confidence": "high",
    "signals": [],
-   "quote": "Session Setup: Implicit after pairing | Explicit `SETUP` + `RECORD`"
+   "quote": "| **Session Setup** | Implicit after pairing | Explicit `SETUP` + `RECORD` |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#62",
@@ -26017,7 +26028,7 @@
    "source_lines": "327",
    "confidence": "high",
    "signals": [],
-   "quote": "Encryption: ChaCha20-Poly1305 | Standard AirPlay"
+   "quote": "| **Encryption** | ChaCha20-Poly1305 | Standard AirPlay |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#63",
@@ -26028,7 +26039,7 @@
    "source_lines": "328",
    "confidence": "high",
    "signals": [],
-   "quote": "First Connect: iPhone \"Use This Car\" prompt | Trust dialog on iPhone"
+   "quote": "| **First Connect** | iPhone \"Use This Car\" prompt | Trust dialog on iPhone |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#64",
@@ -26076,12 +26087,12 @@
    "local_id": 67,
    "statement": "The only capture-confirmed RTSP endpoints are /pair-setup and /pair-verify; others are generic AirPlay and unverified",
    "topic": "rtsp-capture-verification",
-   "source_lines": "346",
+   "source_lines": "347",
    "confidence": "high",
    "signals": [
     "verified"
    ],
-   "quote": "The only capture-confirmed RTSP endpoints are `/pair-setup` and `/pair-verify`; the others are generic AirPlay and unverified here"
+   "quote": "endpoints are `/pair-setup` and `/pair-verify`; the others are generic AirPlay and unverified"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#68",
@@ -26298,7 +26309,7 @@
    "source_lines": "474",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1D01 IdentificationInformation | advertises components incl. `wirelessCarPlayTransportComponent` / `transportSupportsCarPlay`"
+   "quote": "| 3 | adapter → iPhone | `0x1D01 IdentificationInformation` | advertises components incl. `wirelessCarPlayTransportComponent` / `transportSupportsCarPlay` |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#87",
@@ -26309,7 +26320,7 @@
    "source_lines": "475",
    "confidence": "high",
    "signals": [],
-   "quote": "0x1D02 IdentifyAccept | identification accepted → firmware `OnCarPlayPhase 100`"
+   "quote": "| 4 | iPhone → adapter | `0x1D02 IdentifyAccept` | identification accepted → firmware `OnCarPlayPhase 100` |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#88",
@@ -26320,7 +26331,7 @@
    "source_lines": "476",
    "confidence": "high",
    "signals": [],
-   "quote": "0xAA00 ReqAuthCert | request MFi accessory certificate"
+   "quote": "| 5 | iPhone → adapter | `0xAA00 ReqAuthCert` | request MFi accessory certificate |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#89",
@@ -26331,7 +26342,7 @@
    "source_lines": "477",
    "confidence": "high",
    "signals": [],
-   "quote": "0xAA01 | 945-byte cert | MFi certificate from real chip cache"
+   "quote": "| 6 | adapter → iPhone | `0xAA01` (945-byte cert) | MFi certificate from real chip cache |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#90",
@@ -26342,7 +26353,7 @@
    "source_lines": "478",
    "confidence": "high",
    "signals": [],
-   "quote": "0xAA02 ReqChallenge | 20-byte challenge for the MFi chip"
+   "quote": "challenge for the MFi chip"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#91",
@@ -26353,7 +26364,7 @@
    "source_lines": "479",
    "confidence": "high",
    "signals": [],
-   "quote": "0xAA03 | 128-byte RSA signature | adapter drives `/dev/i2c-1` MFi chip to sign"
+   "quote": "| 8 | adapter → iPhone | `0xAA03` (128-byte RSA signature) | adapter drives `/dev/i2c-1` MFi chip to sign |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#92",
@@ -26364,7 +26375,7 @@
    "source_lines": "480",
    "confidence": "high",
    "signals": [],
-   "quote": "0xAA05 AuthSuccess | MFi authentication accepted"
+   "quote": "| 9 | iPhone → adapter | `0xAA05 AuthSuccess` | MFi authentication accepted |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#93",
@@ -26375,7 +26386,7 @@
    "source_lines": "481",
    "confidence": "high",
    "signals": [],
-   "quote": "0x5702 ReqWifiConfig | request WiFi credentials"
+   "quote": "| 10 | iPhone → adapter | `0x5702 ReqWifiConfig` | request WiFi credentials |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#94",
@@ -26386,7 +26397,7 @@
    "source_lines": "482",
    "confidence": "high",
    "signals": [],
-   "quote": "0x5703 WifiConfigInfo | `ssid`, `passphrase`, security type, channel"
+   "quote": "| 11 | adapter → iPhone | `0x5703 WifiConfigInfo` | `ssid`, `passphrase`, security type, channel |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#95",
@@ -26397,7 +26408,7 @@
    "source_lines": "483",
    "confidence": "high",
    "signals": [],
-   "quote": "0x4E0A/0x4E0B/0x4E0D/0x4E0E | language / time / WirelessCarPlayUpdate / TransportNotify"
+   "quote": "| 12 | iPhone → adapter | `0x4E0A/0x4E0B/0x4E0D/0x4E0E` | language / time / WirelessCarPlayUpdate / TransportNotify |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#96",
@@ -26408,7 +26419,7 @@
    "source_lines": "485",
    "confidence": "high",
    "signals": [],
-   "quote": "the iPhone joins the adapter's WiFi SoftAP and the BT iAP2 link is torn down (`kAirPlayCommand_DisableBluetooth`)"
+   "quote": "the iPhone joins the adapter's WiFi SoftAP and the BT iAP2 link is torn down"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#97",
@@ -26416,10 +26427,10 @@
    "local_id": 97,
    "statement": "Connection state machine progresses: IDLE → BT_PAIRING → BT_PAIRED → WIFI_CONNECTING → WIFI_CONNECTED → RTSP_CONNECTING → STREAMING → IDLE",
    "topic": "state-machine",
-   "source_lines": "502",
+   "source_lines": "493",
    "confidence": "high",
    "signals": [],
-   "quote": "IDLE → BT_PAIRING → BT_PAIRED → WIFI_CONNECTING → WIFI_CONNECTED → RTSP_CONNECTING → STREAMING → IDLE"
+   "quote": "## Connection State Machine"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#98",
@@ -26498,7 +26509,7 @@
    "source_lines": "535",
    "confidence": "high",
    "signals": [],
-   "quote": "Port: 54321 (WiFi, SSL/TLS)"
+   "quote": "| **Port** | 54321 (WiFi, SSL/TLS) |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#105",
@@ -26509,7 +26520,7 @@
    "source_lines": "537",
    "confidence": "high",
    "signals": [],
-   "quote": "Auth Handshake: 2037 + 51 bytes"
+   "quote": "| **Auth Handshake** | 2037 + 51 bytes |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#106",
@@ -26520,7 +26531,7 @@
    "source_lines": "544",
    "confidence": "high",
    "signals": [],
-   "quote": "Volume field: 0.0 - 1.0 | Always 0.0"
+   "quote": "| Volume field | 0.0 - 1.0 | Always 0.0 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#107",
@@ -26531,7 +26542,7 @@
    "source_lines": "545",
    "confidence": "high",
    "signals": [],
-   "quote": "audio_type: 1, 2, or 3 | Always 1"
+   "quote": "| audio_type | 1, 2, or 3 | Always 1 |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#108",
@@ -26542,7 +26553,7 @@
    "source_lines": "546",
    "confidence": "high",
    "signals": [],
-   "quote": "Nav ducking: Explicit audio_type=2 | Not observed"
+   "quote": "| Nav ducking | Explicit audio_type=2 | Not observed |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#109",
@@ -26553,7 +26564,7 @@
    "source_lines": "547",
    "confidence": "high",
    "signals": [],
-   "quote": "Mode setting: Default enabled | `androidWorkMode: true` required"
+   "quote": "| Mode setting | Default enabled | `androidWorkMode: true` required |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#110",
@@ -26608,7 +26619,7 @@
    "source_lines": "563",
    "confidence": "high",
    "signals": [],
-   "quote": "/Library/Keychains/default.keychain | HomeKit pairing data"
+   "quote": "| `/Library/Keychains/default.keychain` | HomeKit pairing data |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#115",
@@ -26619,7 +26630,7 @@
    "source_lines": "564",
    "confidence": "high",
    "signals": [],
-   "quote": "/tmp/rfcomm_IAP2 | Bluetooth RFCOMM socket"
+   "quote": "| `/tmp/rfcomm_IAP2` | Bluetooth RFCOMM socket |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#116",
@@ -26630,7 +26641,7 @@
    "source_lines": "565",
    "confidence": "high",
    "signals": [],
-   "quote": "/tmp/.mfi_auth_lock | Auth mutex"
+   "quote": "| `/tmp/.mfi_auth_lock` | Auth mutex |"
   },
   {
    "gid": "02_Protocol_Reference/wireless_carplay.md#117",

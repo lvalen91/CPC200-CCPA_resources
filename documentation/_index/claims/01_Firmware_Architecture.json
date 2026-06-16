@@ -13,7 +13,7 @@
   "01_Firmware_Architecture/web_interface.md",
   "01_Firmware_Architecture/web_settings_reference.md"
  ],
- "claim_count": 1164,
+ "claim_count": 1162,
  "claims": [
   {
    "gid": "01_Firmware_Architecture/configuration.md#1",
@@ -1775,7 +1775,7 @@
    "source_lines": "818",
    "confidence": "high",
    "signals": null,
-   "quote": "only the home screen wallpaper extends beyond the SafeArea. All other content ... remains constrained within the SafeArea"
+   "quote": "only the home screen wallpaper extends beyond the SafeArea. All other content"
   },
   {
    "gid": "01_Firmware_Architecture/configuration.md#160",
@@ -1904,10 +1904,10 @@
    "local_id": 171,
    "statement": "The embedded VideoConfigData.proto defines aasdk.proto.data.VideoConfig with fields video_resolution, video_fps, margin_width, margin_height, density, additional_depth, real_density; there is no ui_config, content_insets, margins nested message, or per-edge Insets type in the binary.",
    "topic": "viewarea-aa",
-   "source_lines": "900",
+   "source_lines": "901",
    "confidence": "high",
    "signals": null,
-   "quote": "There is **no\n`ui_config`, no `content_insets`, no `margins` nested message, and no per-edge `Insets` type anywhere\nin the binary.**"
+   "quote": "`ui_config`, no `content_insets`, no `margins` nested message, and no per-edge `Insets` type anywhere"
   },
   {
    "gid": "01_Firmware_Architecture/configuration.md#172",
@@ -1929,7 +1929,7 @@
    "source_lines": "906",
    "confidence": "high",
    "signals": null,
-   "quote": "`HU_VIEWAREA_INFO`'s only code xref is\n`fcn.00021cb0` (`ProceessCmdOpen`"
+   "quote": "`HU_VIEWAREA_INFO`'s only code xref is"
   },
   {
    "gid": "01_Firmware_Architecture/configuration.md#174",
@@ -2272,20 +2272,6 @@
    "gid": "01_Firmware_Architecture/configuration.md#204",
    "file": "01_Firmware_Architecture/configuration.md",
    "local_id": 204,
-   "statement": "Path A naviScreenInfo requirement: command 508 handshake recommended to echo 508 back if received, but testing was inconclusive on whether strictly required.",
-   "topic": "navvideo-activation",
-   "source_lines": "400",
-   "confidence": "low",
-   "signals": [
-    "inconclusive testing",
-    "hedging"
-   ],
-   "quote": "testing was inconclusive on whether this is strictly required"
-  },
-  {
-   "gid": "01_Firmware_Architecture/configuration.md#205",
-   "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 205,
    "statement": "BoxSettings (USB type 0x19) JSON is parsed by ARMadb-driver FUN_00016c20 (dispatched from FUN_0001dd98); the same parser also serves command 0xA2 CMD_APP_SET_BOX_CONFIG (binary verified Jan 2026; capture-verified May 2026).",
    "topic": "boxsettings-parser",
    "source_lines": "1140",
@@ -2294,9 +2280,9 @@
    "quote": "BoxSettings (USB type `0x19`) JSON is parsed by `ARMadb-driver` `FUN_00016c20` (dispatched from `FUN_0001dd98`)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#206",
+   "gid": "01_Firmware_Architecture/configuration.md#205",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 206,
+   "local_id": 205,
    "statement": "The wifiName, btName, and oemIconLabel BoxSettings fields are vulnerable to command injection.",
    "topic": "security",
    "source_lines": "1136",
@@ -2307,9 +2293,9 @@
    "quote": "The `wifiName`, `btName`, and `oemIconLabel` fields are vulnerable to **command injection**"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#207",
+   "gid": "01_Firmware_Architecture/configuration.md#206",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 207,
+   "local_id": 206,
    "statement": "The generic BoxSettings path FUN_0001658c walks a 29-entry field→key table at 0x93f90: cJSON string values go through SetBoxConfigStr, numbers through SetBoxConfig → /etc/riddle.conf.",
    "topic": "boxsettings-parser",
    "source_lines": "1140",
@@ -2318,9 +2304,9 @@
    "quote": "walks a **29-entry field→key table at `0x93f90`**"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#208",
+   "gid": "01_Firmware_Architecture/configuration.md#207",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 208,
+   "local_id": 207,
    "statement": "BoxSettings field→key mappings (verified 29-entry table @0x93f90): btName→CustomBluetoothName, wifiName→CustomWifiName, fps→CustomFrameRate, gps→HudGPSSwitch, lang→BoxConfig_UI_Lang, bgMode→BackgroundMode, syncMode→iAP2TransMode, startDelay→BoxConfig_DelayStart, mediaDelay→MediaLatency, mediaSound→MediaQuality.",
    "topic": "boxsettings-table",
    "source_lines": "1146",
@@ -2329,9 +2315,9 @@
    "quote": "| 0 | `btName` | CustomBluetoothName | Bluetooth name ⚠️ **CMD INJECTION** |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#209",
+   "gid": "01_Firmware_Architecture/configuration.md#208",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 209,
+   "local_id": 208,
    "statement": "BoxSettings field→key mappings (continued): autoConn→NeedAutoConnect, androidWorkMode→AndroidWorkMode, drivePosition→CarDrivePosition, echoDelay→EchoLatency, androidAutoSizeW→AndroidAutoWidth, androidAutoSizeH→AndroidAutoHeight, screenPhysicalW→ScreenPhysicalW, screenPhysicalH→ScreenPhysicalH, brand→CarBrand, ScreenDPI→ScreenDPI.",
    "topic": "boxsettings-table",
    "source_lines": "1157",
@@ -2340,9 +2326,9 @@
    "quote": "| 11 | `androidWorkMode` | AndroidWorkMode | AA daemon mode (0-5) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#210",
+   "gid": "01_Firmware_Architecture/configuration.md#209",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 210,
+   "local_id": 209,
    "statement": "BoxSettings field→key mappings (continued): boxName→CustomBoxName, WiFiChannel→WiFiChannel, UseBTPhone→UseBTPhone, HiCarConnectMode→HiCarConnectMode, GNSSCapability→GNSSCapability, AutoResetUSB→AutoResetUSB, DashboardInfo→DashboardInfo, DayNightMode→DayNightMode, DockPosition→DuckPosition (firmware key typo).",
    "topic": "boxsettings-table",
    "source_lines": "1174",
@@ -2351,9 +2337,9 @@
    "quote": "| 28 | `DockPosition` | DuckPosition | (firmware key typo) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#211",
+   "gid": "01_Firmware_Architecture/configuration.md#210",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 211,
+   "local_id": 210,
    "statement": "The dead keys oemName and lightType are not in the BoxSettings table and not reachable via type 0x19 JSON; productType is an adapter→host field only.",
    "topic": "boxsettings-table",
    "source_lines": "1176",
@@ -2362,9 +2348,9 @@
    "quote": "The dead keys `oemName` and `lightType` are **not** in the BoxSettings table"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#212",
+   "gid": "01_Firmware_Architecture/configuration.md#211",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 212,
+   "local_id": 211,
    "statement": "BoxSettings special handler syncTime sets the system clock via settimeofday(val + 28800) with a hardcoded UTC+8 offset, writing nothing to riddle.conf.",
    "topic": "boxsettings-special",
    "source_lines": "1184",
@@ -2373,9 +2359,9 @@
    "quote": "`settimeofday(val + 28800)` — hardcoded UTC+8 offset"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#213",
+   "gid": "01_Firmware_Architecture/configuration.md#212",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 213,
+   "local_id": 212,
    "statement": "BoxSettings special handlers mediaVol/callVol/speechVol/ringVol/navVol/otherVol write to HU_AUDIOVOLUME_INFO[0..5] in shared memory.",
    "topic": "boxsettings-special",
    "source_lines": "1185",
@@ -2384,9 +2370,9 @@
    "quote": "`mediaVol`/`callVol`/`speechVol`/`ringVol`/`navVol`/`otherVol` | `HU_AUDIOVOLUME_INFO[0..5]` | shared memory"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#214",
+   "gid": "01_Firmware_Architecture/configuration.md#213",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 214,
+   "local_id": 213,
    "statement": "BoxSettings special handler naviScreenInfo{width,height,fps} writes HU_NAVISCREEN_INFO (24B) shared memory; naviScreenInfo.safearea{width,height,x,y,outside} writes HU_NAVISCREEN_SAFEAREA_INFO (20B) + HU_NAVISCREEN_VIEWAREA_INFO (24B).",
    "topic": "boxsettings-special",
    "source_lines": "1186",
@@ -2395,9 +2381,9 @@
    "quote": "`naviScreenInfo{width,height,fps}` | `HU_NAVISCREEN_INFO` (24B) | shared memory"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#215",
+   "gid": "01_Firmware_Architecture/configuration.md#214",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 215,
+   "local_id": 214,
    "statement": "androidWorkMode JSON int phone link daemon mode values: 0=Idle, 1=AndroidAuto, 2=CarLife, 3=AndroidMirror, 4=HiCar, 5=ICCOA.",
    "topic": "androidworkmode",
    "source_lines": "1204",
@@ -2406,9 +2392,9 @@
    "quote": "0=Idle, 1=AndroidAuto, 2=CarLife, 3=AndroidMirror, 4=HiCar, 5=ICCOA"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#216",
+   "gid": "01_Firmware_Architecture/configuration.md#215",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 216,
+   "local_id": 215,
    "statement": "Adapter→Host BoxSettings fields include uuid, MFD (manufacturing date), boxType (model code e.g. 'YA'), productType (e.g. 'A15W'), OemName, hwVersion, HiCar (0/1), WiFiChannel, CusCode, DevList, ChannelList.",
    "topic": "boxsettings-adapter2host",
    "source_lines": "1212",
@@ -2417,9 +2403,9 @@
    "quote": "| `boxType` | string | Model code (e.g., \"YA\")"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#217",
+   "gid": "01_Firmware_Architecture/configuration.md#216",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 217,
+   "local_id": 216,
    "statement": "Phone Info fields (Adapter→Host): MDLinkType (CarPlay/AndroidAuto/HiCar), MDModel, MDOSVersion (empty for Android Auto), MDLinkVersion, btMacAddr, btName, cpuTemp.",
    "topic": "boxsettings-phoneinfo",
    "source_lines": "1228",
@@ -2428,9 +2414,9 @@
    "quote": "| `MDOSVersion` | string | OS version (empty for Android Auto) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#218",
+   "gid": "01_Firmware_Architecture/configuration.md#217",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 218,
+   "local_id": 217,
    "statement": "The box code is a single-letter customer identifier sent in the Open message (iBoxversion field at offset 20), stored at /etc/box_version, appearing as the last character of the 18-byte SoftwareVersion string (0xCC).",
    "topic": "box-code",
    "source_lines": "1238",
@@ -2439,9 +2425,9 @@
    "quote": "The box code is a single-letter customer identifier sent in the Open message (`iBoxversion` field at offset 20) and stored at `/etc/box_version`"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#219",
+   "gid": "01_Firmware_Architecture/configuration.md#218",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 219,
+   "local_id": 218,
    "statement": "Box code letter→numeric→customer: I=0=Invalid, T=1=TengShi, Y=2=YunLian (AutoKit/LoadKit/FlyPlay), B=3=Basic/AutoCast, H=4=HiCar dedicated (Riddle/SmartLink), D=13=DongRong, K=14=SinKet, J=15=JoyeCar, S=16=Hello_Link, G=17=AutoPlay_H, L=18=Geely/Lynk&Co, M=19=unknown, P=0xFF=Public (default).",
    "topic": "box-code",
    "source_lines": "1244",
@@ -2450,9 +2436,9 @@
    "quote": "| Y | 2 | YunLian (AutoKit/LoadKit/FlyPlay) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#220",
+   "gid": "01_Firmware_Architecture/configuration.md#219",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 220,
+   "local_id": 219,
    "statement": "Box code values 5–12 are unassigned; when the adapter echoes iBoxversion=0 in the Open response, the host marks it as unauthorized.",
    "topic": "box-code",
    "source_lines": "1256",
@@ -2461,9 +2447,9 @@
    "quote": "Values 5–12 are unassigned."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#221",
+   "gid": "01_Firmware_Architecture/configuration.md#220",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 221,
+   "local_id": 220,
    "statement": "Box code source is PhoneMirrorBox Config.java:239-270 (BOX_CODE_MAP), FirstPageExImpl.java:137-148, build.gradle; firmware references /etc/box_version, /etc/box_version2, /etc/box_version3 (confirmed in binary strings).",
    "topic": "box-code",
    "source_lines": "1258",
@@ -2472,9 +2458,9 @@
    "quote": "Firmware references `/etc/box_version`, `/etc/box_version2`, `/etc/box_version3` (confirmed in binary strings)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#222",
+   "gid": "01_Firmware_Architecture/configuration.md#221",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 222,
+   "local_id": 221,
    "statement": "The 18-byte SoftwareVersion string (0xCC) format is YYYY.MM.DD.HHMM[V][P][C]: positions 0-14 date-time from /etc/software_version, position 15 (V) firmware variant (C=CarPlay-capable, O=Non-CarPlay AA-only OEM), position 16 (P) protocol support (A=Android Auto, H=HiCar), position 17 (C) customer/box code.",
    "topic": "software-version",
    "source_lines": "1264",
@@ -2483,9 +2469,9 @@
    "quote": "The 18-byte version string format is: `YYYY.MM.DD.HHMM[V][P][C]`"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#223",
+   "gid": "01_Firmware_Architecture/configuration.md#222",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 223,
+   "local_id": 222,
    "statement": "Example SoftwareVersion: 2025.02.25.1521CAY → 2025-02-25 15:21 build, CarPlay+AA firmware, YunLian customer.",
    "topic": "software-version",
    "source_lines": "1273",
@@ -2494,9 +2480,9 @@
    "quote": "Example: `2025.02.25.1521CAY` → 2025-02-25 15:21 build, CarPlay+AA firmware, YunLian customer."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#224",
+   "gid": "01_Firmware_Architecture/configuration.md#223",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 224,
+   "local_id": 223,
    "statement": "Some host apps (e.g., PhoneMirrorBox) append 'W' when CarPlay_SupportWifi is received from the adapter; this W is host-appended, not part of the firmware's 18-byte string; validation checks like endsWith(\"CHPW\") test the host-extended string.",
    "topic": "software-version",
    "source_lines": "1275",
@@ -2505,9 +2491,9 @@
    "quote": "This `W` is **host-appended, not part of the firmware's 18-byte string**"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#225",
+   "gid": "01_Firmware_Architecture/configuration.md#224",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 225,
+   "local_id": 224,
    "statement": "Firmware /etc/software_version contains only the 15-char date-time; suffix chars come from adapter state (source: PhoneMirrorBox BoxProtocol.java:2172-2187, BoxInfo.java:124-129, Config.java:196).",
    "topic": "software-version",
    "source_lines": "1277",
@@ -2516,9 +2502,9 @@
    "quote": "Firmware `/etc/software_version` contains only the 15-char date-time; suffix chars come from adapter state."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#226",
+   "gid": "01_Firmware_Architecture/configuration.md#225",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 226,
+   "local_id": 225,
    "statement": "AndroidWorkMode is a multi-mode phone link daemon selector, not a simple on/off toggle; writing a value 0-5 to /etc/android_work_mode triggers OnAndroidWorkModeChanged in ARMadb-driver, which stops the current mode's daemon and starts the new one via /script/phone_link_deamon.sh <ModeName> start/stop &.",
    "topic": "androidworkmode",
    "source_lines": "1285",
@@ -2527,9 +2513,9 @@
    "quote": "`AndroidWorkMode` is a **multi-mode phone link daemon selector**, not a simple on/off toggle."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#227",
+   "gid": "01_Firmware_Architecture/configuration.md#226",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 227,
+   "local_id": 226,
    "statement": "AndroidWorkMode mode table: 0=Idle/Disconnect (kills running mode), 1=AndroidAuto (ARMAndroidAuto + hfpd), 2=CarLife (CarLife), 3=AndroidMirror (ARMandroid_Mirror, direct fork/exec not via script), 4=HiCar (ARMHiCar + 9 shared libs), 5=ICCOA (iccoa).",
    "topic": "androidworkmode",
    "source_lines": "1292",
@@ -2538,9 +2524,9 @@
    "quote": "| 1 | AndroidAuto | `ARMAndroidAuto` + `hfpd` | `phone_link_deamon.sh AndroidAuto start &` |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#228",
+   "gid": "01_Firmware_Architecture/configuration.md#227",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 228,
+   "local_id": 227,
    "statement": "On phone disconnect AndroidWorkMode auto-resets N→0 (firmware) and the running daemon stops; on host reconnect the mode value must be re-sent.",
    "topic": "androidworkmode",
    "source_lines": "1304",
@@ -2549,9 +2535,9 @@
    "quote": "| Phone disconnects | `N → 0` (firmware auto-reset) | Running daemon stops |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#229",
+   "gid": "01_Firmware_Architecture/configuration.md#228",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 229,
+   "local_id": 228,
    "statement": "AndroidWorkMode file path is /etc/android_work_mode (4-byte binary int, persistent), set via SendFile (type 0x99) with a 4-byte payload.",
    "topic": "androidworkmode",
    "source_lines": "1309",
@@ -2560,9 +2546,9 @@
    "quote": "**File Path:** `/etc/android_work_mode` (4-byte binary int, persistent)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#230",
+   "gid": "01_Firmware_Architecture/configuration.md#229",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 230,
+   "local_id": 229,
    "statement": "Firmware log evidence: 'UPLOAD FILE: /etc/android_work_mode, 4 byte', 'OnAndroidWorkModeChanged: 0 → 1', 'Start Link Deamon: AndroidAuto'.",
    "topic": "androidworkmode",
    "source_lines": "1320",
@@ -2571,20 +2557,20 @@
    "quote": "OnAndroidWorkModeChanged: 0 → 1"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#231",
+   "gid": "01_Firmware_Architecture/configuration.md#230",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 231,
-   "statement": "With AndroidWorkMode 0 (default) the AA daemon is not started and fresh pairing fails; with 1 the daemon is started and pairing works.",
+   "local_id": 230,
+   "statement": "AndroidWorkMode's persisted/config default is 1; value 0 is the runtime value after reset on disconnect, in which state the Android Auto daemon is NOT started and fresh pairing fails.",
    "topic": "androidworkmode",
    "source_lines": "1328",
    "confidence": "high",
    "signals": null,
-   "quote": "| 0 (default) | NOT started | Fails |"
+   "quote": "| 0 (runtime value after reset on disconnect) | NOT started | Fails |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#232",
+   "gid": "01_Firmware_Architecture/configuration.md#231",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 232,
+   "local_id": 231,
    "statement": "Open-source projects that don't send android_work_mode=1 during initialization cannot perform Android Auto pairing, even if Bluetooth pairing succeeds.",
    "topic": "androidworkmode",
    "source_lines": "1331",
@@ -2593,9 +2579,9 @@
    "quote": "Open-source projects that don't send `android_work_mode=1` during initialization cannot perform Android Auto pairing"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#233",
+   "gid": "01_Firmware_Architecture/configuration.md#232",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 233,
+   "local_id": 232,
    "statement": "AndroidWorkMode in riddle.conf may show 1 if previously set, but runtime state always resets to 0 on phone disconnect; the host app must send it on every connection.",
    "topic": "androidworkmode",
    "source_lines": "1336",
@@ -2604,9 +2590,9 @@
    "quote": "**Runtime state:** Always resets to `0` on phone disconnect"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#234",
+   "gid": "01_Firmware_Architecture/configuration.md#233",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 234,
+   "local_id": 233,
    "statement": "CORRECTION (2026-02-28): AndroidWorkMode was previously described as a binary 0/1 toggle; binary analysis confirms it is a 6-mode selector with mode names ICCOA, CarLife, AndroidMirror as standalone .rodata strings, plus AndroidAuto and HiCar via DAT pointer table; modes 2-5 are for other Carlinkit products sharing the firmware codebase.",
    "topic": "androidworkmode",
    "source_lines": "1339",
@@ -2617,9 +2603,9 @@
    "quote": "Binary analysis of ARMadb-driver confirms it is a 6-mode selector"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#235",
+   "gid": "01_Firmware_Architecture/configuration.md#234",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 235,
+   "local_id": 234,
    "statement": "Heartbeat key facts: 2-second interval, 15,000ms firmware timeout (~10s practical budget), 0xAA message type (16-byte header-only), exempt from encryption.",
    "topic": "heartbeat",
    "source_lines": "1347",
@@ -2628,9 +2614,9 @@
    "quote": "2-second interval, 15,000ms firmware timeout (~10s practical budget), 0xAA message type (16-byte header-only), exempt from encryption"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#236",
+   "gid": "01_Firmware_Architecture/configuration.md#235",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 236,
+   "local_id": 235,
    "statement": "SendHeartBeat changes require reboot to take effect; the running ARMadb-driver process caches the value at startup.",
    "topic": "heartbeat",
    "source_lines": "1357",
@@ -2639,9 +2625,9 @@
    "quote": "The running ARMadb-driver process caches the value at startup."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#237",
+   "gid": "01_Firmware_Architecture/configuration.md#236",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 237,
+   "local_id": 236,
    "statement": "Configuration precedence (highest to lowest): 1=Host App BoxSettings (until next init), 2=riddle.conf (persistent), 3=Web API /server.cgi (persistent), 4=riddle_default.conf (factory).",
    "topic": "config-precedence",
    "source_lines": "1365",
@@ -2650,9 +2636,9 @@
    "quote": "| 1 (Highest) | Host App BoxSettings | Until next init |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#238",
+   "gid": "01_Firmware_Architecture/configuration.md#237",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 238,
+   "local_id": 237,
    "statement": "The firmware uses D-Bus (org.riddle) as its IPC mechanism between ARMadb-driver, bluetoothDaemon, and other adapter processes.",
    "topic": "dbus",
    "source_lines": "1376",
@@ -2661,9 +2647,9 @@
    "quote": "The firmware uses D-Bus (`org.riddle`) as its inter-process communication mechanism"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#239",
+   "gid": "01_Firmware_Architecture/configuration.md#238",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 239,
+   "local_id": 238,
    "statement": "Scripts called by firmware: start_bluetooth_wifi.sh (init BT/WiFi), close_bluetooth_wifi.sh (stop BT/WiFi), phone_link_deamon.sh (manage phone link), start_accessory.sh (start USB accessory mode), update_box_ota.sh (apply firmware update), open_log.sh (enable logging).",
    "topic": "scripts",
    "source_lines": "1389",
@@ -2672,9 +2658,9 @@
    "quote": "| `/script/start_accessory.sh` | USB connect | Start USB accessory mode |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#240",
+   "gid": "01_Firmware_Architecture/configuration.md#239",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 240,
+   "local_id": 239,
    "statement": "LED configuration parameters (8): rgbStartUp (0x800000 red), rgbWifiConnected (0x008000 green), rgbBtConnecting (0x800000 red), rgbLinkSuccess (0x008000 green), rgbUpgrading (0x800000/0x008000 alternating), rgbUpdateSuccess (0x800080 purple), rgbFault (0x000080 blue), ledTimingMode (enum 0-2 default 1: 0=Static,1=Blink,2=Gradient).",
    "topic": "led-config",
    "source_lines": "1399",
@@ -2683,9 +2669,9 @@
    "quote": "| rgbStartUp | hex (24-bit) | 0x800000 | Startup LED color (red) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#241",
+   "gid": "01_Firmware_Architecture/configuration.md#240",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 241,
+   "local_id": 240,
    "statement": "Configuration flow: boot ARMadb-driver starts, reads /etc/riddle.conf into cached global variables, initializes hardware (USB/WiFi/BT), and changing config via riddleBoxCfg writes to file but does not update the running process, requiring reboot/restart to apply.",
    "topic": "config-flow",
    "source_lines": "1424",
@@ -2694,9 +2680,9 @@
    "quote": "Changing config via riddleBoxCfg writes to file\n       but does NOT update running process"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#242",
+   "gid": "01_Firmware_Architecture/configuration.md#241",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 242,
+   "local_id": 241,
    "statement": "riddleBoxCfg is located at /usr/sbin/riddleBoxCfg which may not be in PATH for all shells; Telnet (port 23) includes /usr/sbin in PATH, SSH (dropbear) often does not.",
    "topic": "riddleboxcfg-cli",
    "source_lines": "1439",
@@ -2705,9 +2691,9 @@
    "quote": "`riddleBoxCfg` is located at `/usr/sbin/riddleBoxCfg` which may not be in PATH for all shells"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#243",
+   "gid": "01_Firmware_Architecture/configuration.md#242",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 243,
+   "local_id": 242,
    "statement": "The SSH PATH fix is: echo 'export PATH=$PATH:/usr/sbin' >> /etc/profile.",
    "topic": "riddleboxcfg-cli",
    "source_lines": "1446",
@@ -2716,9 +2702,9 @@
    "quote": "**Fix for SSH**: Add to profile: `echo 'export PATH=$PATH:/usr/sbin' >> /etc/profile`"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#244",
+   "gid": "01_Firmware_Architecture/configuration.md#243",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 244,
+   "local_id": 243,
    "statement": "riddleBoxCfg commands include --help, --info (all config params with defaults/ranges), --uuid, --readOld, --removeOld, --restoreOld (recovery), --upConfig, --specialConfig (sync riddle_special.conf to riddle_default.conf), -s key value [--default], -s list listKeyID listKey listvalue, -g key [--default], -g list, -d list.",
    "topic": "riddleboxcfg-cli",
    "source_lines": "1458",
@@ -2727,9 +2713,9 @@
    "quote": "riddleBoxCfg --specialConfig                           : sync riddle_special.conf to riddle_default.conf"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#245",
+   "gid": "01_Firmware_Architecture/configuration.md#244",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 245,
+   "local_id": 244,
    "statement": "Configuration setting mechanisms: Host App (0x19) BoxSettings JSON, riddleBoxCfg CLI, Auto (Connect) (DevList/LastConnectedDevice/LastPhoneSpsPps), Auto (Pair) (DevList entries/PHONE_INFO), Auto (Runtime) (LastBoxUIType/CarDate), OEM Default (riddle_default.conf, Brand*/USB*/oemName).",
    "topic": "config-mechanisms",
    "source_lines": "1478",
@@ -2738,9 +2724,9 @@
    "quote": "| **Auto (Connect)** | Firmware sets automatically when device connects | DevList, LastConnectedDevice, LastPhoneSpsPps |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#246",
+   "gid": "01_Firmware_Architecture/configuration.md#245",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 246,
+   "local_id": 245,
    "statement": "ARMadb-driver is the USB protocol handler and acts as the MiddleManServer; CarPlay daemons connect back as MiddleMan clients over an abstract-namespace AF_UNIX socket tagged with a RiddleLinktype (CarPlay = 3).",
    "topic": "middleman-ipc",
    "source_lines": "1523",
@@ -2749,9 +2735,9 @@
    "quote": "acts as the **MiddleManServer**. The CarPlay daemons connect back as MiddleMan clients over an **abstract-namespace `AF_UNIX` socket**, tagged with a `RiddleLinktype` (CarPlay = 3)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#247",
+   "gid": "01_Firmware_Architecture/configuration.md#246",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 247,
+   "local_id": 246,
    "statement": "Most session configuration is not carried over the MiddleMan socket; AppleCarPlay and ARMiPhoneIAP2 read config directly from /etc/riddle.conf and /etc/RiddleBoxData/HU_* geometry files at session init.",
    "topic": "middleman-ipc",
    "source_lines": "1523",
@@ -2760,9 +2746,9 @@
    "quote": "`AppleCarPlay` and `ARMiPhoneIAP2` read config directly from `/etc/riddle.conf` and the `/etc/RiddleBoxData/HU_*` geometry files at session init"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#248",
+   "gid": "01_Firmware_Architecture/configuration.md#247",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 248,
+   "local_id": 247,
    "statement": "Auto-set firmware-managed parameters: DevList (set when device pairs via BT), DeletedDevList (when user removes device), LastConnectedDevice (session start, MAC of current device), LastPhoneSpsPps (video stream start, cached H.264 SPS/PPS), LastBoxUIType (UI mode changes), CarDate.",
    "topic": "auto-set-params",
    "source_lines": "1534",
@@ -2771,9 +2757,9 @@
    "quote": "| LastPhoneSpsPps | Video stream starts | Cached H.264 SPS/PPS |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#249",
+   "gid": "01_Firmware_Architecture/configuration.md#248",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 249,
+   "local_id": 248,
    "statement": "Internal parameters requiring riddleBoxCfg CLI or firmware-only: DashboardInfo, GNSSCapability, AdvancedFeatures, SpsPpsMode, SendHeartBeat, LogMode.",
    "topic": "internal-params",
    "source_lines": "1540",
@@ -2782,9 +2768,9 @@
    "quote": "These require `riddleBoxCfg` CLI or are firmware-only"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#250",
+   "gid": "01_Firmware_Architecture/configuration.md#249",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 250,
+   "local_id": 249,
    "statement": "riddleBoxCfg --info is the definitive source for all configuration parameters; Source column legend: Web UI=via Host App BoxSettings 0x19, Protocol Init=via Host App during session init, Internal=firmware-managed or CLI only.",
    "topic": "param-list",
    "source_lines": "1555",
@@ -2793,9 +2779,9 @@
    "quote": "This is the **definitive source** for all configuration parameters."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#251",
+   "gid": "01_Firmware_Architecture/configuration.md#250",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 251,
+   "local_id": 250,
    "statement": "Integer params with defaults/min/max: iAP2TransMode 0/0/1 (Web UI), MediaQuality 1/0/1, MediaLatency 1000/300/2000, UdiskMode 1/0/1, LogMode 1/0/1 (Internal), BoxConfig_UI_Lang 0/0/65535, BoxConfig_DelayStart 0/0/120.",
    "topic": "param-list-int",
    "source_lines": "1568",
@@ -2804,9 +2790,9 @@
    "quote": "| MediaLatency | 1000 | 300 | 2000 | Web UI |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#252",
+   "gid": "01_Firmware_Architecture/configuration.md#251",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 252,
+   "local_id": 251,
    "statement": "BoxConfig_preferSPSPPSType (0/0/1, Protocol Init) is a DEAD KEY with zero runtime xrefs; NotCarPlayH264DecreaseMode (0/0/2, Internal) is a DEAD KEY with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1573",
@@ -2817,9 +2803,9 @@
    "quote": "| BoxConfig_preferSPSPPSType | 0 | 0 | 1 | Protocol Init | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#253",
+   "gid": "01_Firmware_Architecture/configuration.md#252",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 253,
+   "local_id": 252,
    "statement": "DisplaySize (0/0/3, Web UI) is PASS-THROUGH — written by host, never read via GetBoxConfig.",
    "topic": "param-list-passthrough",
    "source_lines": "1577",
@@ -2830,9 +2816,9 @@
    "quote": "| DisplaySize | 0 | 0 | 3 | Web UI | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#254",
+   "gid": "01_Firmware_Architecture/configuration.md#253",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 254,
+   "local_id": 253,
    "statement": "MicGainSwitch (0/0/1, Web UI) controls WebRTC AGC (Automatic Gain Control).",
    "topic": "param-list-int",
    "source_lines": "1579",
@@ -2841,9 +2827,9 @@
    "quote": "| MicGainSwitch | 0 | 0 | 1 | Web UI | Controls WebRTC AGC (Automatic Gain Control) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#255",
+   "gid": "01_Firmware_Architecture/configuration.md#254",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 255,
+   "local_id": 254,
    "statement": "WiFiChannel default 36, min 1, max 165 (Web UI).",
    "topic": "param-list-int",
    "source_lines": "1585",
@@ -2852,9 +2838,9 @@
    "quote": "| WiFiChannel | 36 | 1 | 165 | Web UI |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#256",
+   "gid": "01_Firmware_Architecture/configuration.md#255",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 256,
+   "local_id": 255,
    "statement": "MouseMode is listed in --info as default 1, min 0, max 1 (Web UI), PASS-THROUGH — written by host, never read via GetBoxConfig.",
    "topic": "param-list-passthrough",
    "source_lines": "1587",
@@ -2865,9 +2851,9 @@
    "quote": "| MouseMode | 1 | 0 | 1 | Web UI | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#257",
+   "gid": "01_Firmware_Architecture/configuration.md#256",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 257,
+   "local_id": 256,
    "statement": "VideoBitRate (0/0/20), VideoResolutionHeight (0/0/4096), VideoResolutionWidth (0/0/4096) are Protocol Init params.",
    "topic": "param-list-int",
    "source_lines": "1589",
@@ -2876,9 +2862,9 @@
    "quote": "| VideoBitRate | 0 | 0 | 20 | Protocol Init |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#258",
+   "gid": "01_Firmware_Architecture/configuration.md#257",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 258,
+   "local_id": 257,
    "statement": "UDiskPassThrough (1/0/1, Web UI) is a DEAD KEY with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1592",
@@ -2889,9 +2875,9 @@
    "quote": "| UDiskPassThrough | 1 | 0 | 1 | Web UI | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#259",
+   "gid": "01_Firmware_Architecture/configuration.md#258",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 259,
+   "local_id": 258,
    "statement": "AndroidWorkMode in --info shows default 1, min 1, max 5 (Protocol Init).",
    "topic": "param-list-int",
    "source_lines": "1593",
@@ -2900,22 +2886,22 @@
    "quote": "| AndroidWorkMode | 1 | 1 | 5 | Protocol Init |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#260",
+   "gid": "01_Firmware_Architecture/configuration.md#259",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 260,
-   "statement": "AndroidAutoWidth and AndroidAutoHeight (0/0/4096, Protocol Init) are PASS-THROUGH — written by host, never read via GetBoxConfig.",
+   "local_id": 259,
+   "statement": "AndroidAutoWidth (0/0/4096, Protocol Init) is PASS-THROUGH in ARMadb-driver (not read via its GetBoxConfig), but is read by ARMAndroidAuto via GetBoxConfig for AA video width.",
    "topic": "param-list-passthrough",
    "source_lines": "1595",
    "confidence": "high",
    "signals": [
     "pass-through"
    ],
-   "quote": "| AndroidAutoWidth | 0 | 0 | 4096 | Protocol Init | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
+   "quote": "**PASS-THROUGH in `ARMadb-driver`** (not read via its GetBoxConfig); read by `ARMAndroidAuto` via GetBoxConfig for AA video width"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#261",
+   "gid": "01_Firmware_Architecture/configuration.md#260",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 261,
+   "local_id": 260,
    "statement": "KnobMode (0/0/1, Web UI) is PASS-THROUGH — written by host, never read via GetBoxConfig.",
    "topic": "param-list-passthrough",
    "source_lines": "1598",
@@ -2926,9 +2912,9 @@
    "quote": "| KnobMode | 0 | 0 | 1 | Web UI | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#262",
+   "gid": "01_Firmware_Architecture/configuration.md#261",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 262,
+   "local_id": 261,
    "statement": "CallQuality (default 1, min 0, max 2, Web UI) and VoiceQuality (default 1, min 0, max 2, Internal) are marked BUGGY.",
    "topic": "param-list-buggy",
    "source_lines": "1602",
@@ -2939,9 +2925,9 @@
    "quote": "| CallQuality | 1 | 0 | 2 | Web UI | **BUGGY** - see below |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#263",
+   "gid": "01_Firmware_Architecture/configuration.md#262",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 263,
+   "local_id": 262,
    "statement": "LastBoxUIType (1/0/2, Internal) is a DEAD KEY with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1605",
@@ -2952,9 +2938,9 @@
    "quote": "| LastBoxUIType | 1 | 0 | 2 | Internal | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#264",
+   "gid": "01_Firmware_Architecture/configuration.md#263",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 264,
+   "local_id": 263,
    "statement": "BoxSupportArea (0/0/1, Internal) is a region flag: 0=Global, 1=China, affecting iAP2 identification (zh hint).",
    "topic": "param-list-int",
    "source_lines": "1606",
@@ -2963,9 +2949,9 @@
    "quote": "| BoxSupportArea | 0 | 0 | 1 | Internal | Region flag: 0=Global, 1=China. Affects iAP2 identification (zh hint)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#265",
+   "gid": "01_Firmware_Architecture/configuration.md#264",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 265,
+   "local_id": 264,
    "statement": "HNPInterval (10/0/1000, Internal) is a DEAD KEY; lightType (3/1/3, Web UI) is a DEAD KEY; both with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1607",
@@ -2976,9 +2962,9 @@
    "quote": "| HNPInterval | 10 | 0 | 1000 | Internal | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#266",
+   "gid": "01_Firmware_Architecture/configuration.md#265",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 266,
+   "local_id": 265,
    "statement": "BtAudio in --info has default 0, min 0, max 1 (Web UI).",
    "topic": "param-list-int",
    "source_lines": "1611",
@@ -2987,9 +2973,9 @@
    "quote": "| BtAudio | 0 | 0 | 1 | Web UI |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#267",
+   "gid": "01_Firmware_Architecture/configuration.md#266",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 267,
+   "local_id": 266,
    "statement": "CarLinkType has default 30, min 1, max 30 (Internal).",
    "topic": "param-list-int",
    "source_lines": "1619",
@@ -2998,9 +2984,9 @@
    "quote": "| CarLinkType | 30 | 1 | 30 | Internal |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#268",
+   "gid": "01_Firmware_Architecture/configuration.md#267",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 268,
+   "local_id": 267,
    "statement": "autoDisplay (1/0/2, Web UI) is PASS-THROUGH — written by host, never read via GetBoxConfig.",
    "topic": "param-list-passthrough",
    "source_lines": "1622",
@@ -3011,9 +2997,9 @@
    "quote": "| autoDisplay | 1 | 0 | 2 | Web UI | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#269",
+   "gid": "01_Firmware_Architecture/configuration.md#268",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 269,
+   "local_id": 268,
    "statement": "AudioMultiBusMode (1/0/1, Internal), InternetHotspots (0/0/1, Internal) are DEAD KEYS with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1638",
@@ -3024,9 +3010,9 @@
    "quote": "| AudioMultiBusMode | 1 | 0 | 1 | Internal | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#270",
+   "gid": "01_Firmware_Architecture/configuration.md#269",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 270,
+   "local_id": 269,
    "statement": "DayNightMode (default 2, min 0, max 2, Web UI): 0=Auto (host cmds 16/17), 1=Force Day, 2=Force Night.",
    "topic": "param-list-int",
    "source_lines": "1639",
@@ -3035,9 +3021,9 @@
    "quote": "| DayNightMode | 2 | 0 | 2 | Web UI | 0=Auto (host cmds 16/17), 1=Force Day, 2=Force Night |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#271",
+   "gid": "01_Firmware_Architecture/configuration.md#270",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 271,
+   "local_id": 270,
    "statement": "UseUartBLE (0/0/1, Internal): 0=USB HCI BLE, 1=UART HCI BLE (hardware-dependent).",
    "topic": "param-list-int",
    "source_lines": "1641",
@@ -3046,9 +3032,9 @@
    "quote": "| UseUartBLE | 0 | 0 | 1 | Internal | 0=USB HCI BLE, 1=UART HCI BLE (hardware-dependent) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#272",
+   "gid": "01_Firmware_Architecture/configuration.md#271",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 272,
+   "local_id": 271,
    "statement": "WiFiP2PMode (0/0/1, Internal): 0=SoftAP (hostapd), 1=WiFi Direct P2P GO (wpa_cli, SSID=DIRECT-*); requires WiFi restart.",
    "topic": "param-list-int",
    "source_lines": "1642",
@@ -3057,9 +3043,9 @@
    "quote": "| WiFiP2PMode | 0 | 0 | 1 | Internal | 0=SoftAP (hostapd), 1=WiFi Direct P2P GO (wpa_cli, SSID=DIRECT-*). Requires WiFi restart"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#273",
+   "gid": "01_Firmware_Architecture/configuration.md#272",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 273,
+   "local_id": 272,
    "statement": "DuckPosition (0/0/2, Internal): 0=Left (LHD), 1=Right (RHD), 2=Bottom; maps to viewAreaStatusBarEdge.",
    "topic": "param-list-int",
    "source_lines": "1643",
@@ -3068,9 +3054,9 @@
    "quote": "| DuckPosition | 0 | 0 | 2 | Internal | 0=Left (LHD), 1=Right (RHD), 2=Bottom. Maps to `viewAreaStatusBarEdge` |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#274",
+   "gid": "01_Firmware_Architecture/configuration.md#273",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 274,
+   "local_id": 273,
    "statement": "String params: CarBrand max len 31, BluetoothName/WifiName/CustomBluetoothName/CustomWifiName max len 15, HU_BT_PIN_CODE max len 6 (BT pairing PIN), LastConnectedDevice max len 17.",
    "topic": "param-list-string",
    "source_lines": "1656",
@@ -3079,9 +3065,9 @@
    "quote": "| HU_BT_PIN_CODE | \"\" | 0 | 6 | Internal - BT pairing PIN (see note) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#275",
+   "gid": "01_Firmware_Architecture/configuration.md#274",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 275,
+   "local_id": 274,
    "statement": "LastPhoneSpsPps (string, max len 511, Internal) is a DEAD KEY with zero runtime xrefs (SpsPpsMode 0 does NOT read this).",
    "topic": "param-list-dead",
    "source_lines": "1657",
@@ -3092,9 +3078,9 @@
    "quote": "| LastPhoneSpsPps | \"\" | 0 | 511 | Internal | **DEAD KEY** — zero runtime xrefs (SpsPpsMode 0 does NOT read this) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#276",
+   "gid": "01_Firmware_Architecture/configuration.md#275",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 276,
+   "local_id": 275,
    "statement": "CustomId (string, max len 31, Internal) is PASS-THROUGH — written by host, never read via GetBoxConfig.",
    "topic": "param-list-passthrough",
    "source_lines": "1658",
@@ -3105,9 +3091,9 @@
    "quote": "| CustomId | \"\" | 0 | 31 | Internal | **PASS-THROUGH** — written by host, never read via GetBoxConfig |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#277",
+   "gid": "01_Firmware_Architecture/configuration.md#276",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 277,
+   "local_id": 276,
    "statement": "WifiPassword default value is \"12345678\" (max len 15, Web UI).",
    "topic": "param-list-string",
    "source_lines": "1662",
@@ -3116,9 +3102,9 @@
    "quote": "| WifiPassword | \"12345678\" | 0 | 15 | Web UI |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#278",
+   "gid": "01_Firmware_Architecture/configuration.md#277",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 278,
+   "local_id": 277,
    "statement": "BrandServiceURL (max len 31, Internal), BoxIp (max len 15, Web UI), oemName (max len 63, Internal) are DEAD KEYS with zero runtime xrefs.",
    "topic": "param-list-dead",
    "source_lines": "1666",
@@ -3129,9 +3115,9 @@
    "quote": "| BrandServiceURL | \"\" | 0 | 31 | Internal | **DEAD KEY** — zero runtime xrefs |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#279",
+   "gid": "01_Firmware_Architecture/configuration.md#278",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 279,
+   "local_id": 278,
    "statement": "USBProduct/USBManufacturer/USBSerial max len 63; USBPID/USBVID max len 4.",
    "topic": "param-list-string",
    "source_lines": "1670",
@@ -3140,9 +3126,9 @@
    "quote": "| USBPID | \"\" | 0 | 4 | Web UI |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#280",
+   "gid": "01_Firmware_Architecture/configuration.md#279",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 280,
+   "local_id": 279,
    "statement": "BrandWifiChannel (string, max len 31, Internal) is the WiFi channel branding override, read by start_bluetooth_wifi.sh.",
    "topic": "param-list-string",
    "source_lines": "1674",
@@ -3151,9 +3137,9 @@
    "quote": "| BrandWifiChannel | \"\" | 0 | 31 | Internal | WiFi channel branding override (read by start_bluetooth_wifi.sh) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#281",
+   "gid": "01_Firmware_Architecture/configuration.md#280",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 281,
+   "local_id": 280,
    "statement": "Array/Object parameters: DevList (paired devices), DeletedDevList (removed/unpaired devices), LangList (supported UI languages, PASS-THROUGH — server.cgi only, populates web UI dropdown).",
    "topic": "param-list-array",
    "source_lines": "1682",
@@ -3162,9 +3148,9 @@
    "quote": "| LangList | Array | Supported UI languages (PASS-THROUGH — server.cgi only, populates web UI dropdown) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#282",
+   "gid": "01_Firmware_Architecture/configuration.md#281",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 282,
+   "local_id": 281,
    "statement": "DevList entry fields: id (BT MAC XX:XX:XX:XX:XX:XX), type (CarPlay/AndroidAuto/HiCar), name (device friendly name), index (string starting at \"1\"), time (last connection timestamp YYYY-MM-DD HH:MM:SS), rfcomm (RFCOMM channel number).",
    "topic": "devlist",
    "source_lines": "1710",
@@ -3173,9 +3159,9 @@
    "quote": "| `rfcomm` | string | RFCOMM channel number |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#283",
+   "gid": "01_Firmware_Architecture/configuration.md#282",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 283,
+   "local_id": 282,
    "statement": "DevList is populated automatically when devices pair via Bluetooth, used for auto-reconnect (NeedAutoConnect=1), has maximum ~10 devices (older entries pruned), and survives factory reset if Bluetooth pairing data persists.",
    "topic": "devlist",
    "source_lines": "1716",
@@ -3186,9 +3172,9 @@
    "quote": "Maximum entries: ~10 devices (older entries may be pruned)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#284",
+   "gid": "01_Firmware_Architecture/configuration.md#283",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 284,
+   "local_id": 283,
    "statement": "DeletedDevList stores devices explicitly unpaired by user with fields id (BT MAC) and type; prevents auto-reconnect to removed devices, requires manual re-pairing, and is cleared on factory reset.",
    "topic": "devlist",
    "source_lines": "1721",
@@ -3197,9 +3183,9 @@
    "quote": "Stores devices that were explicitly unpaired/removed by user"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#285",
+   "gid": "01_Firmware_Architecture/configuration.md#284",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 285,
+   "local_id": 284,
    "statement": "CONFIRMED bug (Jan 2026, Firmware 2025.10.XX): the CallQuality Web UI setting (0=Normal,1=Clear,2=HD) fails to translate to the internal VoiceQuality parameter; severity Medium (setting has no effect).",
    "topic": "callquality-bug",
    "source_lines": "1753",
@@ -3210,9 +3196,9 @@
    "quote": "The `CallQuality` Web UI setting (0=Normal, 1=Clear, 2=HD) fails to translate to the internal `VoiceQuality` parameter."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#286",
+   "gid": "01_Firmware_Architecture/configuration.md#285",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 286,
+   "local_id": 285,
    "statement": "TTY log error for CallQuality bug: 'apk callQuality value transf box value error , please check!' occurs regardless of CallQuality value (0,1,2).",
    "topic": "callquality-bug",
    "source_lines": "1758",
@@ -3221,9 +3207,9 @@
    "quote": "[E] apk callQuality value transf box value error , please check!"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#287",
+   "gid": "01_Firmware_Architecture/configuration.md#286",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 287,
+   "local_id": 286,
    "statement": "Voice/telephony audio sample rate is not controllable via CallQuality; CarPlay independently negotiates sample rate (always 16kHz on modern iPhones).",
    "topic": "callquality-bug",
    "source_lines": "1770",
@@ -3232,9 +3218,9 @@
    "quote": "CarPlay independently negotiates sample rate (always 16kHz on modern iPhones)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#288",
+   "gid": "01_Firmware_Architecture/configuration.md#287",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 288,
+   "local_id": 287,
    "statement": "All CarPlay captures showed decode_type=5 (16kHz), never decode_type=3 (8kHz); Android Auto phone calls DO use decode_type=3 (8kHz via HFP/SCO).",
    "topic": "callquality-bug",
    "source_lines": "1775",
@@ -3243,9 +3229,9 @@
    "quote": "All CarPlay captures showed decode_type=5 (16kHz), never decode_type=3 (8kHz)."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#289",
+   "gid": "01_Firmware_Architecture/configuration.md#288",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 289,
+   "local_id": 288,
    "statement": "There is no workaround for the CallQuality bug; sample rate is determined by CarPlay's audioFormat during stream setup.",
    "topic": "callquality-bug",
    "source_lines": "1778",
@@ -3254,9 +3240,9 @@
    "quote": "**Workaround:** None. Sample rate is determined by CarPlay's `audioFormat` during stream setup."
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#290",
+   "gid": "01_Firmware_Architecture/configuration.md#289",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 290,
+   "local_id": 289,
    "statement": "Web UI parameters are set via web interface at http://192.168.43.1 (or http://192.168.50.2).",
    "topic": "param-source",
    "source_lines": "1787",
@@ -3265,9 +3251,9 @@
    "quote": "Set via web interface at `http://192.168.43.1` (or `http://192.168.50.2`)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#291",
+   "gid": "01_Firmware_Architecture/configuration.md#290",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 291,
+   "local_id": 290,
    "statement": "The Web API endpoint is POST /server.cgi with FormData cmd=set&item=parameter&val=value&ts=timestamp&sign=md5_hash and salt HweL*@M@JEYUnvPw9G36MVB9X6u@2qxK.",
    "topic": "web-api",
    "source_lines": "1811",
@@ -3276,9 +3262,9 @@
    "quote": "Salt: HweL*@M@JEYUnvPw9G36MVB9X6u@2qxK"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#292",
+   "gid": "01_Firmware_Architecture/configuration.md#291",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 292,
+   "local_id": 291,
    "statement": "Config method comparison: USB (CPC200-CCPA protocol, binary packets, <100ms latency, restart for video/USB only), Web API (/server.cgi, POST FormData+MD5, real-time, restart for resolution/USB identity), CLI (/usr/sbin/riddleBoxCfg, immediate, restart for system settings).",
    "topic": "web-api",
    "source_lines": "1818",
@@ -3287,9 +3273,9 @@
    "quote": "| USB | CPC200-CCPA protocol | Binary packets | <100ms | Video/USB changes only |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#293",
+   "gid": "01_Firmware_Architecture/configuration.md#292",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 293,
+   "local_id": 292,
    "statement": "Validation rules with error messages: micGain 0-60 ('Please Enter A Number From 0-60'), mediaDelay 300-2000, resolution 0-4096, bitRate 0-20, ScreenDPI 0-480, alphanumeric text ('No Special Symbols Are Allowed'), no emoji ('Emoticons Cannot Be Used').",
    "topic": "validation",
    "source_lines": "1834",
@@ -3298,9 +3284,9 @@
    "quote": "| Text | no emoji | \"Emoticons Cannot Be Used\" |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#294",
+   "gid": "01_Firmware_Architecture/configuration.md#293",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 294,
+   "local_id": 293,
    "statement": "Product identification files: /etc/box_product_type (model identifier A15W/A15H), /etc/box_version (custom version affecting module loading), /script/getFuncModule.sh (module loading logic), /script/init_audio_codec.sh (audio codec detection WM8960/AC6966).",
    "topic": "model-detection",
    "source_lines": "1847",
@@ -3309,9 +3295,9 @@
    "quote": "| `/script/init_audio_codec.sh` | Audio codec detection (WM8960/AC6966) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#295",
+   "gid": "01_Firmware_Architecture/configuration.md#294",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 295,
+   "local_id": 294,
    "statement": "Module loading by model: A15W loads CarPlay,AndroidAuto,AndroidMirror,iOSMirror,HiCar; A15H loads CarPlay,HiCar (limited subset).",
    "topic": "model-detection",
    "source_lines": "1852",
@@ -3320,9 +3306,9 @@
    "quote": "A15W: CarPlay,AndroidAuto,AndroidMirror,iOSMirror,HiCar"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#296",
+   "gid": "01_Firmware_Architecture/configuration.md#295",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 296,
+   "local_id": 295,
    "statement": "Parameters are not hidden by firmware but contextually filtered; all 106 parameters (79 int + 24 string + 3 array) are accessible via API/CLI regardless of model, while the web interface conditionally displays them based on hardware.",
    "topic": "model-detection",
    "source_lines": "1860",
@@ -3331,9 +3317,9 @@
    "quote": "All 106 parameters (79 int + 24 string + 3 array) are accessible via API/CLI regardless of model"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#297",
+   "gid": "01_Firmware_Architecture/configuration.md#296",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 297,
+   "local_id": 296,
    "statement": "A15W contextual limitations: micGain/MicMode/micType limited (hardware-dependent mic), KnobMode disabled (no physical knob), btCall limited (BT calling hardware constraints), audioCodec hardware-detected (WM8960=0 or AC6966=1 via I2C).",
    "topic": "model-detection",
    "source_lines": "1870",
@@ -3342,9 +3328,9 @@
    "quote": "| audioCodec | Hardware-detected | WM8960(0) or AC6966(1) via I2C |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#298",
+   "gid": "01_Firmware_Architecture/configuration.md#297",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 298,
+   "local_id": 297,
    "statement": "Configuration recovery: restore previous config via /usr/sbin/riddleBoxCfg --restoreOld, or restore factory defaults via cp /etc/riddle_default.conf /etc/riddle.conf followed by --upConfig.",
    "topic": "config-recovery",
    "source_lines": "1879",
@@ -3353,9 +3339,9 @@
    "quote": "# Restore previous configuration\n/usr/sbin/riddleBoxCfg --restoreOld"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#299",
+   "gid": "01_Firmware_Architecture/configuration.md#298",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 299,
+   "local_id": 298,
    "statement": "Access method summary (binary verified Feb 2026): Host App (USB Protocol) ~19 keys (18%), Direct Access Only ~68 keys (64%), Read-Only ~19 keys (18%).",
    "topic": "access-summary",
    "source_lines": "1901",
@@ -3364,9 +3350,9 @@
    "quote": "| Host App (USB Protocol) | ~19 keys | 18% |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#300",
+   "gid": "01_Firmware_Architecture/configuration.md#299",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 300,
+   "local_id": 299,
    "statement": "The Open message (0x01) payload is a 28-byte body of 7 × uint32 little-endian: 0x00 width, 0x04 height, 0x08 fps (←CustomFrameRate), 0x0C format, 0x10 packetMax (e.g. 0xC000), 0x14 boxVersion (e.g. 2), 0x18 phoneMode (2=CarPlay).",
    "topic": "open-message",
    "source_lines": "1911",
@@ -3375,9 +3361,9 @@
    "quote": "The Open payload is a 28-byte body, 7 × uint32 little-endian"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#301",
+   "gid": "01_Firmware_Architecture/configuration.md#300",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 301,
+   "local_id": 300,
    "statement": "Open message format field: 1 = basic IDR, 5 = full H.264 / aggressive IDR.",
    "topic": "open-message",
    "source_lines": "1918",
@@ -3386,9 +3372,9 @@
    "quote": "`format` | Video format ID (1 = basic IDR, 5 = full H.264 / aggressive IDR)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#302",
+   "gid": "01_Firmware_Architecture/configuration.md#301",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 302,
+   "local_id": 301,
    "statement": "Open message key mappings: VideoResolutionWidth→width (bytes 0-3), VideoResolutionHeight→height (bytes 4-7), CustomFrameRate→fps (bytes 8-11), ScreenDPI sent via SendFile (0x99), DisplaySize derived from resolution.",
    "topic": "open-message",
    "source_lines": "1928",
@@ -3397,9 +3383,9 @@
    "quote": "| ScreenDPI | Sent via SendFile (0x99) | UI scaling |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#303",
+   "gid": "01_Firmware_Architecture/configuration.md#302",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 303,
+   "local_id": 302,
    "statement": "BoxSettings (0x19) host-configurable keys via JSON: mediaDelay, MediaQuality (mediaSound), CallQuality (callQuality), CustomWifiName (wifiName), CustomBluetoothName (btName), CustomBoxName (boxName/OemName), NeedAutoConnect (autoConn), AndroidAutoWidth (androidAutoSizeW), AndroidAutoHeight (androidAutoSizeH).",
    "topic": "boxsettings-keys",
    "source_lines": "1935",
@@ -3408,9 +3394,9 @@
    "quote": "| mediaDelay | \"mediaDelay\" | Audio delay compensation |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#304",
+   "gid": "01_Firmware_Architecture/configuration.md#303",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 304,
+   "local_id": 303,
    "statement": "AutoPlauMusic is NOT mapped via BoxSettings — the autoPlay key is absent from the ARMadb-driver string table; it is settable via web UI (boa CGI → riddle.conf) only.",
    "topic": "boxsettings-keys",
    "source_lines": "1943",
@@ -3419,9 +3405,9 @@
    "quote": "⚠️ **NOT mapped via BoxSettings** — `autoPlay` key absent from ARMadb-driver string table"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#305",
+   "gid": "01_Firmware_Architecture/configuration.md#304",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 305,
+   "local_id": 304,
    "statement": "Command Message (0x08) runtime control: MicType cmds 7(UseCarMic)/8(UseBoxMic)/15(I2S)/21(Phone), DayNightMode cmds 16(StartNightMode)/17(StopNightMode), BtAudio cmds 22(UseBluetoothAudio)/23(UseBoxTransAudio), WiFiChannel cmds 24(Use24GWiFi)/25(Use5GWiFi), GNSSCapability cmds 18(StartGNSSReport)/19(StopGNSSReport), NeedKeyFrame cmd 12(RequestKeyFrame), NeedAutoConnect cmds 1001(SupportAutoConnect)/1002(StartAutoConnect).",
    "topic": "command-message",
    "source_lines": "1951",
@@ -3430,9 +3416,9 @@
    "quote": "| MicType | 7 (UseCarMic), 8 (UseBoxMic), 15 (I2S), 21 (Phone) | Mic source |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#306",
+   "gid": "01_Firmware_Architecture/configuration.md#305",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 306,
+   "local_id": 305,
    "statement": "SendFile Message (0x99) file writes: ScreenDPI→/tmp/screen_dpi, DayNightMode→/tmp/night_mode (0/1), CarDrivePosition→/tmp/hand_drive_mode, ChargeMode→/tmp/charge_mode, CustomBoxName→/etc/box_name, AirPlay config→/etc/airplay.conf, AndroidWorkMode→/etc/android_work_mode, CustomCarLogo→/etc/icon_*.png.",
    "topic": "sendfile-message",
    "source_lines": "1963",
@@ -3441,9 +3427,9 @@
    "quote": "| ScreenDPI | /tmp/screen_dpi | DPI value |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#307",
+   "gid": "01_Firmware_Architecture/configuration.md#306",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 307,
+   "local_id": 306,
    "statement": "USB hardware config keys requiring direct access: USBVID, USBPID (change USB device identity, require gadget driver reconfigure), USBProduct/USBManufacturer/USBSerial (USB descriptor set at driver init), USBConnectedMode, USBTransMode, AutoResetUSB.",
    "topic": "direct-access-keys",
    "source_lines": "1980",
@@ -3452,9 +3438,9 @@
    "quote": "| USBVID | Changes USB device identity - requires gadget driver reconfigure |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#308",
+   "gid": "01_Firmware_Architecture/configuration.md#307",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 308,
+   "local_id": 307,
    "statement": "ImprovedFluency is UNIMPLEMENTED — no binary reads this value at runtime (fw 2025.10.15).",
    "topic": "improvedfluency",
    "source_lines": "2000",
@@ -3462,12 +3448,12 @@
    "signals": [
     "unimplemented"
    ],
-   "quote": "| ImprovedFluency | Buffering behavior | **UNIMPLEMENTED** — no binary reads this value at runtime (fw 2025.10.15) |"
+   "quote": "**UNIMPLEMENTED** — no binary reads this value at runtime (fw 2025.10.15"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#309",
+   "gid": "01_Firmware_Architecture/configuration.md#308",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 309,
+   "local_id": 308,
    "statement": "DuckPosition controls dock position (viewAreaStatusBarEdge: left/right/bottom of CarPlay status bar); AudioMultiBusMode is a DEAD KEY with zero runtime xrefs in any binary.",
    "topic": "direct-access-keys",
    "source_lines": "2019",
@@ -3478,9 +3464,9 @@
    "quote": "| AudioMultiBusMode | **DEAD KEY** — zero runtime xrefs in any binary |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#310",
+   "gid": "01_Firmware_Architecture/configuration.md#309",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 310,
+   "local_id": 309,
    "statement": "HU_BT_PIN_CODE stores the Bluetooth pairing PIN; related USB types are 0x0C (CMD_SET_BLUETOOTH_PIN_CODE, sets the value) and 0x2B (Connection_PINCODE, real-time PIN notification during active pairing).",
    "topic": "bt-pin",
    "source_lines": "2037",
@@ -3489,9 +3475,9 @@
    "quote": "**Type 0x0C (CMD_SET_BLUETOOTH_PIN_CODE):** Sets this configuration value"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#311",
+   "gid": "01_Firmware_Architecture/configuration.md#310",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 311,
+   "local_id": 310,
    "statement": "Factory reset trigger keys: ResetBoxCarLogo, ResetBoxConfig.",
    "topic": "direct-access-keys",
    "source_lines": "2068",
@@ -3500,9 +3486,9 @@
    "quote": "| ResetBoxCarLogo | Factory reset trigger |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#312",
+   "gid": "01_Firmware_Architecture/configuration.md#311",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 312,
+   "local_id": 311,
    "statement": "Read-only keys set by adapter: RiddlePlatform (hardware detection), uuid (generated/stored in /etc/uuid), hwVersion (/etc/box_version), software_version (/etc/software_version).",
    "topic": "readonly-keys",
    "source_lines": "2080",
@@ -3511,9 +3497,9 @@
    "quote": "| uuid | Generated/stored in /etc/uuid |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#313",
+   "gid": "01_Firmware_Architecture/configuration.md#312",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 313,
+   "local_id": 312,
    "statement": "Read-only keys set by connected phone at session start: PHONE_INFO, PHONE_DEVICE_TYPE, PHONE_OS_VERSION, PHONE_LINK_TYPE, BT_CONNECTING_ADDR, LastPhoneSpsPps; and at session end: conNum, conRate, conSpd, linkT, MD_LINK_TIME.",
    "topic": "readonly-keys",
    "source_lines": "2088",
@@ -3522,9 +3508,9 @@
    "quote": "| PHONE_INFO | Phone during iAP2/AA handshake | Session start |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#314",
+   "gid": "01_Firmware_Architecture/configuration.md#313",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 314,
+   "local_id": 313,
    "statement": "Keys set by host app reported to adapter: APP_INFO (BoxSettings 0x19), HU_TYPE_ID (Open 0x01), HU_TYPE_OS (Open 0x01), HU_OS_VERSION (BoxSettings 0x19), HU_APP_VERSION (BoxSettings 0x19), HU_SCREEN_INFO (Open 0x01), HU_LINK_TYPE (session info).",
    "topic": "readonly-keys",
    "source_lines": "2109",
@@ -3533,9 +3519,9 @@
    "quote": "| HU_SCREEN_INFO | Host screen info | Open (0x01) |"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#315",
+   "gid": "01_Firmware_Architecture/configuration.md#314",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 315,
+   "local_id": 314,
    "statement": "AdvancedFeatures Effects when set to 1 include: sets g_bSupportNaviScreen=1 in AppleCarPlay, advertises supportFeatures naviScreen in boxInfo, enables HU_NAVISCREEN_INFO D-Bus signal, enables HU_NEEDNAVI_STREAM requests, enables RequestNaviScreenFoucs/ReleaseNaviScreenFoucs commands, enables NaviVideoData (0x2C) handling, and activates NaviScreen ViewArea/SafeArea.",
    "topic": "advancedfeatures",
    "source_lines": "2134",
@@ -3544,9 +3530,9 @@
    "quote": "- Enables HU_NEEDNAVI_STREAM requests\n- Enables RequestNaviScreenFoucs/ReleaseNaviScreenFoucs commands"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#316",
+   "gid": "01_Firmware_Architecture/configuration.md#315",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 316,
+   "local_id": 315,
    "statement": "The Host App Configuration Workflow: send Open (0x01) with width/height/fps/format/iBoxVersion/phoneWorkMode, then BoxSettings (0x19) JSON, then Commands (0x08) as needed, then Files (0x99) as needed.",
    "topic": "workflow",
    "source_lines": "2164",
@@ -3555,9 +3541,9 @@
    "quote": "Session Initialization (Host → Adapter):"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#317",
+   "gid": "01_Firmware_Architecture/configuration.md#316",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 317,
+   "local_id": 316,
    "statement": "Source binaries for analysis: riddleBoxCfg_unpacked (49KB, 2025.10 firmware) and ARMadb-driver_2025.10_unpacked (478KB); firmware strings analyzed using strings -t x, objdump -d, radare2.",
    "topic": "references",
    "source_lines": "2197",
@@ -3566,9 +3552,9 @@
    "quote": "- Source: Binary analysis of `riddleBoxCfg_unpacked` (49KB, 2025.10 firmware)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#318",
+   "gid": "01_Firmware_Architecture/configuration.md#317",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 318,
+   "local_id": 317,
    "statement": "The document was last updated 2026-02-19 (deduplicated heartbeat deep dive and D-Bus signal table; added direction/context labels) and consolidated from firmware analysis and live RE.",
    "topic": "doc-meta",
    "source_lines": "5",
@@ -3577,9 +3563,9 @@
    "quote": "**Last Updated:** 2026-02-19 (deduplicated heartbeat deep dive and D-Bus signal table; added direction/context labels)"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#319",
+   "gid": "01_Firmware_Architecture/configuration.md#318",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 319,
+   "local_id": 318,
    "statement": "AndroidWorkMode CarLink usage: new SendBoolean(true, '/etc/android_work_mode') maps to integer 1 (AndroidAuto), the only mode needed for the CarLink app.",
    "topic": "androidworkmode",
    "source_lines": "1313",
@@ -3588,26 +3574,15 @@
    "quote": "// CarLink sends mode 1 (AndroidAuto) — the only mode needed for this app"
   },
   {
-   "gid": "01_Firmware_Architecture/configuration.md#320",
+   "gid": "01_Firmware_Architecture/configuration.md#319",
    "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 320,
+   "local_id": 319,
    "statement": "OriginalResolution (0/0/1, Protocol Init), AutoConnectInterval (0/0/60, Internal), HiCarConnectMode (0/0/1, Internal), NaviVolume (0/0/100, Web UI), NaviAudio (0/0/2, Web UI), ReturnMode (0/0/1, Web UI), LogoType (0/0/3, Web UI), BackRecording (0/0/1, Internal) are integer params.",
    "topic": "param-list-int",
    "source_lines": "1632",
    "confidence": "high",
    "signals": null,
    "quote": "| OriginalResolution | 0 | 0 | 1 | Protocol Init |"
-  },
-  {
-   "gid": "01_Firmware_Architecture/configuration.md#321",
-   "file": "01_Firmware_Architecture/configuration.md",
-   "local_id": 321,
-   "statement": "CORRECTED 2026-03-15: the earlier claim that ARMAndroidAuto has zero config system strings was wrong; ARMAndroidAuto contains GetBoxConfig, SetBoxConfig, ResetBoxConfig, riddleConfigNameValue, BoxConfig_DelayStart, BoxConfig_preferSPSPPSType, AndroidAutoWidth, AndroidAutoHeight and does access the riddle config system.",
-   "topic": "config-system",
-   "source_lines": "155",
-   "confidence": "high",
-   "signals": null,
-   "quote": "**CORRECTED (2026-03-15):** Earlier claim that ARMAndroidAuto has \"zero config system strings\" was wrong."
   },
   {
    "gid": "01_Firmware_Architecture/firmware_encryption.md#1",
@@ -3695,7 +3670,7 @@
    "source_lines": "29",
    "confidence": "high",
    "signals": [],
-   "quote": "AES-128-CBC Encrypted Data\n|                   (block-aligned, 16-byte blocks)"
+   "quote": "AES-128-CBC Encrypted Data"
   },
   {
    "gid": "01_Firmware_Architecture/firmware_encryption.md#9",
@@ -3926,7 +3901,7 @@
    "source_lines": "127",
    "confidence": "high",
    "signals": [],
-   "quote": "# Check for gzip magic bytes (1f 8b)\n# Expected: 00000000: 1f8b 0800 ..."
+   "quote": "# Check for gzip magic bytes (1f 8b)"
   },
   {
    "gid": "01_Firmware_Architecture/firmware_encryption.md#30",
@@ -3965,7 +3940,7 @@
    "gid": "01_Firmware_Architecture/firmware_encryption.md#33",
    "file": "01_Firmware_Architecture/firmware_encryption.md",
    "local_id": 33,
-   "statement": "ARMimg_maker's presence in firmware 2025.10.15 has not been independently verified; earlier analysis claimed removal, but the binary was confirmed in 2025.02 extracted rootfs.",
+   "statement": "ARMimg_maker is confirmed present in both the 2025.02 and 2025.10 extracted rootfs; the earlier analysis claiming removal in 2025.10.15 is overturned, with only on-device re-verification still recommended.",
    "topic": "armimg-maker",
    "source_lines": "170",
    "confidence": "low",
@@ -3973,7 +3948,7 @@
     "unconfirmed",
     "contradiction"
    ],
-   "quote": "Its presence in firmware 2025.10.15 has not been independently verified — earlier analysis claimed removal"
+   "quote": "The binary is confirmed present in both the 2025.02 and 2025.10 extracted rootfs — an earlier analysis claimed it was removed in 2025.10.15, but that removal claim is overturned"
   },
   {
    "gid": "01_Firmware_Architecture/firmware_encryption.md#34",
@@ -4034,14 +4009,14 @@
    "gid": "01_Firmware_Architecture/firmware_encryption.md#39",
    "file": "01_Firmware_Architecture/firmware_encryption.md",
    "local_id": 39,
-   "statement": "ARMimg_maker is present in all firmware versions prior to 2025.10.15 and removed in 2025.10.15.",
+   "statement": "ARMimg_maker is NOT removed in 2025.10.15 — its Availability is confirmed present in both the 2025.02 and 2025.10 extracted rootfs (earlier removal claim overturned).",
    "topic": "armimg-maker",
-   "source_lines": "170",
+   "source_lines": "178",
    "confidence": "medium",
    "signals": [
     "contradiction"
    ],
-   "quote": "Present in all firmware versions prior to 2025.10.15; removed in 2025.10.15"
+   "quote": "Confirmed present in both the 2025.02 and 2025.10 extracted rootfs (earlier \"removed in 2025.10.15\" claim overturned; on-device re-verification recommended)"
   },
   {
    "gid": "01_Firmware_Architecture/firmware_encryption.md#40",
@@ -4217,7 +4192,7 @@
    "source_lines": "331",
    "confidence": "high",
    "signals": [],
-   "quote": "Source: `cpc200_ccpa_firmware_binaries/IMG_FORMAT_ANALYSIS.md`"
+   "quote": "cpc200_ccpa_firmware_binaries/IMG_FORMAT_ANALYSIS.md"
   },
   {
    "gid": "01_Firmware_Architecture/flash_layout.md#1",
@@ -5526,7 +5501,7 @@
    "source_lines": "74",
    "confidence": "high",
    "signals": null,
-   "quote": "the ALSA card/mixer only exists while an audio session is active; at idle `/proc/asound/cards` is empty"
+   "quote": "ALSA card/mixer only exists while an audio session is active; at idle `/proc/asound/cards` is empty"
   },
   {
    "gid": "01_Firmware_Architecture/heartbeat_analysis.md#1",
@@ -6379,12 +6354,12 @@
    "gid": "01_Firmware_Architecture/heartbeat_analysis.md#76",
    "file": "01_Firmware_Architecture/heartbeat_analysis.md",
    "local_id": 76,
-   "statement": "The SendHeartBeat disable effect is bidirectional - both sides need heartbeats.",
+   "statement": "On current firmware the 0xAA heartbeat is one-way host→adapter, not bidirectional (capture-verified 2026-04-20: 716 TX heartbeats, 0 RX heartbeats; the adapter does not echo 0xAA).",
    "topic": "config-sendheartbeat",
    "source_lines": "92",
    "confidence": "medium",
    "signals": [],
-   "quote": "4. Effect is bidirectional - both sides need heartbeats"
+   "quote": "Treat 0xAA as host→adapter one-way for current firmware."
   },
   {
    "gid": "01_Firmware_Architecture/heartbeat_analysis.md#77",
@@ -6694,7 +6669,7 @@
    "source_lines": "350",
    "confidence": "high",
    "signals": [],
-   "quote": "Binary: `cpc200_ccpa_firmware_binaries/unpacked/ARMadb-driver_unpacked`"
+   "quote": "cpc200_ccpa_firmware_binaries/unpacked/ARMadb-driver_unpacked"
   },
   {
    "gid": "01_Firmware_Architecture/heartbeat_analysis.md#104",
@@ -8146,7 +8121,7 @@
    "source_lines": "309",
    "confidence": "high",
    "signals": null,
-   "quote": "`/var/lib/lockdown/*` records are **usbmuxd USB-trust records, separate from MFi credentials** — do not conflate them with the MFi auth path."
+   "quote": "do not conflate them with the MFi auth path"
   },
   {
    "gid": "01_Firmware_Architecture/initialization.md#130",
@@ -8168,7 +8143,7 @@
    "source_lines": "316",
    "confidence": "high",
    "signals": null,
-   "quote": "Firmware: `cpc200_ccpa_firmware_binaries/`"
+   "quote": "Firmware: `_evidence/cpc200_ccpa_firmware_binaries/`"
   },
   {
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#1",
@@ -8320,12 +8295,12 @@
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#14",
    "file": "01_Firmware_Architecture/usb_zlp_bug.md",
    "local_id": 14,
-   "statement": "The session only recovers when the adapter's \"Host No Response\" timer (60-70s) triggers `Reset Accessory!!`.",
+   "statement": "Recovery happens via the adapter's write-stall reset path (~60-70s, a multi-cycle disconnect→recovery span); the 15,000 ms (`0x3a98`) \"Host No Response\" watchdog does NOT fire here because the adapter can still READ heartbeats, and there is no separate ~60 s reset timer.",
    "topic": "recovery",
    "source_lines": "19",
    "confidence": "high",
    "signals": [],
-   "quote": "Only recovers when adapter's \"Host No Response\" timer (60-70s) triggers `Reset Accessory!!`"
+   "quote": "it is distinct from the 15,000 ms (`0x3a98`) heartbeat-receive \"Host No Response\" watchdog documented in heartbeat_analysis.md / configuration.md, which does not fire here because the adapter can still READ heartbeats"
   },
   {
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#15",
@@ -8516,7 +8491,7 @@
    "source_lines": "46",
    "confidence": "high",
    "signals": [],
-   "quote": "0x18a66: bl    BoxLog          ; log the warning"
+   "quote": "0x18a66: bl    BoxLog            ; log the warning"
   },
   {
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#32",
@@ -8672,7 +8647,7 @@
    "source_lines": "72",
    "confidence": "high",
    "signals": [],
-   "quote": "No firmware version ever passes `accZLP=1`."
+   "quote": "No firmware version observed here passes `accZLP=1`"
   },
   {
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#46",
@@ -8735,7 +8710,7 @@
    "source_lines": "98",
    "confidence": "high",
    "signals": [],
-   "quote": "`riddleBoxCfg` does not control USB transport parameters. The ZLP fix is kernel-module-level only."
+   "quote": "`riddleBoxCfg` does not control USB transport parameters and the ZLP fix is kernel-module-level only"
   },
   {
    "gid": "01_Firmware_Architecture/usb_zlp_bug.md#51",
@@ -9348,7 +9323,7 @@
     "needs re-verification",
     "strikethrough"
    ],
-   "quote": "earlier analysis claimed removal; binary confirmed present in 2025.02 and 2025.10 extracted rootfs — needs re-verification"
+   "quote": "An earlier analysis claimed ARMimg_maker was removed in 2025.10.15; this is superseded."
   },
   {
    "gid": "01_Firmware_Architecture/version_comparison.md#39",
@@ -10426,7 +10401,7 @@
     "dead key",
     "unimplemented"
    ],
-   "quote": "ImprovedFluency (DEAD KEY - unimplemented),"
+   "quote": "ImprovedFluency (dead key — see configuration.md)"
   },
   {
    "gid": "01_Firmware_Architecture/web_interface.md#52",
@@ -11044,7 +11019,7 @@
    "source_lines": "396",
    "confidence": "high",
    "signals": [],
-   "quote": "**Command Injection** - Prior firmware versions vulnerable via wifiName/btName (see `vulnerabilities.md`)"
+   "quote": "**Command Injection** - Prior firmware versions vulnerable via wifiName/btName"
   },
   {
    "gid": "01_Firmware_Architecture/web_interface.md#108",
@@ -11222,7 +11197,7 @@
    "signals": [
     "BUGGY"
    ],
-   "quote": "| `CallQuality` | `CallQuality` | 0-2 | 1 | **BUGGY** - Does NOT set VoiceQuality |"
+   "quote": "| `CallQuality` | `CallQuality` | 0-2 | 1 | **BUGGY** - Does NOT set VoiceQuality"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#13",
@@ -11459,23 +11434,23 @@
    "gid": "01_Firmware_Architecture/web_settings_reference.md#34",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 34,
-   "statement": "Video setting `NotCarPlayH264DecreaseMode` has range 0-2, default 0, and blocks adaptive bitrate.",
+   "statement": "Video setting NotCarPlayH264DecreaseMode (range 0-2, default 0) is a DEAD KEY — intended to block adaptive bitrate but never read at runtime in fw 2025.10.15 (zero runtime xrefs, binary-verified).",
    "topic": "video_settings",
    "source_lines": "75",
    "confidence": "high",
    "signals": [],
-   "quote": "| `NotCarPlayH264DecreaseMode` | `NotCarPlayH264DecreaseMode` | 0-2 | 0 | Block adaptive bitrate |"
+   "quote": "**DEAD KEY** — zero runtime xrefs (binary-verified). Intended to block adaptive bitrate, but never read at runtime in fw 2025.10.15."
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#35",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 35,
-   "statement": "SpsPpsMode value 0 = Auto: use LastPhoneSpsPps from riddle.conf.",
+   "statement": "SpsPpsMode value 0 = Passthrough: forward SPS/PPS as-is from the phone with no modification (does NOT read LastPhoneSpsPps, itself a dead key).",
    "topic": "spspps_mode",
    "source_lines": "80",
    "confidence": "high",
    "signals": [],
-   "quote": "| 0 | Auto | Use LastPhoneSpsPps from riddle.conf |"
+   "quote": "| 0 | Passthrough | Forward SPS/PPS as-is from phone, no modification (does NOT read LastPhoneSpsPps — itself a dead key with zero runtime xrefs) |"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#36",
@@ -11514,12 +11489,12 @@
    "gid": "01_Firmware_Architecture/web_settings_reference.md#39",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 39,
-   "statement": "BitRate is sent in CarPlay negotiation via carplay_set_preferred_bitrate(VideoBitRate * 1000000).",
+   "statement": "BitRate is sent in CarPlay negotiation via carplay_set_preferred_bitrate(VideoBitRate * 0.25 * 1000000) — firmware applies a 0.25 throttle factor.",
    "topic": "video_firmware_hooks",
    "source_lines": "89",
    "confidence": "high",
    "signals": [],
-   "quote": "carplay_set_preferred_bitrate(VideoBitRate * 1000000);"
+   "quote": "carplay_set_preferred_bitrate(VideoBitRate * 0.25 * 1000000);"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#40",
@@ -11707,12 +11682,12 @@
    "gid": "01_Firmware_Architecture/web_settings_reference.md#56",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 56,
-   "statement": "Connection setting `USBConnectedMode` has range 0-2, default 0, and controls USB enumeration timing.",
+   "statement": "Connection setting USBConnectedMode (range 0-2, default 0) selects the USB gadget function (consumed by start_mtp.sh, which writes /sys/class/android_usb_accessory/android0/functions), not enumeration timing.",
    "topic": "connection_settings",
    "source_lines": "143",
    "confidence": "high",
    "signals": [],
-   "quote": "| `USBConnectedMode` | `USBConnectedMode` | 0-2 | 0 | USB enumeration timing |"
+   "quote": "USB gadget function selection (consumed by start_mtp.sh, writes /sys/class/android_usb_accessory/android0/functions)"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#57",
@@ -11811,7 +11786,7 @@
    "source_lines": "179",
    "confidence": "high",
    "signals": [],
-   "quote": "| `MouseMode` | `MouseMode` | 0-1 | 1 | Convert touch to cursor |"
+   "quote": "| `MouseMode` | `MouseMode` | 0-1 | 1 | Convert touch to cursor"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#66",
@@ -11883,12 +11858,12 @@
    "gid": "01_Firmware_Architecture/web_settings_reference.md#72",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 72,
-   "statement": "Display setting `lightType` has range 1-3, default 3, and controls RGB LED behavior.",
+   "statement": "Display setting lightType (range 1-3, default 3) is a DEAD KEY (zero runtime xrefs, binary-verified); LED behavior is driven by the separate rgb*/ledTimingMode parameters, not lightType.",
    "topic": "display_settings",
    "source_lines": "186",
    "confidence": "high",
    "signals": [],
-   "quote": "| `lightType` | `lightType` | 1-3 | 3 | RGB LED behavior |"
+   "quote": "**DEAD KEY** — zero runtime xrefs, not in BoxSettings table (binary-verified). LED behavior is driven by the separate rgb*/ledTimingMode parameters, not lightType."
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#73",
@@ -11934,7 +11909,7 @@
    "signals": [
     "⚠️"
    ],
-   "quote": "⚠️ Settable via web UI only — BoxSettings JSON `autoPlay` is NOT mapped in ARMadb-driver."
+   "quote": "BoxSettings JSON `autoPlay` is NOT mapped in ARMadb-driver"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#77",
@@ -12082,7 +12057,7 @@
    "source_lines": "228",
    "confidence": "high",
    "signals": [],
-   "quote": "| `MediaPacketLen` | `MediaPacketLen` | 200-20000 | 200 | Media USB bulk size |"
+   "quote": "| `MediaPacketLen` | `MediaPacketLen` | 200-20000 | 200 | Media USB bulk size"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#90",
@@ -12294,7 +12269,7 @@
     "DEAD KEY",
     "no runtime effect"
    ],
-   "quote": "| Improved Fluency | `ImprovedFluency` | 0=Off, 1=On | **DEAD KEY** — no runtime effect (see firmware hook column above) |"
+   "quote": "| Improved Fluency | `ImprovedFluency` | 0=Off, 1=On | **DEAD KEY** — no runtime effect (see firmware hook column above"
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#109",
@@ -12711,12 +12686,12 @@
    "gid": "01_Firmware_Architecture/web_settings_reference.md#146",
    "file": "01_Firmware_Architecture/web_settings_reference.md",
    "local_id": 146,
-   "statement": "AutoPlauMusic (Auto Play) may be overridden by the host app via BoxSettings JSON field autoPlay.",
+   "statement": "AutoPlauMusic (Auto Play) is NOT overridable via the BoxSettings JSON autoPlay field — autoPlay is not mapped (absent from the ARMadb-driver string table) and is settable via the web UI only.",
    "topic": "host_overridable_settings",
    "source_lines": "394",
    "confidence": "high",
    "signals": [],
-   "quote": "| `AutoPlauMusic` | Auto Play | `autoPlay` |"
+   "quote": "**NOT overridable** — `autoPlay` is NOT mapped via BoxSettings (key absent from the ARMadb-driver string table, binary-confirmed); settable via web UI only."
   },
   {
    "gid": "01_Firmware_Architecture/web_settings_reference.md#147",

@@ -59,12 +59,12 @@
    "gid": "03_Audio_Processing/audio_formats.md#5",
    "file": "03_Audio_Processing/audio_formats.md",
    "local_id": 5,
-   "statement": "The document was last updated 2026-02-19.",
+   "statement": "The document was last updated 2026-05-21.",
    "topic": "document-metadata",
    "source_lines": "8",
    "confidence": "high",
    "signals": null,
-   "quote": "**Last Updated:** 2026-02-19"
+   "quote": "**Last Updated:** 2026-05-21"
   },
   {
    "gid": "03_Audio_Processing/audio_formats.md#6",
@@ -860,10 +860,10 @@
    "local_id": 75,
    "statement": "Even if VoiceQuality controlled sample rate selection (8kHz vs 16kHz), the setting is never applied; all telephony audio uses 16kHz because the CallQuality-to-VoiceQuality translation fails and CarPlay independently negotiates 16kHz (wideband) with modern iPhones.",
    "topic": "callquality-bug-impact",
-   "source_lines": "216",
+   "source_lines": "218",
    "confidence": "high",
    "signals": null,
-   "quote": "All telephony audio uses 16kHz because:\n1. The CallQuality→VoiceQuality translation fails\n2. CarPlay independently negotiates 16kHz (wideband) with modern iPhones"
+   "quote": "CarPlay independently negotiates 16kHz (wideband) with modern iPhones"
   },
   {
    "gid": "03_Audio_Processing/audio_formats.md#76",
@@ -1618,12 +1618,12 @@
    "local_id": 143,
    "statement": "Firmware-supported mic sample rates (binary verified): 8000 Hz (0x1F40) narrowband and 16000 Hz (0x3E80) wideband; other sample rates cause WebRTC AECM initialization failure.",
    "topic": "summary-supported-rates",
-   "source_lines": "123",
+   "source_lines": "413",
    "confidence": "high",
    "signals": [
     "binary verified"
    ],
-   "quote": "**Firmware-supported mic sample rates (binary verified):**\n- 8000 Hz (0x1F40) - narrowband\n- 16000 Hz (0x3E80) - wideband\n- Other sample rates will cause WebRTC AECM initialization failure"
+   "quote": "**Firmware-supported mic sample rates:** 8000 Hz (0x1F40) or 16000 Hz (0x3E80) only"
   },
   {
    "gid": "03_Audio_Processing/audio_formats.md#144",
@@ -1728,12 +1728,12 @@
    "gid": "03_Audio_Processing/audio_formats.md#153",
    "file": "03_Audio_Processing/audio_formats.md",
    "local_id": 153,
-   "statement": "Binary reference: AGC error at address 0x5a642 is 'webrtc_Agc_Process args error!'.",
+   "statement": "Binary reference: AGC error at address 0x6bff2 is 'webrtc_Agc_Process args error!' (distinct from the PhoneCall-AGC string).",
    "topic": "binref-agc-error",
    "source_lines": "433",
    "confidence": "high",
    "signals": null,
-   "quote": "| AGC error | `0x5a642` | `webrtc_Agc_Process args error!` |"
+   "quote": "| AGC error | `0x6bff2` | `webrtc_Agc_Process args error!` (distinct from the PhoneCall-AGC string) |"
   },
   {
    "gid": "03_Audio_Processing/audio_formats.md#154",
@@ -1744,7 +1744,7 @@
    "source_lines": "434",
    "confidence": "high",
    "signals": null,
-   "quote": "| PhoneCall AGC | - | `Not all PhoneCall data Do AGC: %d!!!` |"
+   "quote": "`Not all PhoneCall data Do AGC: %d!!!`"
   },
   {
    "gid": "03_Audio_Processing/audio_formats.md#155",
@@ -1840,12 +1840,12 @@
    "gid": "03_Audio_Processing/microphone_processing.md#4",
    "file": "03_Audio_Processing/microphone_processing.md",
    "local_id": 4,
-   "statement": "The document was last updated 2026-02-19.",
+   "statement": "The document was last updated 2026-05-21.",
    "topic": "doc-status",
    "source_lines": "7",
    "confidence": "high",
    "signals": null,
-   "quote": "**Last Updated:** 2026-02-19"
+   "quote": "**Last Updated:** 2026-05-21"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#5",
@@ -2230,7 +2230,7 @@
    "source_lines": "140",
    "confidence": "high",
    "signals": null,
-   "quote": "\"CallQuality\": 1        // Call quality enhancement"
+   "quote": "\"CallQuality\": 1"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#40",
@@ -2463,7 +2463,7 @@
    "signals": [
     "CRITICAL"
    ],
-   "quote": "the firmware's WebRTC AECM module at `0x2dfa2` accepts only these two rates and rejects others"
+   "quote": "the only rates accepted by the firmware's WebRTC AECM module at `0x2dfa2`"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#61",
@@ -2476,7 +2476,7 @@
    "signals": [
     "old note corrected"
    ],
-   "quote": "8kHz was previously thought to be vestigial (based on CarPlay-only captures). It is actively used for AA phone calls"
+   "quote": "8kHz was previously thought to be vestigial (based on CarPlay-only captures)"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#62",
@@ -2498,7 +2498,7 @@
    "source_lines": "250",
    "confidence": "high",
    "signals": null,
-   "quote": "Host apps must parse `decodeType` from the adapter's `INPUT_CONFIG` command and set mic capture rate accordingly."
+   "quote": "Host apps must parse `decodeType` from the adapter's `INPUT_CONFIG` command"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#64",
@@ -2977,10 +2977,10 @@
    "local_id": 106,
    "statement": "decodeType 3 = 8000 Hz, 1 channel, phone call (narrowband), used for AA VOIP/cellular calls.",
    "topic": "decodetype-table",
-   "source_lines": "312",
+   "source_lines": "337",
    "confidence": "high",
    "signals": null,
-   "quote": "| 3 | 8000 Hz | 1 | Phone call (narrowband) | AA VOIP/cellular calls |"
+   "quote": "decodeType=3 (8000 Hz mono — phone call narrowband, AA VOIP/cellular calls)"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#107",
@@ -2988,10 +2988,10 @@
    "local_id": 107,
    "statement": "decodeType 5 = 16000 Hz, 1 channel, voice assistant (wideband), used for GA, Siri, CarPlay calls.",
    "topic": "decodetype-table",
-   "source_lines": "408",
+   "source_lines": "337",
    "confidence": "high",
    "signals": null,
-   "quote": "| 5 | 16000 Hz | 1 | Voice assistant (wideband) | GA, Siri, CarPlay calls |"
+   "quote": "decodeType=5 (16000 Hz mono — voice assistant wideband: GA, Siri, CarPlay calls)"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#108",
@@ -3454,13 +3454,13 @@
    "local_id": 149,
    "statement": "Corrected 2026-05-21: audioInputFormats is NOT an iAP2 field; it belongs to the AirPlay WifiAudioFormats array sent over RTSP:5000 during AirPlay session SETUP (after the BT→WiFi handover).",
    "topic": "airplay-correction",
-   "source_lines": "484",
+   "source_lines": "485",
    "confidence": "high",
    "signals": [
     "Corrected 2026-05-21",
     "old note corrected"
    ],
-   "quote": "`audioInputFormats` is **NOT an iAP2 field**. It belongs to the\nAirPlay **`WifiAudioFormats`** array sent over **RTSP:5000** during **AirPlay session SETUP**"
+   "quote": "AirPlay **`WifiAudioFormats`** array sent over **RTSP:5000** during **AirPlay session SETUP**"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#150",
@@ -3468,10 +3468,10 @@
    "local_id": 150,
    "statement": "iAP2 0x1D01 IdentificationInformation carries transports / vehicle identity / message IDs only — no audio format.",
    "topic": "airplay-correction",
-   "source_lines": "487",
+   "source_lines": "486",
    "confidence": "high",
    "signals": null,
-   "quote": "iAP2 `0x1D01 IdentificationInformation` carries transports /\nvehicle identity / message IDs only — **no audio format**."
+   "quote": "iAP2 `0x1D01 IdentificationInformation` carries transports"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#151",
@@ -3512,10 +3512,10 @@
    "local_id": 154,
    "statement": "The host→phone microphone uplink path is advertised via the audioInputFormats field on the telephony / speechRecognition / default rows of the AirPlay WifiAudioFormats array (0x4000000 = AAC-ELD duplex), plus compatibility/100 audioInputFormats = 0x10 (PCM 16 kHz mono).",
    "topic": "airplay-formats",
-   "source_lines": "508",
+   "source_lines": "509",
    "confidence": "high",
    "signals": null,
-   "quote": "the host→phone microphone path is advertised via the\n`audioInputFormats` field on the `telephony` / `speechRecognition` / `default` rows of the\nAirPlay `WifiAudioFormats` array (`0x4000000` = AAC-ELD duplex), plus `compatibility/100`\n`audioInputFormats = 0x10` (PCM 16 kHz mono)."
+   "quote": "AirPlay `WifiAudioFormats` array (`0x4000000` = AAC-ELD duplex), plus `compatibility/100`"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#155",
@@ -3664,12 +3664,12 @@
    "gid": "03_Audio_Processing/microphone_processing.md#168",
    "file": "03_Audio_Processing/microphone_processing.md",
    "local_id": 168,
-   "statement": "CarPlay total mic bytes = 3,645,440 (228s); AA varies by call duration.",
+   "statement": "CarPlay total mic samples = 3,645,440 samples (228s at 16kHz); AA varies by call duration.",
    "topic": "carplay-vs-aa-full",
    "source_lines": "537",
    "confidence": "high",
    "signals": null,
-   "quote": "| **Total mic bytes** | 3,645,440 (228s) | Varies by call duration |"
+   "quote": "| **Total mic samples** | 3,645,440 samples (228s at 16kHz) | Varies by call duration |"
   },
   {
    "gid": "03_Audio_Processing/microphone_processing.md#169",

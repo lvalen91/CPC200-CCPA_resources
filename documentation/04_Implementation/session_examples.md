@@ -182,7 +182,7 @@ In this (wired) CarPlay session, navigation video was activated by sending `navi
 | - | ~7500ms | OUT | 8 | cmd=508 (host echoes nav focus) |
 | 43 | 7524ms | IN | 44 | First navigation video frame |
 
-**Note:** This is a **wired** CarPlay session (transport "Wired USB → WiFi handoff"), in which the adapter emits 508 on its own. For **wireless** CarPlay the host must proactively send the 508 kick — `naviScreenInfo` alone is NOT sufficient; in wireless sessions the adapter sends only 506 (not 508) and `_AltScreenSetup` never starts without the host kick (live-verified; see `04_Implementation/host_app_guide.md`). Command **508 starts the iOS nav video encoder** (verified); **509 stops nav audio by turning off its encoder**.
+**Note:** This is a **wired** CarPlay session (transport "Wired USB → WiFi handoff"), in which the adapter emits 508 on its own. For **wireless** CarPlay the host must proactively send the 508 kick — `naviScreenInfo` alone is NOT sufficient; in wireless sessions the adapter sends only 506 (not 508) and `_AltScreenSetup` never starts without the host kick (live-verified; see `04_Implementation/host_app_guide.md`). Command **508 (RequestNaviScreenFocus) starts the 0x2C nav-screen video stream** (verified); **509 (ReleaseNaviScreenFocus) stops it** — a video-focus release, not audio.
 
 ### Session Statistics
 

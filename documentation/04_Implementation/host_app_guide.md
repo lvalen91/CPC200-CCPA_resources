@@ -832,7 +832,7 @@ host app → ARMadb-driver → /etc/riddle.conf + /etc/RiddleBoxData/HU_*
 
 ### Navigation Video Setup (iOS 13+)
 
-Include `naviScreenInfo` in BoxSettings to activate navigation video (type 0x2C). `AdvancedFeatures=1` is NOT required when `naviScreenInfo` is provided. **However, for wireless CarPlay `naviScreenInfo` alone is NOT sufficient — the host must also proactively send the Command 508 kick (see step 1 below).** Command `508` **starts the iOS nav video encoder** (verified); Command `509` **stops nav audio by turning off its encoder**. See `02_Protocol_Reference/video_protocol.md` for complete firmware analysis of the navigation video activation path.
+Include `naviScreenInfo` in BoxSettings to activate navigation video (type 0x2C). `AdvancedFeatures=1` is NOT required when `naviScreenInfo` is provided. **However, for wireless CarPlay `naviScreenInfo` alone is NOT sufficient — the host must also proactively send the Command 508 kick (see step 1 below).** Command `508` (**RequestNaviScreenFocus**) **starts the 0x2C nav-screen video stream** (verified); Command `509` (**ReleaseNaviScreenFocus**) **stops that nav-screen video stream** — a video-focus release, not audio. See `02_Protocol_Reference/video_protocol.md` for complete firmware analysis of the navigation video activation path.
 
 **Note:** Only include `naviScreenInfo` when your host app handles NaviVideoData (Type 0x2C). This causes a second H.264 video stream that increases USB bandwidth and processing load.
 

@@ -8,34 +8,12 @@
   "04_Implementation/iap2_binary_patches.md",
   "04_Implementation/session_examples.md"
  ],
- "claim_count": 694,
+ "claim_count": 691,
  "claims": [
   {
    "gid": "04_Implementation/capture_playback.md#1",
    "file": "04_Implementation/capture_playback.md",
    "local_id": 1,
-   "statement": "Command 101 (0x65) is CtrlButtonRight for navigating right in UI",
-   "topic": "command-101-ctrlbuttonright",
-   "source_lines": "249",
-   "confidence": "high",
-   "signals": null,
-   "quote": "| 101 | CtrlButtonRight | Navigate right in UI |"
-  },
-  {
-   "gid": "04_Implementation/capture_playback.md#2",
-   "file": "04_Implementation/capture_playback.md",
-   "local_id": 2,
-   "statement": "Command 103 (0x67) is CtrlButtonDown for navigating down in UI",
-   "topic": "command-103-ctrlbuttondown",
-   "source_lines": "249",
-   "confidence": "high",
-   "signals": null,
-   "quote": "| 103 | CtrlButtonDown | Navigate down in UI |"
-  },
-  {
-   "gid": "04_Implementation/capture_playback.md#3",
-   "file": "04_Implementation/capture_playback.md",
-   "local_id": 3,
    "statement": "The Capture Playback feature allows replaying previously captured USB sessions without requiring a physical adapter connection.",
    "topic": "playback-feature",
    "source_lines": "10",
@@ -44,9 +22,9 @@
    "quote": "allows replaying previously captured USB sessions without requiring a physical adapter connection"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#4",
+   "gid": "04_Implementation/capture_playback.md#2",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 4,
+   "local_id": 2,
    "statement": "The playback system does not create separate video/audio pipelines; it injects captured data into the existing pipeline.",
    "topic": "playback-architecture",
    "source_lines": "22",
@@ -55,9 +33,9 @@
    "quote": "does not** create separate video/audio pipelines. Instead, it injects captured data into the existing pipeline"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#5",
+   "gid": "04_Implementation/capture_playback.md#3",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 5,
+   "local_id": 3,
    "statement": "Playback reuses the same H264 decoder instance, MediaCodec decoder, Surface for video output, and Audio manager for audio as live operation.",
    "topic": "playback-architecture",
    "source_lines": "24",
@@ -66,9 +44,9 @@
    "quote": "H264 decoder instance\n- MediaCodec decoder\n- Surface for video output\n- Audio manager for audio"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#6",
+   "gid": "04_Implementation/capture_playback.md#4",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 6,
+   "local_id": 4,
    "statement": "CaptureReplaySource reads packets and maintains timing.",
    "topic": "playback-components",
    "source_lines": "41",
@@ -77,9 +55,9 @@
    "quote": "CaptureReplaySource │  Reads packets, maintains timing"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#7",
+   "gid": "04_Implementation/capture_playback.md#5",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 7,
+   "local_id": 5,
    "statement": "CapturePlaybackManager strips headers and routes data by type.",
    "topic": "playback-components",
    "source_lines": "46",
@@ -88,9 +66,9 @@
    "quote": "CapturePlaybackManager│  Strips headers, routes by type"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#8",
+   "gid": "04_Implementation/capture_playback.md#6",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 8,
+   "local_id": 6,
    "statement": "The Main Manager exposes injectVideoData() and injectAudioData() methods for injecting captured data.",
    "topic": "playback-components",
    "source_lines": "51",
@@ -99,9 +77,9 @@
    "quote": "Main Manager      │  injectVideoData() / injectAudioData()"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#9",
+   "gid": "04_Implementation/capture_playback.md#7",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 9,
+   "local_id": 7,
    "statement": "Captures consist of two files: capture.json (packet metadata) and capture.bin (raw binary packet data).",
    "topic": "capture-file-format",
    "source_lines": "67",
@@ -110,9 +88,9 @@
    "quote": "Captures consist of two files:\n- `capture.json` - Packet metadata (sequence, type, timestamp, offset, length)\n- `capture.bin` - Raw binary packet data"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#10",
+   "gid": "04_Implementation/capture_playback.md#8",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 10,
+   "local_id": 8,
    "statement": "capture.json packet metadata contains sequence, type, timestamp, offset, and length fields.",
    "topic": "capture-file-format",
    "source_lines": "68",
@@ -121,9 +99,9 @@
    "quote": "Packet metadata (sequence, type, timestamp, offset, length)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#11",
+   "gid": "04_Implementation/capture_playback.md#9",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 11,
+   "local_id": 9,
    "statement": "The capture format differs between alternate-host, carlink_native, and carlink_macOS implementations, which affects header parsing.",
    "topic": "capture-format-differences",
    "source_lines": "73",
@@ -132,9 +110,9 @@
    "quote": "The capture format differs between implementations. This affects header parsing."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#12",
+   "gid": "04_Implementation/capture_playback.md#10",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 12,
+   "local_id": 10,
    "statement": "In alternate-host format, offset 0 holds a 12-byte capture record prefix (length, offset, type).",
    "topic": "alternate-host-format",
    "source_lines": "80",
@@ -143,9 +121,9 @@
    "quote": "0       12    Capture record prefix (length, offset, type)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#13",
+   "gid": "04_Implementation/capture_playback.md#11",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 13,
+   "local_id": 11,
    "statement": "In alternate-host format, offset 12 holds a 16-byte protocol header (magic, length, type, checksum).",
    "topic": "alternate-host-format",
    "source_lines": "81",
@@ -154,9 +132,9 @@
    "quote": "12      16    Protocol header (magic, length, type, checksum)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#14",
+   "gid": "04_Implementation/capture_playback.md#12",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 14,
+   "local_id": 12,
    "statement": "In alternate-host format, offset 28 holds a 20-byte video header (width, height, flags, pts, reserved).",
    "topic": "alternate-host-format",
    "source_lines": "82",
@@ -165,9 +143,9 @@
    "quote": "28      20    Video header (width, height, flags, pts, reserved)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#15",
+   "gid": "04_Implementation/capture_playback.md#13",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 15,
+   "local_id": 13,
    "statement": "In alternate-host format, H.264 Annex B data (with start codes) begins at offset 48.",
    "topic": "alternate-host-format",
    "source_lines": "83",
@@ -176,9 +154,9 @@
    "quote": "48      N     H.264 Annex B data (with start codes)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#16",
+   "gid": "04_Implementation/capture_playback.md#14",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 16,
+   "local_id": 14,
    "statement": "The alternate-host format total header size is 48 bytes.",
    "topic": "alternate-host-format",
    "source_lines": "85",
@@ -187,9 +165,9 @@
    "quote": "**Total header size: 48 bytes**"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#17",
+   "gid": "04_Implementation/capture_playback.md#15",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 17,
+   "local_id": 15,
    "statement": "In carlink_native format, offset 0 holds a 16-byte protocol header (magic, length, type, checksum) with no record prefix.",
    "topic": "carlink-native-format",
    "source_lines": "92",
@@ -198,9 +176,9 @@
    "quote": "0       16    Protocol header (magic, length, type, checksum)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#18",
+   "gid": "04_Implementation/capture_playback.md#16",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 18,
+   "local_id": 16,
    "statement": "In carlink_native format, offset 16 holds a 20-byte video header (width, height, flags, pts, reserved).",
    "topic": "carlink-native-format",
    "source_lines": "93",
@@ -209,9 +187,9 @@
    "quote": "16      20    Video header (width, height, flags, pts, reserved)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#19",
+   "gid": "04_Implementation/capture_playback.md#17",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 19,
+   "local_id": 17,
    "statement": "In carlink_native format, H.264 Annex B data (with start codes) begins at offset 36.",
    "topic": "carlink-native-format",
    "source_lines": "94",
@@ -220,9 +198,9 @@
    "quote": "36      N     H.264 Annex B data (with start codes)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#20",
+   "gid": "04_Implementation/capture_playback.md#18",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 20,
+   "local_id": 18,
    "statement": "The carlink_native format total header size is 36 bytes.",
    "topic": "carlink-native-format",
    "source_lines": "96",
@@ -231,9 +209,9 @@
    "quote": "**Total header size: 36 bytes**"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#21",
+   "gid": "04_Implementation/capture_playback.md#19",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 21,
+   "local_id": 19,
    "statement": "The carlink_macOS CLNK recorder format (Apr 2026) is emitted by the macOS CarLink client (bundle zeno.carlink.mac, SessionRecorder) and is a third container-oriented format distinct from the other two.",
    "topic": "carlink-macos-format",
    "source_lines": "100",
@@ -242,9 +220,9 @@
    "quote": "The macOS CarLink client (`zeno.carlink.mac`, `SessionRecorder`) emits a third, container-oriented format distinct from both of the above."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#22",
+   "gid": "04_Implementation/capture_playback.md#20",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 22,
+   "local_id": 20,
    "statement": "In the carlink_macOS format, the 16-byte USB protocol header and typeCheck field are stripped by the recorder; direction and timing metadata are prepended per record.",
    "topic": "carlink-macos-format",
    "source_lines": "100",
@@ -253,9 +231,9 @@
    "quote": "The 16-byte USB protocol header and `typeCheck` field are stripped by the recorder; direction and timing metadata are prepended per record."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#23",
+   "gid": "04_Implementation/capture_playback.md#21",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 23,
+   "local_id": 21,
    "statement": "carlink_macOS file layout offset 0 is a 4-byte ASCII magic \"CLNK\".",
    "topic": "carlink-macos-format",
    "source_lines": "104",
@@ -264,9 +242,9 @@
    "quote": "0       4     Magic  \"CLNK\" (ASCII)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#24",
+   "gid": "04_Implementation/capture_playback.md#22",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 24,
+   "local_id": 22,
    "statement": "carlink_macOS file layout offset 4 is a 4-byte little-endian uint32 Version, currently equal to 1.",
    "topic": "carlink-macos-format",
    "source_lines": "105",
@@ -275,9 +253,9 @@
    "quote": "4       4     Version (LE uint32, currently = 1)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#25",
+   "gid": "04_Implementation/capture_playback.md#23",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 25,
+   "local_id": 23,
    "statement": "carlink_macOS file layout offset 8 is an 8-byte LE uint64 session start timestamp in nanoseconds since Unix epoch.",
    "topic": "carlink-macos-format",
    "source_lines": "106",
@@ -286,9 +264,9 @@
    "quote": "8       8     Session start timestamp (LE uint64 ns since Unix epoch)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#26",
+   "gid": "04_Implementation/capture_playback.md#24",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 26,
+   "local_id": 24,
    "statement": "carlink_macOS file layout offset 16 is an 8-byte LE uint64 session end timestamp in nanoseconds.",
    "topic": "carlink-macos-format",
    "source_lines": "107",
@@ -297,9 +275,9 @@
    "quote": "16      8     Session end timestamp   (LE uint64 ns)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#27",
+   "gid": "04_Implementation/capture_playback.md#25",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 27,
+   "local_id": 25,
    "statement": "carlink_macOS file layout offset 24 holds a null-terminated firmware version string (e.g. \"2025.10.15.1127CAY\\0\").",
    "topic": "carlink-macos-format",
    "source_lines": "108",
@@ -308,9 +286,9 @@
    "quote": "24      N     Firmware version string, null-terminated (e.g. \"2025.10.15.1127CAY\\0\")"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#28",
+   "gid": "04_Implementation/capture_playback.md#26",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 28,
+   "local_id": 26,
    "statement": "The carlink_macOS header is padded to 256 bytes total, with the packet record stream starting at offset 256.",
    "topic": "carlink-macos-format",
    "source_lines": "109",
@@ -319,9 +297,9 @@
    "quote": "...     -     Padding to 256 bytes total header\n256     ...   Packet record stream (see below)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#29",
+   "gid": "04_Implementation/capture_playback.md#27",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 29,
+   "local_id": 27,
    "statement": "carlink_macOS per-packet record offset +0 is a 1-byte Direction (0x01 = TX host→adapter, 0x00 = RX adapter→host).",
    "topic": "carlink-macos-format",
    "source_lines": "113",
@@ -330,9 +308,9 @@
    "quote": "+0      1     Direction  (0x01 = TX host→adapter, 0x00 = RX adapter→host)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#30",
+   "gid": "04_Implementation/capture_playback.md#28",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 30,
+   "local_id": 28,
    "statement": "carlink_macOS per-packet record offset +1 is a 4-byte LE uint32 Timestamp in milliseconds since session start.",
    "topic": "carlink-macos-format",
    "source_lines": "114",
@@ -341,9 +319,9 @@
    "quote": "+1      4     Timestamp  (LE uint32 ms since session start)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#31",
+   "gid": "04_Implementation/capture_playback.md#29",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 31,
+   "local_id": 29,
    "statement": "carlink_macOS per-packet record offset +5 is a 4-byte LE uint32 Type (protocol type; e.g. 0x06 video, 0x07 audio, 0xAA heartbeat).",
    "topic": "carlink-macos-format",
    "source_lines": "115",
@@ -352,9 +330,9 @@
    "quote": "+5      4     Type       (LE uint32 — protocol type; e.g. 0x06 video, 0x07 audio, 0xAA heartbeat)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#32",
+   "gid": "04_Implementation/capture_playback.md#30",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 32,
+   "local_id": 30,
    "statement": "carlink_macOS per-packet record offset +9 is a 4-byte LE uint32 Length (payload byte count).",
    "topic": "carlink-macos-format",
    "source_lines": "116",
@@ -363,9 +341,9 @@
    "quote": "+9      4     Length     (LE uint32 — payload byte count)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#33",
+   "gid": "04_Implementation/capture_playback.md#31",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 33,
+   "local_id": 31,
    "statement": "carlink_macOS per-packet record offset +13 is the raw payload only, with no 0x55AA55AA magic and no typeCheck.",
    "topic": "carlink-macos-format",
    "source_lines": "117",
@@ -374,9 +352,9 @@
    "quote": "+13     N     Payload    (raw payload only; no 0x55AA55AA magic, no typeCheck)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#34",
+   "gid": "04_Implementation/capture_playback.md#32",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 34,
+   "local_id": 32,
    "statement": "For carlink_macOS captures the protocol+video header total for injection into carlink_native decode path is 0 because the recorder already stripped them; replaying requires re-synthesizing the 16-byte protocol header and (for video) the 20-byte video header before feeding the decoder.",
    "topic": "carlink-macos-format",
    "source_lines": "120",
@@ -385,9 +363,9 @@
    "quote": "0 — the recorder has already stripped them. When replaying through a carlink_native-style pipeline, you must re-synthesize the 16-byte protocol header and (for video) the 20-byte video header before feeding the decoder."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#35",
+   "gid": "04_Implementation/capture_playback.md#33",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 35,
+   "local_id": 33,
    "statement": "The macOS recorder truncates every type=0x06 VideoData payload to the first 512 bytes of H.264 plus the 20B video header, yielding 532-byte records regardless of actual frame size.",
    "topic": "carlink-macos-truncation",
    "source_lines": "122",
@@ -396,9 +374,9 @@
    "quote": "truncates every `type=0x06` VideoData payload to the first 512 bytes of H.264 plus the 20B video header**, yielding 532-byte records regardless of actual frame size"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#36",
+   "gid": "04_Implementation/capture_playback.md#34",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 36,
+   "local_id": 34,
    "statement": "In a reference 2026-04-20 capture, 65,374 of 65,377 video frames were exactly 532 bytes.",
    "topic": "carlink-macos-truncation",
    "source_lines": "122",
@@ -407,9 +385,9 @@
    "quote": "Confirmed: 65,374 / 65,377 video frames in a reference 2026-04-20 capture were exactly 532 B."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#37",
+   "gid": "04_Implementation/capture_playback.md#35",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 37,
+   "local_id": 35,
    "statement": "Full-frame replay is impossible from macOS captures; only header + NAL-prefix inspection is reliable, and full-payload analysis requires carlink_native or alternate-host recorders.",
    "topic": "carlink-macos-truncation",
    "source_lines": "122",
@@ -418,9 +396,9 @@
    "quote": "**Full-frame replay is impossible from macOS captures** — only header + NAL-prefix inspection is reliable. For full-payload analysis, use carlink_native or alternate-host recorders."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#38",
+   "gid": "04_Implementation/capture_playback.md#36",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 38,
+   "local_id": 36,
    "statement": "In carlink_macOS captures, audio (0x07), heartbeat (0xAA), command (0x08), and other non-video payloads are captured in full.",
    "topic": "carlink-macos-truncation",
    "source_lines": "124",
@@ -429,9 +407,9 @@
    "quote": "Audio (`0x07`), heartbeat (`0xAA`), command (`0x08`), and other non-video payloads are captured in full."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#39",
+   "gid": "04_Implementation/capture_playback.md#37",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 39,
+   "local_id": 37,
    "statement": "To distinguish alternate-host vs carlink_native (both start with protocol magic), check the first 4 bytes: aa 55 aa 55 (little-endian magic) indicates carlink_native format (36-byte video header).",
    "topic": "format-detection",
    "source_lines": "129",
@@ -440,9 +418,9 @@
    "quote": "If `aa 55 aa 55` (little-endian magic) → carlink_native format (36-byte video header)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#40",
+   "gid": "04_Implementation/capture_playback.md#38",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 40,
+   "local_id": 38,
    "statement": "If the first 4 bytes are NOT the magic, the file is alternate-host format (48-byte video header, skip 12-byte prefix).",
    "topic": "format-detection",
    "source_lines": "130",
@@ -451,9 +429,9 @@
    "quote": "If NOT magic → alternate-host format (48-byte video header, skip 12-byte prefix)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#41",
+   "gid": "04_Implementation/capture_playback.md#39",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 41,
+   "local_id": 39,
    "statement": "For carlink_macOS format detection, check the first 4 bytes for the ASCII magic \"CLNK\" (43 4c 4e 4b).",
    "topic": "format-detection",
    "source_lines": "132",
@@ -462,9 +440,9 @@
    "quote": "check the first 4 bytes for the ASCII magic `\"CLNK\"` (`43 4c 4e 4b`)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#42",
+   "gid": "04_Implementation/capture_playback.md#40",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 42,
+   "local_id": 40,
    "statement": "In format detection code, firstFour == 0x4B4E4C43 maps to CaptureFormat.CARLINK_MACOS (\"CLNK\" ASCII read little-endian).",
    "topic": "format-detection",
    "source_lines": "137",
@@ -473,9 +451,9 @@
    "quote": "firstFour == 0x4B4E4C43 -> CaptureFormat.CARLINK_MACOS       // \"CLNK\" ASCII"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#43",
+   "gid": "04_Implementation/capture_playback.md#41",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 43,
+   "local_id": 41,
    "statement": "In format detection code, firstFour == 0x55AA55AA maps to CaptureFormat.CARLINK_NATIVE (protocol magic).",
    "topic": "format-detection",
    "source_lines": "138",
@@ -484,9 +462,9 @@
    "quote": "firstFour == 0x55AA55AA -> CaptureFormat.CARLINK_NATIVE       // protocol magic"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#44",
+   "gid": "04_Implementation/capture_playback.md#42",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 44,
+   "local_id": 42,
    "statement": "In format detection code, the else branch maps to CaptureFormat.ALTERNATE_HOST (with 12-byte record prefix).",
    "topic": "format-detection",
    "source_lines": "139",
@@ -495,9 +473,9 @@
    "quote": "else                    -> CaptureFormat.ALTERNATE_HOST       // with 12-byte record prefix"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#45",
+   "gid": "04_Implementation/capture_playback.md#43",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 45,
+   "local_id": 43,
    "statement": "File preamble sizes: alternate-host 0, carlink_native 0, carlink_macOS 256 bytes (CLNK + ts + fwver).",
    "topic": "header-size-summary",
    "source_lines": "147",
@@ -506,9 +484,9 @@
    "quote": "**File preamble** | 0 | 0 | 256 bytes (CLNK + ts + fwver)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#46",
+   "gid": "04_Implementation/capture_playback.md#44",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 46,
+   "local_id": 44,
    "statement": "Per-record prefix sizes: alternate-host 12, carlink_native 0, carlink_macOS 13 (dir + ts + type + len).",
    "topic": "header-size-summary",
    "source_lines": "148",
@@ -517,9 +495,9 @@
    "quote": "**Per-record prefix** | 12 | 0 | 13 (dir + ts + type + len)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#47",
+   "gid": "04_Implementation/capture_playback.md#45",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 47,
+   "local_id": 45,
    "statement": "Protocol header sizes: alternate-host 16, carlink_native 16, carlink_macOS 0 (stripped).",
    "topic": "header-size-summary",
    "source_lines": "149",
@@ -528,9 +506,9 @@
    "quote": "**Protocol header** | 16 | 16 | **0 (stripped)**"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#48",
+   "gid": "04_Implementation/capture_playback.md#46",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 48,
+   "local_id": 46,
    "statement": "Video header sizes: alternate-host 20, carlink_native 20, carlink_macOS 20 (prepended to H.264 payload).",
    "topic": "header-size-summary",
    "source_lines": "150",
@@ -539,9 +517,9 @@
    "quote": "**Video header** | 20 | 20 | 20 (prepended to H.264 payload)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#49",
+   "gid": "04_Implementation/capture_playback.md#47",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 49,
+   "local_id": 47,
    "statement": "Total video prefix: alternate-host 48, carlink_native 36, carlink_macOS 13 (+ 20 internal video header = 33).",
    "topic": "header-size-summary",
    "source_lines": "151",
@@ -550,9 +528,9 @@
    "quote": "**Total video prefix** | 48 | 36 | 13 (+ 20 internal video header = 33)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#50",
+   "gid": "04_Implementation/capture_playback.md#48",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 50,
+   "local_id": 48,
    "statement": "Audio header sizes: alternate-host 40, carlink_native 28, carlink_macOS 13 (+ 12 internal audio header = 25).",
    "topic": "header-size-summary",
    "source_lines": "152",
@@ -561,9 +539,9 @@
    "quote": "**Audio header** | 40 | 28 | 13 (+ 12 internal audio header = 25)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#51",
+   "gid": "04_Implementation/capture_playback.md#49",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 51,
+   "local_id": 49,
    "statement": "Video payload completeness: alternate-host full, carlink_native full, carlink_macOS capped at 512 B.",
    "topic": "header-size-summary",
    "source_lines": "153",
@@ -572,9 +550,9 @@
    "quote": "**Video payload** | full | full | **capped at 512 B**"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#52",
+   "gid": "04_Implementation/capture_playback.md#50",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 52,
+   "local_id": 50,
    "statement": "Issue 1: configuring MediaCodec throws IllegalArgumentException because the emulator's goldfish video decoder doesn't support KEY_LOW_LATENCY.",
    "topic": "issue-low-latency",
    "source_lines": "163",
@@ -583,9 +561,9 @@
    "quote": "Emulator's goldfish video decoder doesn't support `KEY_LOW_LATENCY`"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#53",
+   "gid": "04_Implementation/capture_playback.md#51",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 53,
+   "local_id": 51,
    "statement": "Fix for low-latency incompatibility: check caps.isFeatureSupported(CodecCapabilities.FEATURE_LowLatency) before setting MediaFormat.KEY_LOW_LATENCY to 1.",
    "topic": "issue-low-latency",
    "source_lines": "167",
@@ -594,9 +572,9 @@
    "quote": "if (caps.isFeatureSupported(CodecCapabilities.FEATURE_LowLatency)) {\n    mediaformat.setInteger(MediaFormat.KEY_LOW_LATENCY, 1);\n}"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#54",
+   "gid": "04_Implementation/capture_playback.md#52",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 54,
+   "local_id": 52,
    "statement": "Issue 2: MediaCodec configure failed with error 0xffffffea (-22 EINVAL) because a Surface can only be connected to one MediaCodec at a time.",
    "topic": "issue-surface-contention",
    "source_lines": "174",
@@ -605,9 +583,9 @@
    "quote": "MediaCodec configure failed with error 0xffffffea (-22 EINVAL)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#55",
+   "gid": "04_Implementation/capture_playback.md#53",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 55,
+   "local_id": 53,
    "statement": "Issue 2 fix: use injection-based architecture so playback uses the existing renderer instead of creating its own.",
    "topic": "issue-surface-contention",
    "source_lines": "178",
@@ -616,9 +594,9 @@
    "quote": "Use injection-based architecture - playback uses existing renderer instead of creating its own"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#56",
+   "gid": "04_Implementation/capture_playback.md#54",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 56,
+   "local_id": 54,
    "statement": "Issue 3 (Critical): video was received but the decoder produced no output (R:161/D:0) because code stripped only 36 bytes but alternate-host capture files include a 12-byte prefix.",
    "topic": "issue-header-stripping",
    "source_lines": "184",
@@ -627,9 +605,9 @@
    "quote": "Code stripped only 36 bytes (protocol + video header), but alternate-host capture files include a 12-byte prefix"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#57",
+   "gid": "04_Implementation/capture_playback.md#55",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 57,
+   "local_id": 55,
    "statement": "In the Issue 3 investigation, raw hex at the video packet offset showed the prefix and magic, protocol header, video header, and the H.264 start code 00 00 00 01 at offset 48.",
    "topic": "issue-header-stripping",
    "source_lines": "195",
@@ -638,9 +616,9 @@
    "quote": "The H.264 start code (`00 00 00 01`) appears at offset 48, not 36."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#58",
+   "gid": "04_Implementation/capture_playback.md#56",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 58,
+   "local_id": 56,
    "statement": "Issue 3 fix: detect format and compute headerSize as 12 + 16 + 20 for alternate-host or 16 + 20 otherwise.",
    "topic": "issue-header-stripping",
    "source_lines": "199",
@@ -649,9 +627,9 @@
    "quote": "val headerSize = if (isAlternateHostFormat) 12 + 16 + 20 else 16 + 20"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#59",
+   "gid": "04_Implementation/capture_playback.md#57",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 59,
+   "local_id": 57,
    "statement": "Issue 4: no audio during playback because stop() releases the audio subsystem and prepareForPlayback() didn't re-initialize it.",
    "topic": "issue-audio-init",
    "source_lines": "206",
@@ -660,9 +638,9 @@
    "quote": "`stop()` releases audio subsystem. `prepareForPlayback()` didn't re-initialize it."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#60",
+   "gid": "04_Implementation/capture_playback.md#58",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 60,
+   "local_id": 58,
    "statement": "Issue 4 fix: in prepareForPlayback(), if not audioInitialized and audioManager != null, set audioInitialized = audioManager?.initialize() ?: false.",
    "topic": "issue-audio-init",
    "source_lines": "214",
@@ -671,9 +649,9 @@
    "quote": "if (!audioInitialized && audioManager != null) {\n        audioInitialized = audioManager?.initialize() ?: false\n    }"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#61",
+   "gid": "04_Implementation/capture_playback.md#59",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 61,
+   "local_id": 59,
    "statement": "Issue 5: audio played as static/noise because tiny audio packets (1 byte payload) at stream start corrupt PCM alignment (stereo 16-bit requires 4-byte frame alignment).",
    "topic": "issue-audio-static",
    "source_lines": "224",
@@ -682,20 +660,20 @@
    "quote": "Tiny audio packets (1 byte payload) at stream start corrupt PCM alignment (stereo 16-bit requires 4-byte frame alignment)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#62",
+   "gid": "04_Implementation/capture_playback.md#60",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 62,
+   "local_id": 60,
    "statement": "Issue 5 fix: define MIN_AUDIO_PAYLOAD_SIZE = 64 and skip audio packets smaller than that.",
    "topic": "issue-audio-static",
    "source_lines": "228",
    "confidence": "high",
    "signals": null,
-   "quote": "private const val MIN_AUDIO_PAYLOAD_SIZE = 64\n\nif (audioData.size < MIN_AUDIO_PAYLOAD_SIZE) {\n        return  // Skip tiny packets"
+   "quote": "private const val MIN_AUDIO_PAYLOAD_SIZE = 64"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#63",
+   "gid": "04_Implementation/capture_playback.md#61",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 63,
+   "local_id": 61,
    "statement": "Issue 6: progress timer showed mismatched values like \"46s / 58s\" at completion because progress used relative time but duration used absolute session time.",
    "topic": "issue-progress-timer",
    "source_lines": "239",
@@ -704,9 +682,9 @@
    "quote": "Progress used relative time but duration used absolute session time"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#64",
+   "gid": "04_Implementation/capture_playback.md#62",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 64,
+   "local_id": 62,
    "statement": "Issue 6 fix: use effective duration computed as lastPacketTime - firstPacketTime and report onProgress(currentTime, effectiveDuration).",
    "topic": "issue-progress-timer",
    "source_lines": "243",
@@ -715,9 +693,9 @@
    "quote": "val effectiveDuration = lastPacketTime - firstPacketTime\ncallback.onProgress(currentTime, effectiveDuration)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#65",
+   "gid": "04_Implementation/capture_playback.md#63",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 65,
+   "local_id": 63,
    "statement": "Issue 7: UI navigated away while video still had buffered content because onComplete() fired when the last packet was dispatched, not when displayed.",
    "topic": "issue-premature-complete",
    "source_lines": "251",
@@ -726,9 +704,9 @@
    "quote": "`onComplete()` fired when last packet dispatched, not when displayed"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#66",
+   "gid": "04_Implementation/capture_playback.md#64",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 66,
+   "local_id": 64,
    "statement": "Issue 7 fix: after final onProgress, delay(500) to allow buffers to drain before calling onComplete().",
    "topic": "issue-premature-complete",
    "source_lines": "256",
@@ -737,9 +715,9 @@
    "quote": "delay(500)  // Allow buffers to drain\ncallback.onComplete()"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#67",
+   "gid": "04_Implementation/capture_playback.md#65",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 67,
+   "local_id": 65,
    "statement": "Issue 8: pressing Stop caused playback to restart because stopPlayback() set state to READY, triggering auto-start.",
    "topic": "issue-stop-restart",
    "source_lines": "264",
@@ -748,9 +726,9 @@
    "quote": "`stopPlayback()` set state to `READY`, triggering auto-start"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#68",
+   "gid": "04_Implementation/capture_playback.md#66",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 68,
+   "local_id": 66,
    "statement": "Issue 8 fix: Stop fully exits playback mode by calling stopPlayback(), setPlaybackEnabled(false), resetVideoDecoder(), and resumeAdapterMode().",
    "topic": "issue-stop-restart",
    "source_lines": "268",
@@ -759,9 +737,9 @@
    "quote": "capturePlaybackManager.stopPlayback()\nplaybackPreference.setPlaybackEnabled(false)\nmanager.resetVideoDecoder()\nmanager.resumeAdapterMode()"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#69",
+   "gid": "04_Implementation/capture_playback.md#67",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 69,
+   "local_id": 67,
    "statement": "Issue 9 (Jan 2026): playing back carlink_native captures caused video to freeze at the exact same timestamp every time, with NAL types showing -1 (parsing failure) indicating data corruption.",
    "topic": "issue-video-freeze",
    "source_lines": "280",
@@ -770,9 +748,9 @@
    "quote": "video freezing at the exact same timestamp every time. NAL types showed `-1` (parsing failure), indicating data corruption"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#70",
+   "gid": "04_Implementation/capture_playback.md#68",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 70,
+   "local_id": 68,
    "statement": "Alternate-host captures played back without the Issue 9 freeze problem.",
    "topic": "issue-video-freeze",
    "source_lines": "282",
@@ -781,9 +759,9 @@
    "quote": "Alternate-host captures played back without issues."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#71",
+   "gid": "04_Implementation/capture_playback.md#69",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 71,
+   "local_id": 69,
    "statement": "Alternate-host recorders capture data at the USB boundary, before processing (USB Read → CAPTURE → Ring Buffer → Video Processing).",
    "topic": "issue-video-freeze",
    "source_lines": "286",
@@ -792,9 +770,9 @@
    "quote": "capture data at USB boundary, BEFORE processing"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#72",
+   "gid": "04_Implementation/capture_playback.md#70",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 72,
+   "local_id": 70,
    "statement": "carlink_native (before the Issue 9 fix) captured after the ring buffer (USB Read → Ring Buffer → Video Processing → CAPTURE).",
    "topic": "issue-video-freeze",
    "source_lines": "291",
@@ -803,9 +781,9 @@
    "quote": "carlink_native** (before fix) captured AFTER ring buffer"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#73",
+   "gid": "04_Implementation/capture_playback.md#71",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 73,
+   "local_id": 71,
    "statement": "Capturing after the ring buffer caused a race condition where the ring buffer could be partially overwritten before capture saved the data.",
    "topic": "issue-video-freeze",
    "source_lines": "296",
@@ -814,20 +792,20 @@
    "quote": "a **race condition**: Ring buffer could be partially overwritten before capture saved the data"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#74",
+   "gid": "04_Implementation/capture_playback.md#72",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 74,
+   "local_id": 72,
    "statement": "Issue 9 fix steps: move capture point earlier (immediately after USB read), allocate per-frame, fix InputStream.skip() with a retry loop, and fix PROTOCOL_MAGIC byte order to little-endian storage.",
    "topic": "issue-video-freeze",
    "source_lines": "300",
    "confidence": "high",
    "signals": null,
-   "quote": "Move capture point earlier** - Capture immediately after USB read\n2. **Allocate per-frame**...3. **Fix InputStream.skip()** - Add retry loop for unreliable skip\n4. **Fix PROTOCOL_MAGIC byte order** - Use little-endian storage"
+   "quote": "1. **Move capture point earlier** - Capture immediately after USB read"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#75",
+   "gid": "04_Implementation/capture_playback.md#73",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 75,
+   "local_id": 73,
    "statement": "Performance: 1080p @ 30fps has a 33ms frame budget, ~3MB allocations/sec, negligible impact.",
    "topic": "performance",
    "source_lines": "309",
@@ -836,9 +814,9 @@
    "quote": "1080p @ 30fps | 33ms | ~3MB | Negligible"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#76",
+   "gid": "04_Implementation/capture_playback.md#74",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 76,
+   "local_id": 74,
    "statement": "Performance: 2400x960 @ 60fps has a 16.67ms frame budget, ~18MB+ allocations/sec, with potential GC pauses.",
    "topic": "performance",
    "source_lines": "310",
@@ -847,9 +825,9 @@
    "quote": "2400x960 @ 60fps | 16.67ms | ~18MB+ | Potential GC pauses"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#77",
+   "gid": "04_Implementation/capture_playback.md#75",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 77,
+   "local_id": 75,
    "statement": "The non-recording path is unchanged and does zero-copy directly into the ring buffer.",
    "topic": "performance",
    "source_lines": "312",
@@ -858,9 +836,9 @@
    "quote": "**Non-recording path is unchanged** - zero-copy directly into ring buffer."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#78",
+   "gid": "04_Implementation/capture_playback.md#76",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 78,
+   "local_id": 76,
    "statement": "Android Automotive (AAOS) uses multi-user profiles, and the driver runs as user 10, not user 0.",
    "topic": "aaos-storage",
    "source_lines": "318",
@@ -869,9 +847,9 @@
    "quote": "Android Automotive uses multi-user profiles. Driver runs as **user 10**, not user 0."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#79",
+   "gid": "04_Implementation/capture_playback.md#77",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 79,
+   "local_id": 77,
    "statement": "On AAOS, /sdcard/ and /storage/emulated/0/ both map to /data/media/0/ and are accessible by user 0 only.",
    "topic": "aaos-storage",
    "source_lines": "322",
@@ -880,9 +858,9 @@
    "quote": "`/sdcard/` | `/data/media/0/` | User 0 only"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#80",
+   "gid": "04_Implementation/capture_playback.md#78",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 80,
+   "local_id": 78,
    "statement": "On AAOS, user 10's storage is at /data/media/10/ and is accessible by user 10 apps via SAF.",
    "topic": "aaos-storage",
    "source_lines": "324",
@@ -891,9 +869,9 @@
    "quote": "User 10's storage | `/data/media/10/` | User 10 apps (via SAF)"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#81",
+   "gid": "04_Implementation/capture_playback.md#79",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 81,
+   "local_id": 79,
    "statement": "Common mistake: adb push file /sdcard/ puts files in user 0's storage, invisible to apps running as user 10.",
    "topic": "aaos-storage",
    "source_lines": "326",
@@ -902,9 +880,9 @@
    "quote": "`adb push file /sdcard/` puts files in user 0's storage, **invisible** to apps running as user 10"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#82",
+   "gid": "04_Implementation/capture_playback.md#80",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 82,
+   "local_id": 80,
    "statement": "The correct method to deliver capture files to user 10 requires root on the emulator (adb root) and copying to /data/media/10/Download/.",
    "topic": "aaos-storage",
    "source_lines": "331",
@@ -913,9 +891,9 @@
    "quote": "# Requires root on emulator\nadb root\n\n# Copy to user 10's Download folder\nadb shell \"cp /data/local/tmp/capture.json /data/media/10/Download/\""
   },
   {
-   "gid": "04_Implementation/capture_playback.md#83",
+   "gid": "04_Implementation/capture_playback.md#81",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 83,
+   "local_id": 81,
    "statement": "After copying capture files, fix permissions with chown media_rw:media_rw and chmod 664 on /data/media/10/Download/capture.*.",
    "topic": "aaos-storage",
    "source_lines": "339",
@@ -924,9 +902,9 @@
    "quote": "adb shell \"chown media_rw:media_rw /data/media/10/Download/capture.*\"\nadb shell \"chmod 664 /data/media/10/Download/capture.*\""
   },
   {
-   "gid": "04_Implementation/capture_playback.md#84",
+   "gid": "04_Implementation/capture_playback.md#82",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 84,
+   "local_id": 82,
    "statement": "Trigger the media scanner with am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///data/media/10/Download/capture.json --user 10.",
    "topic": "aaos-storage",
    "source_lines": "343",
@@ -935,9 +913,9 @@
    "quote": "am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE \\\n    -d file:///data/media/10/Download/capture.json --user 10"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#85",
+   "gid": "04_Implementation/capture_playback.md#83",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 85,
+   "local_id": 83,
    "statement": "H.264 NAL type 1 is Non-IDR slice (P-frame) with hex headers 0x21, 0x41, 0x61.",
    "topic": "h264-nal",
    "source_lines": "353",
@@ -946,9 +924,9 @@
    "quote": "1 | Non-IDR slice (P-frame) | 0x21, 0x41, 0x61"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#86",
+   "gid": "04_Implementation/capture_playback.md#84",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 86,
+   "local_id": 84,
    "statement": "H.264 NAL type 5 is IDR slice (keyframe) with hex headers 0x25, 0x45, 0x65.",
    "topic": "h264-nal",
    "source_lines": "354",
@@ -957,9 +935,9 @@
    "quote": "5 | IDR slice (keyframe) | 0x25, 0x45, 0x65"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#87",
+   "gid": "04_Implementation/capture_playback.md#85",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 87,
+   "local_id": 85,
    "statement": "H.264 NAL type 7 is SPS (Sequence Parameter Set) with hex headers 0x27, 0x47, 0x67.",
    "topic": "h264-nal",
    "source_lines": "355",
@@ -968,9 +946,9 @@
    "quote": "7 | SPS (Sequence Parameter Set) | 0x27, 0x47, 0x67"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#88",
+   "gid": "04_Implementation/capture_playback.md#86",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 88,
+   "local_id": 86,
    "statement": "H.264 NAL type 8 is PPS (Picture Parameter Set) with hex headers 0x28, 0x48, 0x68.",
    "topic": "h264-nal",
    "source_lines": "356",
@@ -979,9 +957,9 @@
    "quote": "8 | PPS (Picture Parameter Set) | 0x28, 0x48, 0x68"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#89",
+   "gid": "04_Implementation/capture_playback.md#87",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 89,
+   "local_id": 87,
    "statement": "NAL type is extracted with nalType = headerByte & 0x1F.",
    "topic": "h264-nal",
    "source_lines": "358",
@@ -990,9 +968,9 @@
    "quote": "nalType = headerByte & 0x1F"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#90",
+   "gid": "04_Implementation/capture_playback.md#88",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 90,
+   "local_id": 88,
    "statement": "H.264 data can be checked via adb logcat -s CARLINK:V | grep \"Video packet\".",
    "topic": "verification",
    "source_lines": "367",
@@ -1001,9 +979,9 @@
    "quote": "adb logcat -s CARLINK:V | grep \"Video packet\""
   },
   {
-   "gid": "04_Implementation/capture_playback.md#91",
+   "gid": "04_Implementation/capture_playback.md#89",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 91,
+   "local_id": 89,
    "statement": "A correct video packet log starts with the 00 00 00 01 start code (e.g. \"Video packet #1: 3849 bytes, first 16: 00 00 00 01 27 64 00 32...\").",
    "topic": "verification",
    "source_lines": "372",
@@ -1012,9 +990,9 @@
    "quote": "Video packet #1: 3849 bytes, first 16: 00 00 00 01 27 64 00 32..."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#92",
+   "gid": "04_Implementation/capture_playback.md#90",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 92,
+   "local_id": 90,
    "statement": "An incorrect video packet (wrong header stripping) is missing the start code, e.g. \"Video packet #1: 3861 bytes, first 16: 67 FF 7F 01 3E 05 93 00...\".",
    "topic": "verification",
    "source_lines": "378",
@@ -1023,9 +1001,9 @@
    "quote": "Video packet #1: 3861 bytes, first 16: 67 FF 7F 01 3E 05 93 00..."
   },
   {
-   "gid": "04_Implementation/capture_playback.md#93",
+   "gid": "04_Implementation/capture_playback.md#91",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 93,
+   "local_id": 91,
    "statement": "Audio can be checked via adb logcat -s CARLINK:V | grep -E \"Audio packet|Injecting audio\".",
    "topic": "verification",
    "source_lines": "385",
@@ -1034,9 +1012,9 @@
    "quote": "adb logcat -s CARLINK:V | grep -E \"Audio packet|Injecting audio\""
   },
   {
-   "gid": "04_Implementation/capture_playback.md#94",
+   "gid": "04_Implementation/capture_playback.md#92",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 94,
+   "local_id": 92,
    "statement": "Audio type=1 is Media audio.",
    "topic": "audio-types",
    "source_lines": "389",
@@ -1045,9 +1023,9 @@
    "quote": "`type=1` - Media audio"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#95",
+   "gid": "04_Implementation/capture_playback.md#93",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 95,
+   "local_id": 93,
    "statement": "Audio type=2 is Navigation audio.",
    "topic": "audio-types",
    "source_lines": "390",
@@ -1056,9 +1034,9 @@
    "quote": "`type=2` - Navigation audio"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#96",
+   "gid": "04_Implementation/capture_playback.md#94",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 96,
+   "local_id": 94,
    "statement": "Audio type=4 is Phone call.",
    "topic": "audio-types",
    "source_lines": "392",
@@ -1067,9 +1045,9 @@
    "quote": "`type=4` - Phone call"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#97",
+   "gid": "04_Implementation/capture_playback.md#95",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 97,
+   "local_id": 95,
    "statement": "Planned future improvements include seek/scrub, pause/resume, speed control (0.5x, 2x), looping playback, skip initial handshake delay option, and a buffer pool for recording to reduce GC pressure.",
    "topic": "future-improvements",
    "source_lines": "398",
@@ -1078,9 +1056,9 @@
    "quote": "- Seek/scrub functionality\n- Pause/resume playback\n- Speed control (0.5x, 2x, etc.)\n- Looping playback\n- Skip initial handshake delay option\n- Buffer pool for recording to reduce GC pressure"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#98",
+   "gid": "04_Implementation/capture_playback.md#96",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 98,
+   "local_id": 96,
    "statement": "The source reference for this guide is carlink_native/documents/playback_feature/playback.md.",
    "topic": "references",
    "source_lines": "409",
@@ -1089,9 +1067,9 @@
    "quote": "Source: `carlink_native/documents/playback_feature/playback.md`"
   },
   {
-   "gid": "04_Implementation/capture_playback.md#99",
+   "gid": "04_Implementation/capture_playback.md#97",
    "file": "04_Implementation/capture_playback.md",
-   "local_id": 99,
+   "local_id": 97,
    "statement": "The document status is an implementation reference from carlink_native, last updated 2026-01-19.",
    "topic": "document-meta",
    "source_lines": "3",
@@ -1569,7 +1547,7 @@
    "source_lines": "204",
    "confidence": "high",
    "signals": [],
-   "quote": "| `/tmp/update_status` | Status code (0-4) |"
+   "quote": "| `/tmp/update_status` | Status code"
   },
   {
    "gid": "04_Implementation/firmware_update.md#43",
@@ -1917,7 +1895,7 @@
    "source_lines": "319",
    "confidence": "high",
    "signals": [],
-   "quote": "| OTA script call | `0x1e0a8` | `/script/update_box_ota.sh` execution |"
+   "quote": "| OTA script call | `0x1e0a8` | `/script/update_box_ota.sh` execution"
   },
   {
    "gid": "04_Implementation/firmware_update.md#73",
@@ -2044,17 +2022,6 @@
    "gid": "04_Implementation/host_app_guide.md#1",
    "file": "04_Implementation/host_app_guide.md",
    "local_id": 1,
-   "statement": "In Phase E2, the adapter registers screen with resolution 2400x960 at 60 FPS with UUID e5f7a68d-",
-   "topic": "phase-e-display",
-   "source_lines": "1314",
-   "confidence": "high",
-   "signals": [],
-   "quote": "Registers screen `2400×960 @ 60 FPS` (uuid `e5f7a68d-…`)"
-  },
-  {
-   "gid": "04_Implementation/host_app_guide.md#2",
-   "file": "04_Implementation/host_app_guide.md",
-   "local_id": 2,
    "statement": "The adapter is a protocol tunnel and the host app owns all correctness.",
    "topic": "architecture-responsibility",
    "source_lines": "11",
@@ -2063,9 +2030,9 @@
    "quote": "The adapter is a protocol tunnel. The host app owns all correctness."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#3",
+   "gid": "04_Implementation/host_app_guide.md#2",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 3,
+   "local_id": 2,
    "statement": "The adapter does not buffer or pace video.",
    "topic": "architecture-responsibility",
    "source_lines": "21",
@@ -2074,9 +2041,9 @@
    "quote": "Buffer or pace video"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#4",
+   "gid": "04_Implementation/host_app_guide.md#3",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 4,
+   "local_id": 3,
    "statement": "The adapter does not reset the decoder on errors.",
    "topic": "architecture-responsibility",
    "source_lines": "23",
@@ -2085,9 +2052,9 @@
    "quote": "Reset decoder on errors"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#5",
+   "gid": "04_Implementation/host_app_guide.md#4",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 5,
+   "local_id": 4,
    "statement": "The adapter does not compensate for jitter.",
    "topic": "architecture-responsibility",
    "source_lines": "24",
@@ -2096,9 +2063,9 @@
    "quote": "Compensate for jitter"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#6",
+   "gid": "04_Implementation/host_app_guide.md#5",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 6,
+   "local_id": 5,
    "statement": "CarPlay/Android Auto video is live UI projection, not video playback.",
    "topic": "video-projection-model",
    "source_lines": "33",
@@ -2107,9 +2074,9 @@
    "quote": "CarPlay/Android Auto video is live UI projection, not video playback."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#7",
+   "gid": "04_Implementation/host_app_guide.md#6",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 7,
+   "local_id": 6,
    "statement": "Late frames (>30-40ms) should be dropped because late frames poison decoder reference state.",
    "topic": "video-projection-model",
    "source_lines": "49",
@@ -2118,9 +2085,9 @@
    "quote": "Drop late frames (>30-40ms) | Late frames poison decoder reference state."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#8",
+   "gid": "04_Implementation/host_app_guide.md#7",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 8,
+   "local_id": 7,
    "statement": "Video buffers should be kept shallow (~150ms) because deep buffers create input latency.",
    "topic": "video-projection-model",
    "source_lines": "50",
@@ -2129,9 +2096,9 @@
    "quote": "Keep buffers shallow (~150ms) | Deep buffers create input latency"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#9",
+   "gid": "04_Implementation/host_app_guide.md#8",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 9,
+   "local_id": 8,
    "statement": "Decoders should be reset on corruption because decoders don't self-heal from reference errors.",
    "topic": "video-projection-model",
    "source_lines": "51",
@@ -2140,9 +2107,9 @@
    "quote": "Reset decoder on corruption | Decoders don't self-heal from reference errors"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#10",
+   "gid": "04_Implementation/host_app_guide.md#9",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 10,
+   "local_id": 9,
    "statement": "The projection video stream is variable rate by design, so FPS targets should not be enforced.",
    "topic": "video-projection-model",
    "source_lines": "53",
@@ -2151,9 +2118,9 @@
    "quote": "Don't enforce FPS targets | Stream is variable rate by design"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#11",
+   "gid": "04_Implementation/host_app_guide.md#10",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 11,
+   "local_id": 10,
    "statement": "Recommended jitter buffer is shallow: 100-200ms max, approximately 10-12 packets.",
    "topic": "video-architecture",
    "source_lines": "72",
@@ -2162,9 +2129,9 @@
    "quote": "Jitter Buffer (shallow: 100-200ms max, ~10-12 packets)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#12",
+   "gid": "04_Implementation/host_app_guide.md#11",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 12,
+   "local_id": 11,
    "statement": "When the jitter buffer is full, skip to the newest IDR.",
    "topic": "video-architecture",
    "source_lines": "76",
@@ -2173,9 +2140,9 @@
    "quote": "Buffer full? → Skip to newest IDR"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#13",
+   "gid": "04_Implementation/host_app_guide.md#12",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 13,
+   "local_id": 12,
    "statement": "The host application communicates with the CPC200-CCPA adapter via USB.",
    "topic": "overview",
    "source_lines": "91",
@@ -2184,9 +2151,9 @@
    "quote": "A host application communicates with the CPC200-CCPA adapter via USB"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#14",
+   "gid": "04_Implementation/host_app_guide.md#13",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 14,
+   "local_id": 13,
    "statement": "Adapter primary USB ID is VID 0x1314, PID 0x1520.",
    "topic": "usb-discovery",
    "source_lines": "106",
@@ -2195,9 +2162,9 @@
    "quote": "VID: 0x1314, PID: 0x1520 (primary)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#15",
+   "gid": "04_Implementation/host_app_guide.md#14",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 15,
+   "local_id": 14,
    "statement": "Adapter alternate USB ID is VID 0x1314, PID 0x1521.",
    "topic": "usb-discovery",
    "source_lines": "107",
@@ -2206,9 +2173,9 @@
    "quote": "VID: 0x1314, PID: 0x1521 (alternate)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#16",
+   "gid": "04_Implementation/host_app_guide.md#15",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 16,
+   "local_id": 15,
    "statement": "Adapter alternate USB ID is VID 0x08E4, PID 0x01C0.",
    "topic": "usb-discovery",
    "source_lines": "108",
@@ -2217,9 +2184,9 @@
    "quote": "VID: 0x08E4, PID: 0x01C0 (alternate)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#17",
+   "gid": "04_Implementation/host_app_guide.md#16",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 17,
+   "local_id": 16,
    "statement": "USB communication uses bulk transfer with an OUT endpoint (host→adapter) and IN endpoint (adapter→host).",
    "topic": "usb-discovery",
    "source_lines": "110",
@@ -2228,9 +2195,9 @@
    "quote": "Open USB interface (bulk transfer)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#18",
+   "gid": "04_Implementation/host_app_guide.md#17",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 18,
+   "local_id": 17,
    "statement": "The adapter has a ~10-second watchdog timer from USB connection; both init messages and the first heartbeat must complete within this window.",
    "topic": "init-sequence",
    "source_lines": "119",
@@ -2241,9 +2208,9 @@
    "quote": "The adapter has a ~10-second watchdog timer from USB connection. Both init messages AND the first heartbeat must complete within this window."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#19",
+   "gid": "04_Implementation/host_app_guide.md#18",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 19,
+   "local_id": 18,
    "statement": "Initialization requires a 3-second mandatory wait after USB reset.",
    "topic": "init-sequence",
    "source_lines": "124",
@@ -2252,9 +2219,9 @@
    "quote": "3-second mandatory wait"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#20",
+   "gid": "04_Implementation/host_app_guide.md#19",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 20,
+   "local_id": 19,
    "statement": "The heartbeat timer should be started before sending init messages, with a 2-second interval, and the first heartbeat fires at t=2000ms after init completes; do not send a heartbeat at t=0.",
    "topic": "heartbeat",
    "source_lines": "131",
@@ -2263,9 +2230,9 @@
    "quote": "Start timer BEFORE sending init messages"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#21",
+   "gid": "04_Implementation/host_app_guide.md#20",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 21,
+   "local_id": 20,
    "statement": "Initialization messages take ~1.5s total with 120ms delays between them.",
    "topic": "init-sequence",
    "source_lines": "136",
@@ -2274,9 +2241,9 @@
    "quote": "Send initialization messages (~1.5s total with 120ms delays)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#22",
+   "gid": "04_Implementation/host_app_guide.md#21",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 22,
+   "local_id": 21,
    "statement": "The init message order is: SendFile /tmp/screen_dpi, Open (resolution/fps/format), SendFile /tmp/night_mode, SendFile /tmp/hand_drive_mode, BoxSettings JSON, then Command messages as needed.",
    "topic": "init-sequence",
    "source_lines": "137",
@@ -2285,9 +2252,9 @@
    "quote": "a. SendFile /tmp/screen_dpi"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#23",
+   "gid": "04_Implementation/host_app_guide.md#22",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 23,
+   "local_id": 22,
    "statement": "The width/height in the Open (0x01) message is what the iPhone ultimately renders to.",
    "topic": "resolution-path",
    "source_lines": "162",
@@ -2295,12 +2262,12 @@
    "signals": [
     "capture-verified 2026-05-21"
    ],
-   "quote": "The `width`/`height` you put in the `Open` (0x01) message is what the iPhone ultimately renders to"
+   "quote": "The `width`/`height` you put in the `Open` (0x01) message is what the iPhone ultimately renders"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#24",
+   "gid": "04_Implementation/host_app_guide.md#23",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 24,
+   "local_id": 23,
    "statement": "Resolution flow: host Open(0x01) w/h → ARMadb-driver ProceessCmdOpen (rewrites /etc/RiddleBoxData/HU_VIEWAREA_INFO) → AppleCarPlay._CopyDisplayDescriptions (reads HU_VIEWAREA_INFO + HU_SAFEAREA_INFO) → AirPlay SETUP viewAreas → iPhone.",
    "topic": "resolution-path",
    "source_lines": "167",
@@ -2311,9 +2278,9 @@
    "quote": "→ ARMadb-driver ProceessCmdOpen          (rewrites /etc/RiddleBoxData/HU_VIEWAREA_INFO)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#25",
+   "gid": "04_Implementation/host_app_guide.md#24",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 25,
+   "local_id": 24,
    "statement": "iAP2 0x1D01 IdentificationInformation (sent over BT before WiFi exists) carries no resolution — it advertises transports, vehicle identity, and message IDs only.",
    "topic": "resolution-path",
    "source_lines": "173",
@@ -2322,9 +2289,9 @@
    "quote": "iAP2 `0x1D01 IdentificationInformation` (sent over BT before WiFi exists) carries **no\n  resolution** — it advertises transports / vehicle identity / message IDs only."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#26",
+   "gid": "04_Implementation/host_app_guide.md#25",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 26,
+   "local_id": 25,
    "statement": "DPI is a separate path: riddleBoxCfg ScreenPhysicalW/H → AirPlay widthPhysical/heightPhysical; when both are 0 the iPhone derives DPI itself.",
    "topic": "resolution-path",
    "source_lines": "175",
@@ -2333,9 +2300,9 @@
    "quote": "**DPI is a separate path:** `riddleBoxCfg ScreenPhysicalW/H` → AirPlay `widthPhysical` /\n  `heightPhysical`. When both are `0` the iPhone derives DPI itself."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#27",
+   "gid": "04_Implementation/host_app_guide.md#26",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 27,
+   "local_id": 26,
    "statement": "Message header is 16 bytes.",
    "topic": "usb-protocol",
    "source_lines": "185",
@@ -2344,9 +2311,9 @@
    "quote": "// Read message header (16 bytes)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#28",
+   "gid": "04_Implementation/host_app_guide.md#27",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 28,
+   "local_id": 27,
    "statement": "Header magic value is 0x55AA55AA.",
    "topic": "usb-protocol",
    "source_lines": "189",
@@ -2355,9 +2322,9 @@
    "quote": "if (header.magic != 0x55AA55AA) continue"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#29",
+   "gid": "04_Implementation/host_app_guide.md#28",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 29,
+   "local_id": 28,
    "statement": "Header type is validated against a type_check field where type_check is the bitwise complement of type.",
    "topic": "usb-protocol",
    "source_lines": "190",
@@ -2366,9 +2333,9 @@
    "quote": "if (header.type != ~header.type_check) continue"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#30",
+   "gid": "04_Implementation/host_app_guide.md#29",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 30,
+   "local_id": 29,
    "statement": "Message type 0x02 is Plugged.",
    "topic": "message-types",
    "source_lines": "197",
@@ -2377,9 +2344,9 @@
    "quote": "case 0x02: handlePlugged(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#31",
+   "gid": "04_Implementation/host_app_guide.md#30",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 31,
+   "local_id": 30,
    "statement": "Message type 0x03 is Phase.",
    "topic": "message-types",
    "source_lines": "198",
@@ -2388,9 +2355,9 @@
    "quote": "case 0x03: handlePhase(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#32",
+   "gid": "04_Implementation/host_app_guide.md#31",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 32,
+   "local_id": 31,
    "statement": "Message type 0x04 is Unplugged.",
    "topic": "message-types",
    "source_lines": "199",
@@ -2399,9 +2366,9 @@
    "quote": "case 0x04: handleUnplugged()"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#33",
+   "gid": "04_Implementation/host_app_guide.md#32",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 33,
+   "local_id": 32,
    "statement": "Message type 0x06 is Video.",
    "topic": "message-types",
    "source_lines": "200",
@@ -2410,9 +2377,9 @@
    "quote": "case 0x06: handleVideo(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#34",
+   "gid": "04_Implementation/host_app_guide.md#33",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 34,
+   "local_id": 33,
    "statement": "Message type 0x07 is Audio.",
    "topic": "message-types",
    "source_lines": "201",
@@ -2421,9 +2388,9 @@
    "quote": "case 0x07: handleAudio(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#35",
+   "gid": "04_Implementation/host_app_guide.md#34",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 35,
+   "local_id": 34,
    "statement": "Message type 0x08 is Command.",
    "topic": "message-types",
    "source_lines": "202",
@@ -2432,9 +2399,9 @@
    "quote": "case 0x08: handleCommand(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#36",
+   "gid": "04_Implementation/host_app_guide.md#35",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 36,
+   "local_id": 35,
    "statement": "Message type 0x19 is BoxSettings.",
    "topic": "message-types",
    "source_lines": "203",
@@ -2443,9 +2410,9 @@
    "quote": "case 0x19: handleBoxSettings(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#37",
+   "gid": "04_Implementation/host_app_guide.md#36",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 37,
+   "local_id": 36,
    "statement": "Message type 0xCC is SoftwareVersion.",
    "topic": "message-types",
    "source_lines": "204",
@@ -2454,9 +2421,9 @@
    "quote": "case 0xCC: handleSoftwareVersion(payload)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#38",
+   "gid": "04_Implementation/host_app_guide.md#37",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 38,
+   "local_id": 37,
    "statement": "The heartbeat message value is 0xAA, sent at a 2000ms interval.",
    "topic": "heartbeat",
    "source_lines": "215",
@@ -2465,9 +2432,9 @@
    "quote": "send(HeartBeat: 0xAA)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#39",
+   "gid": "04_Implementation/host_app_guide.md#38",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 39,
+   "local_id": 38,
    "statement": "The adapter does not decode or transcode video; it forwards H.264 passthrough with USB headers prepended, so the host must perform H.264 decoding.",
    "topic": "video-processing",
    "source_lines": "226",
@@ -2478,9 +2445,9 @@
    "quote": "The adapter does NOT decode or transcode video. It forwards H.264 passthrough with USB headers prepended. Your host application MUST perform H.264 decoding."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#40",
+   "gid": "04_Implementation/host_app_guide.md#39",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 40,
+   "local_id": 39,
    "statement": "The adapter adds a 36-byte header to video (16-byte USB header + 20-byte video metadata).",
    "topic": "video-header",
    "source_lines": "234",
@@ -2491,9 +2458,9 @@
    "quote": "Add 36-byte header"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#41",
+   "gid": "04_Implementation/host_app_guide.md#40",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 41,
+   "local_id": 40,
    "statement": "The adapter receives H.264 via AirPlay/iAP2, parses NAL units for keyframe detection only, prepends USB header + video metadata, and forwards unchanged H.264 payload.",
    "topic": "video-processing",
    "source_lines": "241",
@@ -2504,9 +2471,9 @@
    "quote": "Parses NAL units for keyframe detection only"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#42",
+   "gid": "04_Implementation/host_app_guide.md#41",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 42,
+   "local_id": 41,
    "statement": "In a video message (0x06), width is at payload[0:4], height at payload[4:8], pts at payload[12:16], and H.264 data (Annex B) starts at payload[20:].",
    "topic": "video-header",
    "source_lines": "250",
@@ -2515,9 +2482,9 @@
    "quote": "width = payload[0:4]\n    height = payload[4:8]\n    pts = payload[12:16]\n    h264_data = payload[20:]  // Raw H.264 NAL units (Annex B format)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#43",
+   "gid": "04_Implementation/host_app_guide.md#42",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 43,
+   "local_id": 42,
    "statement": "Recommended stale threshold is 30-40ms, based on jitter analysis showing 85% of frames within ±40ms.",
    "topic": "video-projection-model",
    "source_lines": "269",
@@ -2526,9 +2493,9 @@
    "quote": "STALE_THRESHOLD_MS = 30-40ms (based on jitter analysis: 85% of frames within ±40ms)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#44",
+   "gid": "04_Implementation/host_app_guide.md#43",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 44,
+   "local_id": 43,
    "statement": "The PTS in the video header is stream-relative (starts near 0 when session begins), not wall-clock time.",
    "topic": "video-header",
    "source_lines": "273",
@@ -2539,9 +2506,9 @@
    "quote": "The PTS in the header is stream-relative (starts near 0 when session begins), NOT wall-clock time."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#45",
+   "gid": "04_Implementation/host_app_guide.md#44",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 45,
+   "local_id": 44,
    "statement": "To request an IDR keyframe, send Frame message type 0x0C; the adapter responds within 100-200ms with SPS + PPS + IDR.",
    "topic": "keyframe-recovery",
    "source_lines": "279",
@@ -2550,9 +2517,9 @@
    "quote": "send(Frame: 0x0C)  // Request IDR"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#46",
+   "gid": "04_Implementation/host_app_guide.md#45",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 46,
+   "local_id": 45,
    "statement": "Recommended decoder configuration: Profile High, Level 4.1+, Low Latency enabled, Output Format YUV420 or RGB.",
    "topic": "decoder-config",
    "source_lines": "289",
@@ -2561,9 +2528,9 @@
    "quote": "| Profile | High |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#47",
+   "gid": "04_Implementation/host_app_guide.md#46",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 47,
+   "local_id": 46,
    "statement": "The adapter has no hardcoded resolution or FPS validation; limits are practical, not programmatic.",
    "topic": "resolution-limits",
    "source_lines": "296",
@@ -2574,9 +2541,9 @@
    "quote": "The adapter has no hardcoded resolution or FPS validation."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#48",
+   "gid": "04_Implementation/host_app_guide.md#47",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 48,
+   "local_id": 47,
    "statement": "USB 2.0 bandwidth limit is ~35-40 MB/s (~280 Mbps); exceeding it causes stream stutters/drops.",
    "topic": "resolution-limits",
    "source_lines": "300",
@@ -2585,9 +2552,9 @@
    "quote": "| USB 2.0 Bandwidth | ~35-40 MB/s (~280 Mbps) | Stream stutters/drops |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#49",
+   "gid": "04_Implementation/host_app_guide.md#48",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 49,
+   "local_id": 48,
    "statement": "Adapter RAM is ~128MB total; exceeding it produces error 'Failed to allocate memory for video frame'.",
    "topic": "resolution-limits",
    "source_lines": "301",
@@ -2596,9 +2563,9 @@
    "quote": "| Adapter RAM | ~128MB total | `Failed to allocate memory for video frame` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#50",
+   "gid": "04_Implementation/host_app_guide.md#49",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 50,
+   "local_id": 49,
    "statement": "The adapter has a fixed (implementation-dependent) buffer size; overrun produces error 'H264 data buffer overrun!'.",
    "topic": "resolution-limits",
    "source_lines": "302",
@@ -2607,9 +2574,9 @@
    "quote": "| Buffer Size | Fixed (implementation-dependent) | `H264 data buffer overrun!` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#51",
+   "gid": "04_Implementation/host_app_guide.md#50",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 51,
+   "local_id": 50,
    "statement": "1920x1080 at 60 FPS (~15-25 Mbps) is rated Safe.",
    "topic": "resolution-limits",
    "source_lines": "308",
@@ -2618,9 +2585,9 @@
    "quote": "| 1920x1080 | 60 | ~15-25 Mbps | Safe |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#52",
+   "gid": "04_Implementation/host_app_guide.md#51",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 52,
+   "local_id": 51,
    "statement": "2400x960 at 60 FPS (~15-25 Mbps) is rated Safe (ultra-wide).",
    "topic": "resolution-limits",
    "source_lines": "309",
@@ -2629,9 +2596,9 @@
    "quote": "| 2400x960 | 60 | ~15-25 Mbps | Safe (ultra-wide) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#53",
+   "gid": "04_Implementation/host_app_guide.md#52",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 53,
+   "local_id": 52,
    "statement": "2560x1440 at 60 FPS (~25-35 Mbps) is rated Marginal.",
    "topic": "resolution-limits",
    "source_lines": "310",
@@ -2640,9 +2607,9 @@
    "quote": "| 2560x1440 | 60 | ~25-35 Mbps | Marginal |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#54",
+   "gid": "04_Implementation/host_app_guide.md#53",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 54,
+   "local_id": 53,
    "statement": "3840x2160 (4K) at 30 FPS (~25-40 Mbps) is Marginal and may fail.",
    "topic": "resolution-limits",
    "source_lines": "311",
@@ -2653,9 +2620,9 @@
    "quote": "| 3840x2160 (4K) | 30 | ~25-40 Mbps | Marginal, may fail |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#55",
+   "gid": "04_Implementation/host_app_guide.md#54",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 55,
+   "local_id": 54,
    "statement": "3840x2160 (4K) at 60 FPS (~50+ Mbps) will exceed USB bandwidth.",
    "topic": "resolution-limits",
    "source_lines": "312",
@@ -2664,9 +2631,9 @@
    "quote": "| 3840x2160 (4K) | 60 | ~50+ Mbps | **Will exceed USB bandwidth** |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#56",
+   "gid": "04_Implementation/host_app_guide.md#55",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 56,
+   "local_id": 55,
    "statement": "120 FPS at any resolution requires 2x bitrate of 60fps and requires halving resolution.",
    "topic": "resolution-limits",
    "source_lines": "313",
@@ -2675,9 +2642,9 @@
    "quote": "| Any | 120 | 2x of 60fps | Requires halving resolution |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#57",
+   "gid": "04_Implementation/host_app_guide.md#56",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 57,
+   "local_id": 56,
    "statement": "In an audio message, decodeType is at payload[0:4], volume (float) at payload[4:8], audioType at payload[8:12].",
    "topic": "audio-protocol",
    "source_lines": "330",
@@ -2686,9 +2653,9 @@
    "quote": "val decodeType = payload[0:4]\n    val volume = payload[4:8].toFloat()\n    val audioType = payload[8:12]"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#58",
+   "gid": "04_Implementation/host_app_guide.md#57",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 58,
+   "local_id": 57,
    "statement": "An audio payload of exactly 13 bytes is a command packet with the command byte at payload[12]; otherwise it is a data packet with PCM at payload[12:].",
    "topic": "audio-protocol",
    "source_lines": "334",
@@ -2697,20 +2664,20 @@
    "quote": "if (payload.size == 13) {\n        // Command packet\n        handleAudioCommand(payload[12])"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#59",
+   "gid": "04_Implementation/host_app_guide.md#58",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 59,
+   "local_id": 58,
    "statement": "Audio routing by audioType: 1=media track, 2=navigation track, 3=microphone data.",
    "topic": "audio-protocol",
    "source_lines": "341",
    "confidence": "high",
    "signals": [],
-   "quote": "1 -> mediaTrack.write(pcm)\n            2 -> navTrack.write(pcm)\n            3 -> sendMicrophoneData(pcm)"
+   "quote": "1 -> mediaTrack.write(pcm)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#60",
+   "gid": "04_Implementation/host_app_guide.md#59",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 60,
+   "local_id": 59,
    "statement": "Audio command codes: 0x01 outputStart, 0x02 outputStop, 0x03 inputStart (start mic capture), 0x04 inputStop, 0x07 naviStart (duck media), 0x10 naviComplete (restore media), 0x0A mediaStart, 0x0B mediaStop.",
    "topic": "audio-commands",
    "source_lines": "359",
@@ -2719,9 +2686,9 @@
    "quote": "0x01 -> outputStart()\n        0x02 -> outputStop()\n        0x03 -> inputStart()   // Start mic capture"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#61",
+   "gid": "04_Implementation/host_app_guide.md#60",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 61,
+   "local_id": 60,
    "statement": "Volume ducking: when volume is between 0.0 and 1.0, duck the media track (e.g. to 0.2); when volume is 1.0, restore to full.",
    "topic": "audio-volume",
    "source_lines": "381",
@@ -2730,9 +2697,9 @@
    "quote": "if (volume > 0.0f && volume < 1.0f) {\n    mediaTrack.setVolume(volume)  // Duck to 0.2"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#62",
+   "gid": "04_Implementation/host_app_guide.md#61",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 62,
+   "local_id": 61,
    "statement": "The firmware WebRTC processing only accepts 8000 Hz or 16000 Hz mic sample rates (binary verified at 0x2dfa2).",
    "topic": "audio-mic",
    "source_lines": "391",
@@ -2744,9 +2711,9 @@
    "quote": "The firmware WebRTC processing only accepts **8000 Hz or 16000 Hz** sample rates (binary verified at `0x2dfa2`)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#63",
+   "gid": "04_Implementation/host_app_guide.md#62",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 63,
+   "local_id": 62,
    "statement": "Audio command byte 0x04 is labeled PHONECALL_START in audio_protocol.md (capture-derived names), while carlink_native enum maps this to id=4; both refer to the same active phone call signal.",
    "topic": "audio-mic",
    "source_lines": "403",
@@ -2755,9 +2722,9 @@
    "quote": "PHONECALL_START (note: audio_protocol.md labels byte 5 as PHONECALL_START using capture-derived names; carlink_native enum maps this to id=4"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#64",
+   "gid": "04_Implementation/host_app_guide.md#63",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 64,
+   "local_id": 63,
    "statement": "On PHONECALL_START, start mic capture at 8000 Hz if decodeType==3, else 16000 Hz.",
    "topic": "audio-mic",
    "source_lines": "405",
@@ -2766,9 +2733,9 @@
    "quote": "startMicCapture(sampleRate = if (decodeType == 3) 8000 else 16000)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#65",
+   "gid": "04_Implementation/host_app_guide.md#64",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 65,
+   "local_id": 64,
    "statement": "Audio command byte 0x08 is SIRI_START, usually with decodeType 5 (16kHz), starting mic capture at 16000 Hz.",
    "topic": "audio-mic",
    "source_lines": "407",
@@ -2777,9 +2744,9 @@
    "quote": "0x08 -> {  // SIRI_START\n            micDecodeType = decodeType  // Usually 5 (16kHz)\n            startMicCapture(sampleRate = 16000)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#66",
+   "gid": "04_Implementation/host_app_guide.md#65",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 66,
+   "local_id": 65,
    "statement": "Mic capture timer reads 8192 bytes every 256ms and sends AudioData with audioType=3.",
    "topic": "audio-mic",
    "source_lines": "418",
@@ -2788,9 +2755,9 @@
    "quote": "micTimer = setInterval(256ms) {\n        val data = micRecorder.read(8192)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#67",
+   "gid": "04_Implementation/host_app_guide.md#66",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 67,
+   "local_id": 66,
    "statement": "WebRTC AECM validated sample rates: decodeType=3 → 8000 Hz (narrowband), decodeType=5 → 16000 Hz (wideband); other sample rates cause WebRTC initialization failure on the adapter.",
    "topic": "audio-mic",
    "source_lines": "426",
@@ -2799,9 +2766,9 @@
    "quote": "`decodeType=3` → 8000 Hz (narrowband)\n- `decodeType=5` → 16000 Hz (wideband)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#68",
+   "gid": "04_Implementation/host_app_guide.md#67",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 68,
+   "local_id": 67,
    "statement": "Manufacturer reference app PhoneMirrorBox r5889 adds a mode-specific Thread.sleep() before starting mic capture: 500ms for CarPlay (avoids recording Siri's activation chime), 100ms for Android Auto; this is an app-level choice, not a protocol requirement.",
    "topic": "audio-mic",
    "source_lines": "430",
@@ -2812,9 +2779,9 @@
    "quote": "500ms for CarPlay (avoids recording Siri's activation chime), 100ms for Android Auto. This is an **app-level implementation choice**, not a protocol requirement"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#69",
+   "gid": "04_Implementation/host_app_guide.md#68",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 69,
+   "local_id": 68,
    "statement": "Single-touch uses message type 0x05; CarPlay uses action codes 14=Down, 15=Move, 16=Up, with coordinates as 0-10000 normalized integers.",
    "topic": "touch-input",
    "source_lines": "439",
@@ -2823,9 +2790,9 @@
    "quote": "Single-touch (0x05) — CarPlay uses action codes 14/15/16, coords as 0-10000 ints"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#70",
+   "gid": "04_Implementation/host_app_guide.md#69",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 70,
+   "local_id": 69,
    "statement": "Single-touch payload is 16 bytes little-endian: actionCode (int), x (0-10000 int), y (0-10000 int), flags (encoderType | offScreen<<16).",
    "topic": "touch-input",
    "source_lines": "451",
@@ -2834,9 +2801,9 @@
    "quote": ".putInt(0)                                   // Flags (encoderType | offScreen<<16)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#71",
+   "gid": "04_Implementation/host_app_guide.md#70",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 71,
+   "local_id": 70,
    "statement": "Multi-touch uses message type 0x17 with no count header; the adapter infers point count from dataSize/16.",
    "topic": "touch-input",
    "source_lines": "456",
@@ -2845,9 +2812,9 @@
    "quote": "Multi-touch (0x17) — NO count header, adapter infers from dataSize/16"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#72",
+   "gid": "04_Implementation/host_app_guide.md#71",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 72,
+   "local_id": 71,
    "statement": "Multi-touch per-point format is 16 bytes little-endian: x (0.0-1.0 float), y (0.0-1.0 float), action (0=Up,1=Down,2=Move int), id (0-4 finger index int).",
    "topic": "touch-input",
    "source_lines": "461",
@@ -2856,9 +2823,9 @@
    "quote": "payload.putFloat(point.x)     // 0.0-1.0 normalized float"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#73",
+   "gid": "04_Implementation/host_app_guide.md#72",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 73,
+   "local_id": 72,
    "statement": "The adapter's persistent config lives in /etc/riddle.conf (JSON key:value) with a factory backup at /etc/riddle_default.conf.",
    "topic": "riddleBoxCfg",
    "source_lines": "477",
@@ -2867,9 +2834,9 @@
    "quote": "The adapter's persistent configuration lives in **`/etc/riddle.conf`** (JSON key:value), with a\nfactory backup at **`/etc/riddle_default.conf`**."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#74",
+   "gid": "04_Implementation/host_app_guide.md#73",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 74,
+   "local_id": 73,
    "statement": "riddle.conf is read/written via CLI 'riddleBoxCfg <Key> [Value]' (read with key alone, write with key+value); the BoxSettings parser writes the same file.",
    "topic": "riddleBoxCfg",
    "source_lines": "479",
@@ -2878,9 +2845,9 @@
    "quote": "`riddleBoxCfg <Key> [Value]` (read with the key alone, write with key + value)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#75",
+   "gid": "04_Implementation/host_app_guide.md#74",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 75,
+   "local_id": 74,
    "statement": "riddleBoxCfg key CustomFrameRate maps frame rate to the Open fps field.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "486",
@@ -2889,9 +2856,9 @@
    "quote": "| `CustomFrameRate` | frame rate → `Open` fps field |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#76",
+   "gid": "04_Implementation/host_app_guide.md#75",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 76,
+   "local_id": 75,
    "statement": "riddleBoxCfg keys VideoResolutionWidth/VideoResolutionHeight set display resolution.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "487",
@@ -2900,9 +2867,9 @@
    "quote": "| `VideoResolutionWidth` / `VideoResolutionHeight` | display resolution |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#77",
+   "gid": "04_Implementation/host_app_guide.md#76",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 77,
+   "local_id": 76,
    "statement": "riddleBoxCfg key ScreenDPI sets CarPlay render density.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "488",
@@ -2911,9 +2878,9 @@
    "quote": "| `ScreenDPI` | CarPlay render density |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#78",
+   "gid": "04_Implementation/host_app_guide.md#77",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 78,
+   "local_id": 77,
    "statement": "riddleBoxCfg keys ScreenPhysicalW/ScreenPhysicalH set physical mm → AirPlay widthPhysical/heightPhysical (0 ⇒ iPhone derives DPI).",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "489",
@@ -2922,9 +2889,9 @@
    "quote": "| `ScreenPhysicalW` / `ScreenPhysicalH` | physical mm → AirPlay `widthPhysical`/`heightPhysical` (0 ⇒ iPhone derives DPI) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#79",
+   "gid": "04_Implementation/host_app_guide.md#78",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 79,
+   "local_id": 78,
    "statement": "riddleBoxCfg key CarBrand sets OEM brand and rewrites airplay.conf + logo.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "490",
@@ -2933,9 +2900,9 @@
    "quote": "| `CarBrand` | OEM brand (rewrites airplay.conf + logo) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#80",
+   "gid": "04_Implementation/host_app_guide.md#79",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 80,
+   "local_id": 79,
    "statement": "riddleBoxCfg key WiFiChannel sets the adapter AP channel.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "491",
@@ -2944,9 +2911,9 @@
    "quote": "| `WiFiChannel` | adapter AP channel |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#81",
+   "gid": "04_Implementation/host_app_guide.md#80",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 81,
+   "local_id": 80,
    "statement": "riddleBoxCfg key CarDrivePosition: 0=LHD, 1=RHD.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "492",
@@ -2955,9 +2922,9 @@
    "quote": "| `CarDrivePosition` | 0=LHD, 1=RHD |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#82",
+   "gid": "04_Implementation/host_app_guide.md#81",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 82,
+   "local_id": 81,
    "statement": "riddleBoxCfg key DayNightMode sets day/night mode.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "493",
@@ -2966,9 +2933,9 @@
    "quote": "| `DayNightMode` | day/night mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#83",
+   "gid": "04_Implementation/host_app_guide.md#82",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 83,
+   "local_id": 82,
    "statement": "riddleBoxCfg key GNSSCapability sets GPS capability advertised over iAP2.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "494",
@@ -2977,9 +2944,9 @@
    "quote": "| `GNSSCapability` | GPS capability advertised over iAP2 |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#84",
+   "gid": "04_Implementation/host_app_guide.md#83",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 84,
+   "local_id": 83,
    "statement": "riddleBoxCfg key DashboardInfo is a cluster/dashboard bitmask: bit0 media-player, bit1 vehicle-status, bit2 route-guidance.",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "495",
@@ -2988,9 +2955,9 @@
    "quote": "| `DashboardInfo` | cluster/dashboard bitmask — bit0 media-player, bit1 vehicle-status, bit2 route-guidance |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#85",
+   "gid": "04_Implementation/host_app_guide.md#84",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 85,
+   "local_id": 84,
    "statement": "riddleBoxCfg key AdvancedFeatures gates g_bSupportNaviScreen (CarPlay nav/cluster video).",
    "topic": "riddleBoxCfg-keys",
    "source_lines": "496",
@@ -2999,9 +2966,9 @@
    "quote": "| `AdvancedFeatures` | gates `g_bSupportNaviScreen` (CarPlay nav/cluster video) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#86",
+   "gid": "04_Implementation/host_app_guide.md#85",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 86,
+   "local_id": 85,
    "statement": "The iPhone↔adapter pairing (iAP2 over BT RFCOMM → MFi authentication → BT→WiFi handover → AirPlay/RTSP on port 5000) is a separate layer from the USB host protocol, and the host app never participates in it.",
    "topic": "handshake",
    "source_lines": "498",
@@ -3010,9 +2977,9 @@
    "quote": "iAP2 over BT RFCOMM → MFi\n> authentication → BT→WiFi handover → AirPlay/RTSP on port 5000 — is a **separate layer** from\n> the USB host protocol"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#87",
+   "gid": "04_Implementation/host_app_guide.md#86",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 87,
+   "local_id": 86,
    "statement": "BoxSettings fields wifiName, btName, and oemIconLabel are passed to shell commands via popen() without sanitization, enabling command injection executing any shell command as root via shell metacharacters.",
    "topic": "security-injection",
    "source_lines": "506",
@@ -3024,9 +2991,9 @@
    "quote": "The `wifiName`, `btName`, and `oemIconLabel` fields are passed to shell commands via `popen()` without sanitization. This enables command injection"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#88",
+   "gid": "04_Implementation/host_app_guide.md#87",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 88,
+   "local_id": 87,
    "statement": "A wifiName value such as 'a\"; /usr/sbin/riddleBoxCfg -s AdvancedFeatures 1; /usr/sbin/riddleBoxCfg --upConfig; echo \"' executes riddleBoxCfg immediately on the adapter.",
    "topic": "security-injection",
    "source_lines": "511",
@@ -3037,9 +3004,9 @@
    "quote": "put(\"wifiName\", \"a\\\"; /usr/sbin/riddleBoxCfg -s AdvancedFeatures 1; /usr/sbin/riddleBoxCfg --upConfig; echo \\\"\")"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#89",
+   "gid": "04_Implementation/host_app_guide.md#88",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 89,
+   "local_id": 88,
    "statement": "Command injection breaks the sed command so the WiFi SSID is not updated; the workaround is to send BoxSettings twice (first with injection, second with normal values).",
    "topic": "security-injection",
    "source_lines": "515",
@@ -3048,9 +3015,9 @@
    "quote": "Injection breaks the sed command, so WiFi SSID is NOT updated"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#90",
+   "gid": "04_Implementation/host_app_guide.md#89",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 90,
+   "local_id": 89,
    "statement": "Use 'busybox <applet>' for commands without symlinks (e.g., 'busybox chpasswd' not 'chpasswd').",
    "topic": "security-injection",
    "source_lines": "517",
@@ -3059,9 +3026,9 @@
    "quote": "Use `busybox <applet>` for commands without symlinks (e.g., `busybox chpasswd` not `chpasswd`)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#91",
+   "gid": "04_Implementation/host_app_guide.md#90",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 91,
+   "local_id": 90,
    "statement": "BoxSettings autoPlay JSON key is not mapped and is ignored by ARMadb-driver (mapping missing).",
    "topic": "boxsettings-fields",
    "source_lines": "551",
@@ -3069,12 +3036,12 @@
    "signals": [
     "NOT MAPPED"
    ],
-   "quote": "// put(\"autoPlay\", false)  // ⚠️ NOT MAPPED — ignored by ARMadb-driver (mapping missing)"
+   "quote": "// put(\"autoPlay\", false)  // ⚠️ NOT MAPPED — ignored by ARMadb-driver"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#92",
+   "gid": "04_Implementation/host_app_guide.md#91",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 92,
+   "local_id": 91,
    "statement": "BoxSettings mediaSound field: 0=44.1kHz, 1=48kHz.",
    "topic": "boxsettings-fields",
    "source_lines": "563",
@@ -3083,9 +3050,9 @@
    "quote": "put(\"mediaSound\", 1)          // 0=44.1kHz, 1=48kHz"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#93",
+   "gid": "04_Implementation/host_app_guide.md#92",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 93,
+   "local_id": 92,
    "statement": "BoxSettings drivePosition field: 0=LHD, 1=RHD.",
    "topic": "boxsettings-fields",
    "source_lines": "560",
@@ -3094,20 +3061,20 @@
    "quote": "put(\"drivePosition\", 0)       // 0=LHD, 1=RHD"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#94",
+   "gid": "04_Implementation/host_app_guide.md#93",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 94,
+   "local_id": 93,
    "statement": "For iOS 13+ navigation video, sending naviScreenInfo is all that's needed; AdvancedFeatures=1 is NOT required when naviScreenInfo is provided.",
    "topic": "navigation-video",
    "source_lines": "576",
    "confidence": "high",
    "signals": [],
-   "quote": "sending naviScreenInfo is all that's needed\n        // (AdvancedFeatures=1 is NOT required when naviScreenInfo is provided)"
+   "quote": "sending naviScreenInfo is all that's needed"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#95",
+   "gid": "04_Implementation/host_app_guide.md#94",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 95,
+   "local_id": 94,
    "statement": "BoxSettings (USB type 0x19, JSON body) is parsed by ARMadb-driver FUN_00016c20; the generic path FUN_0001658c walks a 29-entry field→key table at 0x93f90.",
    "topic": "boxsettings-mapping",
    "source_lines": "592",
@@ -3116,9 +3083,9 @@
    "quote": "walks a **29-entry field→key table at `0x93f90`**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#96",
+   "gid": "04_Implementation/host_app_guide.md#95",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 96,
+   "local_id": 95,
    "statement": "BoxSettings string fields map via SetBoxConfigStr, number fields via SetBoxConfig.",
    "topic": "boxsettings-mapping",
    "source_lines": "592",
@@ -3127,9 +3094,9 @@
    "quote": "each JSON field is\nmapped to a `riddle.conf` key (string → `SetBoxConfigStr`, number → `SetBoxConfig`)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#97",
+   "gid": "04_Implementation/host_app_guide.md#96",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 97,
+   "local_id": 96,
    "statement": "BoxSettings mapping entry 0: btName → CustomBluetoothName (BT name, popen cmd-injection).",
    "topic": "boxsettings-mapping",
    "source_lines": "597",
@@ -3138,9 +3105,9 @@
    "quote": "| 0 | `btName` | `CustomBluetoothName` | BT name (⚠ popen cmd-injection) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#98",
+   "gid": "04_Implementation/host_app_guide.md#97",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 98,
+   "local_id": 97,
    "statement": "BoxSettings mapping entry 1: wifiName → CustomWifiName (WiFi SSID, cmd-injection).",
    "topic": "boxsettings-mapping",
    "source_lines": "598",
@@ -3149,9 +3116,9 @@
    "quote": "| 1 | `wifiName` | `CustomWifiName` | WiFi SSID (⚠ cmd-injection) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#99",
+   "gid": "04_Implementation/host_app_guide.md#98",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 99,
+   "local_id": 98,
    "statement": "BoxSettings mapping entry 2: fps → CustomFrameRate (→ Open fps field).",
    "topic": "boxsettings-mapping",
    "source_lines": "599",
@@ -3160,9 +3127,9 @@
    "quote": "| 2 | `fps` | `CustomFrameRate` | → `Open` fps field |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#100",
+   "gid": "04_Implementation/host_app_guide.md#99",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 100,
+   "local_id": 99,
    "statement": "BoxSettings mapping entry 3: gps → HudGPSSwitch (GPS/dashboard enable).",
    "topic": "boxsettings-mapping",
    "source_lines": "600",
@@ -3171,9 +3138,9 @@
    "quote": "| 3 | `gps` | `HudGPSSwitch` | GPS/dashboard enable |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#101",
+   "gid": "04_Implementation/host_app_guide.md#100",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 101,
+   "local_id": 100,
    "statement": "BoxSettings mapping entry 4: lang → BoxConfig_UI_Lang (UI language).",
    "topic": "boxsettings-mapping",
    "source_lines": "601",
@@ -3182,9 +3149,9 @@
    "quote": "| 4 | `lang` | `BoxConfig_UI_Lang` | UI language |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#102",
+   "gid": "04_Implementation/host_app_guide.md#101",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 102,
+   "local_id": 101,
    "statement": "BoxSettings mapping entry 5: bgMode → BackgroundMode (connection-UI visibility).",
    "topic": "boxsettings-mapping",
    "source_lines": "602",
@@ -3193,9 +3160,9 @@
    "quote": "| 5 | `bgMode` | `BackgroundMode` | connection-UI visibility |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#103",
+   "gid": "04_Implementation/host_app_guide.md#102",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 103,
+   "local_id": 102,
    "statement": "BoxSettings mapping entry 6: syncMode → iAP2TransMode (iAP2 framing mode).",
    "topic": "boxsettings-mapping",
    "source_lines": "603",
@@ -3204,9 +3171,9 @@
    "quote": "| 6 | `syncMode` | `iAP2TransMode` | iAP2 framing mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#104",
+   "gid": "04_Implementation/host_app_guide.md#103",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 104,
+   "local_id": 103,
    "statement": "BoxSettings mapping entry 7: startDelay → BoxConfig_DelayStart (USB init delay).",
    "topic": "boxsettings-mapping",
    "source_lines": "604",
@@ -3215,9 +3182,9 @@
    "quote": "| 7 | `startDelay` | `BoxConfig_DelayStart` | USB init delay |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#105",
+   "gid": "04_Implementation/host_app_guide.md#104",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 105,
+   "local_id": 104,
    "statement": "BoxSettings mapping entry 8: mediaDelay → MediaLatency (audio buffer ms).",
    "topic": "boxsettings-mapping",
    "source_lines": "605",
@@ -3226,9 +3193,9 @@
    "quote": "| 8 | `mediaDelay` | `MediaLatency` | audio buffer ms |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#106",
+   "gid": "04_Implementation/host_app_guide.md#105",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 106,
+   "local_id": 105,
    "statement": "BoxSettings mapping entry 9: mediaSound → MediaQuality (0=44.1 kHz, 1=48 kHz PCM).",
    "topic": "boxsettings-mapping",
    "source_lines": "606",
@@ -3237,9 +3204,9 @@
    "quote": "| 9 | `mediaSound` | `MediaQuality` | 0=44.1 kHz, 1=48 kHz PCM |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#107",
+   "gid": "04_Implementation/host_app_guide.md#106",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 107,
+   "local_id": 106,
    "statement": "BoxSettings mapping entry 10: autoConn → NeedAutoConnect (auto-reconnect).",
    "topic": "boxsettings-mapping",
    "source_lines": "607",
@@ -3248,9 +3215,9 @@
    "quote": "| 10 | `autoConn` | `NeedAutoConnect` | auto-reconnect |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#108",
+   "gid": "04_Implementation/host_app_guide.md#107",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 108,
+   "local_id": 107,
    "statement": "BoxSettings mapping entry 11: androidWorkMode → AndroidWorkMode, also fwrite /etc/android_work_mode (0..5).",
    "topic": "boxsettings-mapping",
    "source_lines": "608",
@@ -3259,9 +3226,9 @@
    "quote": "| 11 | `androidWorkMode` | `AndroidWorkMode` | also `fwrite /etc/android_work_mode` (0..5) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#109",
+   "gid": "04_Implementation/host_app_guide.md#108",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 109,
+   "local_id": 108,
    "statement": "BoxSettings mapping entry 12: drivePosition → CarDrivePosition (0=LHD, 1=RHD).",
    "topic": "boxsettings-mapping",
    "source_lines": "609",
@@ -3270,9 +3237,9 @@
    "quote": "| 12 | `drivePosition` | `CarDrivePosition` | 0=LHD, 1=RHD |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#110",
+   "gid": "04_Implementation/host_app_guide.md#109",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 110,
+   "local_id": 109,
    "statement": "BoxSettings mapping entry 13: echoDelay → EchoLatency (WebRTC AEC delay).",
    "topic": "boxsettings-mapping",
    "source_lines": "610",
@@ -3281,9 +3248,9 @@
    "quote": "| 13 | `echoDelay` | `EchoLatency` | WebRTC AEC delay |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#111",
+   "gid": "04_Implementation/host_app_guide.md#110",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 111,
+   "local_id": 110,
    "statement": "BoxSettings mapping entry 14: androidAutoSizeW → AndroidAutoWidth (AA video width).",
    "topic": "boxsettings-mapping",
    "source_lines": "611",
@@ -3292,9 +3259,9 @@
    "quote": "| 14 | `androidAutoSizeW` | `AndroidAutoWidth` | AA video width |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#112",
+   "gid": "04_Implementation/host_app_guide.md#111",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 112,
+   "local_id": 111,
    "statement": "BoxSettings mapping entry 15: androidAutoSizeH → AndroidAutoHeight (AA video height).",
    "topic": "boxsettings-mapping",
    "source_lines": "612",
@@ -3303,9 +3270,9 @@
    "quote": "| 15 | `androidAutoSizeH` | `AndroidAutoHeight` | AA video height |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#113",
+   "gid": "04_Implementation/host_app_guide.md#112",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 113,
+   "local_id": 112,
    "statement": "BoxSettings mapping entry 16: screenPhysicalW → ScreenPhysicalW (physical mm → CarPlay DPI).",
    "topic": "boxsettings-mapping",
    "source_lines": "613",
@@ -3314,9 +3281,9 @@
    "quote": "| 16 | `screenPhysicalW` | `ScreenPhysicalW` | physical mm → CarPlay DPI |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#114",
+   "gid": "04_Implementation/host_app_guide.md#113",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 114,
+   "local_id": 113,
    "statement": "BoxSettings mapping entry 17: screenPhysicalH → ScreenPhysicalH (physical mm → CarPlay DPI).",
    "topic": "boxsettings-mapping",
    "source_lines": "614",
@@ -3325,9 +3292,9 @@
    "quote": "| 17 | `screenPhysicalH` | `ScreenPhysicalH` | physical mm → CarPlay DPI |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#115",
+   "gid": "04_Implementation/host_app_guide.md#114",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 115,
+   "local_id": 114,
    "statement": "BoxSettings mapping entry 18: brand → CarBrand (special handler rewrites airplay.conf + logo).",
    "topic": "boxsettings-mapping",
    "source_lines": "615",
@@ -3336,9 +3303,9 @@
    "quote": "| 18 | `brand` | `CarBrand` | OEM brand (special handler rewrites airplay.conf + logo) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#116",
+   "gid": "04_Implementation/host_app_guide.md#115",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 116,
+   "local_id": 115,
    "statement": "BoxSettings mapping entry 19: ScreenDPI → ScreenDPI (CarPlay render density).",
    "topic": "boxsettings-mapping",
    "source_lines": "616",
@@ -3347,9 +3314,9 @@
    "quote": "| 19 | `ScreenDPI` | `ScreenDPI` | CarPlay render density |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#117",
+   "gid": "04_Implementation/host_app_guide.md#116",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 117,
+   "local_id": 116,
    "statement": "BoxSettings mapping entry 20: boxName → CustomBoxName (device display name).",
    "topic": "boxsettings-mapping",
    "source_lines": "617",
@@ -3358,9 +3325,9 @@
    "quote": "| 20 | `boxName` | `CustomBoxName` | device display name |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#118",
+   "gid": "04_Implementation/host_app_guide.md#117",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 118,
+   "local_id": 117,
    "statement": "BoxSettings mapping entry 21: WiFiChannel → WiFiChannel (adapter AP channel, → 0x5703 WifiConfigInfo).",
    "topic": "boxsettings-mapping",
    "source_lines": "618",
@@ -3369,9 +3336,9 @@
    "quote": "| 21 | `WiFiChannel` | `WiFiChannel` | adapter AP channel (→ `0x5703 WifiConfigInfo`) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#119",
+   "gid": "04_Implementation/host_app_guide.md#118",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 119,
+   "local_id": 118,
    "statement": "BoxSettings mapping entry 22: UseBTPhone → UseBTPhone (route calls via BT-HFP).",
    "topic": "boxsettings-mapping",
    "source_lines": "619",
@@ -3380,9 +3347,9 @@
    "quote": "| 22 | `UseBTPhone` | `UseBTPhone` | route calls via BT-HFP |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#120",
+   "gid": "04_Implementation/host_app_guide.md#119",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 120,
+   "local_id": 119,
    "statement": "BoxSettings mapping entry 23: HiCarConnectMode → HiCarConnectMode (HiCar mode).",
    "topic": "boxsettings-mapping",
    "source_lines": "620",
@@ -3391,9 +3358,9 @@
    "quote": "| 23 | `HiCarConnectMode` | `HiCarConnectMode` | HiCar mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#121",
+   "gid": "04_Implementation/host_app_guide.md#120",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 121,
+   "local_id": 120,
    "statement": "BoxSettings mapping entry 24: GNSSCapability → GNSSCapability (GPS capability advertised).",
    "topic": "boxsettings-mapping",
    "source_lines": "621",
@@ -3402,9 +3369,9 @@
    "quote": "| 24 | `GNSSCapability` | `GNSSCapability` | GPS capability advertised |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#122",
+   "gid": "04_Implementation/host_app_guide.md#121",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 122,
+   "local_id": 121,
    "statement": "BoxSettings mapping entry 25: AutoResetUSB → AutoResetUSB (USB reset on disconnect).",
    "topic": "boxsettings-mapping",
    "source_lines": "622",
@@ -3413,20 +3380,20 @@
    "quote": "| 25 | `AutoResetUSB` | `AutoResetUSB` | USB reset on disconnect |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#123",
+   "gid": "04_Implementation/host_app_guide.md#122",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 123,
+   "local_id": 122,
    "statement": "BoxSettings mapping entry 26: DashboardInfo → DashboardInfo (cluster/dashboard capability bitmask).",
    "topic": "boxsettings-mapping",
    "source_lines": "623",
    "confidence": "high",
    "signals": [],
-   "quote": "| 26 | `DashboardInfo` | `DashboardInfo` | cluster/dashboard capability bitmask |"
+   "quote": "| 26 | `DashboardInfo` | `DashboardInfo` | cluster/dashboard capability bitmask"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#124",
+   "gid": "04_Implementation/host_app_guide.md#123",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 124,
+   "local_id": 123,
    "statement": "BoxSettings mapping entry 27: DayNightMode → DayNightMode (day/night mode).",
    "topic": "boxsettings-mapping",
    "source_lines": "624",
@@ -3435,9 +3402,9 @@
    "quote": "| 27 | `DayNightMode` | `DayNightMode` | day/night mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#125",
+   "gid": "04_Implementation/host_app_guide.md#124",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 125,
+   "local_id": 124,
    "statement": "BoxSettings mapping entry 28: DockPosition → DuckPosition (firmware typo); copies HU_SCREEN_INFO → HU_VIEWAREA_INFO.",
    "topic": "boxsettings-mapping",
    "source_lines": "625",
@@ -3446,9 +3413,9 @@
    "quote": "| 28 | `DockPosition` | `DuckPosition` (fw typo) | copies `HU_SCREEN_INFO` → `HU_VIEWAREA_INFO` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#126",
+   "gid": "04_Implementation/host_app_guide.md#125",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 126,
+   "local_id": 125,
    "statement": "BoxSettings special handler: syncTime sets system clock via settimeofday(val + 28800) — hardcoded UTC+8.",
    "topic": "boxsettings-special",
    "source_lines": "634",
@@ -3457,9 +3424,9 @@
    "quote": "| `syncTime` | system clock | `settimeofday(val + 28800)` — hardcoded UTC+8 |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#127",
+   "gid": "04_Implementation/host_app_guide.md#126",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 127,
+   "local_id": 126,
    "statement": "BoxSettings special handler: mediaVol/callVol/speechVol/ringVol/navVol/otherVol map to HU_AUDIOVOLUME_INFO[0..5] in shared memory.",
    "topic": "boxsettings-special",
    "source_lines": "635",
@@ -3468,9 +3435,9 @@
    "quote": "| `mediaVol`/`callVol`/`speechVol`/`ringVol`/`navVol`/`otherVol` | `HU_AUDIOVOLUME_INFO[0..5]` | shared memory |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#128",
+   "gid": "04_Implementation/host_app_guide.md#127",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 128,
+   "local_id": 127,
    "statement": "BoxSettings special handler: naviScreenInfo{width,height,fps} maps to HU_NAVISCREEN_INFO (24 B) in shared memory.",
    "topic": "boxsettings-special",
    "source_lines": "636",
@@ -3479,9 +3446,9 @@
    "quote": "| `naviScreenInfo{width,height,fps}` | `HU_NAVISCREEN_INFO` (24 B) | shared memory |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#129",
+   "gid": "04_Implementation/host_app_guide.md#128",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 129,
+   "local_id": 128,
    "statement": "BoxSettings special handler: naviScreenInfo.safearea maps to HU_NAVISCREEN_SAFEAREA_INFO (20 B) + HU_NAVISCREEN_VIEWAREA_INFO (24 B) in shared memory.",
    "topic": "boxsettings-special",
    "source_lines": "637",
@@ -3490,9 +3457,9 @@
    "quote": "| `naviScreenInfo.safearea` | `HU_NAVISCREEN_SAFEAREA_INFO` (20 B) + `HU_NAVISCREEN_VIEWAREA_INFO` (24 B) | shared memory |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#130",
+   "gid": "04_Implementation/host_app_guide.md#129",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 130,
+   "local_id": 129,
    "statement": "There is no BoxSettings field for the main-screen SafeArea; HU_SAFEAREA_INFO is only settable via SendFile (0x99) or SSH.",
    "topic": "boxsettings-special",
    "source_lines": "639",
@@ -3501,9 +3468,9 @@
    "quote": "There is no BoxSettings field for the main-screen SafeArea."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#131",
+   "gid": "04_Implementation/host_app_guide.md#130",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 131,
+   "local_id": 130,
    "statement": "The Open (USB type 0x01) payload is a fixed 28-byte body — 7 × uint32 little-endian.",
    "topic": "open-message",
    "source_lines": "645",
@@ -3514,9 +3481,9 @@
    "quote": "The `Open` (USB type `0x01`) payload is a fixed **28-byte body — 7 × uint32 little-endian**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#132",
+   "gid": "04_Implementation/host_app_guide.md#131",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 132,
+   "local_id": 131,
    "statement": "Open message offset 0x00 is width (e.g. 2400).",
    "topic": "open-message",
    "source_lines": "650",
@@ -3525,9 +3492,9 @@
    "quote": "| 0x00 | `width` | display width | e.g. 2400 |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#133",
+   "gid": "04_Implementation/host_app_guide.md#132",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 133,
+   "local_id": 132,
    "statement": "Open message offset 0x04 is height (e.g. 960).",
    "topic": "open-message",
    "source_lines": "651",
@@ -3536,9 +3503,9 @@
    "quote": "| 0x04 | `height` | display height | e.g. 960 |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#134",
+   "gid": "04_Implementation/host_app_guide.md#133",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 134,
+   "local_id": 133,
    "statement": "Open message offset 0x08 is fps, sourced from riddleBoxCfg CustomFrameRate.",
    "topic": "open-message",
    "source_lines": "652",
@@ -3547,9 +3514,9 @@
    "quote": "| 0x08 | `fps` | frame rate | sourced from `riddleBoxCfg CustomFrameRate` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#135",
+   "gid": "04_Implementation/host_app_guide.md#134",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 135,
+   "local_id": 134,
    "statement": "Open message offset 0x0C is format video format ID: 1=basic IDR, 5=full H.264 / aggressive IDR.",
    "topic": "open-message",
    "source_lines": "653",
@@ -3558,9 +3525,9 @@
    "quote": "| 0x0C | `format` | video format ID | `1` = basic IDR, `5` = full H.264 / aggressive IDR |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#136",
+   "gid": "04_Implementation/host_app_guide.md#135",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 136,
+   "local_id": 135,
    "statement": "Open message offset 0x10 is packetMax max packet size (e.g. 0xC000 = 49152).",
    "topic": "open-message",
    "source_lines": "654",
@@ -3569,9 +3536,9 @@
    "quote": "| 0x10 | `packetMax` | max packet size | e.g. `0xC000` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#137",
+   "gid": "04_Implementation/host_app_guide.md#136",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 137,
+   "local_id": 136,
    "statement": "Open message offset 0x14 is boxVersion protocol version 2.",
    "topic": "open-message",
    "source_lines": "655",
@@ -3580,9 +3547,9 @@
    "quote": "| 0x14 | `boxVersion` | protocol version | `2` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#138",
+   "gid": "04_Implementation/host_app_guide.md#137",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 138,
+   "local_id": 137,
    "statement": "Open message offset 0x18 is phoneMode iPhone work mode (2=CarPlay).",
    "topic": "open-message",
    "source_lines": "656",
@@ -3591,9 +3558,9 @@
    "quote": "| 0x18 | `phoneMode` | iPhone work mode | `2` = CarPlay |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#139",
+   "gid": "04_Implementation/host_app_guide.md#138",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 139,
+   "local_id": 138,
    "statement": "Open is handled by ProceessCmdOpen (fcn.00021cb0); it compares Open width/height to stored HU_VIEWAREA_INFO and auto-rewrites HU_VIEWAREA_INFO full-screen if they differ, does not touch HU_SAFEAREA_INFO, and broadcasts the phone's resolution back as USB type 0x1E.",
    "topic": "open-message",
    "source_lines": "673",
@@ -3602,9 +3569,9 @@
    "quote": "`Open` is handled by `ProceessCmdOpen`\n(`fcn.00021cb0`). The handler **compares the `Open` `width`/`height` to the stored\n`HU_VIEWAREA_INFO`**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#140",
+   "gid": "04_Implementation/host_app_guide.md#139",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 140,
+   "local_id": 139,
    "statement": "The Open message is re-sent every session (it is not persistent).",
    "topic": "open-message",
    "source_lines": "677",
@@ -3613,9 +3580,9 @@
    "quote": "The `Open` message is **re-sent every session**\n(it is not persistent)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#141",
+   "gid": "04_Implementation/host_app_guide.md#140",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 141,
+   "local_id": 140,
    "statement": "For Android Auto support, the host must send the android_work_mode file on every connection (path /etc/android_work_mode with value 1).",
    "topic": "android-auto-mode",
    "source_lines": "682",
@@ -3626,9 +3593,9 @@
    "quote": "you MUST send the `android_work_mode` file on every connection"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#142",
+   "gid": "04_Implementation/host_app_guide.md#141",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 142,
+   "local_id": 141,
    "statement": "SendFile uses message type 0x99 with payload format: pathLength (int), path bytes, null terminator, contentSize (int), content.",
    "topic": "sendfile",
    "source_lines": "691",
@@ -3637,9 +3604,9 @@
    "quote": ".putInt(path.length)\n        .put(path.toByteArray())\n        .put(0)  // null terminator\n        .putInt(content.size)\n        .put(content)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#143",
+   "gid": "04_Implementation/host_app_guide.md#142",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 143,
+   "local_id": 142,
    "statement": "Firmware resets AndroidWorkMode to 0 when the phone disconnects; without resending, Android Auto pairing fails even if Bluetooth pairs successfully.",
    "topic": "android-auto-mode",
    "source_lines": "702",
@@ -3650,9 +3617,9 @@
    "quote": "Firmware resets `AndroidWorkMode` to 0 when phone disconnects"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#144",
+   "gid": "04_Implementation/host_app_guide.md#143",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 144,
+   "local_id": 143,
    "statement": "Firmware logs 'OnAndroidWorkModeChanged: 0 → 1' followed by 'Start Link Deamon: AndroidAuto' on enabling AA.",
    "topic": "android-auto-mode",
    "source_lines": "704",
@@ -3661,9 +3628,9 @@
    "quote": "Firmware logs: `OnAndroidWorkModeChanged: 0 → 1` followed by `Start Link Deamon: AndroidAuto`"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#145",
+   "gid": "04_Implementation/host_app_guide.md#144",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 145,
+   "local_id": 144,
    "statement": "SendFile has no path validation or sanitization: any writable path is accessible (root filesystem mounted read-write), no path traversal filtering, no whitelist enforcement.",
    "topic": "security-sendfile",
    "source_lines": "708",
@@ -3674,9 +3641,9 @@
    "quote": "SendFile has **no path validation or sanitization**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#146",
+   "gid": "04_Implementation/host_app_guide.md#145",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 146,
+   "local_id": 145,
    "statement": "The firmware stages each SendFile upload through /tmp/uploadFileTmp before moving it to the target path.",
    "topic": "sendfile",
    "source_lines": "718",
@@ -3685,9 +3652,9 @@
    "quote": "The\nfirmware stages each upload through `/tmp/uploadFileTmp` before moving it to the target path."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#147",
+   "gid": "04_Implementation/host_app_guide.md#146",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 147,
+   "local_id": 146,
    "statement": "SendFile target /tmp/screen_dpi (flat file) sets CarPlay render density.",
    "topic": "sendfile-targets",
    "source_lines": "726",
@@ -3696,9 +3663,9 @@
    "quote": "| `/tmp/screen_dpi` | flat file | CarPlay render density |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#148",
+   "gid": "04_Implementation/host_app_guide.md#147",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 148,
+   "local_id": 147,
    "statement": "SendFile target /tmp/screen_fps (flat file) sets frame rate hint.",
    "topic": "sendfile-targets",
    "source_lines": "727",
@@ -3707,9 +3674,9 @@
    "quote": "| `/tmp/screen_fps` | flat file | frame rate hint |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#149",
+   "gid": "04_Implementation/host_app_guide.md#148",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 149,
+   "local_id": 148,
    "statement": "SendFile target /tmp/screen_size (flat file) sets display size.",
    "topic": "sendfile-targets",
    "source_lines": "728",
@@ -3718,9 +3685,9 @@
    "quote": "| `/tmp/screen_size` | flat file | display size |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#150",
+   "gid": "04_Implementation/host_app_guide.md#149",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 150,
+   "local_id": 149,
    "statement": "SendFile target /tmp/night_mode (flat file) sets day/night mode.",
    "topic": "sendfile-targets",
    "source_lines": "729",
@@ -3729,9 +3696,9 @@
    "quote": "| `/tmp/night_mode` | flat file | day/night mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#151",
+   "gid": "04_Implementation/host_app_guide.md#150",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 151,
+   "local_id": 150,
    "statement": "SendFile target /tmp/hand_drive_mode (flat file) sets LHD/RHD drive position.",
    "topic": "sendfile-targets",
    "source_lines": "730",
@@ -3740,9 +3707,9 @@
    "quote": "| `/tmp/hand_drive_mode` | flat file | LHD/RHD drive position |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#152",
+   "gid": "04_Implementation/host_app_guide.md#151",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 152,
+   "local_id": 151,
    "statement": "SendFile target /tmp/charge_mode (flat file) sets USB charge speed.",
    "topic": "sendfile-targets",
    "source_lines": "731",
@@ -3751,9 +3718,9 @@
    "quote": "| `/tmp/charge_mode` | flat file | USB charge speed (see § *Charge Mode Control*) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#153",
+   "gid": "04_Implementation/host_app_guide.md#152",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 153,
+   "local_id": 152,
    "statement": "SendFile target /tmp/carplay_mode (flat file) sets CarPlay mode flag.",
    "topic": "sendfile-targets",
    "source_lines": "732",
@@ -3762,9 +3729,9 @@
    "quote": "| `/tmp/carplay_mode` | flat file | CarPlay mode flag |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#154",
+   "gid": "04_Implementation/host_app_guide.md#153",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 154,
+   "local_id": 153,
    "statement": "SendFile target /tmp/iphone_work_mode (flat file) sets iPhone work mode.",
    "topic": "sendfile-targets",
    "source_lines": "733",
@@ -3773,9 +3740,9 @@
    "quote": "| `/tmp/iphone_work_mode` | flat file | iPhone work mode |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#155",
+   "gid": "04_Implementation/host_app_guide.md#154",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 155,
+   "local_id": 154,
    "statement": "SendFile target /etc/android_work_mode (flat file, persistent) enables Android Auto.",
    "topic": "sendfile-targets",
    "source_lines": "734",
@@ -3784,9 +3751,9 @@
    "quote": "| `/etc/android_work_mode` | flat file (persistent) | Android Auto enable (see § *Android Auto Mode*) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#156",
+   "gid": "04_Implementation/host_app_guide.md#155",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 156,
+   "local_id": 155,
    "statement": "SendFile target /etc/RiddleBoxData/HU_* are binary structs for display geometry (HU_SCREEN_INFO, HU_VIEWAREA_INFO, HU_SAFEAREA_INFO, etc.).",
    "topic": "sendfile-targets",
    "source_lines": "735",
@@ -3795,9 +3762,9 @@
    "quote": "| `/etc/RiddleBoxData/HU_*` | binary structs | display geometry"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#157",
+   "gid": "04_Implementation/host_app_guide.md#156",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 157,
+   "local_id": 156,
    "statement": "/tmp/* is writable, stored in RAM (lost on reboot), with ~52 MB free.",
    "topic": "writable-paths",
    "source_lines": "741",
@@ -3808,9 +3775,9 @@
    "quote": "| `/tmp/*` | ✅ Yes | RAM (lost on reboot) | ~52 MB free |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#158",
+   "gid": "04_Implementation/host_app_guide.md#157",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 158,
+   "local_id": 157,
    "statement": "/etc/* is writable and persistent in flash (config files, init scripts).",
    "topic": "writable-paths",
    "source_lines": "742",
@@ -3821,9 +3788,9 @@
    "quote": "| `/etc/*` | ✅ Yes | Flash (persistent) | Config files, init scripts |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#159",
+   "gid": "04_Implementation/host_app_guide.md#158",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 159,
+   "local_id": 158,
    "statement": "/script/* is writable and persistent in flash (startup scripts).",
    "topic": "writable-paths",
    "source_lines": "743",
@@ -3834,9 +3801,9 @@
    "quote": "| `/script/*` | ✅ Yes | Flash (persistent) | Startup scripts |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#160",
+   "gid": "04_Implementation/host_app_guide.md#159",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 160,
+   "local_id": 159,
    "statement": "/usr/sbin/* is writable and persistent in flash (system binaries).",
    "topic": "writable-paths",
    "source_lines": "744",
@@ -3847,9 +3814,9 @@
    "quote": "| `/usr/sbin/*` | ✅ Yes | Flash (persistent) | System binaries |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#161",
+   "gid": "04_Implementation/host_app_guide.md#160",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 161,
+   "local_id": 160,
    "statement": "Binaries uploaded to the adapter must be cross-compiled for armv7l (ARM 32-bit).",
    "topic": "binary-upload",
    "source_lines": "765",
@@ -3858,9 +3825,9 @@
    "quote": "Binaries must be cross-compiled for **armv7l** (ARM 32-bit)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#162",
+   "gid": "04_Implementation/host_app_guide.md#161",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 162,
+   "local_id": 161,
    "statement": "Files sent to /tmp/hwfs.tar.gz are automatically extracted; firmware executes 'tar -xvf /tmp/hwfs.tar.gz -C /tmp'.",
    "topic": "sendfile-autoextract",
    "source_lines": "787",
@@ -3869,9 +3836,9 @@
    "quote": "Files sent to `/tmp/hwfs.tar.gz` are automatically extracted"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#163",
+   "gid": "04_Implementation/host_app_guide.md#162",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 163,
+   "local_id": 162,
    "statement": "HU_* geometry structs are stored under /etc/RiddleBoxData/ and all fields are uint32 little-endian.",
    "topic": "hu-structs",
    "source_lines": "799",
@@ -3880,9 +3847,9 @@
    "quote": "All fields are **uint32 little-endian**."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#164",
+   "gid": "04_Implementation/host_app_guide.md#163",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 164,
+   "local_id": 163,
    "statement": "AppleCarPlay reads HU_* structs at session init to build the AirPlay viewAreas/displayInfo descriptor sent to the iPhone.",
    "topic": "hu-structs",
    "source_lines": "799",
@@ -3891,9 +3858,9 @@
    "quote": "`AppleCarPlay` reads these at session init to build the\nAirPlay `viewAreas` / `displayInfo` descriptor sent to the iPhone."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#165",
+   "gid": "04_Implementation/host_app_guide.md#164",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 165,
+   "local_id": 164,
    "statement": "ARMAndroidAuto does NOT read HU_* files; its aasdk openauto-v2 VideoConfig proto has only margin_width/margin_height (no ui_config/content_insets), so Android Auto gets a symmetric letterbox margin sized from androidAutoSizeW/H, not HU_VIEWAREA_INFO.",
    "topic": "hu-structs",
    "source_lines": "800",
@@ -3902,9 +3869,9 @@
    "quote": "**`ARMAndroidAuto` does NOT read\nthese files**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#166",
+   "gid": "04_Implementation/host_app_guide.md#165",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 166,
+   "local_id": 165,
    "statement": "The main-screen HU_SAFEAREA_INFO is CarPlay-only (binary-confirmed Jun 2026, firmware 2025.10): read solely by AppleCarPlay; ARMadb-driver references HU_VIEWAREA_INFO + cluster HU_NAVISCREEN_* but not the bare main-screen SafeArea.",
    "topic": "hu-structs",
    "source_lines": "803",
@@ -3915,20 +3882,20 @@
    "quote": "The\nmain-screen `HU_SAFEAREA_INFO` is **CarPlay-only** (binary-confirmed Jun 2026, firmware 2025.10"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#167",
+   "gid": "04_Implementation/host_app_guide.md#166",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 167,
+   "local_id": 166,
    "statement": "HU_VIEWAREA_INFO's only xref is ProceessCmdOpen.",
    "topic": "hu-structs",
    "source_lines": "803",
    "confidence": "high",
    "signals": [],
-   "quote": "not\n`HU_VIEWAREA_INFO` (whose only xref is `ProceessCmdOpen`)"
+   "quote": "`HU_VIEWAREA_INFO` (whose only xref is `ProceessCmdOpen`)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#168",
+   "gid": "04_Implementation/host_app_guide.md#167",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 168,
+   "local_id": 167,
    "statement": "A genuine AA content-inset SafeArea requires a host speaking the AAP protocol directly, not the dongle.",
    "topic": "hu-structs",
    "source_lines": "806",
@@ -3937,9 +3904,9 @@
    "quote": "A genuine AA content-inset SafeArea requires a host speaking\nthe AAP protocol directly, not the dongle"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#169",
+   "gid": "04_Implementation/host_app_guide.md#168",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 169,
+   "local_id": 168,
    "statement": "HU_SCREEN_INFO is 24 B with layout [width, height, 0, 0, fps, dpi] (uint32-LE).",
    "topic": "hu-structs",
    "source_lines": "812",
@@ -3948,9 +3915,9 @@
    "quote": "| `HU_SCREEN_INFO` | 24 B | `[width, height, 0, 0, fps, dpi]` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#170",
+   "gid": "04_Implementation/host_app_guide.md#169",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 170,
+   "local_id": 169,
    "statement": "HU_VIEWAREA_INFO is 24 B with layout [width, height, width, height, originX, originY] (uint32-LE).",
    "topic": "hu-structs",
    "source_lines": "813",
@@ -3959,9 +3926,9 @@
    "quote": "| `HU_VIEWAREA_INFO` | 24 B | `[width, height, width, height, originX, originY]` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#171",
+   "gid": "04_Implementation/host_app_guide.md#170",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 171,
+   "local_id": 170,
    "statement": "HU_SAFEAREA_INFO is 20 B with layout [width, height, originX, originY, drawUIOutsideSafeArea] (uint32-LE).",
    "topic": "hu-structs",
    "source_lines": "814",
@@ -3970,20 +3937,20 @@
    "quote": "| `HU_SAFEAREA_INFO` | 20 B | `[width, height, originX, originY, drawUIOutsideSafeArea]` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#172",
+   "gid": "04_Implementation/host_app_guide.md#171",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 172,
+   "local_id": 171,
    "statement": "HU_VIEWAREA_INFO is the file AppleCarPlay._CopyDisplayDescriptions reads for viewAreas.widthPixels/heightPixels.",
    "topic": "hu-structs",
    "source_lines": "816",
    "confidence": "high",
    "signals": [],
-   "quote": "`HU_VIEWAREA_INFO` is the file `AppleCarPlay._CopyDisplayDescriptions` reads for\n`viewAreas.widthPixels` / `heightPixels`."
+   "quote": "`HU_VIEWAREA_INFO` is the file `AppleCarPlay._CopyDisplayDescriptions` reads for"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#173",
+   "gid": "04_Implementation/host_app_guide.md#172",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 173,
+   "local_id": 172,
    "statement": "drawUIOutsideSafeArea = 0 means hard crop (UI black outside the SafeArea); = 1 means wallpaper fills the full ViewArea while interactive UI stays inside the SafeArea.",
    "topic": "hu-structs",
    "source_lines": "818",
@@ -3992,9 +3959,9 @@
    "quote": "`drawUIOutsideSafeArea = 0` → **hard crop** (UI black outside the SafeArea);\n  `= 1` → **wallpaper fills the full ViewArea**"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#174",
+   "gid": "04_Implementation/host_app_guide.md#173",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 174,
+   "local_id": 173,
    "statement": "HU_VIEWAREA_INFO is auto-rewritten by ProceessCmdOpen from the Open (0x01) message; HU_SAFEAREA_INFO has no BoxSettings field and must be written via SendFile (0x99) or SSH.",
    "topic": "hu-structs",
    "source_lines": "830",
@@ -4003,9 +3970,9 @@
    "quote": "`HU_VIEWAREA_INFO` is auto-rewritten by `ProceessCmdOpen` from the `Open` (0x01) message;"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#175",
+   "gid": "04_Implementation/host_app_guide.md#174",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 175,
+   "local_id": 174,
    "statement": "Navigation video uses message type 0x2C; including naviScreenInfo in BoxSettings activates it, and AdvancedFeatures=1 is not required when naviScreenInfo is provided.",
    "topic": "navigation-video",
    "source_lines": "835",
@@ -4014,9 +3981,9 @@
    "quote": "Include `naviScreenInfo` in BoxSettings to activate navigation video (type 0x2C). `AdvancedFeatures=1` is NOT required when `naviScreenInfo` is provided."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#176",
+   "gid": "04_Implementation/host_app_guide.md#175",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 176,
+   "local_id": 175,
    "statement": "naviScreenInfo causes a second H.264 video stream that increases USB bandwidth and processing load; only include it when the host handles NaviVideoData (Type 0x2C).",
    "topic": "navigation-video",
    "source_lines": "837",
@@ -4025,9 +3992,9 @@
    "quote": "This causes a second H.264 video stream that increases USB bandwidth and processing load."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#177",
+   "gid": "04_Implementation/host_app_guide.md#176",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 177,
+   "local_id": 176,
    "statement": "Command 508 (REQUEST_NAVI_SCREEN_FOCUS) is a three-step handshake; the host kicks it ~2s after PLUGGED for CarPlay because wireless CarPlay sessions never send 508 on their own (adapter sends only 506, audio nav focus).",
    "topic": "command-508",
    "source_lines": "843",
@@ -4038,9 +4005,9 @@
    "quote": "Host kicks the handshake ~2 s after PLUGGED for CarPlay. Wireless CarPlay\n   //     sessions especially need this because the adapter never sends 508 on its own —\n   //     it sends only 506 (audio nav focus)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#178",
+   "gid": "04_Implementation/host_app_guide.md#177",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 178,
+   "local_id": 177,
    "statement": "Without the proactive 508 kick, _AltScreenSetup never starts even when all three documented gates clear (persistent unlock file + naviScreenInfo BoxSettings + features=naviScreen in boxInfo).",
    "topic": "command-508",
    "source_lines": "845",
@@ -4049,9 +4016,9 @@
    "quote": "Without this kick, _AltScreenSetup never\n   //     starts even when all three documented gates clear"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#179",
+   "gid": "04_Implementation/host_app_guide.md#178",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 179,
+   "local_id": 178,
    "statement": "In the 508 handshake step 3, the host echoes the adapter's step-2 Command(508) reply; the adapter then completes _AltScreenSetup and starts emitting 0x2C; repeated 508s are idempotent.",
    "topic": "command-508",
    "source_lines": "858",
@@ -4060,9 +4027,9 @@
    "quote": "The adapter replies with Command(508) shortly after step 1. Echo it back to\n   //     confirm; the adapter then completes _AltScreenSetup and starts emitting 0x2C."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#180",
+   "gid": "04_Implementation/host_app_guide.md#179",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 180,
+   "local_id": 179,
    "statement": "Wired CarPlay has been observed to initiate at step 2 on its own (echo-only pattern).",
    "topic": "command-508",
    "source_lines": "860",
@@ -4073,9 +4040,9 @@
    "quote": "this also covers wired CarPlay where the\n   //     adapter has been observed to initiate at step 2 on its own (echo-only pattern)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#181",
+   "gid": "04_Implementation/host_app_guide.md#180",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 181,
+   "local_id": 180,
    "statement": "Command 508 navigation video handshake was live-verified 2026-05-28 on carlink_native + CPC200-CCPA firmware 2025.10.15.1127 (wireless CarPlay).",
    "topic": "command-508",
    "source_lines": "867",
@@ -4086,9 +4053,9 @@
    "quote": "Live-verified 2026-05-28 on carlink_native + CPC200-CCPA firmware 2025.10.15.1127 (wireless CarPlay)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#182",
+   "gid": "04_Implementation/host_app_guide.md#181",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 182,
+   "local_id": 181,
    "statement": "NaviVideoData (Type 0x2C) uses the same 20-byte header structure as main video: width payload[0:4], height payload[4:8], encoderState payload[8:12], pts payload[12:16], flags payload[16:20], h264_data payload[20:].",
    "topic": "navigation-video",
    "source_lines": "871",
@@ -4097,9 +4064,9 @@
    "quote": "// Navigation video uses SAME header structure as main video (20-byte header)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#183",
+   "gid": "04_Implementation/host_app_guide.md#182",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 183,
+   "local_id": 182,
    "statement": "For nav video, encoderState is typically 1 (varies for main video).",
    "topic": "navigation-video",
    "source_lines": "875",
@@ -4108,9 +4075,9 @@
    "quote": "encoderState = payload[8:12]  // EncoderState — typically 1 for nav video (varies for main video)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#184",
+   "gid": "04_Implementation/host_app_guide.md#183",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 184,
+   "local_id": 183,
    "statement": "Frame type is determined by the NAL unit type in the H.264 data, not a header field.",
    "topic": "navigation-video",
    "source_lines": "880",
@@ -4119,9 +4086,9 @@
    "quote": "// Frame type determined by NAL unit type in H.264 data, not header field"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#185",
+   "gid": "04_Implementation/host_app_guide.md#184",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 185,
+   "local_id": 184,
    "statement": "The firmware config key AutoPlauMusic (index 20) controls auto-play; when set to 1, after CarPlay session establishment the adapter sends an iAP2 NowPlaying play command targeting com.apple.Music via FUN_0002812c in ARMiPhoneIAP2; this is CarPlay-only (Android Auto unaffected).",
    "topic": "autoplay",
    "source_lines": "893",
@@ -4130,9 +4097,9 @@
    "quote": "The firmware config key `AutoPlauMusic` (index 20) controls auto-play. When set to 1, after CarPlay session establishment the adapter sends an iAP2 NowPlaying play command targeting `com.apple.Music` via `FUN_0002812c` in ARMiPhoneIAP2."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#186",
+   "gid": "04_Implementation/host_app_guide.md#185",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 186,
+   "local_id": 185,
    "statement": "BoxSettings autoPlay JSON key is absent from ARMadb-driver's BoxSettings parser string table — the mapping was never implemented; sending 'autoPlay': true in BoxSettings JSON over USB has no effect.",
    "topic": "autoplay",
    "source_lines": "895",
@@ -4144,9 +4111,9 @@
    "quote": "The `autoPlay` JSON key string is absent from ARMadb-driver's BoxSettings parser string table — the mapping was never implemented (confirmed via binary strings analysis and independent memory dump, Mar 2026)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#187",
+   "gid": "04_Implementation/host_app_guide.md#186",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 187,
+   "local_id": 186,
    "statement": "AutoPlauMusic can be set via the boa web UI (works), or by writing directly to /etc/riddle.conf via SendFile (untested but architecturally valid), or via host-side reconnect resume.",
    "topic": "autoplay",
    "source_lines": "899",
@@ -4157,9 +4124,9 @@
    "quote": "**SendFile workaround:** Write directly to `/etc/riddle.conf` via SendFile (0x99) — untested but architecturally valid"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#188",
+   "gid": "04_Implementation/host_app_guide.md#187",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 188,
+   "local_id": 187,
    "statement": "AutoKit's host-side reconnect auto-resume uses two SharedPreferences flags: IsAutoPlayMusic (global user preference) and MediaPlaying_<deviceId> (per-device, was media playing at last disconnect).",
    "topic": "autoplay",
    "source_lines": "908",
@@ -4170,9 +4137,9 @@
    "quote": "The manufacturer's app implements reconnect-based media resume using two SharedPreferences flags"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#189",
+   "gid": "04_Implementation/host_app_guide.md#188",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 189,
+   "local_id": 188,
    "statement": "On reconnect, if both IsAutoPlayMusic and MediaPlaying_<deviceId> are true, the host requests audio focus and sends Command 201 (MusicPlay, type 0x08) to resume playback.",
    "topic": "autoplay",
    "source_lines": "920",
@@ -4181,9 +4148,9 @@
    "quote": "Host sends Command 201 (`MusicPlay`, type `0x08`) to resume playback"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#190",
+   "gid": "04_Implementation/host_app_guide.md#189",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 190,
+   "local_id": 189,
    "statement": "IsAutoPlayMusic is not sent to the adapter; it is purely a host-app preference controlling whether the host sends Command 201 on reconnect; this host-side mechanism is the only reliable way to implement auto-play over USB since the BoxSettings autoPlay mapping is broken.",
    "topic": "autoplay",
    "source_lines": "935",
@@ -4192,9 +4159,9 @@
    "quote": "this host-side mechanism is the **only reliable way** for a host app to implement auto-play over USB"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#191",
+   "gid": "04_Implementation/host_app_guide.md#190",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 191,
+   "local_id": 190,
    "statement": "Connection error recovery: USB disconnect → stop heartbeat, close interface, retry.",
    "topic": "error-handling",
    "source_lines": "945",
@@ -4203,9 +4170,9 @@
    "quote": "| USB disconnect | Stop heartbeat, close interface, retry |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#192",
+   "gid": "04_Implementation/host_app_guide.md#191",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 192,
+   "local_id": 191,
    "statement": "Connection error recovery: Unplugged (0x04) → full restart sequence (phone disconnected).",
    "topic": "error-handling",
    "source_lines": "946",
@@ -4214,9 +4181,9 @@
    "quote": "| Unplugged (0x04) | Full restart sequence (phone disconnected) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#193",
+   "gid": "04_Implementation/host_app_guide.md#192",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 193,
+   "local_id": 192,
    "statement": "Connection error recovery: Phase stuck at 7 → wait or timeout and retry.",
    "topic": "error-handling",
    "source_lines": "947",
@@ -4225,9 +4192,9 @@
    "quote": "| Phase stuck at 7 | Wait or timeout and retry |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#194",
+   "gid": "04_Implementation/host_app_guide.md#193",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 194,
+   "local_id": 193,
    "statement": "Connection error recovery: No heartbeat response → reset USB and restart.",
    "topic": "error-handling",
    "source_lines": "948",
@@ -4236,9 +4203,9 @@
    "quote": "| No heartbeat response | Reset USB and restart |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#195",
+   "gid": "04_Implementation/host_app_guide.md#194",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 195,
+   "local_id": 194,
    "statement": "Command 1010 (DeviceWifiNotConnected) must NOT be treated as a disconnect signal; it is a WiFi hotspot status notification meaning no phone is connected to the adapter's WiFi, and is irrelevant for USB CarPlay sessions.",
    "topic": "error-handling",
    "source_lines": "950",
@@ -4250,9 +4217,9 @@
    "quote": "Do NOT treat Command 1010 (DeviceWifiNotConnected) as a disconnect signal. This is a WiFi hotspot status notification only"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#196",
+   "gid": "04_Implementation/host_app_guide.md#195",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 196,
+   "local_id": 195,
    "statement": "Correct session termination signals are: Unplugged (0x04), Phase (0x03) with value 0 (session ended), and heartbeat timeout (communication lost).",
    "topic": "error-handling",
    "source_lines": "951",
@@ -4261,9 +4228,9 @@
    "quote": "- `Unplugged` (0x04) - Phone disconnected from adapter\n- `Phase` (0x03) with value 0 - Session ended\n- Heartbeat timeout - Communication lost"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#197",
+   "gid": "04_Implementation/host_app_guide.md#196",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 197,
+   "local_id": 196,
    "statement": "Video error recovery: decode failure → send Frame (0x0C) for IDR; no video data → check Phase is 8; resolution mismatch → re-send Open message.",
    "topic": "error-handling",
    "source_lines": "959",
@@ -4272,9 +4239,9 @@
    "quote": "| Decode failure | Send Frame (0x0C) for IDR |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#198",
+   "gid": "04_Implementation/host_app_guide.md#197",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 198,
+   "local_id": 197,
    "statement": "If corruption survives one IDR frame, the decoder state is poisoned and should be reset immediately.",
    "topic": "video-corruption",
    "source_lines": "973",
@@ -4283,9 +4250,9 @@
    "quote": "If corruption survives one IDR frame, the decoder state is poisoned. Reset immediately"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#199",
+   "gid": "04_Implementation/host_app_guide.md#198",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 199,
+   "local_id": 198,
    "statement": "Decoder reset strategy: most decoders use flush() + wait for next IDR; Intel VPU (OMX.Intel.hw_vd.h264) requires full codec recreation (flush is insufficient).",
    "topic": "video-corruption",
    "source_lines": "977",
@@ -4294,9 +4261,9 @@
    "quote": "Intel VPU (OMX.Intel.hw_vd.h264): Requires full codec recreation (flush is insufficient)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#200",
+   "gid": "04_Implementation/host_app_guide.md#199",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 200,
+   "local_id": 199,
    "statement": "Audio error: WebRTC init fail → use only 8kHz or 16kHz for mic (firmware limitation).",
    "topic": "error-handling",
    "source_lines": "986",
@@ -4305,9 +4272,9 @@
    "quote": "| WebRTC init fail | Use only 8kHz or 16kHz for mic (firmware limitation) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#201",
+   "gid": "04_Implementation/host_app_guide.md#200",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 201,
+   "local_id": 200,
    "statement": "On Android (AAOS), duck media to 0.8f for AA and 0.2f for CarPlay (manufacturer's values).",
    "topic": "platform-android",
    "source_lines": "998",
@@ -4316,9 +4283,9 @@
    "quote": "Duck media to 0.8f for AA, 0.2f for CarPlay (manufacturer's values)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#202",
+   "gid": "04_Implementation/host_app_guide.md#201",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 202,
+   "local_id": 201,
    "statement": "iOS host use would require MFi program access and USB communication via the ExternalAccessory framework.",
    "topic": "platform-ios",
    "source_lines": "1008",
@@ -4329,9 +4296,9 @@
    "quote": "Would require MFi program access"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#203",
+   "gid": "04_Implementation/host_app_guide.md#202",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 203,
+   "local_id": 202,
    "statement": "AutoKit app v2025.03.19.1126 contains per-OEM behavioral overrides detected via Build.MANUFACTURER, Build.MODEL, and ro.board.platform.",
    "topic": "oem-quirks",
    "source_lines": "1013",
@@ -4342,9 +4309,9 @@
    "quote": "The app contains extensive per-OEM behavioral overrides detected via `Build.MANUFACTURER`, `Build.MODEL`, and `ro.board.platform`"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#204",
+   "gid": "04_Implementation/host_app_guide.md#203",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 204,
+   "local_id": 203,
    "statement": "Mic source: Qualcomm msmnile_gvmq uses VOICE_COMMUNICATION (7); Leapmotor C10 uses (7); generic Qualcomm uses (7); Qualcomm MSM8996 (JMEV) uses UNPROCESSED (10) bypassing platform AEC; default uses MIC (1).",
    "topic": "oem-quirks-mic",
    "source_lines": "1022",
@@ -4353,9 +4320,9 @@
    "quote": "| Qualcomm MSM8996 (JMEV) | UNPROCESSED (10) | Bypasses platform AEC |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#205",
+   "gid": "04_Implementation/host_app_guide.md#204",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 205,
+   "local_id": 204,
    "statement": "Mic recording delay compensation: Rockchip RK3399=530ms, Allwinner T3=1320ms (highest), ATC AC8317 (at8317_1537)=844ms, ATC AC8317 (other)=150ms, Spreadtrum SP7731E (sp7731e_1h10)=1081ms, Rockchip RK3368 (PX5)=540ms, MediaTek MT6753 (land_rover)=1079ms, Rockchip RK3188=580ms, default=150ms.",
    "topic": "oem-quirks-mic",
    "source_lines": "1030",
@@ -4364,9 +4331,9 @@
    "quote": "| Allwinner T3 | 1320 | Highest latency |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#206",
+   "gid": "04_Implementation/host_app_guide.md#205",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 206,
+   "local_id": 205,
    "statement": "Display/orientation quirks: BYD, NIO (ET5/ET7), Freescale use portrait orientation (v()=1); alps-changan, Great Wall, JIDU use widescreen mode (v()=2); QTI-FAW (Hong Qi) custom mode (v()=4) with view area inset Rect(0,96,720,0); NIO ET5/ET7, HUAWEI ICHU force max video height to 1080; hozon EP36/NIO/Renesas G6SH use saved vmaxwh preference; Renesas/Intel display rotation (10° or 90°).",
    "topic": "oem-quirks-display",
    "source_lines": "1045",
@@ -4375,9 +4342,9 @@
    "quote": "| QTI-FAW (Hong Qi) | Custom mode (`v()=4`), view area inset `Rect(0,96,720,0)` |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#207",
+   "gid": "04_Implementation/host_app_guide.md#206",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 207,
+   "local_id": 206,
    "statement": "Per-OEM safe area insets: Changan (0,0,0,72) 72px bottom; Great Wall (130,0,0,0) 130px left; JIDU (0,96,0,128) 96px top + 128px bottom.",
    "topic": "oem-quirks-safearea",
    "source_lines": "1054",
@@ -4386,9 +4353,9 @@
    "quote": "| Changan | `(0, 0, 0, 72)` — 72px bottom inset |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#208",
+   "gid": "04_Implementation/host_app_guide.md#207",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 208,
+   "local_id": 207,
    "statement": "Fixed window sizes: hozon 1230w × display height; QTI (Qualcomm) display width × 1750h; BYD display width × 2200h or 1780w × display height (model-dependent).",
    "topic": "oem-quirks-window",
    "source_lines": "1062",
@@ -4397,9 +4364,9 @@
    "quote": "| hozon | 1230w × display height | Fixed width |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#209",
+   "gid": "04_Implementation/host_app_guide.md#208",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 209,
+   "local_id": 208,
    "statement": "Soft decode mode forces FPS to 25 (down from 60) and DPI to 160; default is 60 FPS and DPI from calculation formula.",
    "topic": "oem-quirks-decoder",
    "source_lines": "1070",
@@ -4408,9 +4375,9 @@
    "quote": "| Soft decode mode | Forces FPS to 25 (down from 60), DPI to 160 |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#210",
+   "gid": "04_Implementation/host_app_guide.md#209",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 210,
+   "local_id": 209,
    "statement": "The CPC200-CCPA has a fully implemented GPS forwarding pipeline relaying GPS data from the Android head unit to the iPhone via the iAP2 LocationInformation protocol; the pipeline involves ARMadb-driver (USB reception/validation), ARMiPhoneIAP2 (CiAP2LocationEngine, NMEA→iAP2 conversion), and delivery to the iPhone.",
    "topic": "gps",
    "source_lines": "1077",
@@ -4421,9 +4388,9 @@
    "quote": "The CPC200-CCPA has a **fully implemented GPS forwarding pipeline**."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#211",
+   "gid": "04_Implementation/host_app_guide.md#210",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 211,
+   "local_id": 210,
    "statement": "Enabling GPS capability (one-time) is done via SSH to root@192.168.43.1 running riddleBoxCfg -s GNSSCapability 3, removing /etc/RiddleBoxData/AIEIPIEREngines.datastore, and rebooting via busybox reboot.",
    "topic": "gps",
    "source_lines": "1086",
@@ -4432,9 +4399,9 @@
    "quote": "ssh root@192.168.43.1\n   /usr/sbin/riddleBoxCfg -s GNSSCapability 3    # Enable GPGGA (bit 0) + GPRMC (bit 1)\n   rm -f /etc/RiddleBoxData/AIEIPIEREngines.datastore\n   busybox reboot"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#212",
+   "gid": "04_Implementation/host_app_guide.md#211",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 212,
+   "local_id": 211,
    "statement": "The adapter's SSH/WiFi IP is 192.168.43.1 with root login.",
    "topic": "gps",
    "source_lines": "1086",
@@ -4443,9 +4410,9 @@
    "quote": "ssh root@192.168.43.1"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#213",
+   "gid": "04_Implementation/host_app_guide.md#212",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 213,
+   "local_id": 212,
    "statement": "GNSSCapability defaults to 0; when 0, the GPS pipeline is blocked at two points: iAP2 identification (CiAP2IdentifyEngine.virtual_8 at 0x240e4) and session init (fcn.00015ee4 at 0x15fa4), so the iPhone never learns the adapter can provide location and never sends StartLocationInformation.",
    "topic": "gps",
    "source_lines": "1097",
@@ -4456,9 +4423,9 @@
    "quote": "`GNSSCapability` defaults to `0`. When `GNSSCapability=0`, the GPS pipeline is blocked at **two** points: iAP2 identification (`CiAP2IdentifyEngine.virtual_8` at `0x240e4`) and session init (`fcn.00015ee4` at `0x15fa4`)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#214",
+   "gid": "04_Implementation/host_app_guide.md#213",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 214,
+   "local_id": 213,
    "statement": "GNSSCapability bitmask: bit 0=GPGGA(1), bit 1=GPRMC(2), bit 3=PASCD(8); use value 3 for GPGGA+GPRMC.",
    "topic": "gps",
    "source_lines": "1099",
@@ -4467,20 +4434,20 @@
    "quote": "**GNSSCapability bitmask:** bit 0=GPGGA(1), bit 1=GPRMC(2), bit 3=PASCD(8). Use value `3` for GPGGA+GPRMC."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#215",
+   "gid": "04_Implementation/host_app_guide.md#214",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 215,
+   "local_id": 214,
    "statement": "HudGPSSwitch defaults to 1 (already correct); DashboardInfo does not need changing for GPS — it controls vehicleInfo/vehicleStatus/routeGuidance, not location.",
    "topic": "gps",
    "source_lines": "1099",
    "confidence": "high",
    "signals": [],
-   "quote": "`HudGPSSwitch` defaults to `1` (already correct). `DashboardInfo` does NOT need to be changed for GPS"
+   "quote": "`HudGPSSwitch` defaults to `1` (already correct)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#216",
+   "gid": "04_Implementation/host_app_guide.md#215",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 216,
+   "local_id": 215,
    "statement": "Send StartGNSSReport when the CarPlay session starts via Command 0x08 with payload value 18.",
    "topic": "gps",
    "source_lines": "1104",
@@ -4489,9 +4456,9 @@
    "quote": "send(Command: 0x08, payload = 18)  // StartGNSSReport"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#217",
+   "gid": "04_Implementation/host_app_guide.md#216",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 217,
+   "local_id": 216,
    "statement": "Both GPS data paths converge at CiAP2LocationEngine in ARMiPhoneIAP2 for iAP2 delivery to the phone.",
    "topic": "gps",
    "source_lines": "1109",
@@ -4500,9 +4467,9 @@
    "quote": "Both converge at `CiAP2LocationEngine` in ARMiPhoneIAP2 for iAP2 delivery to the phone."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#218",
+   "gid": "04_Implementation/host_app_guide.md#217",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 218,
+   "local_id": 217,
    "statement": "GPS Method 1 (recommended, lower-latency): send GPS data directly as USB message type 0x29 (GNSS_DATA) with payload format: 4-byte NMEA data length (LE) + NMEA sentence bytes (US-ASCII).",
    "topic": "gps",
    "source_lines": "1113",
@@ -4511,9 +4478,9 @@
    "quote": "Send GPS data directly as USB message type 0x29 (`GNSS_DATA`). This is the lower-latency path."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#219",
+   "gid": "04_Implementation/host_app_guide.md#218",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 219,
+   "local_id": 218,
    "statement": "GPS data should be sent at ~1 Hz.",
    "topic": "gps",
    "source_lines": "1125",
@@ -4522,9 +4489,9 @@
    "quote": "// Usage at ~1 Hz:"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#220",
+   "gid": "04_Implementation/host_app_guide.md#219",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 220,
+   "local_id": 219,
    "statement": "GPS Method 2 (fallback): write GPS data via SendFile (0x99) to /tmp/gnss_info in standard NMEA 0183 format; higher latency due to file I/O.",
    "topic": "gps",
    "source_lines": "1134",
@@ -4533,9 +4500,9 @@
    "quote": "Write GPS data via SendFile (0x99) to `/tmp/gnss_info` in standard **NMEA 0183** format. Higher latency due to file I/O."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#221",
+   "gid": "04_Implementation/host_app_guide.md#220",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 221,
+   "local_id": 220,
    "statement": "NMEA conversion: speed in m/s is converted to knots by multiplying by 1.94384.",
    "topic": "gps-nmea",
    "source_lines": "1161",
@@ -4544,9 +4511,9 @@
    "quote": "speed * 1.94384, // m/s to knots"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#222",
+   "gid": "04_Implementation/host_app_guide.md#221",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 222,
+   "local_id": 221,
    "statement": "NMEA checksum is computed by XOR-ing all characters after the leading $, appended as '*XX' two-digit hex.",
    "topic": "gps-nmea",
    "source_lines": "1177",
@@ -4555,9 +4522,9 @@
    "quote": "checksum = checksum xor c.code"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#223",
+   "gid": "04_Implementation/host_app_guide.md#222",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 223,
+   "local_id": 222,
    "statement": "NMEA sentence $GPGGA provides position fix (time, lat, lon, fix quality, satellites, altitude).",
    "topic": "gps-nmea",
    "source_lines": "1187",
@@ -4566,9 +4533,9 @@
    "quote": "| `$GPGGA` | Position fix | Time, lat, lon, fix quality, satellites, altitude |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#224",
+   "gid": "04_Implementation/host_app_guide.md#223",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 224,
+   "local_id": 223,
    "statement": "NMEA sentence $GPRMC provides recommended minimum (time, status, lat, lon, speed in knots, course, date).",
    "topic": "gps-nmea",
    "source_lines": "1188",
@@ -4577,9 +4544,9 @@
    "quote": "| `$GPRMC` | Recommended minimum | Time, status, lat, lon, speed (knots), course, date |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#225",
+   "gid": "04_Implementation/host_app_guide.md#224",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 225,
+   "local_id": 224,
    "statement": "NMEA sentence $GPGSV provides satellites in view (number of satellites, satellite info, optional).",
    "topic": "gps-nmea",
    "source_lines": "1189",
@@ -4588,9 +4555,9 @@
    "quote": "| `$GPGSV` | Satellites in view | Number of satellites, satellite info (optional) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#226",
+   "gid": "04_Implementation/host_app_guide.md#225",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 226,
+   "local_id": 225,
    "statement": "Vehicle sensor data files: /tmp/vehicle_speed (Float m/s), /tmp/vehicle_heading (Float degrees 0-360), /tmp/reverse_gear (0 or 1).",
    "topic": "vehicle-data",
    "source_lines": "1197",
@@ -4599,9 +4566,9 @@
    "quote": "| Vehicle Speed | `/tmp/vehicle_speed` | Float (m/s) |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#227",
+   "gid": "04_Implementation/host_app_guide.md#226",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 227,
+   "local_id": 226,
    "statement": "The iPhone does not blindly use vehicle GPS; it applies a best-accuracy-wins fusion model via CoreLocation's CL-fusion engine; vehicle GPS is most valuable when the iPhone's own GPS is degraded or during cold start.",
    "topic": "gps-fusion",
    "source_lines": "1217",
@@ -4610,9 +4577,9 @@
    "quote": "it applies a **best-accuracy-wins fusion model** via CoreLocation's `CL-fusion` engine."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#228",
+   "gid": "04_Implementation/host_app_guide.md#227",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 228,
+   "local_id": 227,
    "statement": "iPhone syslog indicators: 'sending nmea sentence to location client' (accessoryd forwarding NMEA), 'EAAccessoryDidReceiveNMEASentenceNotification' (locationd received it), 'numHypothesis,2' (vehicle GPS competing), 'numHypothesis,1'+'isPassthrough,1' (phone GPS winning, vehicle GPS metadata only), no nmea logs (NMEA not reaching iPhone, check GNSSCapability).",
    "topic": "gps-debug",
    "source_lines": "1233",
@@ -4621,9 +4588,9 @@
    "quote": "# ✅ \"numHypothesis,2\" — vehicle GPS is a competing position source (good!)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#229",
+   "gid": "04_Implementation/host_app_guide.md#228",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 229,
+   "local_id": 228,
    "statement": "To stop GPS reports when the CarPlay session ends, send Command 0x08 with payload value 19 (StopGNSSReport).",
    "topic": "gps",
    "source_lines": "1242",
@@ -4632,9 +4599,9 @@
    "quote": "send(Command: 0x08, payload = 19)  // StopGNSSReport"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#230",
+   "gid": "04_Implementation/host_app_guide.md#229",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 230,
+   "local_id": 229,
    "statement": "Charge mode: writing /tmp/charge_mode with byte 1 enables fast charging; byte 0 uses slow charging (default).",
    "topic": "charge-mode",
    "source_lines": "1255",
@@ -4645,9 +4612,9 @@
    "quote": "fun enableFastCharge() {\n    sendFile(\"/tmp/charge_mode\", byteArrayOf(1))"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#231",
+   "gid": "04_Implementation/host_app_guide.md#230",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 231,
+   "local_id": 230,
    "statement": "Testing checklist expectation: cold start (app restart) should reach a stable connection in <10s.",
    "topic": "testing",
    "source_lines": "1273",
@@ -4656,9 +4623,9 @@
    "quote": "| Cold start (app restart) | Stable connection in <10s |"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#232",
+   "gid": "04_Implementation/host_app_guide.md#231",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 232,
+   "local_id": 231,
    "statement": "AltVideo cluster display via USB 0x2C was verified end-to-end on AAOS emulator 2026-05-28: a host app plus a system-priv companion app render the iPhone's CarPlay navigation video onto the AAOS instrument cluster parallel to the main 0x06 video feed.",
    "topic": "altvideo-cluster",
    "source_lines": "1285",
@@ -4669,9 +4636,9 @@
    "quote": "Verified end-to-end on AAOS emulator, 2026-05-28."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#233",
+   "gid": "04_Implementation/host_app_guide.md#232",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 233,
+   "local_id": 232,
    "statement": "The cluster integration uses two processes: zeno.carlink (host app, 3P APK, owns USB, sends naviScreenInfo+safearea, demuxes 0x06 main video and 0x2C NaviVideo, exposes NaviVideoSourceService AIDL with sig|priv permission) and ClusterHomeDisplay (priv-app in /system/priv-app/, cluster sandbox, binds the service, registers INaviVideoSink, decodes to SurfaceView at native 1:1 1920×620 on emulator).",
    "topic": "altvideo-cluster",
    "source_lines": "1289",
@@ -4680,9 +4647,9 @@
    "quote": "The integration uses two processes on the head unit, not one"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#234",
+   "gid": "04_Implementation/host_app_guide.md#233",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 234,
+   "local_id": 233,
    "statement": "The AAOS cluster VirtualDisplay is display 3 (ClusterOsDouble-VD).",
    "topic": "altvideo-cluster",
    "source_lines": "1321",
@@ -4691,9 +4658,9 @@
    "quote": "AAOS cluster VirtualDisplay\n                       (display 3, ClusterOsDouble-VD)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#235",
+   "gid": "04_Implementation/host_app_guide.md#234",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 235,
+   "local_id": 234,
    "statement": "The host app owns USB but cannot reach the cluster sandbox without platform-signed privileges; the cluster app is a priv-app with CAR_INSTRUMENT_CLUSTER_CONTROL but cannot touch USB; an AIDL Service + Surface-or-byte[] IPC bridges them at minimum privilege.",
    "topic": "altvideo-cluster",
    "source_lines": "1325",
@@ -4702,9 +4669,9 @@
    "quote": "the cluster app is a priv-app with `CAR_INSTRUMENT_CLUSTER_CONTROL` but cannot touch USB."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#236",
+   "gid": "04_Implementation/host_app_guide.md#235",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 236,
+   "local_id": 235,
    "statement": "On the AIDL the producer sends per access unit raw Annex-B H.264 (start-code prefixed) with no USB or video-header bytes (the 36 B carrier is stripped by the host).",
    "topic": "altvideo-cluster",
    "source_lines": "1329",
@@ -4713,9 +4680,9 @@
    "quote": "raw Annex-B H.264** (start-code prefixed) with NO USB or video-header bytes — those have already been stripped by the host. The consumer receives the same payload the iPhone emitted, just with the 36 B carrier removed."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#237",
+   "gid": "04_Implementation/host_app_guide.md#236",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 237,
+   "local_id": 236,
    "statement": "INaviVideoSink AIDL is oneway with onStreamConfigured(int width,int height,int fps), onFrame(byte[] h264AnnexB, long ptsUs, boolean isKeyFrame), onStreamEnded(); INaviVideoSource has registerSink, unregisterSink, isStreamActive.",
    "topic": "altvideo-cluster",
    "source_lines": "1332",
@@ -4724,9 +4691,9 @@
    "quote": "oneway interface INaviVideoSink {"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#238",
+   "gid": "04_Implementation/host_app_guide.md#237",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 238,
+   "local_id": 237,
    "statement": "Bandwidth at 1920×620@30 nav-UI content is ~3-6 Mbps → ~12-25 KB per access unit average; Binder oneway calls handle this and the default 1 MB transaction buffer dwarfs per-frame size.",
    "topic": "altvideo-cluster",
    "source_lines": "1345",
@@ -4735,9 +4702,9 @@
    "quote": "Bandwidth at 1920×620@30 nav-UI content is ~3–6 Mbps → ~12–25 KB per access unit average."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#239",
+   "gid": "04_Implementation/host_app_guide.md#238",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 239,
+   "local_id": 238,
    "statement": "The iPhone emits SPS+PPS+IDR once at session start, then refreshes every ~2-7 seconds; a consumer that binds after the initial keyframe receives only P-frames and never locks its decoder.",
    "topic": "altvideo-cluster",
    "source_lines": "1349",
@@ -4746,9 +4713,9 @@
    "quote": "The iPhone emits SPS+PPS+IDR **once at session start**, then refreshes every ~2–7 seconds."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#240",
+   "gid": "04_Implementation/host_app_guide.md#239",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 240,
+   "local_id": 239,
    "statement": "The producer MUST cache the last keyframe access unit and replay it to any sink that registers mid-session, or the consumer waits 2-7 seconds with a black overlay.",
    "topic": "altvideo-cluster",
    "source_lines": "1351",
@@ -4757,9 +4724,9 @@
    "quote": "The producer MUST cache the last keyframe access unit and replay it to any sink that registers mid-session"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#241",
+   "gid": "04_Implementation/host_app_guide.md#240",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 241,
+   "local_id": 240,
    "statement": "The producer must scan the Annex-B payload for any NAL of type 5 (IDR), not just the first NAL; a typical CarPlay keyframe access unit is [SPS (7), PPS (8), IDR (5)] concatenated, so a first-NAL-only check returns false negatives 100% of the time.",
    "topic": "altvideo-cluster-keyframe",
    "source_lines": "1374",
@@ -4768,9 +4735,9 @@
    "quote": "The producer must scan the Annex-B payload for **any** NAL of type 5 (IDR), not just look at the first NAL."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#242",
+   "gid": "04_Implementation/host_app_guide.md#241",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 242,
+   "local_id": 241,
    "statement": "NAL types: 5=IDR, 7=SPS, 8=PPS.",
    "topic": "h264-nal",
    "source_lines": "1393",
@@ -4779,9 +4746,9 @@
    "quote": "the consumer extracts SPS (NAL type 7) and PPS (NAL type 8) from the first keyframe access unit"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#243",
+   "gid": "04_Implementation/host_app_guide.md#242",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 243,
+   "local_id": 242,
    "statement": "The Annex-B IDR scan checks for the 4-byte start code 00 00 00 01 then tests (next byte & 0x1F) == 5.",
    "topic": "altvideo-cluster-keyframe",
    "source_lines": "1383",
@@ -4790,9 +4757,9 @@
    "quote": "if ((buf[i + 4].toInt() and 0x1F) == 5) return true"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#244",
+   "gid": "04_Implementation/host_app_guide.md#243",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 244,
+   "local_id": 243,
    "statement": "The consumer supplies SPS/PPS as csd-0/csd-1 in the MediaFormat; some MediaCodec implementations (notably the AAOS emulator's software AVC decoder) reject inband CSD, so explicit csd-0/csd-1 is the spec-compliant path.",
    "topic": "altvideo-cluster-decode",
    "source_lines": "1393",
@@ -4801,9 +4768,9 @@
    "quote": "Some MediaCodec implementations (notably the AAOS emulator's software AVC decoder) reject inband CSD; explicit `csd-0` / `csd-1` is the spec-compliant path."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#245",
+   "gid": "04_Implementation/host_app_guide.md#244",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 245,
+   "local_id": 244,
    "statement": "After configure, the decoder feeds the keyframe access unit with BUFFER_FLAG_KEY_FRAME then continues with P-frames, rendering to a SurfaceView Surface with zero per-frame IPC.",
    "topic": "altvideo-cluster-decode",
    "source_lines": "1395",
@@ -4812,9 +4779,9 @@
    "quote": "the decoder feeds the same keyframe access unit as a regular input buffer with `BUFFER_FLAG_KEY_FRAME`"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#246",
+   "gid": "04_Implementation/host_app_guide.md#245",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 246,
+   "local_id": 245,
    "statement": "For 1:1 pixel mapping with no SurfaceFlinger scaling, the producer announces naviScreenInfo matching the usable cluster sandbox (1920×620 on emulator, not the physical 1920×720 panel), the consumer SurfaceView matches the same dimensions with no padding/insets, and calls holder.setFixedSize(streamW, streamH).",
    "topic": "altvideo-cluster-pixel",
    "source_lines": "1400",
@@ -4823,9 +4790,9 @@
    "quote": "Producer announces `naviScreenInfo {width, height, fps}` matching the **usable** cluster sandbox (not the physical panel — on the AAOS emulator that's 1920×620, not 1920×720)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#247",
+   "gid": "04_Implementation/host_app_guide.md#246",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 247,
+   "local_id": 246,
    "statement": "If dimensions differ along the chain SurfaceFlinger rescales asymmetrically; a verified failure mode is a 1888×572 View receiving a 1920×620 stream producing ~5.5% horizontal stretch.",
    "topic": "altvideo-cluster-pixel",
    "source_lines": "1405",
@@ -4836,9 +4803,9 @@
    "quote": "Verified failure mode: a 1888×572 View receiving a 1920×620 stream produces ~5.5% horizontal stretch."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#248",
+   "gid": "04_Implementation/host_app_guide.md#247",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 248,
+   "local_id": 247,
    "statement": "The host advertises a safe rect inside the announced screen geometry; the iPhone keeps interactive CarPlay UI inside it while map backgrounds may extend beyond.",
    "topic": "altvideo-cluster-safearea",
    "source_lines": "1409",
@@ -4847,9 +4814,9 @@
    "quote": "The host advertises a safe rect inside the announced screen geometry; the iPhone keeps interactive CarPlay UI (turn cards, lane guidance, speed-limit chips, search affordances) inside it."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#249",
+   "gid": "04_Implementation/host_app_guide.md#248",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 249,
+   "local_id": 248,
    "statement": "Example naviScreenInfo safearea JSON: width 1920, height 620, fps 30, safearea {x:100, y:0, width:1720, height:620, outside:0}; 100px horizontal inset accounts for the AAOS emulator's gauge arcs and zero vertical inset because the VirtualDisplay has no top/bottom obstructions.",
    "topic": "altvideo-cluster-safearea",
    "source_lines": "1414",
@@ -4858,9 +4825,9 @@
    "quote": "\"safearea\": {\n    \"x\": 100, \"y\": 0, \"width\": 1720, \"height\": 620, \"outside\": 0\n  }"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#250",
+   "gid": "04_Implementation/host_app_guide.md#249",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 250,
+   "local_id": 249,
    "statement": "On producer process kill/reinstall both onServiceDisconnected and linkToDeath fire; the consumer should schedule rebind with a 1s→2s→4s→...→30s exponential backoff.",
    "topic": "altvideo-cluster-lifecycle",
    "source_lines": "1429",
@@ -4869,9 +4836,9 @@
    "quote": "both `onServiceDisconnected` and `linkToDeath` fire — schedule rebind with backoff"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#251",
+   "gid": "04_Implementation/host_app_guide.md#250",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 251,
+   "local_id": 250,
    "statement": "On first 0x2C frame the cluster overlay flips visible (~50 ms), showing the iPhone's CarPlay nav UI at native 1:1 identical to a 1920×620 panel; on CarPlay session end/iPhone disconnect the overlay flips back to hidden.",
    "topic": "altvideo-cluster-ux",
    "source_lines": "1439",
@@ -4880,9 +4847,9 @@
    "quote": "First 0x2C frame: cluster overlay flips visible (~50 ms)"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#252",
+   "gid": "04_Implementation/host_app_guide.md#251",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 252,
+   "local_id": 251,
    "statement": "Reference implementation: ClusterHomeDisplay consumer in documents/reference/android_studio_emulator/ClusterHomeDisplay/ and producer in app/src/main/kotlin/com/carlink/ipc/ in carlink_native; INTEGRATION_CARLINK_NATIVE.md specifies the producer-side contract.",
    "topic": "altvideo-cluster-ref",
    "source_lines": "1446",
@@ -4891,9 +4858,9 @@
    "quote": "Working implementation in `documents/reference/android_studio_emulator/ClusterHomeDisplay/` (consumer side) and `app/src/main/kotlin/com/carlink/ipc/` in carlink_native (producer side)."
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#253",
+   "gid": "04_Implementation/host_app_guide.md#252",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 253,
+   "local_id": 252,
    "statement": "The two-app split is specific to AAOS because the cluster sandbox is platform-walled: a 3P APK can talk to USB but not the cluster display, while a priv-app can render to the cluster but cannot touch USB.",
    "topic": "altvideo-cluster",
    "source_lines": "1448",
@@ -4902,9 +4869,9 @@
    "quote": "The two-app split is specific to AAOS: the cluster sandbox is platform-walled"
   },
   {
-   "gid": "04_Implementation/host_app_guide.md#254",
+   "gid": "04_Implementation/host_app_guide.md#253",
    "file": "04_Implementation/host_app_guide.md",
-   "local_id": 254,
+   "local_id": 253,
    "statement": "The document was last updated 2026-02-17, adding the direct USB 0x29 GPS method, GNSSCapability prerequisites, and dual-path architecture.",
    "topic": "doc-meta",
    "source_lines": "5",
@@ -4932,7 +4899,7 @@
    "source_lines": "28",
    "confidence": "high",
    "signals": [],
-   "quote": "The fix has to be **on the adapter, inside `ARMiPhoneIAP2`, before the serializer runs.**"
+   "quote": "The fix has to be **on the adapter, inside `ARMiPhoneIAP2`, before"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#3",
@@ -4965,7 +4932,7 @@
    "source_lines": "66",
    "confidence": "high",
    "signals": [],
-   "quote": "file 0x76b38 .. 0x77000 (VMA 0x86b38 .. 0x87000) = 0x4C8 = 1224 bytes"
+   "quote": "= 0x4C8 = 1224 bytes"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#6",
@@ -5053,7 +5020,7 @@
    "source_lines": "114",
    "confidence": "high",
    "signals": [],
-   "quote": "must reproduce the patched ELF **byte-for-byte**"
+   "quote": "must reproduce the patched ELF"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#14",
@@ -5075,7 +5042,7 @@
    "source_lines": "94",
    "confidence": "high",
    "signals": [],
-   "quote": "factory packed /usr/sbin/ARMiPhoneIAP2 (UPX-LZMA, md5 d933c9d5, 181648 B)"
+   "quote": "(UPX-LZMA, md5 d933c9d5, 181648 B)"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#16",
@@ -5116,10 +5083,10 @@
    "local_id": 19,
    "statement": "Files received via 0x99 land executable, so the host need not send a separate chmod.",
    "topic": "patch-deploy",
-   "source_lines": "142",
+   "source_lines": "143",
    "confidence": "high",
    "signals": [],
-   "quote": "Received files land **executable**"
+   "quote": "**executable** (the driver carries a `chmod`/`0777` mode)"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#20",
@@ -5218,7 +5185,7 @@
    "source_lines": "202",
    "confidence": "high",
    "signals": [],
-   "quote": "v5 emits once per route-calc"
+   "quote": "v5 emits once per"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#29",
@@ -5240,7 +5207,7 @@
    "source_lines": "207",
    "confidence": "high",
    "signals": [],
-   "quote": "an alternate hook that read the maneuver list from the firmware"
+   "quote": "an alternate hook that read the maneuver"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#31",
@@ -5358,10 +5325,10 @@
    "local_id": 41,
    "statement": "The Missed recents entry and voicemail badge are rendered by iOS into the H.264 video (pixels), not telephony data.",
    "topic": "call-model",
-   "source_lines": "308",
+   "source_lines": "309",
    "confidence": "high",
    "signals": [],
-   "quote": "rendered by iOS into the H.264 video stream (pixels)"
+   "quote": "into the H.264 video stream (pixels)"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#42",
@@ -5515,7 +5482,7 @@
    "source_lines": "335",
    "confidence": "high",
    "signals": [],
-   "quote": "the iPhone withholds **ALL update messages**"
+   "quote": "the iPhone withholds ALL update messages"
   },
   {
    "gid": "04_Implementation/session_examples.md#1",
@@ -6302,7 +6269,7 @@
    "source_lines": "177",
    "confidence": "high",
    "signals": null,
-   "quote": "Navigation video is activated by sending `naviScreenInfo` in BoxSettings. `AdvancedFeatures=1` is NOT required when `naviScreenInfo` is provided."
+   "quote": "navigation video was activated by sending `naviScreenInfo` in BoxSettings"
   },
   {
    "gid": "04_Implementation/session_examples.md#72",
@@ -6327,21 +6294,21 @@
     "hedging",
     "inconclusive"
    ],
-   "quote": "cmd=508 (host echoes nav focus — recommended but inconclusive if required)"
+   "quote": "cmd=508 (host echoes nav focus)"
   },
   {
    "gid": "04_Implementation/session_examples.md#74",
    "file": "04_Implementation/session_examples.md",
    "local_id": 74,
-   "statement": "The 508 exchange was observed in captures, but testing could not conclusively isolate it as a requirement; the confirmed trigger is naviScreenInfo in BoxSettings.",
+   "statement": "For wireless CarPlay the host must proactively send the 508 kick; naviScreenInfo alone is NOT sufficient (in wireless sessions the adapter sends only 506, not 508).",
    "topic": "navigation-focus",
-   "source_lines": "131",
+   "source_lines": "185",
    "confidence": "medium",
    "signals": [
     "inconclusive",
     "hedging"
    ],
-   "quote": "The 508 exchange was observed in captures, but testing could not conclusively isolate it as a requirement. The confirmed trigger is `naviScreenInfo` in BoxSettings."
+   "quote": "the host must proactively send the 508 kick — `naviScreenInfo` alone is NOT sufficient"
   },
   {
    "gid": "04_Implementation/session_examples.md#75",
@@ -6699,12 +6666,12 @@
    "gid": "04_Implementation/session_examples.md#107",
    "file": "04_Implementation/session_examples.md",
    "local_id": 107,
-   "statement": "AA phone connection: at 39319ms IN type 163 SessionToken, encrypted blob (508 bytes per this table row).",
+   "statement": "AA phone connection: at 39319ms IN type 163 SessionToken, encrypted blob (444 bytes per this table row).",
    "topic": "session-token",
    "source_lines": "274",
    "confidence": "high",
    "signals": null,
-   "quote": "| 55 | 39319ms | IN | 163 | SessionToken | Encrypted blob (508 bytes) |"
+   "quote": "| 55 | 39319ms | IN | 163 | SessionToken | Encrypted blob (444 bytes) |"
   },
   {
    "gid": "04_Implementation/session_examples.md#108",
@@ -7242,10 +7209,10 @@
    "local_id": 156,
    "statement": "For CarPlay the host sends naviScreenInfo in BoxSettings and the adapter negotiates a second video stream; for Android Auto the host does NOT send naviScreenInfo and no second video stream protocol exists.",
    "topic": "navigation-video",
-   "source_lines": "451",
+   "source_lines": "452",
    "confidence": "high",
    "signals": null,
-   "quote": "**CarPlay:** Host sends `naviScreenInfo` in BoxSettings → adapter negotiates second video stream\n- **Android Auto:** Host does NOT send `naviScreenInfo` → no second video stream protocol exists"
+   "quote": "**Android Auto:** Host does NOT send `naviScreenInfo` → no second video stream protocol exists"
   },
   {
    "gid": "04_Implementation/session_examples.md#157",
