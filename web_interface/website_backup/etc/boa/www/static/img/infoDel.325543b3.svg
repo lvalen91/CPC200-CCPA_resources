@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 3</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图下载-无阴影" transform="translate(-92.000000, -1719.000000)">
+            <g id="编组-3" transform="translate(92.000000, 1719.000000)">
+                <rect id="矩形备份-7" fill="#ECECEF" x="0" y="0" width="40" height="40" rx="12"></rect>
+                <g id="编组" transform="translate(16.000000, 16.000000)" stroke="#FD564F" stroke-linecap="round" stroke-width="2">
+                    <line x1="1.13686838e-13" y1="9.09494702e-13" x2="8" y2="8" id="路径-3"></line>
+                    <line x1="8" y1="0" x2="0" y2="8" id="路径-3备份"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -416,8 +416,62 @@ Standard UPX and radare2 string extraction fail due to packing. Runtime analysis
 
 ---
 
+## Replacement Web Interface (`web_interface/`)
+
+A community-built **drop-in replacement** for the OEM Vue.js UI lives in the repo at
+[`web_interface/`](../../web_interface/) (origin: `github.com/lvalen91/CPC200-CCPA-Alt-Website`).
+It targets the **2025.10.x** firmware and **requires a custom firmware with SSH enabled** (see
+[`firmware/custom/`](../../firmware/custom/)) because it is deployed over `scp`/`ssh`, not via the
+OEM upload path.
+
+### What it changes
+
+| Aspect | OEM | Replacement |
+|--------|-----|-------------|
+| Footprint | ~500–712 KB | ~70 KB (vanilla JS, 0 deps) |
+| Framework | Vue.js 2.x + webpack | hand-written `index.html` + `app.js` |
+| Languages | 6 | English only |
+| Firmware-update page | present | **removed** (avoids accidental OTA / bricking) |
+| Hidden settings | dropped in 2025.10 UI | restored (Mic/Audio Source, Mouse/Knob/Background mode, GPS, Advanced Features, etc.) |
+
+It **reuses the OEM backend** for the documented commands — `api.js` signs requests to
+`server.cgi` with the same `md5(sorted_params + SECRET)` scheme and the same secret
+(`HweL*@M@JEYUnvPw9G36MVB9X6u@2qxK`) described above — and **retains the stock `server.cgi` /
+`upload.cgi`** binaries unchanged.
+
+### Added backend CGIs (`/etc/boa/cgi-bin/`)
+
+Plain `/bin/sh` scripts, all `CORS *` and (unlike `server.cgi`) **unauthenticated**:
+
+| CGI | Function |
+|-----|----------|
+| `config.cgi` | Read/write via `/usr/sbin/riddleBoxCfg`; `?mode=full` dumps **all 106 config keys** (79 int + 24 string + 3 array — cf. `../06_Reference/binary_analysis/config_key_analysis.md`). Writes restricted to a digit-only value + allowlisted keys. |
+| `sysinfo.cgi` | CPU%, mem (MB), temp, uptime, wlan0 RX/TX from `/proc` + `/sys` (2 s refresh) |
+| `streamstats.cgi` | Live video/audio fps + KB/s parsed from `/tmp/ttyLog` "box video frame rate" lines |
+| `governor.cgi` | Get/set CPU scaling governor (input sanitized `a-z`) |
+| `logs.cgi` | Download `dmesg`, userspace log, or `/etc/riddle.conf` |
+| `wifi_clients.cgi` | AP client list (`/tmp/wifi_connection_list` → `hostapd_cli` → ARP fallback) |
+| `restart.cgi` | Backgrounded `busybox reboot` |
+| `term.cgi` | **Web shell — unauthenticated root command execution** with a persistent working directory across calls |
+
+> **Security (tool-introduced, not stock):** `term.cgi` and the other unauthenticated CGIs add
+> root-level exposure to anyone on the adapter's AP. On a research unit running the SSH CFW this
+> matches the existing root-no-password dropbear/telnet exposure, but it is **not** a property of
+> the as-shipped firmware and is intentionally kept out of `../05_Security_Analysis/security_findings.md`
+> (which catalogs the device as shipped).
+
+### Install / restore
+
+`web_interface/cpc200_website.sh {install|restore|status} <ip>` over SSH. The installer also moves
+`/script/custom_init.sh` and `/mnt/UPAN/www` aside to defeat the USB www-override path. The pristine
+**unpacked OEM web app** is preserved at `web_interface/website_backup/` (the restore source) and
+doubles as a citable artifact of the original Vue.js interface.
+
+---
+
 ## Related Documentation
 
 - `configuration.md` - Full riddle.conf parameter reference
 - `../05_Security_Analysis/security_findings.md` - Security issues
 - `../04_Implementation/firmware_update.md` - Firmware update process
+- [`web_interface/`](../../web_interface/) - Replacement web UI + installer (this repo)

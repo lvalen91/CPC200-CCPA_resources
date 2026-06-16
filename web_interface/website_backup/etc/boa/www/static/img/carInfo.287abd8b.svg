@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 12备份</title>
+    <defs>
+        <linearGradient x1="98.9378176%" y1="50%" x2="0.978098081%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#A3BDFF" stop-opacity="0.801389894" offset="0%"></stop>
+            <stop stop-color="#CCDAFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0.112594925%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#70AEFF" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图下载-无阴影" transform="translate(-91.000000, -790.000000)">
+            <g id="编组-12备份" transform="translate(91.000000, 790.000000)">
+                <rect id="矩形备份-5" fill-opacity="0.9" fill="#F5F8FF" x="0" y="0" width="32" height="32" rx="6"></rect>
+                <path d="M24.541,8.922 C24.173,8.348 23.538,8 22.857,8 L14.694,8 C14.168,8 13.468,8.335 13.137,8.744 L9.395,13.381 C9.149,13.685 8.819,13.911 8.447,14.03 L5.392,15.005 C4.563,15.27 4,16.04 4,16.91 L4,20.493 C4,21.598 4.895,22.493 6,22.493 L25.694,22.493 C26.798,22.493 27.694,21.598 27.694,20.493 L27.694,14.433 C27.694,14.05 27.584,13.676 27.378,13.354 L24.541,8.922 Z" id="Fill-1" fill-opacity="0.8" fill="url(#linearGradient-1)"></path>
+                <path d="M11.518,24.9933 L11.518,24.9933 C10.138,24.9933 9.018,23.8753 9.018,22.4923 C9.018,21.1113 10.138,19.9933 11.518,19.9933 C12.898,19.9933 14.018,21.1113 14.018,22.4923 C14.018,23.8753 12.898,24.9933 11.518,24.9933" id="Fill-3" fill="url(#linearGradient-2)"></path>
+                <path d="M22.9139,24.9933 L22.9139,24.9933 C21.5339,24.9933 20.4139,23.8753 20.4139,22.4923 C20.4139,21.1113 21.5339,19.9933 22.9139,19.9933 C24.2939,19.9933 25.4139,21.1113 25.4139,22.4923 C25.4139,23.8753 24.2939,24.9933 22.9139,24.9933" id="Fill-5" fill="url(#linearGradient-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

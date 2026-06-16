@@ -13,7 +13,7 @@
   "01_Firmware_Architecture/web_interface.md",
   "01_Firmware_Architecture/web_settings_reference.md"
  ],
- "claim_count": 1155,
+ "claim_count": 1164,
  "claims": [
   {
    "gid": "01_Firmware_Architecture/configuration.md#1",
@@ -11085,7 +11085,7 @@
    "local_id": 111,
    "statement": "Related documentation: configuration.md (full riddle.conf parameter reference), vulnerabilities.md (security issues), firmware_update.md (firmware update process).",
    "topic": "cross_reference",
-   "source_lines": "421",
+   "source_lines": "474",
    "confidence": "high",
    "signals": [],
    "quote": "`configuration.md` - Full riddle.conf parameter reference"
@@ -12882,6 +12882,105 @@
    "confidence": "high",
    "signals": [],
    "quote": "- `configuration.md` - Full riddleBoxCfg reference"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#112",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 112,
+   "statement": "A community-built drop-in replacement for the OEM Vue.js web UI is included in the repository at web_interface/ (origin: github.com/lvalen91/CPC200-CCPA-Alt-Website), targeting 2025.10.x firmware.",
+   "topic": "replacement_web_ui",
+   "source_lines": "419",
+   "confidence": "high",
+   "signals": [],
+   "quote": "A community-built **drop-in replacement** for the OEM Vue.js UI lives in the repo at"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#113",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 113,
+   "statement": "The replacement web interface requires a custom firmware with SSH enabled because it is deployed over scp/ssh rather than the OEM upload path.",
+   "topic": "replacement_web_ui",
+   "source_lines": "423",
+   "confidence": "high",
+   "signals": [],
+   "quote": "requires a custom firmware with SSH enabled"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#114",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 114,
+   "statement": "The replacement web UI is ~70 KB of vanilla JavaScript with zero dependencies, versus the OEM Vue.js UI's ~500-712 KB.",
+   "topic": "replacement_web_ui",
+   "source_lines": "431",
+   "confidence": "high",
+   "signals": [],
+   "quote": "~70 KB (vanilla JS, 0 deps)"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#115",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 115,
+   "statement": "The replacement web UI removes the firmware-update page to avoid accidental OTA updates / bricking.",
+   "topic": "replacement_web_ui",
+   "source_lines": "434",
+   "confidence": "high",
+   "signals": [],
+   "quote": "avoids accidental OTA / bricking"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#116",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 116,
+   "statement": "The replacement web UI reuses the OEM backend: api.js signs requests to server.cgi with the same md5(sorted_params + SECRET) scheme and secret, and retains the stock server.cgi and upload.cgi binaries unchanged.",
+   "topic": "replacement_web_ui",
+   "source_lines": "437",
+   "confidence": "high",
+   "signals": [],
+   "quote": "It **reuses the OEM backend** for the documented commands"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#117",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 117,
+   "statement": "The added config.cgi endpoint reads/writes via /usr/sbin/riddleBoxCfg and with ?mode=full dumps all 106 config keys (79 integer + 24 string + 3 array); writes are restricted to a digit-only value and an allowlist of keys.",
+   "topic": "replacement_web_ui",
+   "source_lines": "448",
+   "confidence": "high",
+   "signals": [],
+   "quote": "dumps **all 106 config keys**"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#118",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 118,
+   "statement": "The added term.cgi endpoint is a web shell providing unauthenticated root command execution with a working directory persisted across calls.",
+   "topic": "replacement_web_ui",
+   "source_lines": "455",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**Web shell — unauthenticated root command execution**"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#119",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 119,
+   "statement": "The replacement web UI's unauthenticated CGIs are tool-introduced exposure, not a property of the as-shipped firmware, and are intentionally excluded from security_findings.md (which catalogs the stock device).",
+   "topic": "replacement_web_ui",
+   "source_lines": "457",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**Security (tool-introduced, not stock):**"
+  },
+  {
+   "gid": "01_Firmware_Architecture/web_interface.md#120",
+   "file": "01_Firmware_Architecture/web_interface.md",
+   "local_id": 120,
+   "statement": "The installer cpc200_website.sh {install|restore|status} <ip> deploys over SSH, moves /script/custom_init.sh and /mnt/UPAN/www aside to defeat the USB www-override path, and preserves the unpacked OEM web app at web_interface/website_backup/ as the restore source.",
+   "topic": "replacement_web_ui",
+   "source_lines": "463",
+   "confidence": "high",
+   "signals": [],
+   "quote": "over SSH. The installer also moves"
   }
  ]
 }

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0c798c"],{"50fa":function(c,n,p){c.exports=p.p+"static/img/back-white.8c3ba7f6.svg"}}]);

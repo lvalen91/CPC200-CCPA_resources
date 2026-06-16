@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d237173"],{fa46:function(a,n,o){a.exports=o.p+"static/img/boxImg_active.4979afa2.svg"}}]);

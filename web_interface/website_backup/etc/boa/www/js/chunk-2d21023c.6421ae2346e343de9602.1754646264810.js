@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d21023c"],{b72c:function(n,c,o){n.exports=o.p+"static/img/infoDel.325543b3.svg"}}]);

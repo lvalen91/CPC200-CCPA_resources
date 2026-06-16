@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 7备份</title>
+    <defs>
+        <linearGradient x1="50%" y1="0.112594925%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#70AEFF" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="98.9378176%" y1="50%" x2="0.978098081%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#A3BDFF" stop-opacity="0.801389894" offset="0%"></stop>
+            <stop stop-color="#CCDAFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="98.9378176%" y1="50%" x2="0.978098081%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#CCDAFF" offset="0%"></stop>
+            <stop stop-color="#A3BDFF" stop-opacity="0.801389894" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0.112594925%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#70AEFF" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图下载-无阴影" transform="translate(-91.000000, -736.000000)">
+            <g id="编组-7备份" transform="translate(91.000000, 736.000000)">
+                <rect id="矩形备份-8" fill-opacity="0.9" fill="#F5F8FF" x="0" y="0" width="32" height="32" rx="6"></rect>
+                <path d="M6.01029333,16.5149 C6.0093,16.0999 6.3443,15.7639 6.7583,15.7629 L17.6893,15.7369 C18.1043,15.7369 18.4403,16.0719 18.4413067,16.4849 C18.4423,16.8999 18.1073,17.2359 17.6933,17.2369 L6.7623,17.2629 C6.3473,17.2629 6.0113,16.9289 6.01029333,16.5149 Z" id="Fill-3" fill="url(#linearGradient-1)"></path>
+                <path d="M7.5,11 C6.672,11 6,10.328 6,9.5 C6,8.672 6.672,8 7.5,8 L24.5,8 C25.328,8 26,8.672 26,9.5 C26,10.328 25.328,11 24.5,11 L7.5,11 Z" id="Fill-15" fill-opacity="0.8" fill="url(#linearGradient-2)"></path>
+                <path d="M7.5,25 C6.672,25 6,24.328 6,23.5 C6,22.672 6.672,22 7.5,22 L24.5,22 C25.328,22 26,22.672 26,23.5 C26,24.328 25.328,25 24.5,25 L7.5,25 Z" id="Fill-17" fill-opacity="0.8" fill="url(#linearGradient-3)"></path>
+                <path d="M21.4853,17.2502 C21.0713,17.2502 20.7353,16.9142 20.7353,16.5002 C20.7353,16.0862 21.0713,15.7502 21.4853,15.7502 L25.2603,15.7502 C25.6743,15.7502 26.0103,16.0862 26.0103,16.5002 C26.0103,16.9142 25.6743,17.2502 25.2603,17.2502 L21.4853,17.2502 Z" id="Fill-5" fill="url(#linearGradient-4)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

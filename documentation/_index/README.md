@@ -65,10 +65,10 @@ content is removed. The index should never accumulate references to content that
 | Cluster | Claims | Docs |
 |---|---:|---:|
 | 00_Root | 221 | 2 |
-| 01_Firmware_Architecture | 1155 | 10 |
+| 01_Firmware_Architecture | 1164 | 10 |
 | 02_Protocol_Reference | 2364 | 12 |
 | 03_Audio_Processing | 332 | 2 |
 | 04_Implementation | 694 | 5 |
 | 05_Security_Analysis | 442 | 3 |
 | 06_Reference | 1268 | 6 |
-| **Total** | **6476** | **40** |
+| **Total** | **6485** | **40** |

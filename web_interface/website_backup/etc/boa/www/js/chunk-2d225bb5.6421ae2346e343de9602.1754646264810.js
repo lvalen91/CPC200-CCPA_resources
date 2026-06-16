@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d225bb5"],{e63a:function(n,o,p){n.exports=p.p+"static/img/video.a02f6198.svg"}}]);

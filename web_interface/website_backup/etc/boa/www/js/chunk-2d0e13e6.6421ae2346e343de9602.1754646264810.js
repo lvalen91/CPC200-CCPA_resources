@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0e13e6"],{"7a39":function(e,n,o){e.exports=o.p+"static/img/otherSettings.f9b2ec8f.svg"}}]);

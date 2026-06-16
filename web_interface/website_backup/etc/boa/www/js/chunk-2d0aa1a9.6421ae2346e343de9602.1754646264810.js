@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0aa1a9"],{"101e":function(a,c,n){a.exports=n.p+"static/img/feedback.a1fc804c.svg"}}]);

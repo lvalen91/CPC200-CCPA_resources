@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Settings</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; margin: 0; padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; }
+        h1 { color: #00d4ff; text-align: center; margin-bottom: 30px; }
+        .section { background: #16213e; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .section h2 { color: #00d4ff; margin-top: 0; font-size: 18px; border-bottom: 1px solid #0f3460; padding-bottom: 10px; }
+        .setting { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #0f3460; }
+        .setting:last-child { border-bottom: none; }
+        .setting-name { font-weight: 500; }
+        .setting-desc { font-size: 12px; color: #888; margin-top: 4px; }
+        .toggle { position: relative; width: 50px; height: 26px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .3s; border-radius: 26px; }
+        .toggle .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #fff; transition: .3s; border-radius: 50%; }
+        .toggle input:checked + .slider { background: #00d4ff; }
+        .toggle input:checked + .slider:before { transform: translateX(24px); }
+        select, input[type="number"] { padding: 8px; border: 1px solid #0f3460; border-radius: 6px; background: #0f3460; color: #fff; }
+        input[type="number"] { width: 80px; text-align: center; }
+        select { min-width: 140px; }
+        .btn { background: #00d4ff; color: #000; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; }
+        .btn:hover { background: #00b8e6; }
+        .status { text-align: center; padding: 10px; margin-top: 10px; border-radius: 6px; display: none; }
+        .status.success { display: block; background: #0a3d0a; color: #4caf50; }
+        .status.error { display: block; background: #3d0a0a; color: #f44336; }
+        .status.loading { display: block; background: #3d3d0a; color: #ffeb3b; }
+        .refresh-btn { background: #0f3460; margin-bottom: 20px; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #00d4ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Advanced Settings</h1>
+        <button class="btn refresh-btn" onclick="loadSettings()">Refresh Settings</button>
+
+        <div class="section">
+            <h2>System Monitor</h2>
+            <div class="setting"><div><div class="setting-name">Uptime</div></div><span id="sys-uptime">--</span></div>
+            <div class="setting"><div><div class="setting-name">Load Average</div></div><span id="sys-load">--</span></div>
+            <div class="setting"><div><div class="setting-name">CPU Temp</div></div><span id="sys-cpu-temp">--</span></div>
+            <div class="setting"><div><div class="setting-name">CPU Freq</div></div><span id="sys-cpu-freq">--</span></div>
+            <div class="setting"><div><div class="setting-name">Memory</div><div class="setting-desc">Used / Total</div></div><span id="sys-mem">--</span></div>
+            <div class="setting"><div><div class="setting-name">Disk /tmp</div><div class="setting-desc">Runtime storage (volatile)</div></div><span id="sys-disk-tmp">--</span></div>
+            <div class="setting"><div><div class="setting-name">Disk /</div><div class="setting-desc">Root filesystem (persistent)</div></div><span id="sys-disk-root">--</span></div>
+            <div class="setting"><div><div class="setting-name">WiFi RX / TX</div><div class="setting-desc">Since boot</div></div><span id="sys-net">--</span></div>
+            <div class="setting" style="flex-direction:column;align-items:flex-start"><div><div class="setting-name">WiFi Clients</div></div><div id="sys-wifi-clients" style="font-size:12px;margin-top:8px;width:100%">--</div></div>
+        </div>
+
+        <div class="section">
+            <h2>Video / H.264 Settings</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">SPS/PPS Mode</div>
+                    <div class="setting-desc">How NAL units (SPS type 7, PPS type 8) are processed. Re-inject=prepend before IDR, Cache=store and replay on errors, Repeat=duplicate in every packet</div>
+                </div>
+                <select id="SpsPpsMode" onchange="setSetting('SpsPpsMode', this.value)">
+                    <option value="0">Auto (use LastPhoneSpsPps)</option>
+                    <option value="1">Re-inject before IDR frames</option>
+                    <option value="2">Cache and replay on errors</option>
+                    <option value="3">Repeat in every packet</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Prefer SPS/PPS Type</div>
+                    <div class="setting-desc">NAL unit encoding preference for decoder compatibility</div>
+                </div>
+                <select id="BoxConfig_preferSPSPPSType" onchange="setSetting('BoxConfig_preferSPSPPSType', this.value)">
+                    <option value="0">Default</option>
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Keyframe Repeat</div>
+                    <div class="setting-desc">Re-transmit last IDR frame when USB buffer underrun detected. Helps displays that drop frames</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="RepeatKeyframe" onchange="setSetting('RepeatKeyframe', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Auto Keyframe Request</div>
+                    <div class="setting-desc">Send RequestKeyFrame (cmd 0x1c) to phone when decoder reports corruption or sync loss</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="NeedKeyFrame" onchange="setSetting('NeedKeyFrame', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Send Empty Frames</div>
+                    <div class="setting-desc">Send zero-length timing packets during video gaps to prevent decoder stall</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="SendEmptyFrame" onchange="setSetting('SendEmptyFrame', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Block Bitrate Reduction</div>
+                    <div class="setting-desc">Prevent CarPlay adaptive bitrate from reducing quality on congestion (may cause frame drops instead)</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="NotCarPlayH264DecreaseMode" onchange="setSetting('NotCarPlayH264DecreaseMode', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Video Bitrate</div>
+                    <div class="setting-desc">Hint to phone encoder: 0=auto, 1-5=low (~2-5Mbps), 6-15=medium, 16-20=high (~13-20Mbps)</div>
+                </div>
+                <input type="number" id="VideoBitRate" min="0" max="20" step="1" onchange="setSetting('VideoBitRate', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Custom Frame Rate</div>
+                    <div class="setting-desc">Sent in Open message (type 0x01) to phone. 0=auto (~30fps), 20-60=fixed FPS</div>
+                </div>
+                <input type="number" id="CustomFrameRate" min="0" max="60" step="5" onchange="setSetting('CustomFrameRate', this.value)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Performance / Fluency</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Improved Fluency</div>
+                    <div class="setting-desc">Increase USB bulk transfer buffers and adjust pcm_get_buffer_size. Slightly higher latency, smoother playback</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="ImprovedFluency" onchange="setSetting('ImprovedFluency', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Fast Connect</div>
+                    <div class="setting-desc">Skip BT discovery on reconnect if MAC matches LastConnectedDevice. Saves ~2-5 seconds</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="FastConnect" onchange="setSetting('FastConnect', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Heartbeat</div>
+                    <div class="setting-desc">Send periodic HeartBeat (msg 0xAA) every ~1s. Allows host to detect adapter responsiveness</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="SendHeartBeat" onchange="setSetting('SendHeartBeat', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Background Mode</div>
+                    <div class="setting-desc">Hide connection UI overlay during init. Fixes blur/composite issues on some head units</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="BackgroundMode" onchange="setSetting('BackgroundMode', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Start Delay</div>
+                    <div class="setting-desc">usleep() before USB accessory init. For head units that power USB before ready</div>
+                </div>
+                <input type="number" id="BoxConfig_DelayStart" min="0" max="30" step="1" onchange="setSetting('BoxConfig_DelayStart', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Media Latency</div>
+                    <div class="setting-desc">Audio PCM buffer size via tinyalsa. Lower=sync but may skip, higher=stable but A/V desync</div>
+                </div>
+                <input type="number" id="MediaLatency" min="300" max="2000" step="50" onchange="setSetting('MediaLatency', this.value)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>USB / Connection Mode</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">USB Connection Mode</div>
+                    <div class="setting-desc">USB enumeration timing. Mode 2=extended descriptor delays, Mode 3=slower handshake with retries</div>
+                </div>
+                <select id="USBConnectedMode" onchange="setSetting('USBConnectedMode', this.value)">
+                    <option value="0">Standard USB 2.0 timing</option>
+                    <option value="1">Extended descriptor delays</option>
+                    <option value="2">Compatibility (slow + retries)</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">USB Transfer Mode</div>
+                    <div class="setting-desc">Bulk transfer packetization. Compact=smaller packets for limited-buffer head units</div>
+                </div>
+                <select id="USBTransMode" onchange="setSetting('USBTransMode', this.value)">
+                    <option value="0">Normal bulk transfers</option>
+                    <option value="1">Compact (smaller packets)</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">iAP2 Transport Mode</div>
+                    <div class="setting-desc">iPhone Accessory Protocol framing. Compatible=longer ACK timeouts, smaller messages</div>
+                </div>
+                <select id="iAP2TransMode" onchange="setSetting('iAP2TransMode', this.value)">
+                    <option value="0">Normal iAP2 framing</option>
+                    <option value="1">Compatible (old car systems)</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Wired Connect</div>
+                    <div class="setting-desc">Check /dev/usb_accessory for cable. Fallback to wired CarPlay if wireless fails</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="WiredConnect" onchange="setSetting('WiredConnect', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Auto Reset USB</div>
+                    <div class="setting-desc">Power-cycle i.MX ci_hdrc USB controller via sysfs on disconnect (NOT factory reset)</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="AutoResetUSB" onchange="setSetting('AutoResetUSB', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Auto Connect</div>
+                    <div class="setting-desc">Read LastConnectedDevice and initiate BT connection on boot via D-Bus StartAutoConnect</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="NeedAutoConnect" onchange="setSetting('NeedAutoConnect', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Auto Update</div>
+                    <div class="setting-desc">Run /script/update_box_ota.sh automatically when updates available</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="AutoUpdate" onchange="setSetting('AutoUpdate', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Audio Settings</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Media Quality</div>
+                    <div class="setting-desc">PCM sample rate via tinyalsa pcm_open. CD=44.1kHz (compatible), DVD=48kHz (better)</div>
+                </div>
+                <select id="MediaQuality" onchange="setSetting('MediaQuality', this.value)">
+                    <option value="0">CD 44.1kHz (compatible)</option>
+                    <option value="1">DVD 48kHz (better quality)</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Microphone Source</div>
+                    <div class="setting-desc">AudioSignal_INPUT_CONFIG routing. Car=/dev/snd/pcmC0D0c, Box=3.5mm input, Phone=stays on phone</div>
+                </div>
+                <select id="MicType" onchange="setSetting('MicType', this.value)">
+                    <option value="0">Car Mic (pcmC0D0c)</option>
+                    <option value="1">Box Mic (3.5mm jack)</option>
+                    <option value="2">Phone Mic (on device)</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Microphone Mode</div>
+                    <div class="setting-desc">WebRTC noise suppression algorithm (WebRtcNs_AnalyzeCore). Auto selects based on noise level</div>
+                </div>
+                <select id="MicMode" onchange="setSetting('MicMode', this.value)">
+                    <option value="0">Auto (detect noise)</option>
+                    <option value="1">WebRTC NS Mode 1</option>
+                    <option value="2">WebRTC NS Mode 2</option>
+                    <option value="3">WebRTC NS Mode 3</option>
+                    <option value="4">WebRTC NS Mode 4</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Mic Gain</div>
+                    <div class="setting-desc">Boost microphone input gain in audio pipeline</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="MicGainSwitch" onchange="setSetting('MicGainSwitch', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Bluetooth Audio</div>
+                    <div class="setting-desc">Route media audio via BT A2DP instead of USB</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="BtAudio" onchange="setSetting('BtAudio', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Bluetooth Phone</div>
+                    <div class="setting-desc">Route phone call audio via BT HFP instead of USB</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="UseBTPhone" onchange="setSetting('UseBTPhone', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Echo Latency</div>
+                    <div class="setting-desc">WebRTC delay_estimator parameter for AEC. Match to your car's audio path latency</div>
+                </div>
+                <input type="number" id="EchoLatency" min="20" max="2000" step="20" onchange="setSetting('EchoLatency', this.value)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Audio Packet Settings</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Media Packet Length</div>
+                    <div class="setting-desc">USB bulk transfer size for music. Larger=fewer transactions, smaller=lower latency</div>
+                </div>
+                <input type="number" id="MediaPacketLen" min="200" max="40000" step="100" onchange="setSetting('MediaPacketLen', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">TTS Packet Length</div>
+                    <div class="setting-desc">USB bulk transfer size for navigation voice (Siri directions)</div>
+                </div>
+                <input type="number" id="TtsPacketLen" min="200" max="40000" step="100" onchange="setSetting('TtsPacketLen', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">VR Packet Length</div>
+                    <div class="setting-desc">USB bulk transfer size for voice recognition / Siri mic data</div>
+                </div>
+                <input type="number" id="VrPacketLen" min="200" max="40000" step="100" onchange="setSetting('VrPacketLen', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">TTS Volume Gain</div>
+                    <div class="setting-desc">Apply gain boost to navigation voice audio stream</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="TtsVolumGain" onchange="setSetting('TtsVolumGain', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">VR Volume Gain</div>
+                    <div class="setting-desc">Apply gain boost to phone call voice audio stream</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="VrVolumGain" onchange="setSetting('VrVolumGain', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Display Settings</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Display Size</div>
+                    <div class="setting-desc">Screen mapping mode sent to phone</div>
+                </div>
+                <select id="DisplaySize" onchange="setSetting('DisplaySize', this.value)">
+                    <option value="0">Auto (detect from HU)</option>
+                    <option value="1">Small (S) fixed</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Original Resolution</div>
+                    <div class="setting-desc">Use phone's native resolution without scaling to head unit</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="OriginalResolution" onchange="setSetting('OriginalResolution', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Mouse Mode</div>
+                    <div class="setting-desc">Convert touch to cursor movements for touchpad/iDrive controllers. Triple-tap=toggle drag</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="MouseMode" onchange="setSetting('MouseMode', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Knob Mode</div>
+                    <div class="setting-desc">Remap steering wheel / center console button inputs</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="KnobMode" onchange="setSetting('KnobMode', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Screen DPI</div>
+                    <div class="setting-desc">CarPlay rendering density in Open msg. 0=auto, 160=MDPI, 240=HDPI, 320=XHDPI, 480=XXHDPI</div>
+                </div>
+                <input type="number" id="ScreenDPI" min="0" max="480" step="10" onchange="setSetting('ScreenDPI', this.value)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>HiCar / Android Auto</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">HiCar Connect Mode</div>
+                    <div class="setting-desc">Huawei HiCar connection method (uses ARMHiCar process)</div>
+                </div>
+                <select id="HiCarConnectMode" onchange="setSetting('HiCarConnectMode', this.value)">
+                    <option value="0">Default</option>
+                    <option value="1">Alternative</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Auto Play Music</div>
+                    <div class="setting-desc">Automatically start media playback when HiCar connects</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="AutoPlauMusic" onchange="setSetting('AutoPlauMusic', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">HUD GPS</div>
+                    <div class="setting-desc">Pass car's GPS antenna coordinates to phone via CarPlay protocol for better positioning</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="HudGPSSwitch" onchange="setSetting('HudGPSSwitch', this.checked ? 1 : 0)"><span class="slider"></span></label>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Android Auto Width</div>
+                    <div class="setting-desc">Display width in pixels sent to Android Auto protocol</div>
+                </div>
+                <input type="number" id="AndroidAutoWidth" min="800" max="4096" step="10" onchange="setSetting('AndroidAutoWidth', this.value)">
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Android Auto Height</div>
+                    <div class="setting-desc">Display height in pixels sent to Android Auto protocol</div>
+                </div>
+                <input type="number" id="AndroidAutoHeight" min="480" max="4096" step="10" onchange="setSetting('AndroidAutoHeight', this.value)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>CPU / Memory Settings</h2>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">CPU Governor</div>
+                    <div class="setting-desc">Linux cpufreq governor. performance=max freq, ondemand=dynamic scaling, powersave=min freq</div>
+                </div>
+                <select id="cpu-governor" onchange="setGovernor(this.value)">
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+            <div class="setting">
+                <div>
+                    <div class="setting-name">Overcommit Memory</div>
+                    <div class="setting-desc">/proc/sys/vm/overcommit_memory. 0=heuristic (may OOM), 1=always allow (risky but faster malloc)</div>
+                </div>
+                <select id="overcommit" onchange="setOvercommit(this.value)">
+                    <option value="0">Heuristic (safe)</option>
+                    <option value="1">Always allow (perf)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>System Tools</h2>
+            <div class="setting"><div><div class="setting-name">Download ttyLog</div><div class="setting-desc">ARMadb-driver userspace debug output (/var/log/ttyLog)</div></div><a href="/cgi-bin/api.cgi?ttylog" class="btn" style="width:auto;padding:8px 16px;text-decoration:none">Download</a></div>
+            <div class="setting"><div><div class="setting-name">Download dmesg</div><div class="setting-desc">Kernel ring buffer - USB, WiFi, BT driver messages</div></div><a href="/cgi-bin/api.cgi?dmesg" class="btn" style="width:auto;padding:8px 16px;text-decoration:none">Download</a></div>
+            <div class="setting"><div><div class="setting-name">Download Config</div><div class="setting-desc">/etc/riddle.conf - all current setting key=value pairs</div></div><a href="/cgi-bin/api.cgi?config" class="btn" style="width:auto;padding:8px 16px;text-decoration:none">Download</a></div>
+            <div class="setting"><div><div class="setting-name">Restore Config</div><div class="setting-desc">Copy /etc/riddle_default.conf to /etc/riddle.conf (factory defaults)</div></div><button class="btn" onclick="doRestore()" style="width:auto;padding:8px 16px;background:#ff9800">Restore</button></div>
+            <div class="setting"><div><div class="setting-name">Reboot</div><div class="setting-desc">Trigger kRiddleHUDComand_A_Reboot via D-Bus to restart adapter</div></div><button class="btn" onclick="doReboot()" style="width:auto;padding:8px 16px;background:#d32f2f">Reboot</button></div>
+        </div>
+
+        <div id="status" class="status"></div>
+        <a href="/" class="back-link">Back to Main Settings</a>
+    </div>
+
+    <script>
+    // MD5 implementation
+    !function(n){"use strict";function d(n,d){var t=(65535&n)+(65535&d);return(n>>16)+(d>>16)+(t>>16)<<16|65535&t}function t(n,t,e,r,o,u){return d((f=d(d(t,n),d(r,u)))<<(c=o)|f>>>32-c,e);var f,c}function e(n,d,e,r,o,u,f){return t(d&e|~d&r,n,d,o,u,f)}function r(n,d,e,r,o,u,f){return t(d&r|e&~r,n,d,o,u,f)}function o(n,d,e,r,o,u,f){return t(d^e^r,n,d,o,u,f)}function u(n,d,e,r,o,u,f){return t(e^(d|~r),n,d,o,u,f)}function f(n,t){n[t>>5]|=128<<t%32,n[14+(t+64>>>9<<4)]=t;var f,c,i,a,h,l=1732584193,g=-271733879,v=-1732584194,m=271733878;for(f=0;f<n.length;f+=16)c=l,i=g,a=v,h=m,l=e(l,g,v,m,n[f],7,-680876936),m=e(m,l,g,v,n[f+1],12,-389564586),v=e(v,m,l,g,n[f+2],17,606105819),g=e(g,v,m,l,n[f+3],22,-1044525330),l=e(l,g,v,m,n[f+4],7,-176418897),m=e(m,l,g,v,n[f+5],12,1200080426),v=e(v,m,l,g,n[f+6],17,-1473231341),g=e(g,v,m,l,n[f+7],22,-45705983),l=e(l,g,v,m,n[f+8],7,1770035416),m=e(m,l,g,v,n[f+9],12,-1958414417),v=e(v,m,l,g,n[f+10],17,-42063),g=e(g,v,m,l,n[f+11],22,-1990404162),l=e(l,g,v,m,n[f+12],7,1804603682),m=e(m,l,g,v,n[f+13],12,-40341101),v=e(v,m,l,g,n[f+14],17,-1502002290),g=e(g,v,m,l,n[f+15],22,1236535329),l=r(l,g,v,m,n[f+1],5,-165796510),m=r(m,l,g,v,n[f+6],9,-1069501632),v=r(v,m,l,g,n[f+11],14,643717713),g=r(g,v,m,l,n[f],20,-373897302),l=r(l,g,v,m,n[f+5],5,-701558691),m=r(m,l,g,v,n[f+10],9,38016083),v=r(v,m,l,g,n[f+15],14,-660478335),g=r(g,v,m,l,n[f+4],20,-405537848),l=r(l,g,v,m,n[f+9],5,568446438),m=r(m,l,g,v,n[f+14],9,-1019803690),v=r(v,m,l,g,n[f+3],14,-187363961),g=r(g,v,m,l,n[f+8],20,1163531501),l=r(l,g,v,m,n[f+13],5,-1444681467),m=r(m,l,g,v,n[f+2],9,-51403784),v=r(v,m,l,g,n[f+7],14,1735328473),g=r(g,v,m,l,n[f+12],20,-1926607734),l=o(l,g,v,m,n[f+5],4,-378558),m=o(m,l,g,v,n[f+8],11,-2022574463),v=o(v,m,l,g,n[f+11],16,1839030562),g=o(g,v,m,l,n[f+14],23,-35309556),l=o(l,g,v,m,n[f+1],4,-1530992060),m=o(m,l,g,v,n[f+4],11,1272893353),v=o(v,m,l,g,n[f+7],16,-155497632),g=o(g,v,m,l,n[f+10],23,-1094730640),l=o(l,g,v,m,n[f+13],4,681279174),m=o(m,l,g,v,n[f],11,-358537222),v=o(v,m,l,g,n[f+3],16,-722521979),g=o(g,v,m,l,n[f+6],23,76029189),l=o(l,g,v,m,n[f+9],4,-640364487),m=o(m,l,g,v,n[f+12],11,-421815835),v=o(v,m,l,g,n[f+15],16,530742520),g=o(g,v,m,l,n[f+2],23,-995338651),l=u(l,g,v,m,n[f],6,-198630844),m=u(m,l,g,v,n[f+7],10,1126891415),v=u(v,m,l,g,n[f+14],15,-1416354905),g=u(g,v,m,l,n[f+5],21,-57434055),l=u(l,g,v,m,n[f+12],6,1700485571),m=u(m,l,g,v,n[f+3],10,-1894986606),v=u(v,m,l,g,n[f+10],15,-1051523),g=u(g,v,m,l,n[f+1],21,-2054922799),l=u(l,g,v,m,n[f+8],6,1873313359),m=u(m,l,g,v,n[f+15],10,-30611744),v=u(v,m,l,g,n[f+6],15,-1560198380),g=u(g,v,m,l,n[f+13],21,1309151649),l=u(l,g,v,m,n[f+4],6,-145523070),m=u(m,l,g,v,n[f+11],10,-1120210379),v=u(v,m,l,g,n[f+2],15,718787259),g=u(g,v,m,l,n[f+9],21,-343485551),l=d(l,c),g=d(g,i),v=d(v,a),m=d(m,h);return[l,g,v,m]}function c(n){var d,t="",e=32*n.length;for(d=0;d<e;d+=8)t+=String.fromCharCode(n[d>>5]>>>d%32&255);return t}function i(n){var d,t=[];for(t[(n.length>>2)-1]=void 0,d=0;d<t.length;d+=1)t[d]=0;var e=8*n.length;for(d=0;d<e;d+=8)t[d>>5]|=(255&n.charCodeAt(d/8))<<d%32;return t}function a(n){var d,t,e="0123456789abcdef",r="";for(t=0;t<n.length;t+=1)d=n.charCodeAt(t),r+=e.charAt(d>>>4&15)+e.charAt(15&d);return r}function h(n){return unescape(encodeURIComponent(n))}function l(n){return function(n){return c(f(i(n),8*n.length))}(h(n))}function g(n,d){return function(n,d){var t,e,r=i(n),o=[],u=[];for(o[15]=u[15]=void 0,r.length>16&&(r=f(r,8*n.length)),t=0;t<16;t+=1)o[t]=909522486^r[t],u[t]=1549556828^r[t];return e=f(o.concat(i(d)),512+8*d.length),c(f(u.concat(e),640))}(h(n),h(d))}function v(n,d,t){return d?t?g(d,n):a(g(d,n)):t?l(n):a(l(n))}n.md5=v}(this);
+
+    var SECRET = 'HweL*@M@JEYUnvPw9G36MVB9X6u@2qxK';
+
+    function sign(params) {
+        var keys = Object.keys(params).sort();
+        var str = keys.map(function(k) { return k + '=' + params[k]; }).join('&');
+        return md5(str + SECRET);
+    }
+
+    function showStatus(msg, type) {
+        var el = document.getElementById('status');
+        el.textContent = msg;
+        el.className = 'status ' + type;
+        if (type === 'success') setTimeout(function() { el.className = 'status'; }, 2000);
+    }
+
+    // All config keys we want to load/save
+    var toggleKeys = [
+        'RepeatKeyframe', 'NeedKeyFrame', 'SendEmptyFrame', 'NotCarPlayH264DecreaseMode',
+        'ImprovedFluency', 'FastConnect', 'SendHeartBeat', 'BackgroundMode',
+        'WiredConnect', 'AutoResetUSB', 'NeedAutoConnect', 'AutoUpdate',
+        'MicGainSwitch', 'BtAudio', 'UseBTPhone', 'TtsVolumGain', 'VrVolumGain',
+        'OriginalResolution', 'MouseMode', 'KnobMode', 'AutoPlauMusic', 'HudGPSSwitch'
+    ];
+
+    var selectKeys = [
+        'SpsPpsMode', 'BoxConfig_preferSPSPPSType', 'USBConnectedMode', 'USBTransMode',
+        'iAP2TransMode', 'MediaQuality', 'MicType', 'MicMode', 'DisplaySize', 'HiCarConnectMode'
+    ];
+
+    var numberKeys = [
+        'VideoBitRate', 'CustomFrameRate', 'BoxConfig_DelayStart', 'MediaLatency',
+        'EchoLatency', 'MediaPacketLen', 'TtsPacketLen', 'VrPacketLen',
+        'ScreenDPI', 'AndroidAutoWidth', 'AndroidAutoHeight'
+    ];
+
+    function loadSettings() {
+        showStatus('Loading...', 'loading');
+
+        var ts = new Date().getTime();
+        var params = { cmd: 'infos', ts: ts };
+        params.sign = sign(params);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/cgi-bin/server.cgi', true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        var s = data.Settings;
+
+                        toggleKeys.forEach(function(key) {
+                            var el = document.getElementById(key);
+                            if (el && s[key] !== undefined) el.checked = (s[key] === 1);
+                        });
+
+                        selectKeys.forEach(function(key) {
+                            var el = document.getElementById(key);
+                            if (el && s[key] !== undefined) el.value = s[key];
+                        });
+
+                        numberKeys.forEach(function(key) {
+                            var el = document.getElementById(key);
+                            if (el && s[key] !== undefined) el.value = s[key];
+                        });
+
+                        showStatus('Settings loaded', 'success');
+                    } catch (e) {
+                        showStatus('Parse error: ' + e.message, 'error');
+                    }
+                } else {
+                    showStatus('HTTP error: ' + xhr.status, 'error');
+                }
+            }
+        };
+
+        var formData = new FormData();
+        formData.append('cmd', params.cmd);
+        formData.append('ts', params.ts);
+        formData.append('sign', params.sign);
+
+        xhr.send(formData);
+    }
+
+    function setSetting(item, val) {
+        showStatus('Saving ' + item + '...', 'loading');
+
+        var ts = new Date().getTime();
+        var params = { cmd: 'set', item: item, ts: ts, val: String(val) };
+        params.sign = sign(params);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/cgi-bin/server.cgi', true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.err === 0) {
+                            showStatus(item + ' saved', 'success');
+                        } else {
+                            showStatus('Error: ' + JSON.stringify(data), 'error');
+                        }
+                    } catch (e) {
+                        showStatus('Parse error: ' + e.message, 'error');
+                    }
+                } else {
+                    showStatus('HTTP error: ' + xhr.status, 'error');
+                }
+            }
+        };
+
+        var formData = new FormData();
+        formData.append('cmd', params.cmd);
+        formData.append('item', params.item);
+        formData.append('val', params.val);
+        formData.append('ts', params.ts);
+        formData.append('sign', params.sign);
+
+        xhr.send(formData);
+    }
+
+    function fmtSize(kb) {
+        if (kb >= 1024) return (kb / 1024).toFixed(1) + ' MB';
+        return kb + ' KB';
+    }
+
+    function fmtBytes(b) {
+        if (b >= 1073741824) return (b / 1073741824).toFixed(2) + ' GB';
+        if (b >= 1048576) return (b / 1048576).toFixed(1) + ' MB';
+        if (b >= 1024) return (b / 1024).toFixed(1) + ' KB';
+        return b + ' B';
+    }
+
+    function loadSysInfo() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?sysinfo', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var d = JSON.parse(xhr.responseText);
+                    document.getElementById('sys-uptime').textContent = d.uptime;
+                    document.getElementById('sys-load').textContent = d.load;
+                    document.getElementById('sys-cpu-temp').textContent = d.cpu_temp + ' C';
+                    document.getElementById('sys-cpu-freq').textContent = d.cpu_freq + ' MHz';
+                    document.getElementById('sys-mem').textContent = fmtSize(d.mem.used) + ' / ' + fmtSize(d.mem.total) + ' (' + d.mem.pct + '%)';
+                    document.getElementById('sys-disk-tmp').textContent = fmtSize(d.disk_tmp.used) + ' / ' + fmtSize(d.disk_tmp.total) + ' (' + d.disk_tmp.pct + '%)';
+                    document.getElementById('sys-disk-root').textContent = fmtSize(d.disk_root.used) + ' / ' + fmtSize(d.disk_root.total) + ' (' + d.disk_root.pct + '%)';
+                    document.getElementById('sys-net').textContent = fmtBytes(d.net.rx) + ' / ' + fmtBytes(d.net.tx);
+                    var clientsEl = document.getElementById('sys-wifi-clients');
+                    if (d.wifi_clients.length === 0) {
+                        clientsEl.textContent = 'None';
+                    } else {
+                        clientsEl.innerHTML = d.wifi_clients.map(function(c) {
+                            return '<div style="padding:4px 0;border-bottom:1px solid #0f3460">' + c.ip + ' <span style="color:#888">' + c.mac + '</span></div>';
+                        }).join('');
+                    }
+                    document.getElementById('overcommit').value = d.overcommit;
+                } catch(e) {}
+            }
+        };
+        xhr.send();
+    }
+
+    function loadGovernor() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?governor', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var d = JSON.parse(xhr.responseText);
+                    var sel = document.getElementById('cpu-governor');
+                    sel.innerHTML = '';
+                    var govs = d.available.split(' ');
+                    govs.forEach(function(g) {
+                        if (g) {
+                            var opt = document.createElement('option');
+                            opt.value = g;
+                            opt.textContent = g;
+                            if (g === d.current) opt.selected = true;
+                            sel.appendChild(opt);
+                        }
+                    });
+                } catch(e) {}
+            }
+        };
+        xhr.send();
+    }
+
+    function setGovernor(gov) {
+        showStatus('Setting governor...', 'loading');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?governor_set=' + gov, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var d = JSON.parse(xhr.responseText);
+                    showStatus('Governor set to ' + gov, d.ok ? 'success' : 'error');
+                } catch(e) { showStatus('Failed to set governor', 'error'); }
+            }
+        };
+        xhr.send();
+    }
+
+    function setOvercommit(val) {
+        showStatus('Setting overcommit...', 'loading');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?overcommit_set=' + val, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var d = JSON.parse(xhr.responseText);
+                    showStatus('Overcommit set to ' + val, d.ok ? 'success' : 'error');
+                } catch(e) { showStatus('Failed to set overcommit', 'error'); }
+            }
+        };
+        xhr.send();
+    }
+
+    function doRestore() {
+        if (!confirm('Restore previous config? This will undo recent changes.')) return;
+        showStatus('Restoring...', 'loading');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?restore', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var d = JSON.parse(xhr.responseText);
+                    if (d.ok) {
+                        showStatus('Config restored. Reboot to apply.', 'success');
+                    } else {
+                        showStatus('Restore failed', 'error');
+                    }
+                } catch(e) { showStatus('Restore failed', 'error'); }
+            }
+        };
+        xhr.send();
+    }
+
+    function doReboot() {
+        if (!confirm('Reboot the adapter? You will lose connection.')) return;
+        showStatus('Rebooting...', 'loading');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/api.cgi?reboot', true);
+        xhr.send();
+    }
+
+    window.onload = function() { loadSettings(); loadSysInfo(); loadGovernor(); setInterval(loadSysInfo, 5000); };
+    </script>
+</body>
+</html>

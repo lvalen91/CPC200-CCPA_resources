@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d217a30"],{c827:function(c,n,p){c.exports=p.p+"static/img/back-black.80c99e61.svg"}}]);

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d230895"],{ed66:function(n,p,c){n.exports=c.p+"static/img/ring.e6c737be.svg"}}]);

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPC200 Settings</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <h1>CPC200-CCPA</h1>
+            <div class="header-right">
+                <button class="btn btn-sm" onclick="App.refreshAll()" title="Reload all settings from adapter">Refresh</button>
+                <div class="status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="dashboard">Dashboard</button>
+            <button class="tab" data-tab="devices">Devices</button>
+            <button class="tab" data-tab="audio">Audio</button>
+            <button class="tab" data-tab="video">Video</button>
+            <button class="tab" data-tab="connection">Connection</button>
+            <button class="tab" data-tab="identity">Identity</button>
+            <button class="tab" data-tab="info">Info</button>
+            <button class="tab" data-tab="config">Config</button>
+            <button class="tab" data-tab="terminal">Terminal</button>
+            <button class="tab" data-tab="system">System</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="content">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <div class="card">
+                    <h2>Connection Status</h2>
+                    <div class="status-display">
+                        <div class="big-status" id="bigStatus">Disconnected</div>
+                        <div class="phone-info" id="phoneInfo"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>System Stats</h2>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-label">CPU</span>
+                            <span class="stat-value" id="cpuUsage">--%</span>
+                            <span class="stat-detail" id="cpuFreq">-- MHz</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Memory</span>
+                            <span class="stat-value" id="memUsage">--%</span>
+                            <span class="stat-detail" id="memDetail">-- / -- MB</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Temp</span>
+                            <span class="stat-value" id="cpuTemp">--°C</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">WiFi RX</span>
+                            <span class="stat-value" id="netRxDash">-- KB/s</span>
+                            <span class="stat-detail" id="netRxTotal">Total: --</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">WiFi TX</span>
+                            <span class="stat-value" id="netTxDash">-- KB/s</span>
+                            <span class="stat-detail" id="netTxTotal">Total: --</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Uptime</span>
+                            <span class="stat-value" id="uptime">--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-button">
+                    <button class="btn btn-danger" onclick="App.restart()">Restart Device</button>
+                </div>
+            </section>
+
+            <!-- Devices Tab -->
+            <section id="devices" class="tab-content">
+                <div class="card">
+                    <h2>Paired Devices</h2>
+                    <div id="deviceList" class="device-list">
+                        <p class="loading">Loading devices...</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-danger" onclick="App.clearAllDevices()">Clear All Devices</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audio Tab -->
+            <section id="audio" class="tab-content">
+                <div class="card">
+                    <h2>Audio Settings</h2>
+                    <p class="note">Settings marked with * may be overridden by host app</p>
+
+                    <div class="setting">
+                        <label>Media Delay (ms) *</label>
+                        <input type="number" id="mediaDelay" min="300" max="2000" step="50">
+                        <button class="btn btn-sm" onclick="App.setSetting('mediaDelay', 'mediaDelay')">Set</button>
+                        <p class="setting-hint">Audio-video sync buffer in ms. Firmware default is 1000. Increase if audio leads video</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Audio Quality *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="mediaSound" data-value="0">44.1 kHz</button>
+                            <button class="toggle" data-key="mediaSound" data-value="1">48 kHz</button>
+                        </div>
+                        <p class="setting-hint">Audio sample rate. 48 kHz is higher quality (firmware default)</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Echo Delay (ms) *</label>
+                        <input type="number" id="echoDelay" min="20" max="2000" step="10">
+                        <button class="btn btn-sm" onclick="App.setSetting('echoDelay', 'echoDelay')">Set</button>
+                        <p class="setting-hint">Echo cancellation delay for hands-free calls. Default 320 is a sentinel enabling two-mode AEC</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Nav Volume *</label>
+                        <input type="range" id="naviVolume" min="0" max="100" step="5">
+                        <span id="naviVolumeValue">50</span>
+                        <p class="setting-hint">Navigation voice prompt volume level</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Mic Type *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="micType" data-value="0">Car Mic</button>
+                            <button class="toggle" data-key="micType" data-value="1">Adapter Mic</button>
+                            <button class="toggle" data-key="micType" data-value="2">Phone Mic</button>
+                        </div>
+                        <p class="setting-hint">Microphone source: 0=head unit mic, 1=adapter built-in mic, 2=phone mic</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Audio Source *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="BtAudio" data-value="0">Adapter</button>
+                            <button class="toggle" data-key="BtAudio" data-value="1">Phone BT</button>
+                        </div>
+                        <p class="setting-hint">Route audio through adapter (USB) or phone's Bluetooth</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Tab -->
+            <section id="video" class="tab-content">
+                <div class="card">
+                    <h2>Video Settings</h2>
+                    <p class="note">Settings marked with * may be overridden by host app</p>
+
+                    <div class="setting">
+                        <label>Screen DPI *</label>
+                        <input type="number" id="ScreenDPI" min="0" max="480" step="10">
+                        <button class="btn btn-sm" onclick="App.setSetting('ScreenDPI', 'ScreenDPI')">Set</button>
+                        <p class="setting-hint">Screen density. Higher values make UI elements smaller</p>
+                    </div>
+
+                    <!-- DisplaySize: PASS-THROUGH (server.cgi only, no firmware effect) - removed -->
+
+                    <div class="setting">
+                        <label>Video Bit Rate</label>
+                        <input type="number" id="bitRate" min="0" max="20" step="1">
+                        <button class="btn btn-sm" onclick="App.setSetting('bitRate', 'bitRate')">Set</button>
+                        <p class="setting-hint">Bitrate level requested from phone. Higher = better quality but more bandwidth. 0 = auto</p>
+                    </div>
+
+                    <!-- MouseMode: PASS-THROUGH (server.cgi only, no firmware effect) - removed -->
+                    <!-- KnobMode: PASS-THROUGH (server.cgi only, no firmware effect) - removed -->
+
+                    <div class="setting">
+                        <label>Background Mode *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="bgMode" data-value="0">Show UI</button>
+                            <button class="toggle" data-key="bgMode" data-value="1">Hide UI</button>
+                        </div>
+                        <p class="setting-hint">Background UI behavior. Exact effect unconfirmed</p>
+                    </div>
+
+                    <!-- ImprovedFluency: PASS-THROUGH (server.cgi only, verified dead via full decompilation scan) - removed -->
+                </div>
+            </section>
+
+            <!-- Connection Tab -->
+            <section id="connection" class="tab-content">
+                <div class="card">
+                    <h2>Connection Settings</h2>
+                    <p class="note">Settings marked with * may be overridden by host app</p>
+
+                    <div class="setting">
+                        <label>Auto Connect *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="autoConn" data-value="1">On</button>
+                            <button class="toggle" data-key="autoConn" data-value="0">Off</button>
+                        </div>
+                        <p class="setting-hint">Automatically connect to last paired device on startup</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Auto Play *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="autoPlay" data-value="1">On</button>
+                            <button class="toggle" data-key="autoPlay" data-value="0">Off</button>
+                        </div>
+                        <p class="setting-hint">Automatically resume media playback when connected</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Fast Connect</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="fastConnect" data-value="0">Off</button>
+                            <button class="toggle" data-key="fastConnect" data-value="1">On</button>
+                        </div>
+                        <p class="setting-hint">Reconnect faster to last paired device. Requires Auto Connect on and a previously paired device</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>WiFi Channel *</label>
+                        <select id="wifiChannel" onchange="App.setSelect('wifiChannel', this.value)">
+                            <optgroup label="2.4GHz">
+                                <option value="1">1</option>
+                                <option value="6">6</option>
+                                <option value="11">11</option>
+                            </optgroup>
+                            <optgroup label="5GHz">
+                                <option value="36">36</option>
+                                <option value="40">40</option>
+                                <option value="44">44</option>
+                                <option value="48">48</option>
+                                <option value="149">149</option>
+                                <option value="153">153</option>
+                                <option value="157">157</option>
+                                <option value="161">161</option>
+                                <option value="165">165</option>
+                            </optgroup>
+                        </select>
+                        <p class="setting-hint">WiFi channel for adapter hotspot. 5GHz is faster but shorter range</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Start Delay (seconds) *</label>
+                        <input type="number" id="startDelay" min="0" max="120" step="1">
+                        <button class="btn btn-sm" onclick="App.setSetting('startDelay', 'startDelay')">Set</button>
+                        <p class="setting-hint">Delay before starting CarPlay after connection</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>GPS Forwarding *</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="gps" data-value="0">Off</button>
+                            <button class="toggle" data-key="gps" data-value="1">On</button>
+                        </div>
+                        <p class="setting-hint">CarPlay only. Forward head unit GPS to phone via iAP2. Phone fuses both sources (best-accuracy-wins). Requires GNSSCapability > 0 from host app. Android Auto has a firmware bug in this path</p>
+                    </div>
+
+                    <!-- UDiskPassThrough: DEAD (zero runtime xrefs across all 6 binaries) - removed -->
+
+                    <div class="setting">
+                        <label>USB Disk Mode</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="UdiskMode" data-value="0">Off</button>
+                            <button class="toggle" data-key="UdiskMode" data-value="1">On</button>
+                        </div>
+                        <p class="setting-hint">USB mass storage gadget. Exposes 8MB RAM FAT32 with BoxHelper.apk via f_mass_storage. WARNING: interferes with Android Auto</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Advanced Features</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="AdvancedFeatures" data-value="0">Off</button>
+                            <button class="toggle" data-key="AdvancedFeatures" data-value="1">On</button>
+                        </div>
+                        <p class="setting-hint">Gates naviScreenInfo on adapter side. Not required if host app sends navigation video parameters (resolution, refresh rate) directly via BoxSettings. May increase CPU/memory usage when enabled</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Identity Tab -->
+            <section id="identity" class="tab-content">
+                <div class="card">
+                    <h2>Device Identity</h2>
+                    <p class="note">Settings marked with * may be overridden by host app</p>
+
+                    <div class="setting">
+                        <label>WiFi Name (SSID) *</label>
+                        <input type="text" id="wifiName" maxlength="15" placeholder="Max 15 characters">
+                        <button class="btn btn-sm" onclick="App.setTextSetting('wifiName')">Set</button>
+                        <p class="setting-hint">Network name shown when connecting to adapter's WiFi hotspot</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Bluetooth Name *</label>
+                        <input type="text" id="btName" maxlength="15" placeholder="Max 15 characters">
+                        <button class="btn btn-sm" onclick="App.setTextSetting('btName')">Set</button>
+                        <p class="setting-hint">Name shown in your phone's Bluetooth pairing list</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Box Name *</label>
+                        <input type="text" id="boxName" maxlength="15" placeholder="Max 15 characters">
+                        <button class="btn btn-sm" onclick="App.setTextSetting('boxName')">Set</button>
+                        <p class="setting-hint">Device name displayed in CarPlay/Android Auto interface</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Custom Car Logo</label>
+                        <div class="toggle-group">
+                            <button class="toggle" data-key="CustomCarLogo" data-value="0">Default</button>
+                            <button class="toggle" data-key="CustomCarLogo" data-value="1">Custom</button>
+                        </div>
+                        <p class="setting-hint">Use a custom boot logo instead of the default manufacturer logo</p>
+                    </div>
+
+                    <div class="setting" id="logoUploadSection" style="display:none;">
+                        <label>Upload Logo (PNG)</label>
+                        <input type="file" id="logoFile" accept="image/png">
+                        <button class="btn btn-sm" onclick="App.uploadLogo()">Upload</button>
+                        <p class="setting-hint">Upload a PNG image file for the custom boot logo</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Info Tab -->
+            <section id="info" class="tab-content">
+                <div class="card">
+                    <h2>Device Information</h2>
+                    <table class="info-table">
+                        <tr><td>Firmware Version</td><td id="infoFirmware">--</td></tr>
+                        <tr><td>Hardware Version</td><td id="infoHardware">--</td></tr>
+                        <tr><td>Serial Number</td><td id="infoSerial">--</td></tr>
+                        <tr><td>UUID</td><td id="infoUUID">--</td></tr>
+                        <tr><td>Product Type</td><td id="infoProduct">--</td></tr>
+                        <tr><td>Manufacturing Date</td><td id="infoMfgDate">--</td></tr>
+                        <tr><td>WiFi Channel</td><td id="infoWifiChannel">--</td></tr>
+                        <tr><td>Box IP</td><td id="infoBoxIP">--</td></tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Config Tab -->
+            <section id="config" class="tab-content">
+                <div class="card">
+                    <div class="config-header">
+                        <h2>Full Configuration Dump</h2>
+                        <button class="btn btn-sm" onclick="App.loadFullConfig()">Refresh Config</button>
+                    </div>
+                    <p class="note">All 106 riddleBoxCfg keys. Read-only view of adapter state. Updated on page load or manual refresh.</p>
+                    <div class="config-legend">
+                        <span class="badge badge-alive">ALIVE</span> Runtime effect
+                        <span class="badge badge-dead">DEAD</span> No code xrefs
+                        <span class="badge badge-pass">PASS-THROUGH</span> server.cgi only
+                    </div>
+                    <div class="config-legend">
+                        <span class="val-label val-unset-label">unset</span> Never configured (normal)
+                        <span class="val-label val-unavail-label">unavailable</span> Read failed
+                        <span class="val-label val-error-label">read error</span> Unexpected failure
+                    </div>
+                    <div id="configDump" class="config-dump">
+                        <p class="loading">Click Refresh Config to load...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Terminal Tab -->
+            <section id="terminal" class="tab-content">
+                <div class="card">
+                    <div class="config-header">
+                        <h2>Terminal</h2>
+                        <button class="btn btn-sm" onclick="App.clearTerminal()">Clear</button>
+                    </div>
+                    <p class="note">Runs commands as <strong>root</strong> on the adapter via term.cgi. Full shell syntax (pipes, redirects). Working directory persists between commands. Avoid interactive (top, vi) or long-running (ping with no count) commands — there is no live streaming, and a request that never returns is aborted after 60s.</p>
+                    <div id="termWarning" class="term-warning">
+                        <div class="term-warning-icon">&#9888;</div>
+                        <h3>Danger &mdash; Root Shell</h3>
+                        <p>This terminal executes commands as <strong>root</strong> directly on the adapter, with <strong>no sandbox and no undo</strong>. A single mistyped command can corrupt the firmware, erase configuration, brick the adapter, or drop your connection.</p>
+                        <ul>
+                            <li>Commands run immediately &mdash; there is no per-command confirmation.</li>
+                            <li>Destructive operations (<code>rm</code>, <code>dd</code>, <code>mkfs</code>, <code>reboot</code>, killing services) take effect at once.</li>
+                            <li>Only run commands you understand. When in doubt, don't.</li>
+                        </ul>
+                        <button class="btn btn-danger" onclick="App.ackTerminal()">I understand the risk &mdash; Enable Terminal</button>
+                    </div>
+                    <div id="termBody" style="display:none">
+                        <div id="termOutput" class="term-output" aria-live="polite"></div>
+                        <form id="termForm" class="term-input-row" autocomplete="off">
+                            <span class="term-prompt" id="termPrompt">/ #</span>
+                            <input type="text" id="termInput" class="term-input" enterkeyhint="go" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type a command">
+                            <button type="submit" class="btn btn-sm" id="termSend">Run</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Tab -->
+            <section id="system" class="tab-content">
+                <div class="card">
+                    <h2>System Management</h2>
+
+                    <div class="setting">
+                        <label>CPU Governor</label>
+                        <select id="cpuGovernor"></select>
+                        <button class="btn btn-sm" onclick="App.setGovernor(document.getElementById('cpuGovernor').value)">Apply</button>
+                        <p class="setting-hint">Takes effect immediately, no reboot required. Resets to default on reboot</p>
+                    </div>
+
+                    <div class="setting">
+                        <label>Configuration</label>
+                        <div class="reset-options">
+                            <div class="reset-option">
+                                <button class="btn btn-warning" onclick="App.resetConfig()">Undo Recent Changes</button>
+                                <span class="setting-hint">Reverts to last saved configuration</span>
+                            </div>
+                            <div class="reset-option">
+                                <button class="btn btn-danger" onclick="App.factoryReset()">Factory Reset</button>
+                                <span class="setting-hint">Erases all settings and paired devices</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Logs & Diagnostics</h2>
+                    <div class="button-group vertical">
+                        <button class="btn" onclick="App.downloadLog('dmesg')">Download Kernel Log (dmesg)</button>
+                        <button class="btn" onclick="App.downloadLog('userspace')">Download Application Log</button>
+                        <button class="btn" onclick="App.downloadLog('config')">Download riddle.conf</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Connected WiFi Clients</h2>
+                    <div id="wifiClients">
+                        <p>Click refresh to load</p>
+                    </div>
+                    <button class="btn btn-sm" onclick="App.refreshWifiClients()">Refresh</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span>CPC200-CCPA Custom Web Interface v2.5</span>
+        </footer>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

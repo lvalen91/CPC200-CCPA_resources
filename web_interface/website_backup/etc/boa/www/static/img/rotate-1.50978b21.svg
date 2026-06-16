@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="38px" viewBox="0 0 22 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>路径</title>
+    <defs>
+        <linearGradient x1="50%" y1="0.112594925%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#70AEFF" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="切图下载-无阴影" transform="translate(-88.000000, -1038.000000)" stroke="url(#linearGradient-1)" stroke-width="5">
+            <path d="M107,1041 C98.163444,1041 91,1048.16344 91,1057 C91,1065.83656 98.163444,1073 107,1073" id="路径"></path>
+        </g>
+    </g>
+</svg>

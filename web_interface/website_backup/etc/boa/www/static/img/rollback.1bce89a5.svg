@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="38px" viewBox="0 0 40 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 2备份</title>
+    <defs>
+        <linearGradient x1="50%" y1="0.112594925%" x2="50%" y2="99.2596202%" id="linearGradient-1">
+            <stop stop-color="#70AEFF" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="111.592639%" x2="50%" y2="8.5325658%" id="linearGradient-2">
+            <stop stop-color="#3774F6" stop-opacity="0.199136801" offset="0%"></stop>
+            <stop stop-color="#3B79F3" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图下载-无阴影" transform="translate(-277.000000, -408.000000)">
+            <g id="编组-2备份" transform="translate(278.000000, 409.000000)">
+                <path d="M18.5,6 L29,17.3666667 L23,17.366 L23,37 L14,37 L14,17.366 L8,17.3666667 L18.5,6 Z" id="形状结合备份-7" fill="url(#linearGradient-1)" transform="translate(18.500000, 21.500000) rotate(-180.000000) translate(-18.500000, -21.500000) "></path>
+                <rect id="矩形备份-66" fill="#3B79F3" opacity="0.0810990106" transform="translate(19.000000, 10.500000) rotate(-180.000000) translate(-19.000000, -10.500000) " x="0" y="0" width="38" height="21" rx="3"></rect>
+                <rect id="矩形备份-67" stroke="url(#linearGradient-2)" stroke-width="0.5" opacity="0.202364676" x="-0.25" y="-0.25" width="38.5" height="21.5" rx="3"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
