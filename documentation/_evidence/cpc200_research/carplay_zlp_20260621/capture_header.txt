@@ -1,0 +1,6 @@
+=== DEVICE CONFIG AT CAPTURE START ===
+Timestamp: 2026-06-21 07:43:12 AKDT
+=== END CONFIG ===
+
+20:Kernel version:linux-3.0.15
+25:Software Vserion: 2025.12.29.1746

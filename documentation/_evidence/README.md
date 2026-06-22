@@ -4,7 +4,7 @@ _Self-contained copies of the external research files the documentation cites, b
 
 **Excluded by request:** files under `aa_rebuild/firmware_rework_patch/` (the ongoing iAP2 passthrough-patch research) are intentionally **not** imported yet; the few docs that cite them keep their original (external) reference until that research is cleared for integration.
 
-**Contents:** 18 files, 2,228 KB total.
+**Contents:** 21 files, 2,253 KB total.
 
 | File (`_evidence/…`) | Size | Origin | SHA-256 |
 |---|---:|---|---|
@@ -26,3 +26,6 @@ _Self-contained copies of the external research files the documentation cites, b
 | `cpc200_research/CLAUDE.md` | 17,531 | CPC200-CCPA research tree | `41338c816b5124b7…` |
 | `cpc200_research/docs/hardware/REVERSE_ENGINEERING_NOTES.md` | 35,930 | CPC200-CCPA research tree | `fe5e0ef87f0d7d98…` |
 | `cpc200_research/docs/protocol/AUDIO_PROTOCOL.md` | 9,597 | CPC200-CCPA research tree | `838d9676fe3f47a3…` |
+| `cpc200_research/carplay_zlp_20260621/capture_header.txt` | 165 | CCPA log `cpc200_20260621_074312.log` (excerpt) | `eedf8deb6abe2701…` |
+| `cpc200_research/carplay_zlp_20260621/excerpt_first_cycle_08-14.txt` | 4,903 | CCPA log `cpc200_20260621_074312.log` (excerpt) | `b51a49936a49ebdd…` |
+| `cpc200_research/carplay_zlp_20260621/zlp_disconnect_timeline.txt` | 20,148 | CCPA log `cpc200_20260621_074312.log` (excerpt) | `d8ae34fb8b0898d2…` |

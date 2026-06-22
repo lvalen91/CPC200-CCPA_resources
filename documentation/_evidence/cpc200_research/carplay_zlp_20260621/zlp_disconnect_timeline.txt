@@ -1,0 +1,195 @@
+527:[E]2020-01-02 00:00:18.411 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+813:[E]2020-01-02 00:00:33.237 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+1063:[D]2020-01-02 00:00:40.17 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+1064:[E]2020-01-02 00:00:40.17 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+1077:[E]2020-01-02 00:00:40.306 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+1453:[D]2026-06-22 00:11:20.580 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+3898:06-21 08:14:10.195305 AM [CiAP2Session_FileTransfer] iPhoneToBox ##### sign=Sign_Setup, fileTransferIdentifer=132, size=143868
+3899:[W]2026-06-21 08:14:10.245 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+3900:[  220.430225] acc_write: size 12800, accZLP 0
+3933:[D]2026-06-21 08:14:13.927 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+3934:[E]2026-06-21 08:14:13.928 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+3935:[D]2026-06-21 08:14:13.928 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+3951:[W]2026-06-21 08:14:14.33 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 106 ms
+3987:[E]2026-06-21 08:14:14.317 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+5659:[W]2026-06-21 08:14:25.188 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+5660:[  235.200858] acc_write: size 12800, accZLP 0
+5703:[D]2026-06-21 08:14:28.939 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+5704:[E]2026-06-21 08:14:28.939 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+5705:[D]2026-06-21 08:14:28.939 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+5721:[W]2026-06-21 08:14:29.63 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 125 ms
+5740:[E]2026-06-21 08:14:29.361 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+7345:[W]2026-06-21 08:14:39.853 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+7346:[  249.666236] acc_write: size 12800, accZLP 0
+7374:[D]2026-06-21 08:14:43.580 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+7375:[E]2026-06-21 08:14:43.581 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+7376:[D]2026-06-21 08:14:43.581 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+7392:[W]2026-06-21 08:14:43.695 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 115 ms
+7416:[E]2026-06-21 08:14:43.961 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+9036:[W]2026-06-21 08:14:54.55 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+9037:[  264.233726] acc_write: size 12800, accZLP 0
+9071:[D]2026-06-21 08:14:57.782 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+9072:[E]2026-06-21 08:14:57.783 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+9073:[D]2026-06-21 08:14:57.783 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+9089:[W]2026-06-21 08:14:57.910 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 127 ms
+9108:[E]2026-06-21 08:14:58.189 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+10782:[W]2026-06-21 08:15:10.7 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+10783:[  280.451036] acc_write: size 12800, accZLP 0
+10811:[D]2026-06-21 08:15:13.712 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+10812:[E]2026-06-21 08:15:13.712 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+10813:[D]2026-06-21 08:15:13.712 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+10829:[W]2026-06-21 08:15:13.889 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 178 ms
+10869:[E]2026-06-21 08:15:14.233 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+12516:[W]2026-06-21 08:15:25.43 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+12517:[  294.917459] acc_write: size 12800, accZLP 0
+12547:[D]2026-06-21 08:15:28.862 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+12548:[E]2026-06-21 08:15:28.862 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+12549:[D]2026-06-21 08:15:28.862 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+12565:[W]2026-06-21 08:15:28.971 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 110 ms
+12590:[E]2026-06-21 08:15:29.238 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14266:[W]2026-06-21 08:15:39.969 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+14267:[  309.868683] acc_write: size 12800, accZLP 0
+14303:[D]2026-06-21 08:15:43.650 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+14304:[E]2026-06-21 08:15:43.650 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14305:[D]2026-06-21 08:15:43.650 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+14321:[W]2026-06-21 08:15:43.769 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 119 ms
+14353:[E]2026-06-21 08:15:44.67 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14514:[D]2026-06-22 00:15:53.18 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+14515:[E]2026-06-22 00:15:53.19 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14532:[E]2026-06-22 00:15:53.260 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14597:[D]2026-06-22 00:15:56.672 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+14598:[E]2026-06-22 00:15:56.672 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+14607:[E]2026-06-22 00:15:56.895 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+16277:[W]2026-06-21 08:16:01.472 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+16278:[  331.835143] acc_write: size 12800, accZLP 0
+16307:[D]2026-06-21 08:16:05.238 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+16308:[E]2026-06-21 08:16:05.238 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+16309:[D]2026-06-21 08:16:05.238 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+16337:[E]2026-06-21 08:16:05.593 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+17980:[W]2026-06-21 08:16:15.741 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+17981:[  345.662057] acc_write: size 12800, accZLP 0
+18009:[D]2026-06-21 08:16:19.422 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+18010:[E]2026-06-21 08:16:19.422 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+18011:[D]2026-06-21 08:16:19.422 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+18027:[W]2026-06-21 08:16:19.527 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 106 ms
+18065:[E]2026-06-21 08:16:19.795 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+19721:[W]2026-06-21 08:16:29.124 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+19722:[  360.190322] acc_write: size 12800, accZLP 0
+19753:[D]2026-06-21 08:16:32.847 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+19754:[E]2026-06-21 08:16:32.847 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+19755:[D]2026-06-21 08:16:32.847 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+19771:[W]2026-06-21 08:16:32.965 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 118 ms
+19802:[E]2026-06-21 08:16:33.252 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+21440:[W]2026-06-21 08:16:44.997 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+21441:[  375.350595] acc_write: size 12800, accZLP 0
+21472:[D]2026-06-21 08:16:48.607 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+21473:[E]2026-06-21 08:16:48.608 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+21474:[D]2026-06-21 08:16:48.608 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+21490:[W]2026-06-21 08:16:48.718 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 111 ms
+21528:[E]2026-06-21 08:16:48.991 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+23154:[W]2026-06-21 08:17:00.23 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+23155:[  389.949497] acc_write: size 12800, accZLP 0
+23189:[D]2026-06-21 08:17:03.624 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+23190:[E]2026-06-21 08:17:03.624 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+23191:[D]2026-06-21 08:17:03.624 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+23207:[W]2026-06-21 08:17:03.735 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 112 ms
+23230:[E]2026-06-21 08:17:04.10 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+24835:[W]2026-06-21 08:17:14.995 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+24836:[  404.869168] acc_write: size 12800, accZLP 0
+24864:[D]2026-06-21 08:17:18.706 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+24865:[E]2026-06-21 08:17:18.706 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+24866:[D]2026-06-21 08:17:18.707 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+24882:[W]2026-06-21 08:17:18.824 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 119 ms
+24903:[E]2026-06-21 08:17:19.128 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+26523:[W]2026-06-21 08:17:30.19 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+26524:[  419.590831] acc_write: size 12800, accZLP 0
+26552:[D]2026-06-21 08:17:33.713 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+26553:[E]2026-06-21 08:17:33.714 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+26554:[D]2026-06-21 08:17:33.714 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+26570:[W]2026-06-21 08:17:33.829 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 116 ms
+26608:[E]2026-06-21 08:17:34.124 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+28238:[W]2026-06-21 08:17:43.904 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+28239:[  434.166036] acc_write: size 12800, accZLP 0
+28270:[D]2026-06-21 08:17:47.595 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+28271:[E]2026-06-21 08:17:47.596 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+28272:[D]2026-06-21 08:17:47.596 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+28288:[W]2026-06-21 08:17:47.712 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 117 ms
+28326:[E]2026-06-21 08:17:47.987 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+29988:[W]2026-06-21 08:17:58.928 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+29990:[  448.799221] acc_write: size 12800, accZLP 0
+30016:[D]2026-06-21 08:18:02.585 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+30017:[E]2026-06-21 08:18:02.586 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+30018:[D]2026-06-21 08:18:02.586 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+30034:[W]2026-06-21 08:18:02.697 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 111 ms
+30068:[E]2026-06-21 08:18:02.986 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+31061:[D]2026-06-21 08:18:12.379 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+31108:[D]2026-06-21 08:19:17.999 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+31109:[E]2026-06-21 08:19:18.0 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+31140:[E]2026-06-21 08:19:18.243 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+32746:[W]2026-06-21 08:19:38.374 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+32747:[  548.048606] acc_write: size 12800, accZLP 0
+32827:[D]2026-06-21 08:19:42.449 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+32828:[E]2026-06-21 08:19:42.449 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+32829:[D]2026-06-21 08:19:42.450 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+32845:[W]2026-06-21 08:19:42.551 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 103 ms
+32883:[E]2026-06-21 08:19:42.804 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+33006:[D]2026-06-22 00:19:51.782 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+33007:[E]2026-06-22 00:19:51.783 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+33021:[E]2026-06-22 00:19:52.57 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+33062:[D]2026-06-22 00:19:55.402 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+33063:[E]2026-06-22 00:19:55.402 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+33072:[E]2026-06-22 00:19:55.627 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+33724:[W]2026-06-21 08:20:32.265 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+33725:[  602.596056] acc_write: size 12800, accZLP 0
+35112:06-21 08:23:37.518155 AM [CiAP2Session_FileTransfer] iPhoneToBox ##### sign=Sign_Setup, fileTransferIdentifer=132, size=106699
+36672:[D]2026-06-21 08:28:13.203 180-76f67000/ARMadb-driver[ActionSessions]: 有线 CarPlay 退出
+36691:[D]2026-06-21 08:28:13.780 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+36692:[E]2026-06-21 08:28:13.780 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+36712:[E]2026-06-21 08:28:14.641 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+36769:[D]2026-06-21 08:28:17.411 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+36770:[E]2026-06-21 08:28:17.412 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+36779:[E]2026-06-21 08:28:17.634 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+40812:06-21 08:38:49.177325 AM [CiAP2Session_FileTransfer] iPhoneToBox ##### sign=Sign_Setup, fileTransferIdentifer=132, size=179617
+50855:[W]2026-06-21 09:23:25.764 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+50856:[ 4376.150142] acc_write: size 12800, accZLP 0
+50869:[D]2026-06-21 09:23:29.407 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+50870:[E]2026-06-21 09:23:29.407 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+50871:[D]2026-06-21 09:23:29.408 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+50887:[W]2026-06-21 09:23:29.522 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 115 ms
+50908:[E]2026-06-21 09:23:29.876 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+52582:[W]2026-06-21 09:23:40.885 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+52586:[ 4391.226936] acc_write: size 12800, accZLP 0
+52679:[D]2026-06-21 09:23:44.557 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+52680:[E]2026-06-21 09:23:44.558 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+52681:[D]2026-06-21 09:23:44.558 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+52702:[W]2026-06-21 09:23:44.691 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 135 ms
+52733:[E]2026-06-21 09:23:44.991 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+54967:[W]2026-06-21 09:24:21.971 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+54969:[ 4432.435363] acc_write: size 12800, accZLP 0
+55002:[D]2026-06-21 09:24:25.589 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+55003:[E]2026-06-21 09:24:25.590 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+55004:[D]2026-06-21 09:24:25.590 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+55023:[W]2026-06-21 09:24:25.717 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 127 ms
+55072:[E]2026-06-21 09:24:26.39 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+57401:06-21 09:25:35.266471 AM [CiAP2Session_FileTransfer] iPhoneToBox ##### sign=Sign_Setup, fileTransferIdentifer=132, size=143868
+57402:[W]2026-06-21 09:25:35.337 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+57403:[ 4505.802153] acc_write: size 12800, accZLP 0
+57416:[D]2026-06-21 09:25:38.960 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+57417:[E]2026-06-21 09:25:38.961 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+57418:[D]2026-06-21 09:25:38.961 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+57434:[W]2026-06-21 09:25:39.83 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 123 ms
+57473:[E]2026-06-21 09:25:39.392 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+59105:[W]2026-06-21 09:25:50.898 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+59106:[ 4520.475224] acc_write: size 12800, accZLP 0
+59163:[D]2026-06-21 09:25:54.476 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+59164:[E]2026-06-21 09:25:54.476 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+59165:[D]2026-06-21 09:25:54.476 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+59229:[E]2026-06-21 09:25:54.863 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+61661:[W]2026-06-21 09:28:39.320 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+61663:[ 4689.024871] acc_write: size 12800, accZLP 0
+61786:[D]2026-06-21 09:28:43.11 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+61787:[E]2026-06-21 09:28:43.12 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+61788:[D]2026-06-21 09:28:43.12 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+61805:[W]2026-06-21 09:28:43.130 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 119 ms
+61843:[E]2026-06-21 09:28:43.416 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+64377:06-21 09:29:50.527326 AM [CiAP2Session_FileTransfer] iPhoneToBox ##### sign=Sign_Setup, fileTransferIdentifer=132, size=85837

@@ -1,0 +1,57 @@
+[W]2026-06-21 08:14:10.245 180-76f67000/ARMadb-driver[Accessory_fd]: _SendDataToCar iSize: 143872, may need send ZLP
+[  220.430225] acc_write: size 12800, accZLP 0
+06-21 08:14:10.260252 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+06-21 08:14:10.577625 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+06-21 08:14:10.731683 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+2026-06-21 08:14:10.843553 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:10.892279 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:10.924606 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:10.957721 AM [ScreenStream] ### Don't need navi stream
+06-21 08:14:11.156895 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+06-21 08:14:11.194825 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+2026-06-21 08:14:11.255813 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.322403 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.356201 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.389542 AM [ScreenStream] ### Don't need navi stream
+06-21 08:14:11.654045 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+2026-06-21 08:14:11.723171 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.789720 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.823227 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:11.856100 AM [ScreenStream] ### Don't need navi stream
+06-21 08:14:11.925497 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+06-21 08:14:12.117309 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+2026-06-21 08:14:12.356837 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:12.423393 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:12.456261 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:12.490009 AM [ScreenStream] ### Don't need navi stream
+06-21 08:14:12.576562 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+06-21 08:14:13.035857 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+[D]2026-06-21 08:14:13.201 309-76401450/colorLightDaemon[colorLightDaemon]: picRGBValue = 0x000000 
+2026-06-21 08:14:13.223345 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:13.293185 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:13.323245 AM [ScreenStream] ### Don't need navi stream
+2026-06-21 08:14:13.355846 AM [ScreenStream] ### Don't need navi stream
+06-21 08:14:13.497955 AM [CiAP2Session_CarPlay] Message from iPhone: 0x5001 NowPlaying
+[D]2026-06-21 08:14:13.927 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_MANUAL_DISCONNECT_PHONE
+[E]2026-06-21 08:14:13.928 180-76f67000/ARMadb-driver[Accessory_fd]: DisconnectPhoneConnection
+[D]2026-06-21 08:14:13.928 180-76f67000/ARMadb-driver[ActionSessions]: 无线 CarPlay 退出
+[D]2026-06-21 08:14:13.928 180-76f67000/ARMadb-driver[ActionSessions]: 开启蓝牙扫描发现
+06-21 08:14:13.928983 AM [RiddleBluetoothService_Interface_Control] OnDbusSignal org.riddle.BluetoothControl:Listen
+06-21 08:14:13.929159 AM [RiddleBluetoothService_Interface_Control] RiddleBluetoothService_Interface_Control::OnDbusMessage Listen
+06-21 08:14:13.929320 AM [RiddleBluetoothService_Interface_Control] StartListen_Inner beListened_ = 0
+06-21 08:14:13.964472 AM [BluetoothSocket_fd] 	$$$ Bluetooth StartListen IAP2!!!
+06-21 08:14:13.964751 AM [BluetoothSocket_fd] 	$$$ Bluetooth StartListen NEARBY!!!
+06-21 08:14:13.964918 AM [BluetoothSocket_fd] 	$$$ Bluetooth StartListen AAP!!!
+06-21 08:14:13.967013 AM [RiddleBluetoothService_Interface_Control] OnDbusSignal org.bluez.Adapter:ModeChanged
+06-21 08:14:13.967179 AM [RiddleBluetoothService_Interface_Control] ModeChanged discoverable
+06-21 08:14:13.967269 AM [RiddleBluetoothService_Interface_Control] OnDbusSignal org.bluez.Adapter:PropertyChanged
+######### CarPlay interrupt SIGTER(15)
+06-21 08:14:14.026041 AM [iAP2] ######### interrupt SIGTER(15)
+06-21 08:14:14.026283 AM [iAP2] ######### interrupt SIGTER(15)
+06-21 08:14:14.030942 AM [RiddleBluetoothService_Interface_Control] OnDbusSignal org.riddle.BluetoothControl:DisconnectRemoteDevice
+06-21 08:14:14.031139 AM [RiddleBluetoothService_Interface_Control] RiddleBluetoothService_Interface_Control::OnDbusMessage DisconnectRemoteDevice
+[W]2026-06-21 08:14:14.33 180-76f67000/ARMadb-driver[Accessory_fd]: OnRead: CMD_MANUAL_DISCONNECT_PHONE(15), use time: 106 ms
+[D]2026-06-21 08:14:14.33 180-76f67000/ARMadb-driver[Accessory_fd]: $$$ CMD_STOP_PHONE_CONNECTION
+[D]2026-06-21 08:14:14.33 180-76f67000/ARMadb-driver[Accessory_fd]: OniPhoneWorkModeChanged: 2 0
+[D]2026-06-21 08:14:14.44 180-76f67000/ARMadb-driver[Accessory_fd]: OnAndroidWorkModeChanged: 1 0
+Stop Link Deamon: CarPlay
