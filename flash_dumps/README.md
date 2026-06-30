@@ -1,9 +1,11 @@
 > [!CAUTION]
-> #1. These dumps are from a A15W (CPC200-CCPA) Adapter with a Realtek Wifi Chipset. Therefor the dumps would only work on other Realtek A15W adapters. Flashing to a non-Realtek Adapter will possibly result in a bricked adapter. Unable to complete its boot due to kernel failure. Backup your own SPI first just in case.
+> #1. These dumps are from a A15W (CPC200-CCPA) Adapter with a Realtek Wifi Chipset. Therefor the dumps would should only work on other Realtek A15W adapters. Flashing to a non-Realtek Adapter will possibly result in a bricked adapter. Unable to complete its boot due to kernel failure. Backup your own SPI first just in case.
 
 > [!CAUTION]
 > #2 If you have the capability to use these dumps to rewrite the SPI, then I’ll assume you’re also capable of retrieving the necessary firmware blobs from the CFW-Recovery update image. And splicing/incorporating it into your own flash bin.
 
+> [!CAUTION]
+> Research shows possible uBoot+Kernel signing based on SoC fuses. While rootfs can be interchanged. The uBoot+Kernel most likely has to be from the original device. See U2air coververtion for further details
 
 Reader: XGecu Pro T48
 OS: Fedora
