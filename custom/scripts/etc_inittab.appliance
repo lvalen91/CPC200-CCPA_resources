@@ -1,0 +1,12 @@
+console::sysinit:/etc/init.d/rcS
+#ttyS0::respawn:/sbin/getty -n -l/bin/sh -L ttyS0 115200 vt100 # GENERIC_SERIAL
+# ttymxc0 backup console: always-on passwordless root LOGIN shell (sources /etc/profile
+# -> standardized PATH). busybox init opens /dev/ttymxc0 (115200 8N1) as the controlling
+# tty; a shell on the idle serial line blocks on read (stays up). Replaces the stock getty
+# line, which exited immediately under busybox getty -> console was silent. 115200 8N1.
+ttymxc0::respawn:-/bin/sh
+::askfirst:-/bin/sh
+::restart:/sbin/init
+::ctrlaltdel:/sbin/reboot
+#::shutdown:bin/umount -a -r
+::shutdown:/script/after_shutdown.sh

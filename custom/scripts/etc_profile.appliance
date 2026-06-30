@@ -1,0 +1,25 @@
+#Ash profile
+#vim:syntax=sh
+# Standardized appliance PATH: system dirs first, /tmp/bin last. Deterministic
+# (no reliance on an inherited $PATH). Sourced by login/interactive shells and by
+# the boot context (rcS does `. /etc/profile`), so reboot/ifconfig/insmod/hostapd
+# all resolve without prefixing. NOTE: non-interactive `ssh host cmd` sessions do
+# NOT source profile (dropbear uses a fixed default PATH=/usr/bin:/bin), so
+# /script/*.sh self-set PATH and automation should pass PATH explicitly.
+export LD_LIBRARY_PATH=/lib:/usr/lib:/tmp/lib
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin:/tmp/bin
+USER=`id -un`
+LOGNAME=$USER
+PS1='[(\t)\u@\w]#'
+HOSTNAME='/bin/hostname'
+export USER LOGNAME PS1 PATH
+
+# USB staging area (when /mnt/UPAN is mounted): make staged tools/libs usable.
+# Appended so on-rootfs system dirs always win; only active while the stick is present.
+[ -d /mnt/UPAN/bin ] && PATH="$PATH:/mnt/UPAN/bin"
+[ -d /mnt/UPAN/lib ] && LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/mnt/UPAN/lib"
+export PATH LD_LIBRARY_PATH
+
+#common alias
+alias ll='ls -alF'
+alias la='ls -A'

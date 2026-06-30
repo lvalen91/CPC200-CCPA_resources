@@ -66,7 +66,9 @@ if [ "$ttylog" -eq 1 ] && [ -e /etc/log_file ]; then
 	ln -s /tmp/ttyLog /tmp/userspace.log
 fi
 
-# (riddle removed: config now lives in hostapd.conf + /etc name files, no riddleBoxCfg)
+if [ -e /usr/sbin/riddleBoxCfg ]; then
+	test -e /etc/riddle.conf || (echo "create riddle.conf from default config file";cp /etc/riddle_default.conf /etc/riddle.conf)
+fi
 
 
 # Must process tar file before LED Power ON
@@ -81,13 +83,8 @@ if [ -e /script/ncm_only ]; then
 else
 	/script/init_bluetooth_wifi.sh
 fi
-#Start load audio codec (headless appliance: no audio path off-device with projection
-# gone, so the WM8960 codec setup is skipped in ncm_only mode)
-if [ -e /script/ncm_only ]; then
-	echo "[start_main_service] ON-DEMAND: skip init_audio_codec (no audio path)"
-else
-	/script/init_audio_codec.sh
-fi
+#Start load audio codec
+/script/init_audio_codec.sh
 #Check Auto Test Mode
 /script/check_mfg_mode.sh &
 
@@ -163,11 +160,6 @@ test -e /script/check_udisk_log.sh && /script/check_udisk_log.sh &
 
 
 echo 3 > /proc/sys/vm/drop_caches
-
-# USB staging area: auto-mount the FAT32 stick at /mnt/UPAN if present at boot
-# (mdev handles hotplug-after-boot). Backgrounded; no-op when no stick. Gives a
-# roomy scratch/bin/lib area to work around the ~12.5MB rootfs.
-test -e /script/mount_usb.sh && /script/mount_usb.sh 12 &
 
 # hwSecret&
 
