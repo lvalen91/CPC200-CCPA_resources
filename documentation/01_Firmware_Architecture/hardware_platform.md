@@ -10,7 +10,7 @@
 
 | Parameter | Value |
 |-----------|-------|
-| **Processor** | NXP i.MX6UL (ARM Cortex-A7) |
+| **Processor** | NXP i.MX6ULL (ARM Cortex-A7) — ULL variant confirmed (DCP at 0x02280000, OCOTP at 0x021BC000) |
 | **Architecture** | ARMv7, 32-bit |
 | **RAM** | 128MB |
 | **Storage** | 16MB Flash |
@@ -208,6 +208,32 @@ The CPC200-CCPA operates under severe constraints:
 This architecture results in a **"Smart Interface, Dumb Processing"** design where the adapter handles protocol translation and format conversion, delegating sophisticated processing (WebRTC, noise cancellation) to the host application.
 
 ---
+
+
+## Unit-Specific OCOTP Fuse Values (CPC200-CCPA, firmware db2026.91)
+
+Read 2026-06-30 via `/sys/fsl_otp/` (sysfs interface; direct devmem of OCOTP registers hangs on this device).
+
+| Register | Value | Notes |
+|----------|-------|-------|
+| CFG0 | 0x692173ca | DCP PAYLOAD[0] for kernel decrypt |
+| CFG1 | 0x1d16c1d7 | DCP PAYLOAD[1] for kernel decrypt |
+| CFG2 | 0x7df100ae | |
+| CFG3 | 0xfc433f02 | |
+| CFG4 | 0x0 | |
+| CFG5 | 0x08d0004a | |
+| CFG6 | 0x0 | |
+| LOCK | 0x324003 | Selective fuse locking |
+| MISC_CONF | 0x40 | HAB Closed (SEC_CONFIG[1]=1) |
+| FIELD_RETURN | 0x2 | |
+| MAC0 | 0x767bb8ec | Ethernet MAC bytes [5:2] |
+| MAC1 | 0xfefd6672 | Ethernet MAC bytes [1:0] |
+| SRK0-7 | 0x35799e07... | Identical to all other HeWei devices |
+| OTPMK0-7 | 0xbadabada | Hardware-masked; actual OTPMK never readable |
+| SW_GP2 / GP412 | 0x0 | DCP PAYLOAD[2] for kernel decrypt |
+| SW_GP3 / GP413 | 0x0 | DCP PAYLOAD[3] for kernel decrypt |
+
+CFG0 and CFG1 are passed to the DCP descriptor as the PAYLOAD field during kernel decryption — they are NOT the AES key. The AES key is derived internally by the DCP from the hardware OTPMK. See `05_Security_Analysis/kernel_encryption.md`.
 
 ## References
 

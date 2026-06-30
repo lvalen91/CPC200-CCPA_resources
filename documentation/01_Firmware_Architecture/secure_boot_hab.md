@@ -35,17 +35,34 @@ MAC0=0xf9138131  MAC1=0xec5819fe
 Direct comparison of OTP fuse values across multiple devices and both brands (Carlinkit and AutoKit) shows the SRK table hash is **identical on every unit**:
 
 ```
-                Carlinkit (Ludwig)   A15W (AutoKit)   2air (U2AC_AUTOKIT)
-SRK0            0x35799e07           0x35799e07       0x35799e07     MATCH
-SRK1            0x3777df73           0x3777df73       0x3777df73     MATCH
-SRK2            0xf1f402d0           0xf1f402d0       0xf1f402d0     MATCH
-SRK3            0xd57be823           0xd57be823       0xd57be823     MATCH
-SRK4            0xddf4d972           0xddf4d972       0xddf4d972     MATCH
-SRK5            0xade068b3           0xade068b3       0xade068b3     MATCH
-SRK6            0x79e7970b           0x79e7970b       0x79e7970b     MATCH
-SRK7            0xa30cdab2           0xa30cdab2       0xa30cdab2     MATCH
-LOCK            0x324003             0x324003         0x324003       MATCH
+                Carlinkit (Ludwig)   A15W (AutoKit)   2air (U2AC_AUTOKIT)  CPC200-CCPA (db2026.91)
+SRK0            0x35799e07           0x35799e07       0x35799e07           0x35799e07     MATCH
+SRK1            0x3777df73           0x3777df73       0x3777df73           0x3777df73     MATCH
+SRK2            0xf1f402d0           0xf1f402d0       0xf1f402d0           0xf1f402d0     MATCH
+SRK3            0xd57be823           0xd57be823       0xd57be823           0xd57be823     MATCH
+SRK4            0xddf4d972           0xddf4d972       0xddf4d972           0xddf4d972     MATCH
+SRK5            0xade068b3           0xade068b3       0xade068b3           0xade068b3     MATCH
+SRK6            0x79e7970b           0x79e7970b       0x79e7970b           0x79e7970b     MATCH
+SRK7            0xa30cdab2           0xa30cdab2       0xa30cdab2           0xa30cdab2     MATCH
+LOCK            0x324003             0x324003         0x324003             0x324003       MATCH
+MISC_CONF       —                    —                —                    0x40           HAB Closed
 ```
+
+The CPC200-CCPA column was verified live 2026-06-30 via `/sys/fsl_otp/` (sysfs OCOTP interface; `devmem` hangs on this device). `MISC_CONF=0x40` confirms HAB Closed (SEC_CONFIG[1]=1). The 8 u-Boot hardcoded SRK constants in mtd0 are byte-for-byte identical to these burned fuse values — confirming u-Boot self-validates its own signing key at first boot.
+
+**CPC200-CCPA unit-specific values (firmware db2026.91, read 2026-06-30):**
+
+```
+CFG0 = 0x692173ca   CFG3 = 0xfc433f02   LOCK = 0x324003
+CFG1 = 0x1d16c1d7   CFG4 = 0x0          MISC_CONF = 0x40
+CFG2 = 0x7df100ae   CFG5 = 0x08d0004a   FIELD_RETURN = 0x2
+                    CFG6 = 0x0
+MAC0 = 0x767bb8ec   MAC1 = 0xfefd6672
+SW_GP2 = 0x0        SW_GP3 = 0x0        (DCP PAYLOAD words 2 and 3)
+OTPMK0-7 = 0xbadabada  (hardware-masked; software reads always return sentinel)
+```
+
+Note: CFG0 and CFG1 are used as DCP descriptor PAYLOAD[0] and PAYLOAD[1] by u-Boot during kernel decryption — they are NOT the AES key. See `05_Security_Analysis/kernel_encryption.md`.
 
 **Every HeWei device — U2W, U2AW, U2AC, A15W, 2air, in both Carlinkit and AutoKit branding — shares the same SRK table hash.** Consequences:
 
