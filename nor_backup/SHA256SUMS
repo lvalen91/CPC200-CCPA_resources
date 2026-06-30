@@ -1,0 +1,8 @@
+# CPC200-CCPA NOR backup — verified device(/dev/mtdN) == local(gunzip) on 2026-06-28
+# Device: sk_mainboard, i.MX6UL, sw 2025.10.15.1127, IW416 (sdio 0x9159), kernel 3.14.52+g94d07bb
+# Layout: mtd0 uboot 256K | mtd1 kernel 3328K | mtd2 rootfs jffs2 12800K (erasesize 0x10000, LE)
+# uBoot+kernel HAB-fused: KEEP verbatim. Only mtd2 is replaceable.
+e62f62a9ef8f6f62d247902f64487c5436f1cc5c53418014867fe7fe1cec41f9  mtd0.bin (uboot)   [stored gz]
+738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128  mtd1.bin (kernel)  [stored gz]
+a0eb519bcf611f22d0f5c368aecda1b1a2c0c77d65a3b546e187993b28d87aa8  mtd2.bin (rootfs)  [stored gz]
+f591e3d44ae9392142abc4d9524e7aaf717d5d88d7c588d00d6f7f5f72f3a5d0  full_nor.bin (whole 16MB chip = mtd0|mtd1|mtd2, programmer-ready)

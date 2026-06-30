@@ -47,6 +47,10 @@ specific WLAN firmware version string and the WLAN firmware blob name/size:
 - **BT firmware:** `nxp/uartiw416_bt_v0.bin` — already documented in this repo
   (`attach_bluetooth.sh`), confirmed identical on the WN16 unit.
 
+> For the IW416 **radio capabilities** (PHY ceiling, SoftAP hostapd `ht_capab` support
+> matrix, measured link behavior, channel guidance), see `wifi_iw416_capabilities.md`
+> — live-verified on hardware including this WN16 unit (`wlan0` MAC `00:E0:4C:91:B0:DF`).
+
 ## Notes on values that differ from this repo's Rev A captures
 
 The following Rev B values are **unit-specific** and are expected to differ from the Rev A

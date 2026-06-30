@@ -8242,12 +8242,12 @@
    "gid": "02_Protocol_Reference/command_ids.md#38",
    "file": "02_Protocol_Reference/command_ids.md",
    "local_id": 38,
-   "statement": "Commands 16-17 are night mode commands handled by the adapter only (StartNightMode, StopNightMode), not forwarded to phone (H→A)",
+   "statement": "Commands 16-17 (Night Mode: StartNightMode/StopNightMode) are received H→A and the adapter writes /tmp/night_mode, but UNLIKE the other adapter-only commands their effect IS propagated to the CarPlay session via the legacy AirPlay setNightMode: path — CarPlay honors it (device-verified 2026-06-23, CPC200-CCPA FW 2025.10.x + iPhone). Earlier 'adapter-only, not forwarded to phone' wording was wrong.",
    "topic": "command-16-17",
    "source_lines": "112",
    "confidence": "high",
    "signals": [],
-   "quote": "16-17 | Night Mode | StartNightMode, StopNightMode"
+   "quote": "16-17 | Night Mode | StartNightMode, StopNightMode — reaches CarPlay, not adapter-local (see ‡)"
   },
   {
    "gid": "02_Protocol_Reference/command_ids.md#39",

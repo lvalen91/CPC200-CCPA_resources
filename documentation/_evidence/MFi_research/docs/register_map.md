@@ -94,3 +94,55 @@ The Carlinkit firmware's binary string table uses these names for the same regis
 | `MFI_AUTH_COP_REG_ADDR_ACC_CERT_DATA_BASE` | `0x31`+ | AccessoryCertData (pages) |
 
 These confirm the chip implements the published MFi 2.0C spec exactly. Function call chain in the firmware: `APSMFiPlatform_CopyCertificate` (cert read) and `APSMFiPlatform_CreateSignature` (sign) → `mfi_auth_processchallenge` (low-level sequence) → I²C writes via `_DoI2C` against the Linux `/dev/i2c-1` device file. See `firmware_internals.md` for the full call structure and the `/dev/mem`-based GPIO mechanism that controls the chip's reset line.
+
+---
+
+## Official-spec cross-reference (standalone `MFI337S3959`, CP 2.0C)
+
+The table above is **live-verified against the CPC200-CCPA's own chip** and is authoritative for
+*this adapter*. For building/driving a **standalone** chip on a Pi (project stages 2–3), the
+official Apple spec — *"iPod Authentication Coprocessor 2.0C Specification"*, transcribed in the
+`zhongyuanluo-cmd/e46-smart-dash` project from Apple's `3530714577MFI337S3959规格书.pdf` — adds
+detail beyond the CCPA's lower bank. Corroborated independently by four code implementations
+(`signalius/MFI_Chip_Rpi_Hat/app_cert_reading/auth.py`, `cvetaevvitaliy/carplay/auth.c`,
+`HaToan/carplay-wifi-extractor/.../mfi_auth_coprocessor.py`, and the AccessorySDK
+`MFiServerPlatformLinux.c`), which all use the identical `0x10`/`0x11`/`0x12`/`0x20`/`0x21`/
+`0x30`/`0x31` map.
+
+**Additional / corrected facts from the official spec:**
+
+- **`DeviceVersion` (`0x00`) differs by part.** The CCPA's chip reads **`0x03`** (above); the
+  standalone `MFI337S3959` spec lists **`0x05`** for CP 2.0C. Treat `0x00` as the part-ID probe,
+  not a fixed constant.
+- **I²C address — 7-bit vs 8-bit (frequent bug).** Linux/`smbus2` uses the **7-bit** address:
+  **`0x10`** when `RST`→GND, **`0x11`** when `RST`→VCC. The spec's "write `0x20` / read `0x21`"
+  are the *8-bit* forms of `0x10` (`0x10<<1`). In `i2cdetect` you must see `0x10`/`0x11`, **not**
+  `0x20`. Writing `0x20` as a 7-bit address never finds the chip. (The CCPA chip sits at `0x11`.)
+- **`0x10` `PROC_CONTROL` is a 3-bit field [2:0]:** `1`=generate signature, `2`=generate
+  challenge, `3`=verify signature, `4`=validate certificate. Read-back: bit7 `ERR_SET`,
+  bits[3:0] `PROC_RESULTS` (success when the result bit is set — `0x10` family).
+- **Certificate paging.** Spec defines cert as up to **10 pages** (`0x31`–`0x3A`, 128 B each, len
+  at `0x30`, ≤1280 B). The CCPA returns its 945 B cert in a **single burst** from `0x31` (no
+  paging needed) — but a standalone part may require page-by-page reads (`0x31+page`). Code should
+  support both.
+- **Higher registers (not exercised on the CCPA lower bank):**
+  - `0x40` **SelfTest** — write `1` to run; read bit7 = certificate present, bit6 = private key
+    present (auto-clears). Quick "is the chip alive and provisioned" check.
+  - `0x4D` **SEC** (System Event Counter) — decrements ~1/s; **per spec, wait until `SEC == 0`
+    before removing VCC.** Relevant to clean power-down of a dedicated chip.
+  - `0x50`–`0x58` **Apple Device certificate** (≤1024 B) — used for the reverse direction
+    (accessory authenticating an iPhone); unused in our receiver/oracle role.
+- **CP 2.0 vs CP 2.0C.** Older RE (wiomoc.de) targeted CP **2.0**; `MFI337S3959` is **2.0C** —
+  differences: RST pin is mandatory (selects address), cert paging, the 3-bit `PROC_CONTROL`,
+  self-test `0x40`, and the SEC counter `0x4D` are 2.0C additions.
+- **Newer part `MFI343S00177` (CP 3.0)** is a *different crypto generation* — **ECDSA P-256 /
+  SHA-256**, 32-byte challenge, cert valid to 2049 — not drop-in for the RSA-1024/SHA-1/20-byte
+  flow above. See the external-landscape survey §7.1.
+
+> **Supported source.** `zhongyuanluo-cmd/e46-smart-dash` (RK3566 + Qt6 BMW-E46 dash, dongle-free
+> wireless-CarPlay, **actively developed**) is adopted as an **ongoing reference source** for this
+> project: it carries the official `MFI337S3959` spec PDF, a practical MFi-chip bring-up/debug
+> guide (pinout, pull-ups, power/timing, NACK behavior, USON-8 cold-solder, fake-chip checks), and
+> a thorough CarPlay-implementation research doc. Re-check it as our testing progresses — it may
+> surface new information. The official spec PDF is mirrored into this repo at
+> `hardware/MFI337S3959_iPod_Auth_Coprocessor_2.0C_spec.pdf` (source: `zhongyuanluo-cmd/e46-smart-dash`).

@@ -23,6 +23,12 @@
 | **WiFi** | Realtek RTL88x2CS | 5GHz 802.11ac, hotspot mode |
 | **Bluetooth** | Realtek RTK HCI UART | BR/EDR + BLE |
 
+> **WLAN variant:** the A15W ships with **two non-interchangeable WiFi variants** — the
+> **Realtek RTL88x2CS** (802.11ac) shown above, and an **NXP/Marvell IW416** (802.11n, 1×1)
+> seen on the units in `hardware_revisions.md`. For the IW416 variant's radio capabilities and
+> SoftAP support matrix, see `wifi_iw416_capabilities.md`. The Bluetooth row likewise differs
+> on IW416 units (NXP `uartiw416_bt_v0.bin` over `hci_uart`).
+
 ## Audio Hardware
 
 ### Supported Codecs

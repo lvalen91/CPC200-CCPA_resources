@@ -119,6 +119,7 @@ RE_Documention/
 │   ├── capture_playback.md             # Capture/playback design reference
 │   └── firmware_update.md              # OTA update mechanism
 └── 06_Reference/
+    ├── external_landscape_survey.md    # Open-source wireless-CarPlay receiver landscape (45clouds fork network, GitHub/GitLab sweep, amineross verified-session reference)
     ├── firmware_internals.md           # DMSDP framework, iAP2 engines, internals
     ├── android_mediacodec/             # Android MediaCodec API reference
     ├── vehicle_platforms/gminfo/       # GM Info 3.7 platform specs

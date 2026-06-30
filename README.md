@@ -22,7 +22,7 @@ centralized documentation, and binary patches.
 | **`web_interface/`** | Replacement web UI for the adapter's Boa config server — vanilla-JS drop-in (~70 KB) + SSH installer + unpacked OEM backup; requires the SSH custom firmware. See [`documentation/01_Firmware_Architecture/web_interface.md`](documentation/01_Firmware_Architecture/web_interface.md) |
 | **`flash_dumps/`** | Raw 16 MB SPI flash IC dumps, date-versioned (stock + post-custom `.ncm`) |
 | **`documentation/`** | Centralized research docs (numbered sections + `_evidence/`, `_index/`) |
-| **`hardware/`** | Device reference: `cpc200-ccpa_spec.md`, `MX25L12835F_datasheet.pdf`, `photos/` |
+| **`hardware/`** | Device reference: `cpc200-ccpa_spec.md`, `MX25L12835F_datasheet.pdf` (flash), `MFI337S3959_iPod_Auth_Coprocessor_2.0C_spec.pdf` (Apple MFi 2.0C auth-coprocessor spec), `photos/` |
 
 > Repo origin/purpose: maintain a pair of firmware images (for updating) and an EEPROM flash dump
 > taken after the update completes. That core remains under `carlinkit/firmware_stock/` + `flash_dumps/`.

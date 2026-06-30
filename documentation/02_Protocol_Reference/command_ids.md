@@ -103,13 +103,13 @@ These commands are sent by the host and **forwarded to the connected phone** via
 
 ### Host → Adapter (H→A) — Handled by Adapter Only
 
-These commands are processed by the adapter firmware and **NOT forwarded** to the phone.
+These commands are processed by the adapter firmware and **NOT forwarded** to the phone — **with one exception: Night Mode (16-17), whose effect does reach CarPlay (see ‡ below).**
 
 | ID Range | Group | Summary |
 |----------|-------|---------|
 | 7-8, 15, 21 | Mic Routing | UseCarMic, UseBoxMic, UseBoxI2SMic, UsePhoneMic |
 | 12, 26 | Video | RequestKeyFrame, RefreshFrame |
-| 16-17 | Night Mode | StartNightMode, StopNightMode |
+| 16-17 | Night Mode | StartNightMode, StopNightMode — **reaches CarPlay**, not adapter-local (see ‡) |
 | 18-19 | GNSS | StartGNSSReport, StopGNSSReport |
 | 22-23 | Audio Routing | UseBluetoothAudio, UseBoxTransAudio |
 | 24-25 | WiFi Band | Use24GWiFi, Use5GWiFi |
@@ -117,6 +117,8 @@ These commands are processed by the adapter firmware and **NOT forwarded** to th
 | 30-31 | BLE | StartBleAdv, StopBleAdv |
 | 600-601 | DVR | DVRCommand_RequestPreview, ScanAndConnect — dead code, no hardware |
 | 1000-1002, 1012-1013 | Connection Control | SupportWifi, SupportAutoConnect, StartAutoConnect, WiFiPair, GetBluetoothOnlineList |
+
+‡ **Night Mode (16-17) — correction (device-verified 2026-06-23):** previously listed here as purely adapter-local / "not forwarded to phone." That is **wrong**. The *command* is received H→A and the adapter writes `/tmp/night_mode`, but the adapter then **propagates the day/night state into the active CarPlay session** via the legacy AirPlay `setNightMode:` path (see `carkit_ios26_master.md` §"Display and UI" / the `setNightMode:` resolver). **CarPlay honors it:** sending 16 (StartNightMode) / 17 (StopNightMode) from the host mid-session switches the CarPlay UI dark/light, with the session uninterrupted. Verified on a CPC200-CCPA (FW 2025.10.x) + iPhone via USB passthrough, driven by the AAOS day/night state. So unlike the genuinely adapter-local commands in this group, Night Mode's effect is visible on the phone (the *command* is adapter-handled; the *result* is forwarded).
 
 ### Phone → Adapter → Host (P→A→H) — Forwarded from Phone
 
