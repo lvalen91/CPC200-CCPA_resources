@@ -343,3 +343,106 @@ SendFile (0x99) allows writing to **any path** on the adapter filesystem:
 5. **Reconnect and verify** via SoftwareVersion (0xCC) message
 
 The adapter handles everything else automatically once the correctly-named file is written.
+
+---
+
+## Server-Side OTA API & Host-Mediated Architecture
+
+**Source:** Protocol/server analysis (api.paplink.cn), correlated against firmware behavior
+
+### The Adapter Has No Internet
+
+The adapter itself **never contacts any update server** — it has no internet access in normal operation. The entire OTA flow is mediated by an external host application. The on-device mechanism documented above (SendFile 0x99 → `update_box_ota.sh`) is only the final delivery step; the check and download happen off-device.
+
+**A15W (CPC200-CCPA) — Via Host App:**
+```
+LIVI / AutoKit PC app
+  → Reads adapter's BoxSettings (UUID, MFD, productType, version) over USB
+  → Calls api.paplink.cn/a/upgrade/checkBox with those credentials
+  → Downloads .img from api.paplink.cn/a/upgrade/down
+  → Pushes .img to adapter via USB SendFile (msg type 0x99) → /tmp/<model>_Update.img
+  → ARMadb-driver detects file, runs /script/update_box_ota.sh
+```
+
+### Two Distinct OTA APIs
+
+There are two separate update APIs in the HeWei ecosystem. The older web-UI endpoint is decommissioned; the app-driven API is active.
+
+| | Old web-UI API (U2W era) | Active app API (A15W) |
+|---|---|---|
+| **Check URL** | `www.paplink.cn/server.php?action=checkBoxUpdateByCustomerBoxType` | `api.paplink.cn/a/upgrade/checkBox` or `check2Box` |
+| **Method** | GET (browser JavaScript) | POST (app native code) |
+| **Parameters** | CustomerType, BoxType, uuid, fileName, curVer | lang, code, appVer, ver, uuid, mfd, fwn, model |
+| **MFD used?** | No (not in URL params) | Yes (batch gate) |
+| **Download** | `www.paplink.cn/server.php?action=downfile` | `api.paplink.cn/a/upgrade/down` with JWT |
+| **Status** | **server.php returns HTTP 404** (decommissioned) | **Active** |
+
+The old `www.paplink.cn/server.php` endpoint is now dead (404). However, direct download paths under `www.paplink.cn/mnt/downloads/` still resolve.
+
+### API Endpoints (api.paplink.cn)
+
+**Check for updates (ARMHiCar binary):**
+```
+POST http://api.paplink.cn/a/upgrade/check2Box
+Content-Type: application/x-www-form-urlencoded
+
+Parameters:
+  lang=0              Language
+  uuid=<device UUID>  From OTP fuses (CFG0+CFG1+MAC0+MAC1)
+  mfd=<YYYYMMDD>      Manufacture date
+  ptype=<product>     e.g., "A15W", "U2W_AUTOKIT"
+  cbrand=             Car brand (optional)
+  cmodel=             Car model (optional)
+  cyear=0             Car year (optional)
+  ver=<current fw>    e.g., "2025.10.15.1127"
+  fwn=<filename>      e.g., "A15W_Update.img"
+```
+
+**Check for updates (LIVI app):**
+```
+POST http://api.paplink.cn/a/upgrade/checkBox
+Parameters: lang, code, appVer, ver, uuid, mfd, fwn, model
+```
+
+**Download firmware:**
+```
+POST http://api.paplink.cn/a/upgrade/down
+Headers: Authorization: <JWT token>, OS: Android, User-Agent: LIVI
+Parameters: same as check + id=<update id>
+```
+
+### Response Structure
+
+```json
+{
+  "err": 0,
+  "token": "<JWT with UUID + expiry>",
+  "ver": "2025.10.15.1127",
+  "size": "11342661",
+  "path": "20251017/IuSttKFZ_A15W_Update_2025.10.15.1127.img",
+  "id": "504a1fe17bab6a9af946e2e735057098",
+  "notes": "...",
+  "forced": 0,
+  "rollback": {"ver": "2025.02.25.1521", "path": "...", "size": 12585685}
+}
+```
+
+### MFD as Hardware-Batch Gate
+
+The `mfd` (manufacture date) parameter acts as a **hardware batch filter**. Devices manufactured before a certain date are excluded from newer firmware channels, so older hardware never receives an incompatible AutoBox.img (signed U-Boot+kernel):
+
+```
+For A15W with a given UUID:
+  MFD=20220101 → NO update available
+  MFD=20230101 → NO update available
+  MFD=20240101 → ✅ Updates available
+  MFD=20250101 → ✅ Updates available
+```
+
+This ensures the server only delivers firmware compatible with the device's hardware revision and SRK key index. Devices too old for a given firmware channel simply receive no update.
+
+### Sequential Update Model
+
+Updates are **sequential** — the server offers one step at a time, not a direct jump to the latest version. Each check returns the next version in the chain for that device's MFD; after applying it, the device must check again to obtain the following step.
+
+> **Note:** This section documents the protocol and server-side architecture only. The on-device delivery and execution path (SendFile 0x99 staging, `update_box_ota.sh`, progress files) is covered in the sections above.

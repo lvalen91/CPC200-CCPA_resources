@@ -30,6 +30,32 @@ rootwait quiet rw
 
 This captured cmdline (from `cmdline.txt`) is the authoritative record of what the kernel actually booted with — `console=ttyLogFile0`, `root=/dev/mtdblock2` — and matches the 3-partition MTD layout. It takes precedence over the differing `console=ttymxc0,115200 root=/dev/mtdblock3` values seen in the U-Boot `norargs` env (see below), which are stale/unused.
 
+### MTD Partition Flags (Write Permissions)
+
+All three MTD partitions carry the same flag value:
+
+| Partition | Flags | Decoded |
+|-----------|-------|---------|
+| mtd0 (uboot) | 0xc00 | MTD_WRITEABLE \| MTD_BIT_WRITEABLE |
+| mtd1 (kernel) | 0xc00 | MTD_WRITEABLE \| MTD_BIT_WRITEABLE |
+| mtd2 (rootfs) | 0xc00 | MTD_WRITEABLE \| MTD_BIT_WRITEABLE |
+
+**All three partitions are Linux-writable from a running root shell — not just mtd2 (rootfs).** mtd0 (U-Boot) and mtd1 (kernel) carry the same writeable flags, so a root-level process can overwrite the signed bootloader and encrypted kernel from the live system.
+
+The consequence is asymmetric and unforgiving: because the boot ROM enforces HAB signature verification on U-Boot and the kernel is decrypted with per-chip key material, writing an unsigned U-Boot or an undecryptable kernel results in a **permanent brick** with no field recovery path. This is the basis of the factory burn-mode escape hatch (which deliberately erases the U-Boot block to force the boot ROM into serial-download mode). See `03_Security_Analysis/secure_boot_hab.md` for the HAB enforcement details and brick/recovery consequences.
+
+### QSPI NOR Write/Erase Geometry
+
+The flash is driven by the `fsl-quadspi` controller at `0x21e0000`:
+
+| Property | Value |
+|----------|-------|
+| Flash type | SPI NOR |
+| Write size | 1 byte (byte-addressable) |
+| Erase block size | 65,536 bytes (64KB) |
+
+The 64KB erase granularity matches the `erasesize` reported for all three partitions in `/proc/mtd`.
+
 ---
 
 ## U-Boot Analysis (mtd0.bin)

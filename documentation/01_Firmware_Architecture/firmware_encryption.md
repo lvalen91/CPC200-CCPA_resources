@@ -71,6 +71,7 @@ See `03_Security_Analysis/crypto_stack.md` for complete cryptographic stack docu
 | Model | Key | Source |
 |-------|-----|--------|
 | U2W | `CarPlay5KBP6ClJv` | ludwig-v repo |
+| U2W_AUTOKIT | `CarPlay5KBP6ClJv` | Verified (same key as U2W) |
 | U2AW | `CarPlayBbnF6ecFP` | ludwig-v repo |
 | U2AC | `CarPlayiHXF1o74i` | ludwig-v repo |
 | HWFS modules | `8e15c895KBP6ClJv` | ludwig-v repo |
