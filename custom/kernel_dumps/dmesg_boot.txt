@@ -1,0 +1,60 @@
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC) ) #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=10c53c7d
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+[    0.000000] Machine model: Freescale i.MX6 UltraLite 14x14 EVK Board
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] On node 0 totalpages: 32768
+[    0.000000] free_area_init_node: node 0, pgdat 805f0000, node_mem_map 87ef8000
+[    0.000000]   Normal zone: 256 pages used for memmap
+[    0.000000]   Normal zone: 0 pages reserved
+[    0.000000]   Normal zone: 32768 pages, LIFO batch:7
+[    0.000000] PERCPU: Embedded 8 pages/cpu @87ee2000 s8256 r8192 d16320 u32768
+[    0.000000] pcpu-alloc: s8256 r8192 d16320 u32768 alloc=8*4096
+[    0.000000] pcpu-alloc: [0] 0 
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 32512
+[    0.000000] Kernel command line: console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs) rootwait quiet rw
+[    0.000000] PID hash table entries: 512 (order: -1, 2048 bytes)
+[    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536 bytes)
+[    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768 bytes)
+[    0.000000] Memory: 123256K/131072K available (4260K kernel code, 194K rwdata, 1384K rodata, 204K init, 478K bss, 7816K reserved)
+[    0.000000] Virtual kernel memory layout:
+[    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+[    0.000000]     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
+[    0.000000]     vmalloc : 0x88800000 - 0xff000000   (1896 MB)
+[    0.000000]     lowmem  : 0x80000000 - 0x88000000   ( 128 MB)
+[    0.000000]     modules : 0x7f000000 - 0x80000000   (  16 MB)
+[    0.000000]       .text : 0x80008000 - 0x8058b328   (5645 kB)
+[    0.000000]       .init : 0x8058c000 - 0x805bf040   ( 205 kB)
+[    0.000000]       .data : 0x805c0000 - 0x805f0b60   ( 195 kB)
+[    0.000000]        .bss : 0x805f0b6c - 0x806684c8   ( 479 kB)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] Preemptible hierarchical RCU implementation.
+[    0.000000] 	RCU restricting CPUs from NR_CPUS=4 to nr_cpu_ids=1.
+[    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS:16 nr_irqs:16 16
+[    0.000000] Switching to timer-based delay loop
+[    0.000022] sched_clock: 32 bits at 3000kHz, resolution 333ns, wraps every 1431655765682ns
+[    0.001572] clocksource_of_init: no matching clocksources found
+[    0.001849] log file data init success
+[    0.001960] console [ttyLogFile0] enabled
+[    0.001973] tty-log-file: registered console driver for tty log file 0
+[    0.002172] Console: colour dummy device 80x30
+[    0.002208] Calibrating delay loop (skipped), value calculated using timer frequency.. 6.00 BogoMIPS (lpj=30000)
+[    0.002237] pid_max: default: 32768 minimum: 301
+[    0.002614] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.002637] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.004284] CPU: Testing write buffer coherency: ok
+[    0.004806] CPU0: update cpu_power 1024
+[    0.004832] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.004885] Setting up static identity map for 0x8040af58 - 0x8040afb0
+[    0.040848] Brought up 1 CPUs
+[    0.040874] SMP: Total of 1 processors activated (6.00 BogoMIPS).
+[    0.040885] CPU: All CPU(s) started in SVC mode.
+[    0.042261] devtmpfs: initialized
+[    0.053843] VFP support v0.3: implementor 41 architecture 2 part 30 variant 7 rev 5
+[    0.054626] pinctrl core: initialized pinctrl subsystem
+[    0.055486] regulator-dummy: no parameters
+[    0.056121] NET: Registered protocol family 16
+[    0.056797] DMA: preallocated 256 KiB pool for atomic coherent allocations
+[    0.058135] cpuidle: using governor ladder

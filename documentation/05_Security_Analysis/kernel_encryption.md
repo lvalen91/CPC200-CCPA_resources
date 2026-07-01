@@ -1,14 +1,16 @@
 # CPC200-CCPA Kernel Encryption Analysis
 
 **Purpose:** Document kernel encryption findings and decryption/re-encryption capability
-**Analysis Date:** 2026-01-29 (initial); 2026-06-30 morning session (cipher-mode claim, later found wrong); **2026-06-30 evening session (corrected via fresh disassembly + live DCP register work)**
-**Status:** Cipher mode and register map now CONFIRMED via disassembly cross-checked against the real Linux `mxs-dcp.c` driver source. Live re-derivation of the actual per-chip key material (running the decrypt on-device) attempted but NOT yet achieved — DCP channel trigger does not reliably complete from Linux userspace on this unit; root cause still open. See "Live DCP Attempts" below before trying again.
+**Analysis Date:** 2026-01-29 (initial); 2026-06-30 morning session (cipher-mode claim, later found wrong); 2026-06-30 evening session (corrected via fresh disassembly + live DCP register work); **2026-06-30 night session (plaintext kernel actually recovered, via a different route)**
+**Status:** **Plaintext kernel recovered.** Cipher mode and register map were confirmed via disassembly cross-checked against the real Linux `mxs-dcp.c` driver source, but live re-derivation via a userspace DCP trigger was never made to work reliably (see "Live DCP Attempts" below). That whole approach turned out to be unnecessary: u-Boot already decrypts the kernel into RAM once, every boot, before jumping to it — so the plaintext just has to be read back out of the running system's physical memory, no crypto engine needed. Done, see "Breakthrough" section below. Artifacts in `custom/kernel_dumps/`.
 
 ---
 
-## TL;DR (2026-06-30 evening)
+## TL;DR (2026-06-30 night)
 
-The kernel in mtd1 is encrypted with **AES-128-CBC** (not stream/CTR — the earlier same-day doc revision was wrong, see "Corrected Finding" below) using the DCP hardware AES engine's **`OTP_KEY`** mode (`KEY_SELECT=0xfe`, i.e. `DCP_PAES_KEY_UNIQUE` in mainline Linux's naming — a per-chip key derived from OTPMK fuses, never software-readable). The 16-byte IV is `OCOTP_CFG0 ‖ OCOTP_CFG1 ‖ SW_GP2 ‖ SW_GP3`, all of which ARE readable (`/sys/fsl_otp/`) and device-specific but not secret. Because the key is hardware-bound, the only way to actually decrypt is to make the DCP peripheral itself run the operation (either u-Boot at boot, as it already does, or a Linux userspace program driving the same registers via `/dev/mem`) — there is no way to extract the key or compute a static keystream file offline.
+**The plaintext kernel has been extracted, from live RAM, no DCP register access required.** u-Boot decrypts mtd1 into RAM and jumps to it once per boot; the resulting running kernel's `.text`/`.data` sit at a fixed, `/proc/iomem`-documented physical address for the entire uptime of the device. Reading that range with a plain `dd if=/dev/mem` yields the exact decrypted, decompressed kernel bytes — banner string, ~43k `/proc/kallsyms` symbols, and real ARM opcodes all confirmed. See "Breakthrough" below for the full method and caveats (this is the linked, resident image at its final address, not a byte-identical copy of any zImage/Image file that once existed on flash — see caveats before using it to rebuild a flashable image).
+
+The kernel in mtd1 is encrypted with **AES-128-CBC** (not stream/CTR — the earlier same-day doc revision was wrong, see "Corrected Finding" below) using the DCP hardware AES engine's **`OTP_KEY`** mode (`KEY_SELECT=0xfe`, i.e. `DCP_PAES_KEY_UNIQUE` in mainline Linux's naming — a per-chip key derived from OTPMK fuses, never software-readable). The 16-byte IV is `OCOTP_CFG0 ‖ OCOTP_CFG1 ‖ SW_GP2 ‖ SW_GP3`, all of which ARE readable (`/sys/fsl_otp/`) and device-specific but not secret. This is all still true and still the reason the DCP-register route is hard — it's just no longer the only way to get the plaintext.
 
 **The 2026-06-30 morning doc revision claiming "AES-128 CTR/stream, keystream.bin XOR recipe, SOLVED" was incorrect.** No `keystream.bin` or `decrypted_gzip.bin` from that session ever existed on disk (checked exhaustively — repo, device, home directory); the claim was apparently generated without the backing artifacts surviving, and the "zero repeated 16-byte block" test used to justify "stream cipher" doesn't actually distinguish CBC from CTR when the plaintext is gzip-compressed data (gzip output essentially never repeats a 16-byte block regardless of cipher mode). Disassembly-derived register values point at CBC, not CTR — see below.
 
@@ -97,6 +99,53 @@ Built a small static ARM/musl tool (`custom/tools/dcp_decrypt.c`, cross-compiled
 
 ---
 
+## Breakthrough: Plaintext Kernel Recovered via Direct RAM Read (2026-06-30 night)
+
+After the DCP register trigger repeatedly failed to complete reliably from Linux userspace (see above), stepped back from "replicate u-Boot's decrypt" to "u-Boot already ran the decrypt — go read the result." u-Boot decrypts mtd1 into RAM and jumps into it exactly once per boot; the running kernel's code and data then sit at a fixed physical address for the rest of that boot's uptime, and Linux itself documents exactly where in `/proc/iomem`:
+
+```
+80000000-87ffffff : System RAM
+  80008000-8058b327 : Kernel code
+  805c0000-806684c7 : Kernel data
+```
+
+No DCP involvement needed — this is just reading already-decrypted bytes back out of RAM.
+
+### Method
+
+```
+ssh root@192.168.50.2 'dd if=/dev/mem bs=4096 skip=524296 count=2048' > kernel_ram_dump_0x80008000.bin
+```
+
+(`skip=524296` = `0x80008000 / 4096`; `count=2048` = 8 MiB, i.e. `0x80008000`–`0x80808000`, comfortably covering both the "Kernel code" and "Kernel data" ranges plus the gap between them.) Streamed straight over the SSH pipe to the Mac rather than writing to the device — root's `/` had only 6.2 MB free, but this never touched flash either way.
+
+Also pulled `/proc/kallsyms` (42,960 entries — full symbol table, name→physical address) and the first 60 lines of `dmesg` for boot-time context.
+
+### Verification
+
+- `strings` on the dump surfaces `Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC) ) #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025` — the exact banner reported live by `/proc/version` on the same boot — plus dozens of real i.MX6/ARM kernel symbol name strings (`mxc_restart`, `imx6q_pm_pu_power_on`, `vfp_single_add`, etc).
+- First bytes decode as plausible ARM32 instruction encodings (condition-code nibble `e` = "always" on nearly every 4-byte word), not random/encrypted-looking bytes.
+- `/proc/kallsyms`'s first real symbol, `_stext` at `80008200`, is 0x200 into the dump — consistent with the standard short ARM Linux boot-stub header occupying the first 0x200 bytes before `_stext`.
+- Byte histogram: 74% non-zero, no long zero-run padding pattern — consistent with real packed code+data, not an unmapped/faulted region silently reading as zeros.
+
+### Caveats — what this is and isn't
+
+- This is the **linked, resident kernel image at its final run address** (post zImage self-decompression), not a byte-identical copy of the zImage or raw Image that once sat in a bootloader staging buffer. It's missing the self-extracting decompressor stub and the original compressed wrapper. It **is** the real `.text`/`.data` content, which is what matters for reading code, finding strings/functions, and diffing against a stock reference build.
+- It reflects the *current running state*, not necessarily the pristine flashed image — e.g. any runtime relocation, but for this architecture kernel .text/.data are not self-modifying in the general case, so this should match the flashed content closely modulo re-relocatable sections (`.init`, freed after boot, may already be gone from the "Kernel code" range's tail — the reported range shrinks as init sections are reclaimed by the buddy allocator, which likely explains why the code range's actual conservative-hexdump extent is smaller than the original zImage would suggest).
+- To turn this into something reflashable (a modified mtd1), still need to reconstruct a bootable image format (raw `Image` or self-decompressing `zImage`) using this dump + `kallsyms_running.txt` as the byte/symbol-accurate reference, and would still need either (a) a way to write a *new* encrypted mtd1 image u-Boot will accept (requires driving the DCP **encrypt** path, still unsolved live), or (b) patching u-Boot to skip/bypass the decrypt step for a plain unencrypted replacement kernel (see `secure_boot_hab.md` for HAB constraints on modifying u-Boot itself). The read-side secrecy problem — "what does the real kernel contain" — is fully solved; the write-side problem (flashing a modified kernel back) is not addressed by this technique and remains open.
+
+### Artifacts (this repo, `custom/kernel_dumps/`)
+
+| File | Contents |
+|------|----------|
+| `kernel_ram_dump_0x80008000.bin` | 8 MiB raw dump, physical `0x80008000`–`0x80808000` (covers `/proc/iomem`'s Kernel code + Kernel data ranges and the gap between) |
+| `kallsyms_running.txt` | Full `/proc/kallsyms` (42,960 symbols) — address→name map for the dump above |
+| `dmesg_boot.txt` | First 60 lines of `dmesg` from the same boot, for cross-reference |
+
+Device state at capture time: `db2026.91` test unit, 192.168.50.2, uptime 21 min (clean boot after the earlier DCP-experiment recovery), `/proc/cmdline`: `console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs) rootwait quiet rw`.
+
+---
+
 ## Previous Decryption Attempts (Historical, still valid)
 
 | Key | Algorithm | Why It Failed |
@@ -110,7 +159,7 @@ Built a small static ARM/musl tool (`custom/tools/dcp_decrypt.c`, cross-compiled
 
 ## Anti-Debug Hardening
 
-- `CONFIG_STRICT_DEVMEM`: blocks `/dev/mem` **read()/write() syscalls** to normal "System RAM" pages (confirmed: reads at `0x80800000`, the kernel's own former load address, succeed via `mmap()`+pointer but **fail** via `dd`'s read()/write() path at the exact same address — the block is syscall-path-specific, not a blanket RAM ban). OCRAM (not part of the System RAM resource) is unaffected either way.
+- `CONFIG_STRICT_DEVMEM` claim **needs re-verification** — an earlier note here said reads at `0x80800000` (the pre-decompression staging address) succeeded via `mmap()` but failed via `dd`'s read()/write() path. That doesn't hold universally: plain `dd if=/dev/mem` against `0x80008000`–`0x80808000` (the live "Kernel code"/"Kernel data" range from `/proc/iomem`) worked with **zero errors**, no `mmap()` needed (see "Breakthrough" above). Either this kernel doesn't actually have `CONFIG_STRICT_DEVMEM` enabled (never confirmed directly — `/proc/config.gz` isn't present on this build), or the restriction (if any) is finer-grained than "System RAM" and doesn't cover the specific reserved kernel-code/data sub-ranges. Don't assume `dd` is blocked on System RAM without testing the exact address first.
 - `ptrace` globally rejected with `EINVAL` — no on-device function tracing
 - No ftrace (`/sys/kernel/debug/tracing` absent)
 
@@ -122,6 +171,7 @@ Built a small static ARM/musl tool (`custom/tools/dcp_decrypt.c`, cross-compiled
 - Encrypted kernel: `mtd1.bin` (backup `20260629_224242_FINAL_consoleFix_bb137_db2026.91/`)
 - OCOTP live values (2026-06-30, re-verified via both `/sys/fsl_otp/` and direct `/dev/mem` MMIO read of `0x021bc410`/`0x021bc420`): CFG0=`0x692173ca`, CFG1=`0x1d16c1d7`, SW_GP2=`0x0`, SW_GP3=`0x0`
 - Live DCP driver tool: `custom/tools/dcp_decrypt.c` (current safe version — single reset, single attempt per chunk, no retry storm)
+- Plaintext kernel (recovered via direct RAM read, not DCP): `custom/kernel_dumps/kernel_ram_dump_0x80008000.bin`, `kallsyms_running.txt`, `dmesg_boot.txt`
 - Authoritative register/bit reference used to correct this doc: `torvalds/linux` `drivers/crypto/mxs-dcp.c`, `include/soc/fsl/dcp.h`, `include/linux/stmp_device.h`, `lib/stmp_device.c`
 - Kernel compilation guide: `01_Firmware_Architecture/kernel_compilation.md`
 - HAB/SRK/OTPMK architecture: `05_Security_Analysis/secure_boot_hab.md`
