@@ -100,6 +100,18 @@ int main(int argc, char **argv) {
     long total = strtol(argv[3], NULL, 10);
     if (total <= 0) { fprintf(stderr, "bad total_len\n"); return 2; }
     if (argc >= 5) CHUNK_MAX = (uint32_t)strtoul(argv[4], NULL, 10);
+    /* data_buf lives at OCRAM_BASE+DATA_BUF_OFF inside a fixed-size /dev/mem
+     * mmap of only OCRAM_LEN bytes -- a chunk that doesn't fit writes past
+     * the mapped region into unmapped memory and segfaults. Clamp instead
+     * of trusting the caller (this exact mistake was made once already:
+     * passing chunk_size == total_len to try a single u-Boot-style
+     * whole-file descriptor crashed the tool on the device). */
+    uint32_t max_chunk = (uint32_t)(OCRAM_LEN - DATA_BUF_OFF);
+    if (CHUNK_MAX > max_chunk) {
+        fprintf(stderr, "chunk_size %u exceeds OCRAM data buffer capacity %u, clamping\n",
+                CHUNK_MAX, max_chunk);
+        CHUNK_MAX = max_chunk;
+    }
 
     uint8_t *ct = malloc(total);
     uint8_t *pt = malloc(total);
