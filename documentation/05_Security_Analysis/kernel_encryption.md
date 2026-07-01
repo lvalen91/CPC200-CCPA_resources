@@ -148,6 +148,28 @@ Device state at capture time: `db2026.91` test unit, 192.168.50.2, uptime 21 min
 
 ---
 
+## Cross-Product Analysis: `wireless-carplay-dongle-reverse-engineering` (ludwig-v) (2026-06-30 night)
+
+Prompted by the question "could any of Carlinkit/HeWei's other known keys (A15W OTA image key, USB Bulk Message session keys) apply here" — they can't (see table below, already ruled out), but the external repo at `wireless-carplay-dongle-reverse-engineering-master` turned out to be far more useful for a different reason: **it's the same hardware/software platform family**, not just "another Carlinkit product." Confirmed identical: SoC (i.MX6ULL), flash chip (Macronix MX25L12835F, 16MB), partition table string byte-for-byte (`21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs)`), and kernel version (`3.14.52+g94d07bb`) across its U2W/U2AW/U2AC dumps and our CCPA `db2026.91` unit. This repo has **full 16MB NOR flash dumps** (`Flash_Dump/{U2W,U2AW,U2AC,Android_Version}/*.bin`) spanning firmware dates 2020-01-22 through 2024-07-20, across multiple physical units — a dataset our own single-device analysis never had.
+
+### What extracting and comparing every dump's kernel partition (offset `0x40000`, length `0x340000`, per that repo's own `Flash_Dump/STRUCTURE.md`) showed:
+
+| Firmware | Kernel partition | Notes |
+|---|---|---|
+| `U2W 20200122` | **Plaintext** — real ARM zImage magic (`0x016F2818`) found at partition offset `0xC0024`; low-entropy structured content (37% zero/0xFF bytes vs. ~1% baseline) before it | Confirms kernel-partition encryption **did not exist** on this platform as of Jan 2020 |
+| `U2W 20200804` onward (all dates through 2024, all of U2W/U2AW/U2AC) | High-entropy, no zImage/gzip magic anywhere, ~1% zero/0xFF (matches random-data baseline) | Encryption was introduced **between 2020-01-22 and 2020-08-04** |
+| Our CCPA `mtd1.bin` | High-entropy from byte 0, no low-entropy preamble | Structurally different from the 2020 layout (that dump has a ~768KB low-entropy region before its zImage; ours doesn't) — CCPA's scheme (or a later evolution of it) appears to encrypt starting from the partition's first byte, not just from a fixed offset within it |
+
+Two additional, independently-arrived-at data points that reinforce (not just repeat) our own CBC/per-device-IV analysis:
+- Several same-family firmware/CFW builds share **byte-identical** kernel ciphertext (confirmed via SHA-256) despite different release labels/dates — e.g. `U2W_FW_20220124` and `U2W_CFW_20231228_FORGED_RTL8822BS` are identical; both `U2AW_FW_20220927` (`3.10.16.0952`-era) — expected when a repackaging/"forged" CFW build reuses an unmodified kernel binary rather than proof of anything about the key.
+- Two other builds (`U2W_CFW_20210306_RTL_..._STRACE` and `U2W_CFW_20210830_RTL8822BS_..._SSH`) share **identical leading ciphertext bytes but diverge later** (same first-16 hex, different full SHA-256). That's the textbook signature of AES-**CBC** with a **device-persistent IV** and similar-but-not-identical plaintext: same physical device (same OTP-derived IV) + same kernel-header prologue bytes for a few blocks ⇒ same leading ciphertext blocks, then chaining diverges once the actual kernel content differs between releases. Independent confirmation, from a completely different dataset, of the CBC-mode / OTP-derived-IV model already established from CCPA's own disassembly.
+
+### Bottom line on the original question
+
+No — none of Carlinkit's known *static* keys (OTA image key `AutoPlay9uPT4n17`, USB session key `W2EC1X1NbZ58TXtn`, or this repo's reference device's OTP/CFG values) can be the CCPA kernel key, because it's confirmed hardware-bound per-chip (matches this repo's own `IMX_eFuses/list.txt` reference device having different CFG0/CFG1 than our unit, as expected). **But** this cross-product data is still the most useful lead so far for the *unsolved* half of this problem (the DCP trigger's completion race): this repo has u-Boot binaries from both sides of the exact 2020-01-22→2020-08-04 window where encryption was introduced. Diffing/disassembling a **known-working, pre-encryption u-Boot against a known-working, post-encryption u-Boot** (rather than reverse-engineering CCPA's single hardened build in isolation, which is all we've done so far) could reveal an initialization step, clock-gating detail, or register write our from-scratch reimplementation in `custom/tools/dcp_decrypt.c` is still missing. Not done yet — flagged here as the strongest next step. u-Boot extraction offset/length for this platform: `0x1830`/`0x2A7D0`, per the same `STRUCTURE.md`.
+
+---
+
 ## Previous Decryption Attempts (Historical, still valid)
 
 | Key | Algorithm | Why It Failed |
@@ -156,6 +178,7 @@ Device state at capture time: `db2026.91` test unit, 192.168.50.2, uptime 21 min
 | `W2EC1X1NbZ58TXtn` | AES-128-CBC | USB session key, not kernel key |
 | CFG0+CFG1+GP2+GP3 (reference device) | AES-128 | Wrong device (Carlinkit V2 fuse values) |
 | CFG0+CFG1+GP2+GP3 (our CCPA device, as literal AES key) | AES-128 | This is the IV (DCP `PAYLOAD` field), not the AES key — the key is hardware-only (`OTP_KEY`/`KEY_SELECT=0xfe`) and never touches software in any form |
+| Any static key/OTP value from `wireless-carplay-dongle-reverse-engineering-master` (other Carlinkit U2W/U2AW/U2AC units) | AES-128 | Same platform family, but per-chip OTP-derived key — confirmed structurally impossible across different physical units regardless of firmware version, see "Cross-Product Analysis" below |
 
 ---
 
