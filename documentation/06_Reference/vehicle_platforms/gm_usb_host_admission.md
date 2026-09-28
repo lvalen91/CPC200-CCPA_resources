@@ -128,6 +128,38 @@ The box can self-time this from signals it already has: `state = CONFIGURED` (ho
 mass_storage, the first SCSI READ (the OS storage stack engaged). It cannot observe GM's framework-level admission, so it
 triggers on the USB-level signal plus a small margin.
 
+### Interim manual method: prime via the box's UART gadget toggle
+Until the box firmware auto-primes on link-up (the sequence above), the reconnect serial can be armed by hand from
+the box's **debug UART root console (115200 8N1)**. This is the manual equivalent of the auto-UDisk firmware
+sequence: the same mass_storage → OCBM prime, done by toggling the gadget's functions one at a time instead of
+having the firmware self-time it.
+
+The box's car-facing accessory gadget — the one that presents OCBM as **1314:2d00, iSerial `0123456789FEDCBA`,
+class 0/0/0, single vendor interface**, via `g_android_accessory` — also has `f_mass_storage` and `f_mtp`
+available at that same serial. So over UART:
+
+1. Switch the gadget to a **mass_storage** (or **MTP**) function. The GM head unit enumerates it, admits it into
+   `mDevices` (both types are on the allow-list), and — because the serial is `0123456789FEDCBA` — records that
+   serial on removal.
+2. Switch the gadget back to the **accessory/OCBM** function. GM admits the returning class-0/0/0 device via
+   `isReconnectedPhoneOrTabletDevice` (its serial matches `mLastRemovedDeviceSerial`), and the host app can then
+   claim it.
+
+The gadget lives at the box's Android-gadget sysfs (the OCBM boot path sets `functions=accessory` there —
+reference it generically, e.g. `.../android_usb_accessory/android0`). Each switch is the usual gadget dance:
+
+```
+echo 0 > enable
+echo <function> > functions      # mass_storage (or mtp), then accessory
+echo 1 > enable
+```
+
+**Status.** The constituent facts are verified: UART root console is confirmed; the accessory gadget exposes
+`f_mass_storage` and `f_mtp` at iSerial `0123456789FEDCBA` (on-box UART); and on the emulator a `0123456789FEDCBA`
+mass_storage primer arms GM's reconnect rule and the OCBM app then claims the box (see the emulator-verified
+section above). The **end-to-end box-side function toggle itself has not yet been exercised** — it is planned for
+the on-vehicle / on-emulator CarPlay bring-up test. Do not treat it as run.
+
 ## History
 
 - 2026-09-27: first written. It combines user field reports and static firmware analysis (UDisk toggle on CT5 / AAOS 14; gminfo shows only the
