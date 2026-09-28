@@ -131,6 +131,7 @@ RE_Documention/
     ├── firmware_internals.md           # DMSDP framework, iAP2 engines, internals
     ├── android_mediacodec/             # Android MediaCodec API reference
     ├── vehicle_platforms/gminfo/       # GM Info 3.7 platform specs
+    ├── vehicle_platforms/gm_usb_host_admission.md  # GM AAOS 12/14 USB admission: "USB Device not supported", UDisk toggle, reconnect-by-serial
     └── binary_analysis/
         ├── key_binaries.md             # Firmware binary analysis
         └── config_key_analysis.md      # 106 config keys deep analysis (85 ALIVE / 12 DEAD / 9 PASS-THROUGH)
