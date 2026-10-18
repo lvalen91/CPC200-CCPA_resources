@@ -6,6 +6,8 @@ host. All three use the same technique — an ARM trampoline in a code cave that
 **original raw iAP2 frame** and forwards it hex-encoded as one extra JSON key — so the host
 re-parses the full TLV itself instead of re-implementing Apple's parsers.
 
+**Artifacts** (builders, patched binaries, deploy scripts): `../../custom/patches/README.md`.
+
 **Status:** NAV — working/production (host carlink_native). CALL — device-verified (host
 carlink_macOS). COMM — device-verified end-to-end + host-decoded (host carlink_macOS).
 All on board A15W, firmware `2025.10.15.1127CAY` (NXP i.MX6UL ARMv7, kernel 3.14.52, jffs2 rootfs).
