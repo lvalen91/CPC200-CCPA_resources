@@ -66,9 +66,9 @@ content is removed. The index should never accumulate references to content that
 |---|---:|---:|
 | 00_Root | 209 | 2 |
 | 01_Firmware_Architecture | 1174 | 10 |
-| 02_Protocol_Reference | 2365 | 12 |
+| 02_Protocol_Reference | 2386 | 12 |
 | 03_Audio_Processing | 332 | 2 |
-| 04_Implementation | 691 | 5 |
+| 04_Implementation | 757 | 5 |
 | 05_Security_Analysis | 441 | 3 |
 | 06_Reference | 1259 | 6 |
-| **Total** | **6471** | **40** |
+| **Total** | **6558** | **40** |

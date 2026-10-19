@@ -8,7 +8,7 @@
   "04_Implementation/iap2_binary_patches.md",
   "04_Implementation/session_examples.md"
  ],
- "claim_count": 691,
+ "claim_count": 757,
  "claims": [
   {
    "gid": "04_Implementation/capture_playback.md#1",
@@ -4885,7 +4885,7 @@
    "local_id": 1,
    "statement": "ARMiPhoneIAP2 parses each iAP2 message then discards all but a few fields before broadcasting to the host (parse-then-discard).",
    "topic": "patch-overview",
-   "source_lines": "27",
+   "source_lines": "32",
    "confidence": "high",
    "signals": [],
    "quote": "parse-then-discard"
@@ -4896,7 +4896,7 @@
    "local_id": 2,
    "statement": "The strip can only be fixed on the adapter inside ARMiPhoneIAP2 before the serializer runs; the host never receives the dropped bytes.",
    "topic": "patch-overview",
-   "source_lines": "28",
+   "source_lines": "33",
    "confidence": "high",
    "signals": [],
    "quote": "The fix has to be **on the adapter, inside `ARMiPhoneIAP2`, before"
@@ -4907,7 +4907,7 @@
    "local_id": 3,
    "statement": "The raw-passthrough technique captures the original raw iAP2 frame, hex-encodes it, and appends it as one extra JSON key the host parses.",
    "topic": "patch-method",
-   "source_lines": "47",
+   "source_lines": "55",
    "confidence": "high",
    "signals": [],
    "quote": "Capture the **original raw iAP2 frame** the engine received, hex-encode it, and append it as a"
@@ -4918,7 +4918,7 @@
    "local_id": 4,
    "statement": "ARMiPhoneIAP2 has a 1224-byte zero-filled code cave between the R-X LOAD segment end and the next page boundary.",
    "topic": "patch-cave",
-   "source_lines": "62",
+   "source_lines": "70",
    "confidence": "high",
    "signals": [],
    "quote": "a **1224-byte zero-filled gap** between the end of the R-X"
@@ -4929,7 +4929,7 @@
    "local_id": 5,
    "statement": "The code cave spans file 0x76b38..0x77000 / VMA 0x86b38..0x87000 = 0x4C8 = 1224 bytes.",
    "topic": "patch-cave",
-   "source_lines": "66",
+   "source_lines": "74",
    "confidence": "high",
    "signals": [],
    "quote": "= 0x4C8 = 1224 bytes"
@@ -4940,7 +4940,7 @@
    "local_id": 6,
    "statement": "ARMiPhoneIAP2 is non-PIE with load base 0x10000, so VMA = file offset + 0x10000.",
    "topic": "patch-cave",
-   "source_lines": "61",
+   "source_lines": "69",
    "confidence": "high",
    "signals": [],
    "quote": "VMA = file offset + 0x10000"
@@ -4951,7 +4951,7 @@
    "local_id": 7,
    "statement": "An earlier 1944-byte/0x86868 cave estimate was wrong; the device-verified cave is 1224 bytes at file 0x76b38 / VMA 0x86b38.",
    "topic": "patch-cave",
-   "source_lines": "75",
+   "source_lines": "83",
    "confidence": "high",
    "signals": [],
    "quote": "the device-verified cave is **1224 bytes at file `0x76b38` / VMA `0x86b38`**"
@@ -4962,7 +4962,7 @@
    "local_id": 8,
    "statement": "A hook uses b cave (no link) when the cave replays the displaced instruction and continues.",
    "topic": "patch-hook",
-   "source_lines": "80",
+   "source_lines": "88",
    "confidence": "high",
    "signals": [],
    "quote": "`b cave` (no link) when the cave will **replay the displaced instruction"
@@ -4973,7 +4973,7 @@
    "local_id": 9,
    "statement": "A hook uses bl cave (link) when the cave must run then return to the instruction after the hook.",
    "topic": "patch-hook",
-   "source_lines": "82",
+   "source_lines": "90",
    "confidence": "high",
    "signals": [],
    "quote": "`bl cave` (link) when the cave must **run, then return**"
@@ -4984,7 +4984,7 @@
    "local_id": 10,
    "statement": "Per AAPCS callees preserve r4-r11, so a trampoline can rely on the cJSON-object register surviving across malloc/cJSON/free.",
    "topic": "patch-hook",
-   "source_lines": "86",
+   "source_lines": "94",
    "confidence": "high",
    "signals": [],
    "quote": "callees preserve `r4–r11`"
@@ -4995,7 +4995,7 @@
    "local_id": 11,
    "statement": "The repacker is a Carlinkit-modified UPX 3.96 that round-trips this firmware UPX-LZMA packing.",
    "topic": "patch-pipeline",
-   "source_lines": "111",
+   "source_lines": "119",
    "confidence": "high",
    "signals": [],
    "quote": "a Carlinkit-modified UPX 3.96 that round-trips this firmware's packing"
@@ -5006,7 +5006,7 @@
    "local_id": 12,
    "statement": "The modified UPX repacker is a 32-bit ARM-Linux ELF and cannot run on macOS; run it on the adapter or under ARM emulation.",
    "topic": "patch-pipeline",
-   "source_lines": "112",
+   "source_lines": "120",
    "confidence": "high",
    "signals": [],
    "quote": "a **32-bit ARM-Linux ELF**, so it **cannot run on macOS**"
@@ -5017,7 +5017,7 @@
    "local_id": 13,
    "statement": "Round-trip check: --best then -d must reproduce the patched ELF byte-for-byte before trusting the pack.",
    "topic": "patch-pipeline",
-   "source_lines": "114",
+   "source_lines": "122",
    "confidence": "high",
    "signals": [],
    "quote": "must reproduce the patched ELF"
@@ -5028,7 +5028,7 @@
    "local_id": 14,
    "statement": "Patching is done off the static unpack; no live /proc/PID/mem dump is needed.",
    "topic": "patch-pipeline",
-   "source_lines": "116",
+   "source_lines": "124",
    "confidence": "high",
    "signals": [],
    "quote": "no live `/proc/PID/mem` dump needed"
@@ -5039,7 +5039,7 @@
    "local_id": 15,
    "statement": "The factory packed /usr/sbin/ARMiPhoneIAP2 is UPX-LZMA, md5 d933c9d5, 181648 B.",
    "topic": "patch-pipeline",
-   "source_lines": "94",
+   "source_lines": "102",
    "confidence": "high",
    "signals": [],
    "quote": "(UPX-LZMA, md5 d933c9d5, 181648 B)"
@@ -5050,7 +5050,7 @@
    "local_id": 16,
    "statement": "The unpacked ARMiPhoneIAP2 ELF is 494244 B, md5 f1e1a0aa.",
    "topic": "patch-pipeline",
-   "source_lines": "97",
+   "source_lines": "105",
    "confidence": "high",
    "signals": [],
    "quote": "494244 B, md5 f1e1a0aa"
@@ -5061,7 +5061,7 @@
    "local_id": 17,
    "statement": "The phone-link deploy gate tests for /tmp/bin/AppleCarPlay, not ARMiPhoneIAP2; when absent it copies both factory binaries.",
    "topic": "patch-deploy",
-   "source_lines": "135",
+   "source_lines": "143",
    "confidence": "high",
    "signals": [],
    "quote": "The gate tests for **`/tmp/bin/AppleCarPlay`**, *not* for `ARMiPhoneIAP2`"
@@ -5072,7 +5072,7 @@
    "local_id": 18,
    "statement": "USB type 0x99 SendFile is the host-to-adapter deploy channel, writing a file as root via write-temp + atomic rename.",
    "topic": "patch-deploy",
-   "source_lines": "140",
+   "source_lines": "148",
    "confidence": "high",
    "signals": [],
    "quote": "**Firmware SendFile (USB type `0x99`)** is the host→adapter deploy channel"
@@ -5083,7 +5083,7 @@
    "local_id": 19,
    "statement": "Files received via 0x99 land executable, so the host need not send a separate chmod.",
    "topic": "patch-deploy",
-   "source_lines": "143",
+   "source_lines": "151",
    "confidence": "high",
    "signals": [],
    "quote": "**executable** (the driver carries a `chmod`/`0777` mode)"
@@ -5094,7 +5094,7 @@
    "local_id": 20,
    "statement": "If both /tmp and /usr/sbin deploys are present, the persistent /usr/sbin copy wins the gate.",
    "topic": "patch-deploy",
-   "source_lines": "156",
+   "source_lines": "164",
    "confidence": "high",
    "signals": [],
    "quote": "the persistent `/usr/sbin` copy wins the gate"
@@ -5105,7 +5105,7 @@
    "local_id": 21,
    "statement": "Recovery is guaranteed: dropbear SSH starts in rcS before start_main_service.sh, so a bad binary only breaks CarPlay connect.",
    "topic": "patch-safety",
-   "source_lines": "160",
+   "source_lines": "168",
    "confidence": "high",
    "signals": [],
    "quote": "dropbear SSH starts in `rcS` **before**"
@@ -5116,7 +5116,7 @@
    "local_id": 22,
    "statement": "The NAV patch forwards the raw 0x5201 RouteGuidanceUpdate frame as NaviJSON key _iap2.",
    "topic": "nav-patch",
-   "source_lines": "177",
+   "source_lines": "186",
    "confidence": "high",
    "signals": [],
    "quote": "The raw `0x5201` RouteGuidanceUpdate frame → NaviJSON key **`_iap2`**"
@@ -5127,7 +5127,7 @@
    "local_id": 23,
    "statement": "The NAV patch forwards the raw 0x5202 maneuver burst as NaviJSON key _iap2m.",
    "topic": "nav-patch",
-   "source_lines": "178",
+   "source_lines": "187",
    "confidence": "high",
    "signals": [],
    "quote": "The raw `0x5202` maneuver burst → NaviJSON key **`_iap2m`**"
@@ -5138,7 +5138,7 @@
    "local_id": 24,
    "statement": "NAV capture hook is at VMA 0x2d1c8, stock bytes f0 43 2d e9 (push {r4-r9,lr}).",
    "topic": "nav-patch",
-   "source_lines": "186",
+   "source_lines": "195",
    "confidence": "high",
    "signals": [],
    "quote": "`0x2d1c8` | `f0 43 2d e9`"
@@ -5149,7 +5149,7 @@
    "local_id": 25,
    "statement": "NAV emit hook is at VMA 0x2d454, stock bytes 5d fd ff eb.",
    "topic": "nav-patch",
-   "source_lines": "187",
+   "source_lines": "196",
    "confidence": "high",
    "signals": [],
    "quote": "`0x2d454` | `5d fd ff eb`"
@@ -5160,7 +5160,7 @@
    "local_id": 26,
    "statement": "NAV stage 1 copies the session payload into a 64 KB .bss ring buffer at 0x9A000.",
    "topic": "nav-patch",
-   "source_lines": "191",
+   "source_lines": "200",
    "confidence": "high",
    "signals": [],
    "quote": "64 KB `.bss` ring buffer at `0x9A000`"
@@ -5171,7 +5171,7 @@
    "local_id": 27,
    "statement": "NAV v4 OOM: it re-broadcast the 64 KB buffer as _iap2m on every 0x5201 (~1/s), ~96KB/s, exhausting adapter memory.",
    "topic": "nav-patch",
-   "source_lines": "201",
+   "source_lines": "210",
    "confidence": "high",
    "signals": [],
    "quote": "v4 re-broadcast the 64 KB buffer as `_iap2m` on **every** `0x5201`"
@@ -5182,7 +5182,7 @@
    "local_id": 28,
    "statement": "NAV v5 emits _iap2m once per route-calc using a settle gate (cur==prev>0), fixing the v4 OOM.",
    "topic": "nav-patch",
-   "source_lines": "202",
+   "source_lines": "211",
    "confidence": "high",
    "signals": [],
    "quote": "v5 emits once per"
@@ -5193,7 +5193,7 @@
    "local_id": 29,
    "statement": "Standing precedent: never emit a large buffer on a high-frequency message without a settle/dedup gate.",
    "topic": "nav-patch",
-   "source_lines": "205",
+   "source_lines": "214",
    "confidence": "high",
    "signals": [],
    "quote": "never emit a large buffer on a high-frequency message without a settle/dedup"
@@ -5204,7 +5204,7 @@
    "local_id": 30,
    "statement": "An alternate 0x5202 hook reading the firmware internal maneuver tree crashed on a red-black-tree rebalancer race; the shipped design avoids it.",
    "topic": "nav-patch",
-   "source_lines": "207",
+   "source_lines": "216",
    "confidence": "high",
    "signals": [],
    "quote": "an alternate hook that read the maneuver"
@@ -5215,7 +5215,7 @@
    "local_id": 31,
    "statement": "The CALL patch is device-verified 2026-06-14 (firmware 2025.10.15.1127CAY, A15W).",
    "topic": "call-patch",
-   "source_lines": "216",
+   "source_lines": "301",
    "confidence": "high",
    "signals": [],
    "quote": "**Status:** device-verified 2026-06-14"
@@ -5226,7 +5226,7 @@
    "local_id": 32,
    "statement": "In the CallState frame the total length is the BE u16 at [2..3] and the iAP2 message starts at offset 9.",
    "topic": "call-patch",
-   "source_lines": "227",
+   "source_lines": "312",
    "confidence": "high",
    "signals": [],
    "quote": "the iAP2 **message** starts at **offset 9**"
@@ -5237,7 +5237,7 @@
    "local_id": 33,
    "statement": "CALL capture hook is at VMA 0x296cc, stock bytes f0 40 2d e9 (push {r4-r7,lr}).",
    "topic": "call-patch",
-   "source_lines": "236",
+   "source_lines": "321",
    "confidence": "high",
    "signals": [],
    "quote": "`0x296cc` | `f0 40 2d e9`"
@@ -5248,7 +5248,7 @@
    "local_id": 34,
    "statement": "CALL emit hook is at VMA 0x29960, stock bytes 5a ff 00 fa (blx cJSON_PrintUnformatted).",
    "topic": "call-patch",
-   "source_lines": "237",
+   "source_lines": "322",
    "confidence": "high",
    "signals": [],
    "quote": "`0x29960` | `5a ff 00 fa`"
@@ -5259,7 +5259,7 @@
    "local_id": 35,
    "statement": "CALL stage 2 hex-encodes the payload and attaches it via cJSON_AddStringToObject(r5, _callraw, hex).",
    "topic": "call-patch",
-   "source_lines": "245",
+   "source_lines": "330",
    "confidence": "high",
    "signals": [],
    "quote": "`cJSON_AddStringToObject(r5, \"_callraw\", hex)`"
@@ -5270,7 +5270,7 @@
    "local_id": 36,
    "statement": "The subtype-100 content is NUL-terminated, so JSONSerialization rejected it and the host call path failed silently until a NUL-trim fix.",
    "topic": "call-host",
-   "source_lines": "261",
+   "source_lines": "346",
    "confidence": "high",
    "signals": [],
    "quote": "subtype-100 content is **NUL-terminated**"
@@ -5281,7 +5281,7 @@
    "local_id": 37,
    "statement": "The host fix trims subtype-100 to the first NUL via Data(content.prefix(while: $0 != 0)).",
    "topic": "call-host",
-   "source_lines": "263",
+   "source_lines": "348",
    "confidence": "high",
    "signals": [],
    "quote": "`Data(content.prefix(while: { $0 != 0 }))`"
@@ -5292,7 +5292,7 @@
    "local_id": 38,
    "statement": "For ordinary 1:1 calls iOS sends exactly 5 flat 0x4155 params, never more.",
    "topic": "call-model",
-   "source_lines": "267",
+   "source_lines": "352",
    "confidence": "high",
    "signals": [],
    "quote": "iOS sends **exactly 5 flat params, never more**"
@@ -5303,7 +5303,7 @@
    "local_id": 39,
    "statement": "The 0x4155 CallUUID is real and equals the stock CallID, not the firmware fabricated fallback.",
    "topic": "call-model",
-   "source_lines": "275",
+   "source_lines": "360",
    "confidence": "high",
    "signals": [],
    "quote": "== the stock `CallID` (not the firmware's fabricated fallback)"
@@ -5314,7 +5314,7 @@
    "local_id": 40,
    "statement": "The extra fields AddressBookID/Label/Service/IsConferenced/ConferenceGroup/DisconnectReason are not present on 0x4155 for normal 1:1 calls regardless of subscription.",
    "topic": "call-model",
-   "source_lines": "285",
+   "source_lines": "370",
    "confidence": "high",
    "signals": [],
    "quote": "are **not** present on `0x4155` for normal 1:1 calls regardless of subscription"
@@ -5325,7 +5325,7 @@
    "local_id": 41,
    "statement": "The Missed recents entry and voicemail badge are rendered by iOS into the H.264 video (pixels), not telephony data.",
    "topic": "call-model",
-   "source_lines": "309",
+   "source_lines": "394",
    "confidence": "high",
    "signals": [],
    "quote": "into the H.264 video stream (pixels)"
@@ -5336,7 +5336,7 @@
    "local_id": 42,
    "statement": "Unlike nav/call, the Communication engine never runs at all on stock firmware, so a passthrough hook has nothing to forward until it is enabled.",
    "topic": "comm-patch",
-   "source_lines": "322",
+   "source_lines": "407",
    "confidence": "high",
    "signals": [],
    "quote": "the **Communication engine never runs at all** on stock firmware"
@@ -5347,7 +5347,7 @@
    "local_id": 43,
    "statement": "Hard rule: never add Communication to any /etc/RiddleBoxData/ datastore.",
    "topic": "comm-poison",
-   "source_lines": "331",
+   "source_lines": "416",
    "confidence": "high",
    "signals": [],
    "quote": "HARD RULE: never add Communication to any `/etc/RiddleBoxData/` datastore"
@@ -5358,7 +5358,7 @@
    "local_id": 44,
    "statement": "A comm datastore edit breaks the datastore signature, so ReadCFValue_FromSystem(IdentifyInfo) fails (kSignatureErr).",
    "topic": "comm-poison",
-   "source_lines": "333",
+   "source_lines": "418",
    "confidence": "high",
    "signals": [],
    "quote": "**breaks the datastore signature**"
@@ -5369,7 +5369,7 @@
    "local_id": 45,
    "statement": "The daemon rewrites CallStateItems_Usablity back to stock ids 0-4 on every connect, so file-edit expansion does not persist.",
    "topic": "comm-poison",
-   "source_lines": "343",
+   "source_lines": "428",
    "confidence": "high",
    "signals": [],
    "quote": "rewrites `CallStateItems_Usablity` back to stock (ids 0–4) on every connect"
@@ -5380,7 +5380,7 @@
    "local_id": 46,
    "statement": "The comm engine is datastore-gated build-then-destroy: factory 0x15ee4 builds it then destroys it if its name is absent from the datastore.",
    "topic": "comm-rootcause",
-   "source_lines": "355",
+   "source_lines": "440",
    "confidence": "high",
    "signals": [],
    "quote": "The comm engine object is datastore-gated build-then-destroy"
@@ -5391,7 +5391,7 @@
    "local_id": 47,
    "statement": "Runtime proof of comm dormancy: the comm singleton [0x9859c] is NULL, the only null engine.",
    "topic": "comm-rootcause",
-   "source_lines": "360",
+   "source_lines": "445",
    "confidence": "high",
    "signals": [],
    "quote": "`[0x9859c] = NULL` (the only null engine)"
@@ -5402,7 +5402,7 @@
    "local_id": 48,
    "statement": "The comm recv handler 0x2846c is never invoked because the dispatcher route null-gates on the comm singleton at dispatch time.",
    "topic": "comm-rootcause",
-   "source_lines": "361",
+   "source_lines": "446",
    "confidence": "high",
    "signals": [],
    "quote": "The recv handler `0x2846c` is never invoked"
@@ -5413,7 +5413,7 @@
    "local_id": 49,
    "statement": "COMM mod 1 force-construct: NOP the datastore keep/destroy gate at 0x1617c so comm is kept and registered.",
    "topic": "comm-patch",
-   "source_lines": "384",
+   "source_lines": "469",
    "confidence": "high",
    "signals": [],
    "quote": "NOP `0x1617c`"
@@ -5424,7 +5424,7 @@
    "local_id": 50,
    "statement": "COMM mod 2 subscribe: hook 0x285b0 to re-select the comm children and set dirty so the sender emits StartCommunicationUpdate 0x4157.",
    "topic": "comm-patch",
-   "source_lines": "385",
+   "source_lines": "470",
    "confidence": "high",
    "signals": [],
    "quote": "hook `0x285b0`"
@@ -5435,7 +5435,7 @@
    "local_id": 51,
    "statement": "COMM mod 3 forward: hook the dispatcher 0x4158 case at 0x18ff8 before the null-gate and broadcast subtype-101 _commraw.",
    "topic": "comm-patch",
-   "source_lines": "386",
+   "source_lines": "471",
    "confidence": "high",
    "signals": [],
    "quote": "hook `0x18ff8`"
@@ -5446,7 +5446,7 @@
    "local_id": 52,
    "statement": "The COMM patch forwards CommunicationUpdate as MetaData subtype-101 _commraw.",
    "topic": "comm-patch",
-   "source_lines": "386",
+   "source_lines": "471",
    "confidence": "high",
    "signals": [],
    "quote": "MetaData **subtype-101 `_commraw`**"
@@ -5457,7 +5457,7 @@
    "local_id": 53,
    "statement": "The comm subscribe set and 0x4158 field map are cross-validated against two shipping wireless-CarPlay head-unit middleware stacks (Cinemo/Nme) and the Apple R14G17 SDK.",
    "topic": "comm-result",
-   "source_lines": "375",
+   "source_lines": "460",
    "confidence": "high",
    "signals": [],
    "quote": "head-unit middleware stacks (Cinemo/Nme — x86-64 and aarch64 builds)"
@@ -5468,7 +5468,7 @@
    "local_id": 54,
    "statement": "All three patches fit one cave: nav ~536B + call ~240B + comm ~208B which is under the 1224B budget.",
    "topic": "patch-combine",
-   "source_lines": "412",
+   "source_lines": "497",
    "confidence": "high",
    "signals": [],
    "quote": "Cave budget: nav (~536 B) + call (~240 B) + comm (~208 B)"
@@ -5479,10 +5479,798 @@
    "local_id": 55,
    "statement": "With a poisoned datastore the iPhone withholds all update messages (no NowPlaying 0x5001, no CallStateUpdate 0x4155): media and telephony go dark.",
    "topic": "comm-poison",
-   "source_lines": "335",
+   "source_lines": "420",
    "confidence": "high",
    "signals": [],
    "quote": "the iPhone withholds ALL update messages"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#56",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 56,
+   "statement": "NAV v6 is NAV v5 plus an ExitInfo hook called P1 (§4.1).",
+   "topic": "nav-patch",
+   "source_lines": "11",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "NAV v6 (= v5 + ExitInfo \"P1\", §4.1) —"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#57",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 57,
+   "statement": "NAV v6 is device-verified 2026-10-19 with the carlink_macOS log-only probe and is not shipped by any app yet.",
+   "topic": "nav-patch",
+   "source_lines": "12",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "**not shipped by any app yet**"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#58",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 58,
+   "statement": "The NAV v6 test ran on firmware 2025.12.29.1746CAY of the same board (A15W).",
+   "topic": "nav-patch",
+   "source_lines": "15",
+   "confidence": "high",
+   "signals": [],
+   "quote": "the v6 test ran on firmware `2025.12.29.1746CAY` of the same board."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#59",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 59,
+   "statement": "The stock accessory's StartRouteGuidanceUpdates 0x5200 omits the SupportsExitInfo selector, so the phone never sends RouteGuidance ExitInfo (0x5202 id 13).",
+   "topic": "patch-overview",
+   "source_lines": "41",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`StartRouteGuidanceUpdates` `0x5200` omits the `SupportsExitInfo` selector"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#60",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 60,
+   "statement": "For ExitInfo nothing is stripped; the request itself is missing, and NAV v6 fixes it.",
+   "topic": "patch-overview",
+   "source_lines": "42",
+   "confidence": "high",
+   "signals": [],
+   "quote": "nothing is stripped; the request itself is missing. Fixed by NAV v6 (§4.1)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#61",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 61,
+   "statement": "NAV v5 is working in production (the build carlink_native ships); v6 = v5 + ExitInfo is device-verified but not shipped.",
+   "topic": "nav-patch",
+   "source_lines": "181",
+   "confidence": "high",
+   "signals": [],
+   "quote": "v6 = v5 + ExitInfo is device-verified but not shipped (§4.1)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#62",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 62,
+   "statement": "NAV v6 adds one extra hook (P1) so the accessory's StartRouteGuidanceUpdates (0x5200) asks the phone for ExitInfo; everything else is v5.",
+   "topic": "nav-patch",
+   "source_lines": "223",
+   "confidence": "high",
+   "signals": [],
+   "quote": "one extra hook (\"P1\") so the accessory's"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#63",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 63,
+   "statement": "NAV v6 artifacts are production/ARMiPhoneIAP2.nav_v6.{patched,packed}.",
+   "topic": "nav-patch",
+   "source_lines": "224",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`production/ARMiPhoneIAP2.nav_v6.{patched,packed}`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#64",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 64,
+   "statement": "The NAV v6 builder is build_v6.py.",
+   "topic": "nav-patch",
+   "source_lines": "225",
+   "confidence": "high",
+   "signals": [],
+   "quote": "builder `build_v6.py` (see"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#65",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 65,
+   "statement": "Per Apple's spec, 0x5200 selector id 3 SupportsExitInfo (empty) must be included to receive ExitInfo in RouteGuidanceManeuverInformation.",
+   "topic": "nav-patch",
+   "source_lines": "228",
+   "confidence": "high",
+   "signals": [],
+   "quote": "(empty) \"must be included to receive ExitInfo in RouteGuidanceManeuverInformation\""
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#66",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 66,
+   "statement": "Per Apple's spec, 0x5202 id 13 ExitInfo (utf8) is only sent if SupportsExitInfo is included.",
+   "topic": "nav-patch",
+   "source_lines": "229",
+   "confidence": "high",
+   "signals": [],
+   "quote": "\"only sent if SupportsExitInfo is included\""
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#67",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 67,
+   "statement": "The stock StartGuidanceItems constructor (0x2db80) emits only ids 0 (ComponentID), 1 (SourceName), 2 (SourceSupportsRouteGuidance).",
+   "topic": "nav-patch",
+   "source_lines": "230",
+   "confidence": "high",
+   "signals": [],
+   "quote": "constructor (`0x2db80`) emits only ids 0 (ComponentID), 1 (SourceName), 2 (SourceSupportsRouteGuidance)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#68",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 68,
+   "statement": "The three selector entities are embedded sub-objects at fixed offsets in a fixed-size heap object with an embedded std::map.",
+   "topic": "nav-patch",
+   "source_lines": "231",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The three selector entities are embedded sub-objects at fixed offsets in a fixed-size heap object with"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#69",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 69,
+   "statement": "Adding selector id 3 inside the object would mean resizing it and fighting the HUD value-clear path.",
+   "topic": "nav-patch",
+   "source_lines": "232",
+   "confidence": "high",
+   "signals": [],
+   "quote": "adding id 3 there means resizing that object and fighting the HUD value-clear"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#70",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 70,
+   "statement": "P1 appends the selector TLV to the already-built wire frame and lets the firmware's own finalizer recompute lengths and checksums.",
+   "topic": "nav-patch",
+   "source_lines": "233",
+   "confidence": "high",
+   "signals": [],
+   "quote": "path, so P1 instead appends the TLV to the **already-built wire frame** and lets the firmware's own"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#71",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 71,
+   "statement": "All checksums and the FF 5A start marker are computed after the send call, so only the two length fields need adjusting.",
+   "topic": "nav-patch",
+   "source_lines": "234",
+   "confidence": "high",
+   "signals": [],
+   "quote": "all checksums and the `FF 5A` start marker are computed *after*"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#72",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 72,
+   "statement": "The P1 hook is in the generic iAP2 sender 0x2f7c4 at VMA 0x2f914 (file 0x1f914).",
+   "topic": "patch-hook",
+   "source_lines": "241",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| P1 hook, in the generic iAP2 sender `0x2f7c4` | `0x2f914` (`0x1f914`) |"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#73",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 73,
+   "statement": "The P1 hook changes bytes 19 95 ff eb (bl 0x14d80) to 0f 5d 01 eb (bl 0x86d58).",
+   "topic": "patch-hook",
+   "source_lines": "241",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`19 95 ff eb` (`bl 0x14d80`) -> `0f 5d 01 eb` (`bl 0x86d58`)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#74",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 74,
+   "statement": "The P1 stub is 124 B, placed in the cave right after v5's stage1 at VMA 0x86d58 (file 0x76d58).",
+   "topic": "patch-cave",
+   "source_lines": "242",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| P1 stub, 124 B, in the cave right after v5's stage1 | `0x86d58` (`0x76d58`) |"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#75",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 75,
+   "statement": "For v6 the R-X LOAD (ph3) filesz/memsz grows from 0x76d58 to 0x76dd4.",
+   "topic": "patch-cave",
+   "source_lines": "243",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| R-X LOAD (`ph3`) filesz/memsz | | `0x76d58` -> `0x76dd4` |"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#76",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 76,
+   "statement": "The P1 stub uses no stack; lr is already set by the bl and r0/r1 are untouched.",
+   "topic": "patch-hook",
+   "source_lines": "245",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Stub logic (no stack use; `lr` already set by the `bl`, `r0`/`r1` untouched)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#77",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 77,
+   "statement": "The P1 stub, if BE16(buf[0xd..0xe]) == 0x5200, appends 00 04 00 03 (length 4, id 3, empty) at buf+9+msglen.",
+   "topic": "patch-hook",
+   "source_lines": "246",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`BE16(buf[0xd..0xe]) == 0x5200`, append `00 04 00 03` (length 4, id 3, empty) at `buf+9+msglen`,"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#78",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 78,
+   "statement": "The P1 stub adds 4 to msglen and linklen, then branches (b 0x14d80), which returns into the sender exactly as the original call did.",
+   "topic": "patch-hook",
+   "source_lines": "247",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`msglen += 4`, `linklen += 4`, then `b 0x14d80`, which returns into the sender exactly as the original"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#79",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 79,
+   "statement": "The +0x49-byte slack of the sender's malloc(bodylen+0x49) holds the 4 extra bytes.",
+   "topic": "patch-hook",
+   "source_lines": "248",
+   "confidence": "high",
+   "signals": [],
+   "quote": "The `+0x49`-byte slack of the sender's `malloc(bodylen+0x49)` holds the 4 extra bytes."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#80",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 80,
+   "statement": "nav_v6 differs from nav_v5.patched by 123 bytes: the ph3 size, the hook, and the stub.",
+   "topic": "nav-patch",
+   "source_lines": "250",
+   "confidence": "high",
+   "signals": [],
+   "quote": "v6 differs from `nav_v5.patched` by 123 bytes: the `ph3` size, the hook, the"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#81",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 81,
+   "statement": "In v6, v5 stage1/stage2, both v5 hooks (0x2d1c8, 0x2d454) and ph4 (memsz 0x14000) are byte-identical to v5.",
+   "topic": "nav-patch",
+   "source_lines": "251",
+   "confidence": "high",
+   "signals": [],
+   "quote": "v5 stage1/stage2, both v5 hooks (`0x2d1c8`, `0x2d454`) and `ph4` (memsz `0x14000`) are"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#82",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 82,
+   "statement": "build_v6.py asserts the v5 parts are byte-identical when ARMiPhoneIAP2.v5.patched is present.",
+   "topic": "nav-patch",
+   "source_lines": "252",
+   "confidence": "high",
+   "signals": [],
+   "quote": "byte-identical (`build_v6.py` asserts this when `ARMiPhoneIAP2.v5.patched` is present)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#83",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 83,
+   "statement": "The v6 build uses cave range 0x76b38..0x76dd4 (668 B), leaving 556 B.",
+   "topic": "patch-cave",
+   "source_lines": "253",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`0x76b38..0x76dd4` (668 B); **556 B left**."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#84",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 84,
+   "statement": "NAV v6 has no CALL/COMM hooks; those remain a separate build (§7).",
+   "topic": "nav-patch",
+   "source_lines": "253",
+   "confidence": "high",
+   "signals": [],
+   "quote": "No CALL/COMM hooks: those remain a separate build (§7)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#85",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 85,
+   "statement": "The v6 device test captured iAP2 frames on the phone side with idevicesyslog filtering accessoryd and carkitd, where accessoryd logs each iAP2 frame's payload as hex.",
+   "topic": "nav-v6-result",
+   "source_lines": "256",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "capture (`idevicesyslog -p accessoryd -p carkitd`), where `accessoryd` logs each iAP2 frame's payload"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#86",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 86,
+   "statement": "The v6 test also used the macOS host's [EXITINFO_PROBE] log, which decodes the forwarded _iap2m.",
+   "topic": "nav-v6-result",
+   "source_lines": "257",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "as hex; plus the macOS host's `[EXITINFO_PROBE]` log, which decodes the forwarded `_iap2m`."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#87",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 87,
+   "statement": "The stock accessory 0x5200 params are ids 0-2, from disassembly of the stock declaration (0x2db80); this control is not a v5 run on this unit.",
+   "topic": "nav-v6-result",
+   "source_lines": "261",
+   "confidence": "medium",
+   "signals": [
+    "disassembly"
+   ],
+   "quote": "ids 0-2 (from disassembly of the stock declaration, `0x2db80`)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#88",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 88,
+   "statement": "With v6 on a stock unit the accessory 0x5200 params were ids [0,1,2,3] (24 B payload).",
+   "topic": "nav-v6-result",
+   "source_lines": "261",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "ids [0,1,2,3] (24 B payload)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#89",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 89,
+   "statement": "With v6 the 0x5202 burst had 20 maneuvers, ids 0..11 plus id 13 on exactly one maneuver.",
+   "topic": "nav-v6-result",
+   "source_lines": "262",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "20 maneuvers, ids 0..11 plus id 13 on exactly one maneuver"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#90",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 90,
+   "statement": "The control 0x5202 burst of 13 maneuvers with ids 0..11 only comes from the earlier OCBM-accessory run, not this box.",
+   "topic": "nav-v6-result",
+   "source_lines": "262",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "13 maneuvers, ids 0..11 only (from the OCBM-accessory run below, not this box)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#91",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 91,
+   "statement": "ExitInfo id 13 content in the raw wire bytes is utf8 text of the form `Exit <n>`.",
+   "topic": "nav-v6-result",
+   "source_lines": "263",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "utf8 text of the form `Exit <n>`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#92",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 92,
+   "statement": "The host probe reported frames=20 and ExitInfo(0x000d)=PRESENT(x1).",
+   "topic": "nav-v6-result",
+   "source_lines": "264",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "frames=20, `ExitInfo(0x000d)=PRESENT(x1)`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#93",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 93,
+   "statement": "With v6 there was no 0x1D03 reject, no crash, and the session reached streaming.",
+   "topic": "nav-v6-result",
+   "source_lines": "265",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "no `0x1D03` reject, no crash, session reached streaming"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#94",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 94,
+   "statement": "The control column is not a measured stock-v5 run: no v5 capture on this unit is recorded.",
+   "topic": "nav-v6-result",
+   "source_lines": "267",
+   "confidence": "high",
+   "signals": [
+    "NOT measured"
+   ],
+   "quote": "(The control column is NOT a measured stock-v5 run: no v5 capture on this unit is recorded."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#95",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 95,
+   "statement": "An independent Rust OCBM accessory sending the same selector also received ExitInfo, so the gate is iOS behaviour, not firmware-specific.",
+   "topic": "nav-v6-result",
+   "source_lines": "268",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "sending the same selector also received ExitInfo, so the gate is"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#96",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 96,
+   "statement": "The v6 result corrects the older 'capability advertised at identification' model in the SDK delta doc for ExitInfo.",
+   "topic": "nav-v6-result",
+   "source_lines": "269",
+   "confidence": "high",
+   "signals": [
+    "corrects"
+   ],
+   "quote": "Note this corrects the older \"capability advertised at"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#97",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 97,
+   "statement": "The box has no UPX tool and no scp binary (sftp-server exists, so macOS scp in SFTP mode works).",
+   "topic": "patch-pipeline",
+   "source_lines": "272",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "the box has no UPX tool and no `scp` binary"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#98",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 98,
+   "statement": "macOS scp in SFTP mode works because the box has sftp-server.",
+   "topic": "patch-pipeline",
+   "source_lines": "273",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "exists, so macOS `scp` in SFTP mode works"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#99",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 99,
+   "statement": "To pack on the box, copy modified_upx_arm (Linux ARM ELF) to the box /tmp.",
+   "topic": "patch-pipeline",
+   "source_lines": "273",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "Copy `modified_upx_arm` (Linux ARM ELF) to the box `/tmp`,"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#100",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 100,
+   "statement": "The input file must also be chmod +x, else modified_upx_arm fails with CantPackException: file not executable.",
+   "topic": "patch-pipeline",
+   "source_lines": "274",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "and `chmod +x` the **input** file too, else `CantPackException: file not executable`."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#101",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 101,
+   "statement": "Packing the v6 patched ELF with modified_upx_arm --best gave 494244 -> 233996 B (47.34%).",
+   "topic": "patch-pipeline",
+   "source_lines": "275",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "gave 494244 -> 233996 B (47.34%)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#102",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 102,
+   "statement": "Decompressing the v6 packed file with -d reproduced the patched ELF byte-for-byte.",
+   "topic": "patch-pipeline",
+   "source_lines": "276",
+   "confidence": "high",
+   "signals": [
+    "verified"
+   ],
+   "quote": "reproduced the patched ELF byte-for-byte."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#103",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 103,
+   "statement": "The v6 test deployed with strategy A via the carlink_macOS host push (SendFile 0x99 of the packed file).",
+   "topic": "patch-deploy",
+   "source_lines": "278",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "**Deploy used for the test:** strategy A, via the carlink_macOS host push (SendFile `0x99` of the packed"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#104",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 104,
+   "statement": "Nothing was written to flash for the v6 test; /tmp is tmpfs.",
+   "topic": "patch-deploy",
+   "source_lines": "279",
+   "confidence": "high",
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "Nothing was written to flash; `/tmp` is"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#105",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 105,
+   "statement": "A reboot restores the factory binary for the v6 /tmp deploy (rollback = reboot).",
+   "topic": "patch-deploy",
+   "source_lines": "280",
+   "confidence": "high",
+   "signals": [],
+   "quote": "tmpfs, so a reboot restores the factory binary (rollback = reboot)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#106",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 106,
+   "statement": "The v6 deploy took effect on the first CarPlay session after a box reboot into the default protocol mode on this unit.",
+   "topic": "patch-deploy",
+   "source_lines": "280",
+   "confidence": "medium",
+   "signals": [
+    "single unit"
+   ],
+   "quote": "It took effect on the **first**"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#107",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 107,
+   "statement": "Why the v6 deploy differs from the strategy-A cold-boot row in §3.5 is not established (UNVERIFIED, single unit).",
+   "topic": "patch-deploy",
+   "source_lines": "282",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "strategy-A cold-boot row in §3.5; the reason is not established (UNVERIFIED, single unit)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#108",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 108,
+   "statement": "The host app can only claim the box in default mode; stock NCM maintenance mode is the flag file /script/ncm_only (+ reboot).",
+   "topic": "patch-deploy",
+   "source_lines": "283",
+   "confidence": "high",
+   "signals": [],
+   "quote": "can only claim the box in default mode; stock NCM maintenance mode is the flag file `/script/ncm_only`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#109",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 109,
+   "statement": "`rm /script/ncm_only` + `busybox reboot` returns the box to default mode.",
+   "topic": "patch-deploy",
+   "source_lines": "284",
+   "confidence": "high",
+   "signals": [],
+   "quote": "(+ reboot), and `rm /script/ncm_only` + `busybox reboot` returns to default."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#110",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 110,
+   "statement": "carlink_native ships the v5 asset and its Iap2RouteParser/Iap2ManeuverData.",
+   "topic": "nav-v6-result",
+   "source_lines": "286",
+   "confidence": "high",
+   "signals": [],
+   "quote": "carlink_native ships the **v5** asset and its `Iap2RouteParser`/`Iap2ManeuverData`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#111",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 111,
+   "statement": "carlink_native does not parse 0x5202 id 13; carlink_macOS only has the log-only probe (no nav decoder/UI).",
+   "topic": "nav-v6-result",
+   "source_lines": "287",
+   "confidence": "high",
+   "signals": [],
+   "quote": "do not parse `0x5202` id 13; carlink_macOS only has the log-only probe (no nav decoder/UI)."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#112",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 112,
+   "statement": "v6 is proven on the wire and in the probe, but not delivered to any user-facing app.",
+   "topic": "nav-v6-result",
+   "source_lines": "288",
+   "confidence": "high",
+   "signals": [],
+   "quote": "proven on the wire and in the probe, but not delivered to any user-facing app."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#113",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 113,
+   "statement": "Off-ramp exit types (maneuver types 8/22/23) are UNVERIFIED for v6.",
+   "topic": "open-item",
+   "source_lines": "290",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "**UNVERIFIED:** off-ramp exit types (maneuver types 8/22/23);"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#114",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 114,
+   "statement": "Selectors 4/5 (timezone / EV) are only inferred to gate 0x5201 ids 21+; UNVERIFIED.",
+   "topic": "open-item",
+   "source_lines": "290",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "selectors 4/5 (timezone / EV — only"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#115",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 115,
+   "statement": "Lane guidance (0x5204) on the stock binary is UNVERIFIED: it neither declares nor handles it, and a lane patch (P2) is under research, not built.",
+   "topic": "open-item",
+   "source_lines": "292",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "nor handles it, and a lane patch (\"P2\") is under research, not built;"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#116",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 116,
+   "statement": "Persistence of v6 beyond /tmp is UNVERIFIED (strategy B never tried).",
+   "topic": "open-item",
+   "source_lines": "292",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "persistence of v6 beyond `/tmp`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#117",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 117,
+   "statement": "Other iOS versions and other firmware builds are UNVERIFIED for v6.",
+   "topic": "open-item",
+   "source_lines": "293",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "other iOS versions and other firmware builds"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#118",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 118,
+   "statement": "Whether the on-box factory binary of 2025.12.29.1746CAY is identical to the 2025.10.15 one that build_v6.py asserts against is UNVERIFIED; the hook applied and ran, but its md5 was not recorded.",
+   "topic": "open-item",
+   "source_lines": "294",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "binary of `2025.12.29.1746CAY` is identical to the `2025.10.15` one `build_v6.py` asserts against (the"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#119",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 119,
+   "statement": "Raw frame logs for the v6 test are not archived in this repo.",
+   "topic": "open-item",
+   "source_lines": "295",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "Raw frame logs are not archived in this repo."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#120",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 120,
+   "statement": "The only composition built so far is NAV v5 + P1 (§4.1), which uses the cave up to file 0x76dd4 (556 B left).",
+   "topic": "patch-combine",
+   "source_lines": "505",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "P1 (§4.1), which uses the cave up to file `0x76dd4` (556 B left)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#121",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 121,
+   "statement": "A full nav+call+comm build would need to fit call+comm (~450 B by the figures above) into the 556 B remainder; arithmetic only, UNVERIFIED.",
+   "topic": "patch-combine",
+   "source_lines": "506",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "to fit call+comm (~450 B by the figures above) into that remainder — arithmetic only, UNVERIFIED."
   },
   {
    "gid": "04_Implementation/session_examples.md#1",
