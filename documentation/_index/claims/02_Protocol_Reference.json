@@ -15,7 +15,7 @@
   "02_Protocol_Reference/video_protocol.md",
   "02_Protocol_Reference/wireless_carplay.md"
  ],
- "claim_count": 2386,
+ "claim_count": 2398,
  "claims": [
   {
    "gid": "02_Protocol_Reference/audio_protocol.md#1",
@@ -13001,12 +13001,12 @@
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#104",
    "file": "02_Protocol_Reference/iap2_message_catalog.md",
    "local_id": 104,
-   "statement": "0x5202 field 0x000c LinkedLaneGuidanceInfo is an iOS 26 group field linking a maneuver to a lane-guidance display block, not yet captured.",
+   "statement": "0x5202 field 0x000c LinkedLaneGuidanceInfo is an iOS 26 group field linking a maneuver to a lane-guidance display block; it has no selector in the spec and was never observed on the wire in the captures so far (2026-10-19).",
    "topic": "iap2-0x5202-field",
    "source_lines": "196",
    "confidence": "medium",
-   "signals": null,
-   "quote": "Links maneuver to a lane-guidance display block — not yet captured"
+   "signals": [],
+   "quote": "no selector in the spec; never observed on the wire in captures so far (2026-10-19)"
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#105",
@@ -13047,12 +13047,14 @@
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#108",
    "file": "02_Protocol_Reference/iap2_message_catalog.md",
    "local_id": 108,
-   "statement": "Fields LinkedLaneGuidanceInfo (0x0c) and ExitInfo (0x0d) are iOS 26 additions that require the adapter to opt in.",
+   "statement": "ExitInfo (0x0d) is an iOS 26 addition requested by the accessory, not by Identify capability flags.",
    "topic": "iap2-parser-note",
    "source_lines": "201",
    "confidence": "high",
-   "signals": null,
-   "quote": "are iOS 26 additions that require the adapter to opt in."
+   "signals": [
+    "device-verified"
+   ],
+   "quote": "is an iOS 26 addition requested by the accessory, not by Identify capability flags"
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#109",
@@ -13543,7 +13545,7 @@
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#152",
    "file": "02_Protocol_Reference/iap2_message_catalog.md",
    "local_id": 152,
-   "statement": "For ExitInfo the opt-in is selector id 3 SupportsExitInfo in the accessory's 0x5200 StartRouteGuidanceUpdates, not an identification-time capability flag (device-verified on a stock board A15W via NAV v6).",
+   "statement": "For ExitInfo the request is selector id 3 SupportsExitInfo in the accessory's 0x5200 StartRouteGuidanceUpdates, device-verified 2026-10-19 on a stock board A15W via the NAV v6 patch and on the OCBM implementation.",
    "topic": "iap2-parser-note",
    "source_lines": "201",
    "confidence": "high",
@@ -13551,20 +13553,20 @@
     "Correction 2026-10-19",
     "device-verified"
    ],
-   "quote": "for `ExitInfo` the opt-in is not an identification-time capability flag but selector id 3 `SupportsExitInfo` in the accessory's `0x5200` StartRouteGuidanceUpdates"
+   "quote": "device-verified 2026-10-19 on a stock board A15W via the NAV v6 patch, and on the OCBM implementation"
   },
   {
    "gid": "02_Protocol_Reference/iap2_message_catalog.md#153",
    "file": "02_Protocol_Reference/iap2_message_catalog.md",
    "local_id": 153,
-   "statement": "LinkedLaneGuidanceInfo/lane guidance (0x5204) is UNVERIFIED: the stock binary neither declares nor handles it, and its opt-in mechanism has not been tested.",
+   "statement": "The stock binary neither declares nor handles 0x5204 LaneGuidanceInformation; stock behaviour with a declare-only patch is UNVERIFIED.",
    "topic": "iap2-parser-note",
    "source_lines": "201",
    "confidence": "low",
    "signals": [
     "UNVERIFIED"
    ],
-   "quote": "`LinkedLaneGuidanceInfo`/lane guidance (`0x5204`) is still UNVERIFIED: the stock binary neither declares nor handles it, and its opt-in mechanism has not been tested"
+   "quote": "the stock binary neither declares nor handles it (staged plan"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#1",
@@ -14204,15 +14206,14 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#57",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 57,
-   "statement": "Lane Guidance Information Update (LGI) message wire ID not yet captured, likely 0x5204 or 0x5205.",
+   "statement": "The Lane Guidance Information Update (LGI) message wire ID is 0x5204 (LaneGuidanceInformation); superseded 2026-10-19, previously documented as not yet captured, likely 0x5204 or 0x5205.",
    "topic": "lgi-message",
    "source_lines": "101",
-   "confidence": "medium",
+   "confidence": "high",
    "signals": [
-    "unconfirmed",
-    "TODO"
+    "superseded 2026-10-19"
    ],
-   "quote": "Wire ID not yet captured (likely `0x5204` or `0x5205`)"
+   "quote": "Wire ID is `0x5204` (LaneGuidanceInformation;"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#58",
@@ -14471,12 +14472,15 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#81",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 81,
-   "statement": "iOS 26 NEW component-registration parameter MaxLaneGuidanceStorageCapacity; iPhone won't send LGI fields if not advertised.",
+   "statement": "Identify param 30 sub 8 MaxLaneGuidanceStorageCapacity: Apple's note says it must be included, but 0x5204 arrived on the OCBM implementation without it (2026-10-19); whether it matters on the stock CPC200 is UNVERIFIED.",
    "topic": "ios26-param",
    "source_lines": "141",
-   "confidence": "high",
-   "signals": [],
-   "quote": "| `MaxLaneGuidanceStorageCapacity` | iPhone won't send LGI fields if not advertised"
+   "confidence": "low",
+   "signals": [
+    "superseded 2026-10-19",
+    "UNVERIFIED"
+   ],
+   "quote": "*superseded 2026-10-19:* the OCBM implementation received `0x5204` WITHOUT declaring it"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#82",
@@ -14495,12 +14499,14 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#83",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 83,
-   "statement": "Runtime capability getter supportsLaneGuidance gates 0x5201 fields 0x10/0x11/0x12, 0x5202 field 0x0c, and entire LGI message.",
+   "statement": "Runtime capability getter supportsLaneGuidance is documented as gating 0x5201 fields 0x10/0x11/0x12, 0x5202 field 0x0c and the LGI message; the exact gate for 0x10-0x12 is UNVERIFIED (0x5204 arrived on OCBM with 0x5204 declared as a received message).",
    "topic": "capability-getter",
    "source_lines": "145",
-   "confidence": "high",
-   "signals": [],
-   "quote": "- `supportsLaneGuidance` — gates 0x5201 fields 0x10/0x11/0x12 + 0x5202 field 0x0c + entire LGI message"
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "the exact gate for 0x10-0x12 is UNVERIFIED"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#84",
@@ -14583,12 +14589,14 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#91",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 91,
-   "statement": "CCPA does NOT advertise MaxLaneGuidanceStorageCapacity; iPhone keeps LaneGuidanceCurrentIndex/TotalCount/Showing at 0 and never emits LGI.",
+   "statement": "Stock CCPA does not advertise MaxLaneGuidanceStorageCapacity and LaneGuidanceCurrentIndex/TotalCount/Showing are constantly 0; that this is the cause is UNVERIFIED.",
    "topic": "ccpa-missing-capability",
    "source_lines": "157",
-   "confidence": "high",
-   "signals": [],
-   "quote": "Does NOT advertise `MaxLaneGuidanceStorageCapacity` → iPhone keeps `LaneGuidanceCurrentIndex/TotalCount/Showing` at constant 0 and never emits LGI messages"
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "*(UNVERIFIED as the cause; see the 2026-10-19 note below)*"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#92",
@@ -14665,12 +14673,15 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#98",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 98,
-   "statement": "Adapter must advertise MaxLaneGuidanceDescriptionLength > 0 AND MaxLaneGuidanceStorageCapacity > 0 to trigger 0x5201 fields 0x10/0x11/0x12, 0x5202 field 0x0c, and new LGI message stream.",
+   "statement": "Advertising MaxLaneGuidanceDescriptionLength > 0 and MaxLaneGuidanceStorageCapacity > 0 is not required on OCBM, where declaring 0x5204 as a received message sufficed; the stock effect is UNVERIFIED.",
    "topic": "capability-trigger",
    "source_lines": "169",
-   "confidence": "high",
-   "signals": [],
-   "quote": "`MaxLaneGuidanceDescriptionLength > 0` + `MaxLaneGuidanceStorageCapacity > 0` | 0x5201 fields 0x10/0x11/0x12 populate; 0x5202 field 0x0c populates; new LGI message stream starts"
+   "confidence": "low",
+   "signals": [
+    "superseded 2026-10-19",
+    "UNVERIFIED"
+   ],
+   "quote": "*(superseded 2026-10-19: not required on OCBM; declaring `0x5204` as a received message sufficed; stock effect UNVERIFIED)*"
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#99",
@@ -14724,7 +14735,7 @@
    "local_id": 103,
    "statement": "Different adapter natively advertising capabilities would expose new fields without patching.",
    "topic": "ccpa-upgrade",
-   "source_lines": "178",
+   "source_lines": "180",
    "confidence": "high",
    "signals": [],
    "quote": "a different adapter that advertises these natively (a hypothetical \"modern\" CCPA generation) would expose them without patching"
@@ -14735,7 +14746,7 @@
    "local_id": 104,
    "statement": "CarPlay framework contains CPRouteGuidance class wrapping AccessoryNavigation primitives.",
    "topic": "wrapper-class",
-   "source_lines": "188",
+   "source_lines": "190",
    "confidence": "high",
    "signals": [],
    "quote": "| `CPRouteGuidance` (CarPlay framework) | Highest-level — what a CarPlay-using app interacts with"
@@ -14746,7 +14757,7 @@
    "local_id": 105,
    "statement": "CarPlay framework contains CPManeuver class wrapping maneuver data.",
    "topic": "wrapper-class",
-   "source_lines": "189",
+   "source_lines": "191",
    "confidence": "high",
    "signals": [],
    "quote": "| `CPManeuver` (CarPlay framework) | High-level maneuver wrapper"
@@ -14757,7 +14768,7 @@
    "local_id": 106,
    "statement": "CarKitNavigation contains CRAccNavRouteGuidance class wrapping iAP2 layer.",
    "topic": "wrapper-class",
-   "source_lines": "190",
+   "source_lines": "192",
    "confidence": "high",
    "signals": [],
    "quote": "| `CRAccNavRouteGuidance` (CarKitNavigation) | CarKit's internal wrapper over the iAP2 layer"
@@ -14768,7 +14779,7 @@
    "local_id": 107,
    "statement": "CarKitNavigation contains CRAccNavManeuver class wrapping maneuver data.",
    "topic": "wrapper-class",
-   "source_lines": "191",
+   "source_lines": "193",
    "confidence": "high",
    "signals": [],
    "quote": "| `CRAccNavManeuver` (CarKitNavigation) | Same for maneuvers"
@@ -14779,7 +14790,7 @@
    "local_id": 108,
    "statement": "AccessoryNavigation contains ACCNavigationRouteGuidanceUpdateInfo class wrapping low-level iAP2-fielded messages.",
    "topic": "wrapper-class",
-   "source_lines": "192",
+   "source_lines": "194",
    "confidence": "high",
    "signals": [],
    "quote": "| `ACCNavigationRouteGuidanceUpdateInfo` (AccessoryNavigation) | Low-level iAP2-fielded message wrapper"
@@ -14790,7 +14801,7 @@
    "local_id": 109,
    "statement": "AccessoryNavigation contains ACCNavigationManeuverUpdateInfo class wrapping maneuver messages.",
    "topic": "wrapper-class",
-   "source_lines": "193",
+   "source_lines": "195",
    "confidence": "high",
    "signals": [],
    "quote": "| `ACCNavigationManeuverUpdateInfo` (AccessoryNavigation) | Same for maneuvers"
@@ -14801,7 +14812,7 @@
    "local_id": 110,
    "statement": "AccessoryNavigation contains ACCNavigationAccessoryComponent class with per-accessory display component model and all supports* capability getters.",
    "topic": "wrapper-class",
-   "source_lines": "194",
+   "source_lines": "196",
    "confidence": "high",
    "signals": [],
    "quote": "| `ACCNavigationAccessoryComponent` (AccessoryNavigation) | Per-accessory display-component model w/ all the `supports*` capability getters"
@@ -14812,7 +14823,7 @@
    "local_id": 111,
    "statement": "Field tables in document recovered by disassembling wrapper classes.",
    "topic": "methodology",
-   "source_lines": "196",
+   "source_lines": "198",
    "confidence": "high",
    "signals": [],
    "quote": "Disassembling these classes is how the field tables in this doc were recovered"
@@ -14823,7 +14834,7 @@
    "local_id": 112,
    "statement": "0x5201 integer-to-name table in dyld_shared_cache_arm64e at vaddr 0x226ac5f74.",
    "topic": "jump-table",
-   "source_lines": "209",
+   "source_lines": "211",
    "confidence": "high",
    "signals": [
     "verified"
@@ -14836,7 +14847,7 @@
    "local_id": 113,
    "statement": "0x5202 integer-to-name table in dyld_shared_cache_arm64e at vaddr 0x226ac77ec.",
    "topic": "jump-table",
-   "source_lines": "213",
+   "source_lines": "215",
    "confidence": "high",
    "signals": [
     "verified"
@@ -14849,7 +14860,7 @@
    "local_id": 114,
    "statement": "Each iOS version IPSW can be re-cracked to track future protocol additions.",
    "topic": "future-work",
-   "source_lines": "221",
+   "source_lines": "223",
    "confidence": "high",
    "signals": [],
    "quote": "Each iOS version's IPSW can be re-cracked this way to track future protocol additions"
@@ -14860,7 +14871,7 @@
    "local_id": 115,
    "statement": "CarPlay master capability surface has 62 total entries across all domains.",
    "topic": "capability-surface",
-   "source_lines": "231",
+   "source_lines": "233",
    "confidence": "high",
    "signals": [],
    "quote": "Master `supports*` capability list (62 entries)"
@@ -14871,7 +14882,7 @@
    "local_id": 116,
    "statement": "supportsCarPlay is master flag enabling CarPlay support in accessory.",
    "topic": "capability-transport",
-   "source_lines": "238",
+   "source_lines": "240",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCarPlay` | Master flag — accessory supports CarPlay at all"
@@ -14882,7 +14893,7 @@
    "local_id": 117,
    "statement": "supportsWirelessCarPlay enables WiFi-based CarPlay (5GHz, AirPlay tunnel).",
    "topic": "capability-transport",
-   "source_lines": "239",
+   "source_lines": "241",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsWirelessCarPlay` | Enables WiFi-based CarPlay (5GHz, AirPlay tunnel)"
@@ -14893,7 +14904,7 @@
    "local_id": 118,
    "statement": "supportsUSBCarPlay enables USB-tethered CarPlay (modern USB-C).",
    "topic": "capability-transport",
-   "source_lines": "240",
+   "source_lines": "242",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsUSBCarPlay` | Enables USB-tethered CarPlay (modern USB-C)"
@@ -14904,7 +14915,7 @@
    "local_id": 119,
    "statement": "supportsBluetoothLE enables iPhone to advertise BLE accessory metadata.",
    "topic": "capability-transport",
-   "source_lines": "241",
+   "source_lines": "243",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsBluetoothLE` | iPhone may advertise BLE accessory metadata"
@@ -14915,7 +14926,7 @@
    "local_id": 120,
    "statement": "supportsWiredBluetoothPairing enables one-touch USB-triggered BT pairing.",
    "topic": "capability-transport",
-   "source_lines": "242",
+   "source_lines": "244",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsWiredBluetoothPairing` | One-touch USB-triggered BT pairing"
@@ -14926,7 +14937,7 @@
    "local_id": 121,
    "statement": "supportsOOBBTPairing and supportsOOBBTPairing2 enable out-of-band BT pairing (newer/v2 protocol).",
    "topic": "capability-transport",
-   "source_lines": "243",
+   "source_lines": "245",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsOOBBTPairing` / `supportsOOBBTPairing2` | Out-of-band BT pairing (newer/v2 protocol)"
@@ -14937,7 +14948,7 @@
    "local_id": 122,
    "statement": "supportsMutualAuth and supportsMutualAuthentication enable MFi mutual authentication (real coprocessor required).",
    "topic": "capability-transport",
-   "source_lines": "244",
+   "source_lines": "246",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMutualAuth` / `supportsMutualAuthentication` | MFi mutual authentication (real coprocessor required)"
@@ -14948,7 +14959,7 @@
    "local_id": 123,
    "statement": "supportsCarPlayConnectionRequest enables adapter to request iPhone start CarPlay.",
    "topic": "capability-transport",
-   "source_lines": "245",
+   "source_lines": "247",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCarPlayConnectionRequest` | Adapter can request iPhone start CarPlay"
@@ -14959,7 +14970,7 @@
    "local_id": 124,
    "statement": "supportsStartSessionRequest enables adapter to request iPhone start session.",
    "topic": "capability-transport",
-   "source_lines": "246",
+   "source_lines": "248",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsStartSessionRequest` | Same as above for session start"
@@ -14970,7 +14981,7 @@
    "local_id": 125,
    "statement": "supportsStopSession and supportsStopSessionDisconnectForThisDrive enable adapter to request iPhone end session.",
    "topic": "capability-transport",
-   "source_lines": "247",
+   "source_lines": "249",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsStopSession` / `supportsStopSessionDisconnectForThisDrive` | Adapter can request iPhone end session"
@@ -14981,7 +14992,7 @@
    "local_id": 126,
    "statement": "supportsAudio enables basic audio routing.",
    "topic": "capability-audio",
-   "source_lines": "252",
+   "source_lines": "254",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsAudio` | Basic audio routing enabled"
@@ -14992,7 +15003,7 @@
    "local_id": 127,
    "statement": "supportsMixableAudio enables iPhone to emit overlapping audio streams.",
    "topic": "capability-audio",
-   "source_lines": "253",
+   "source_lines": "255",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMixableAudio` | iPhone may emit overlapping audio streams"
@@ -15003,7 +15014,7 @@
    "local_id": 128,
    "statement": "supportsDolbyAtmos enables Atmos-encoded audio streams.",
    "topic": "capability-audio",
-   "source_lines": "254",
+   "source_lines": "256",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsDolbyAtmos` | Atmos-encoded audio streams"
@@ -15014,7 +15025,7 @@
    "local_id": 129,
    "statement": "supportsSpatialAudio enables Apple Spatial Audio support.",
    "topic": "capability-audio",
-   "source_lines": "255",
+   "source_lines": "257",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsSpatialAudio` | Apple Spatial Audio support"
@@ -15025,7 +15036,7 @@
    "local_id": 130,
    "statement": "supportsSiriMixable enables Siri audio mixable with media.",
    "topic": "capability-audio",
-   "source_lines": "256",
+   "source_lines": "258",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsSiriMixable` | Siri audio mixable with media"
@@ -15036,7 +15047,7 @@
    "local_id": 131,
    "statement": "supportsSiriZLL and supportsSiriZLLButton enable zero-latency listening and hardware Siri button support.",
    "topic": "capability-audio",
-   "source_lines": "257",
+   "source_lines": "259",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsSiriZLL` / `supportsSiriZLLButton` | \"Zero-latency listening\" / hardware Siri button"
@@ -15047,7 +15058,7 @@
    "local_id": 132,
    "statement": "supportsVoiceConversational enables Voice/VoIP audio class.",
    "topic": "capability-audio",
-   "source_lines": "258",
+   "source_lines": "260",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsVoiceConversational` | Voice/VoIP audio class"
@@ -15058,7 +15069,7 @@
    "local_id": 133,
    "statement": "supportsEnhancedSiriVoice enables higher quality Siri synthesis voice.",
    "topic": "capability-audio",
-   "source_lines": "259",
+   "source_lines": "261",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsEnhancedSiriVoice` | Higher quality Siri synthesis voice"
@@ -15069,7 +15080,7 @@
    "local_id": 134,
    "statement": "supportsHighFidelityTouch enables touch latency upgrade for audio scrubbing.",
    "topic": "capability-audio",
-   "source_lines": "260",
+   "source_lines": "262",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsHighFidelityTouch` | Touch latency upgrade for audio scrubbing"
@@ -15080,7 +15091,7 @@
    "local_id": 135,
    "statement": "supportsVideo enables video stream to accessory display.",
    "topic": "capability-display",
-   "source_lines": "265",
+   "source_lines": "267",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsVideo` | Video stream to accessory display"
@@ -15091,7 +15102,7 @@
    "local_id": 136,
    "statement": "supportsTemplates enables CarPlay Templates Host (main CarPlay UI).",
    "topic": "capability-display",
-   "source_lines": "266",
+   "source_lines": "268",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsTemplates` | CarPlay Templates Host (the main CarPlay UI)"
@@ -15102,7 +15113,7 @@
    "local_id": 137,
    "statement": "supportsThemeAssets enables custom car-theme overlays.",
    "topic": "capability-display",
-   "source_lines": "267",
+   "source_lines": "269",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsThemeAssets` | Custom car-theme overlays"
@@ -15113,7 +15124,7 @@
    "local_id": 138,
    "statement": "supportsAppearanceMode enables Light/Dark mode awareness.",
    "topic": "capability-display",
-   "source_lines": "268",
+   "source_lines": "270",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsAppearanceMode` | Light/Dark mode awareness"
@@ -15124,7 +15135,7 @@
    "local_id": 139,
    "statement": "supportsMapAppearanceMode enables map-specific dark mode.",
    "topic": "capability-display",
-   "source_lines": "269",
+   "source_lines": "271",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMapAppearanceMode` | Map-specific dark mode"
@@ -15135,7 +15146,7 @@
    "local_id": 140,
    "statement": "supportsPerDisplayNightMode enables independent night mode per display (cluster vs HUD).",
    "topic": "capability-display",
-   "source_lines": "270",
+   "source_lines": "272",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsPerDisplayNightMode` | Independent night mode per display (cluster vs HUD)"
@@ -15146,7 +15157,7 @@
    "local_id": 141,
    "statement": "supportsUIOutsideSafeArea enables curved-display safe-area override.",
    "topic": "capability-display",
-   "source_lines": "271",
+   "source_lines": "273",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsUIOutsideSafeArea` | Curved-display safe-area override"
@@ -15157,7 +15168,7 @@
    "local_id": 142,
    "statement": "supportsLayerTracking enables CarPlay layer composition coordination.",
    "topic": "capability-display",
-   "source_lines": "272",
+   "source_lines": "274",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsLayerTracking` | CarPlay layer composition coordination"
@@ -15168,7 +15179,7 @@
    "local_id": 143,
    "statement": "supportsFocusTransfer enables focus passing between iPhone surfaces and CarPlay.",
    "topic": "capability-display",
-   "source_lines": "273",
+   "source_lines": "275",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsFocusTransfer` | Focus passing between iPhone surfaces and CarPlay"
@@ -15179,7 +15190,7 @@
    "local_id": 144,
    "statement": "supportsHighFrameRateMaps enables 60fps maps rendering.",
    "topic": "capability-display",
-   "source_lines": "274",
+   "source_lines": "276",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsHighFrameRateMaps` | 60fps maps rendering"
@@ -15190,7 +15201,7 @@
    "local_id": 145,
    "statement": "supportsInstrumentClusterContent gates cluster-IC content streaming (iPhone sending nav/cluster content to secondary display).",
    "topic": "capability-display",
-   "source_lines": "275",
+   "source_lines": "277",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsInstrumentClusterContent` | **Cluster-IC content streaming** — gates iPhone sending nav/cluster content to a secondary display"
@@ -15201,7 +15212,7 @@
    "local_id": 146,
    "statement": "supportsCarPlayContent enables generic CarPlay content stream.",
    "topic": "capability-apps",
-   "source_lines": "280",
+   "source_lines": "282",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCarPlayContent` | Generic CarPlay content stream"
@@ -15212,7 +15223,7 @@
    "local_id": 147,
    "statement": "supportsCarPlayAppLinks enables app-to-app deep linking.",
    "topic": "capability-apps",
-   "source_lines": "281",
+   "source_lines": "283",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCarPlayAppLinks` | App-to-app deep linking"
@@ -15223,7 +15234,7 @@
    "local_id": 148,
    "statement": "supportsAutomakerAppService enables OEM custom app extension hosting.",
    "topic": "capability-apps",
-   "source_lines": "282",
+   "source_lines": "284",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsAutomakerAppService` | OEM custom app extension hosting"
@@ -15234,7 +15245,7 @@
    "local_id": 149,
    "statement": "supportsLiveActivities enables iPhone Live Activities on CarPlay.",
    "topic": "capability-apps",
-   "source_lines": "283",
+   "source_lines": "285",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsLiveActivities` | iPhone Live Activities on CarPlay"
@@ -15245,7 +15256,7 @@
    "local_id": 150,
    "statement": "supportsLodWidgets enables lock-screen-style widgets on CarPlay.",
    "topic": "capability-apps",
-   "source_lines": "284",
+   "source_lines": "286",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsLodWidgets` | Lock-screen-style widgets on CarPlay"
@@ -15256,7 +15267,7 @@
    "local_id": 151,
    "statement": "supportsPinnedMessages enables pinned message UI.",
    "topic": "capability-apps",
-   "source_lines": "285",
+   "source_lines": "287",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsPinnedMessages` | Pinned message UI"
@@ -15267,7 +15278,7 @@
    "local_id": 152,
    "statement": "supportsAdditionalContent enables generic content sideband.",
    "topic": "capability-apps",
-   "source_lines": "286",
+   "source_lines": "288",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsAdditionalContent` | Generic content sideband"
@@ -15278,7 +15289,7 @@
    "local_id": 153,
    "statement": "supportsCommunication enables phone/messaging features at all.",
    "topic": "capability-communication",
-   "source_lines": "291",
+   "source_lines": "293",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCommunication` | Phone/messaging features at all"
@@ -15289,7 +15300,7 @@
    "local_id": 154,
    "statement": "supportsCalling enables phone calls routing.",
    "topic": "capability-communication",
-   "source_lines": "292",
+   "source_lines": "294",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCalling` | Phone calls routing"
@@ -15300,7 +15311,7 @@
    "local_id": 155,
    "statement": "supportsMessaging enables iMessage/SMS over CarPlay.",
    "topic": "capability-communication",
-   "source_lines": "293",
+   "source_lines": "295",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMessaging` | iMessage/SMS over CarPlay"
@@ -15311,7 +15322,7 @@
    "local_id": 156,
    "statement": "supportsVehicleData enables iPhone to receive vehicleStatus/vehicleInformation from accessory.",
    "topic": "capability-vehicle",
-   "source_lines": "298",
+   "source_lines": "300",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsVehicleData` | iPhone may receive `vehicleStatus`/`vehicleInformation` from accessory"
@@ -15322,7 +15333,7 @@
    "local_id": 157,
    "statement": "supportsCharging (EV) gates 0x5201 fields 0x17/0x18/0x19/0x1a and charging-station content.",
    "topic": "capability-vehicle",
-   "source_lines": "299",
+   "source_lines": "301",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsCharging` | **EV** — gates 0x5201 fields 0x17/0x18/0x19/0x1a + charging-station content"
@@ -15333,7 +15344,7 @@
    "local_id": 158,
    "statement": "supportsFueling enables ICE fueling-station prompts.",
    "topic": "capability-vehicle",
-   "source_lines": "300",
+   "source_lines": "302",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsFueling` | ICE fueling-station prompts"
@@ -15344,7 +15355,7 @@
    "local_id": 159,
    "statement": "supportsParking enables parking integration.",
    "topic": "capability-vehicle",
-   "source_lines": "301",
+   "source_lines": "303",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsParking` | Parking integration"
@@ -15355,7 +15366,7 @@
    "local_id": 160,
    "statement": "supportsElectronicTollCollection enables ETC transponder declaration (R14G17 already had this).",
    "topic": "capability-vehicle",
-   "source_lines": "302",
+   "source_lines": "304",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsElectronicTollCollection` | ETC transponder declaration (R14G17 already had this)"
@@ -15366,7 +15377,7 @@
    "local_id": 161,
    "statement": "supportsRouteSharing enables Apple Maps 'Share ETA' target.",
    "topic": "capability-vehicle",
-   "source_lines": "303",
+   "source_lines": "305",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsRouteSharing` | Apple Maps \"Share ETA\" target"
@@ -15377,7 +15388,7 @@
    "local_id": 162,
    "statement": "supportsDrivingTask enables driving-mode coordination (Focus integration).",
    "topic": "capability-vehicle",
-   "source_lines": "304",
+   "source_lines": "306",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsDrivingTask` | Driving-mode coordination (Focus integration)"
@@ -15388,7 +15399,7 @@
    "local_id": 163,
    "statement": "supportsPublicSafety enables first-responder / police / emergency override surface.",
    "topic": "capability-vehicle",
-   "source_lines": "305",
+   "source_lines": "307",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsPublicSafety` | First-responder / police / emergency override surface"
@@ -15399,7 +15410,7 @@
    "local_id": 164,
    "statement": "supportsQuickOrdering enables drive-thru ordering integration.",
    "topic": "capability-vehicle",
-   "source_lines": "306",
+   "source_lines": "308",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsQuickOrdering` | Drive-thru ordering integration"
@@ -15410,7 +15421,7 @@
    "local_id": 165,
    "statement": "supportsMaps is maps content base flag.",
    "topic": "capability-navigation",
-   "source_lines": "311",
+   "source_lines": "313",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMaps` | Maps content base flag"
@@ -15421,7 +15432,7 @@
    "local_id": 166,
    "statement": "supportsMapContent enables map tile content stream.",
    "topic": "capability-navigation",
-   "source_lines": "312",
+   "source_lines": "314",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsMapContent` | Map tile content stream"
@@ -15432,7 +15443,7 @@
    "local_id": 167,
    "statement": "supportsAccNav gates entire ACCNavigation* subsystem including 0x5200-0x5203 and LGI messages.",
    "topic": "capability-navigation",
-   "source_lines": "313",
+   "source_lines": "315",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsAccNav` | **Accessory Navigation** — the entire `ACCNavigation*` subsystem this doc covers. Gates 0x5200-0x5203 + LGI messages."
@@ -15443,7 +15454,7 @@
    "local_id": 168,
    "statement": "supportsFileTransfer enables bulk file transfer (artwork, themes).",
    "topic": "capability-misc",
-   "source_lines": "318",
+   "source_lines": "320",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsFileTransfer` | Bulk file transfer (artwork, themes)"
@@ -15454,7 +15465,7 @@
    "local_id": 169,
    "statement": "supportsLogTransfer enables iPhone log shipping for diagnostics.",
    "topic": "capability-misc",
-   "source_lines": "319",
+   "source_lines": "321",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsLogTransfer` | iPhone log shipping for diagnostics"
@@ -15465,7 +15476,7 @@
    "local_id": 170,
    "statement": "supportsACBack enables A/C / climate back-channel.",
    "topic": "capability-misc",
-   "source_lines": "320",
+   "source_lines": "322",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsACBack` | A/C / climate back-channel"
@@ -15476,7 +15487,7 @@
    "local_id": 171,
    "statement": "supportsSecureCoding and supportsBSXPCSecureCoding enable NSSecureCoding for serialized data.",
    "topic": "capability-misc",
-   "source_lines": "321",
+   "source_lines": "323",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsSecureCoding` / `supportsBSXPCSecureCoding` | NSSecureCoding for serialized data"
@@ -15487,7 +15498,7 @@
    "local_id": 172,
    "statement": "supportsDDPContent enables Apple's DigitalDeviceProvider content.",
    "topic": "capability-misc",
-   "source_lines": "322",
+   "source_lines": "324",
    "confidence": "high",
    "signals": [],
    "quote": "| `supportsDDPContent` | Apple's DigitalDeviceProvider content"
@@ -15498,7 +15509,7 @@
    "local_id": 173,
    "statement": "CarKit persists capabilities to per-accessory global domain via +[CRCarPlayCapabilities persistCapabilitiesToGlobalDomain].",
    "topic": "capability-persistence",
-   "source_lines": "326",
+   "source_lines": "328",
    "confidence": "high",
    "signals": [],
    "quote": "CarKit persists capabilities to the per-accessory global domain via `+[CRCarPlayCapabilities persistCapabilitiesToGlobalDomain]`"
@@ -15509,7 +15520,7 @@
    "local_id": 174,
    "statement": "Known capabilities dictionary key: CapabilitiesDashboardRoundedCornersKey.",
    "topic": "capability-key",
-   "source_lines": "327",
+   "source_lines": "329",
    "confidence": "high",
    "signals": [],
    "quote": "- `CapabilitiesDashboardRoundedCornersKey`"
@@ -15520,7 +15531,7 @@
    "local_id": 175,
    "statement": "Known capabilities dictionary key: CapabilitiesLiveActivitiesKey.",
    "topic": "capability-key",
-   "source_lines": "328",
+   "source_lines": "330",
    "confidence": "high",
    "signals": [],
    "quote": "- `CapabilitiesLiveActivitiesKey`"
@@ -15531,7 +15542,7 @@
    "local_id": 176,
    "statement": "Known capabilities dictionary key: CapabilitiesLodWidgetsKey.",
    "topic": "capability-key",
-   "source_lines": "329",
+   "source_lines": "331",
    "confidence": "high",
    "signals": [],
    "quote": "- `CapabilitiesLodWidgetsKey`"
@@ -15542,7 +15553,7 @@
    "local_id": 177,
    "statement": "Known capabilities dictionary key: CapabilitiesNowPlayingAlbumArtKey.",
    "topic": "capability-key",
-   "source_lines": "330",
+   "source_lines": "332",
    "confidence": "high",
    "signals": [],
    "quote": "- `CapabilitiesNowPlayingAlbumArtKey`"
@@ -15553,7 +15564,7 @@
    "local_id": 178,
    "statement": "Known capabilities dictionary key: CapabilitiesViewAreaInsetKey.",
    "topic": "capability-key",
-   "source_lines": "331",
+   "source_lines": "333",
    "confidence": "high",
    "signals": [],
    "quote": "- `CapabilitiesViewAreaInsetKey`"
@@ -15564,7 +15575,7 @@
    "local_id": 179,
    "statement": "Known capabilities dictionary key: CARCapabilitesInsets (sic — typo in iOS).",
    "topic": "capability-key",
-   "source_lines": "332",
+   "source_lines": "334",
    "confidence": "high",
    "signals": [],
    "quote": "- `CARCapabilitesInsets` (sic — typo in iOS)"
@@ -15575,7 +15586,7 @@
    "local_id": 180,
    "statement": "Known capabilities dictionary key: CarCapabilitiesContentVersion.",
    "topic": "capability-key",
-   "source_lines": "333",
+   "source_lines": "335",
    "confidence": "high",
    "signals": [],
    "quote": "- `CarCapabilitiesContentVersion`"
@@ -15586,7 +15597,7 @@
    "local_id": 181,
    "statement": "Known capabilities dictionary key: CarCapabilitiesDefaultIdentifier.",
    "topic": "capability-key",
-   "source_lines": "334",
+   "source_lines": "336",
    "confidence": "high",
    "signals": [],
    "quote": "- `CarCapabilitiesDefaultIdentifier`"
@@ -15597,7 +15608,7 @@
    "local_id": 182,
    "statement": "Capabilities dictionary keys are AirPlay-layer counterpart to iAP2-layer component capabilities.",
    "topic": "capability-layer",
-   "source_lines": "336",
+   "source_lines": "338",
    "confidence": "high",
    "signals": [],
    "quote": "These appear to be the AirPlay-layer counterpart to iAP2-layer component capabilities"
@@ -15608,7 +15619,7 @@
    "local_id": 183,
    "statement": "Capabilities dictionary used to cache capability set across sessions for paired accessory.",
    "topic": "capability-persistence",
-   "source_lines": "336",
+   "source_lines": "338",
    "confidence": "high",
    "signals": [],
    "quote": "what gets cached so iPhone \"remembers\" a paired accessory's capability set across sessions"
@@ -15619,7 +15630,7 @@
    "local_id": 184,
    "statement": "CarKit has multiple night-mode resolution paths: _systemNightMode, _locationBasedNightMode, _fallbackNightMode, _supportsPerDisplayNightMode.",
    "topic": "nightmode",
-   "source_lines": "340",
+   "source_lines": "342",
    "confidence": "high",
    "signals": [],
    "quote": "CarKit has multiple night-mode resolution paths (recovered via `_systemNightMode`, `_locationBasedNightMode`, `_fallbackNightMode`, `_supportsPerDisplayNightMode`)"
@@ -15630,7 +15641,7 @@
    "local_id": 185,
    "statement": "Modern iPhone resolves night mode in order: 1) Per-display, 2) System, 3) Location-based, 4) Fallback.",
    "topic": "nightmode",
-   "source_lines": "340",
+   "source_lines": "342",
    "confidence": "high",
    "signals": [],
    "quote": "Modern iPhone resolves night mode in this order:"
@@ -15641,7 +15652,7 @@
    "local_id": 186,
    "statement": "Per-display night mode requires supportsPerDisplayNightMode=YES.",
    "topic": "nightmode",
-   "source_lines": "341",
+   "source_lines": "343",
    "confidence": "high",
    "signals": [],
    "quote": "Per-display night mode (`supportsPerDisplayNightMode=YES`)"
@@ -15652,7 +15663,7 @@
    "local_id": 187,
    "statement": "System night mode uses iPhone's own setting.",
    "topic": "nightmode",
-   "source_lines": "342",
+   "source_lines": "344",
    "confidence": "high",
    "signals": [],
    "quote": "System night mode (iPhone reports its own)"
@@ -15663,7 +15674,7 @@
    "local_id": 188,
    "statement": "Location-based night mode computed from sun position.",
    "topic": "nightmode",
-   "source_lines": "343",
+   "source_lines": "345",
    "confidence": "high",
    "signals": [],
    "quote": "Location-based (computed from sun position)"
@@ -15674,7 +15685,7 @@
    "local_id": 189,
    "statement": "Fallback night mode defaults to OFF.",
    "topic": "nightmode",
-   "source_lines": "344",
+   "source_lines": "346",
    "confidence": "high",
    "signals": [],
    "quote": "Fallback (default OFF)"
@@ -15685,7 +15696,7 @@
    "local_id": 190,
    "statement": "Legacy setNightMode AirPlay command (R14G17) still works but overridden by modern resolution paths.",
    "topic": "nightmode",
-   "source_lines": "346",
+   "source_lines": "348",
    "confidence": "high",
    "signals": [],
    "quote": "The legacy `setNightMode` AirPlay command (R14G17) still works but is overridden by these"
@@ -15696,7 +15707,7 @@
    "local_id": 191,
    "statement": "CCPA advertises fixed minimal subset of capabilities baked into firmware.",
    "topic": "ccpa-advertised",
-   "source_lines": "350",
+   "source_lines": "352",
    "confidence": "high",
    "signals": [],
    "quote": "The CCPA's `ARMiPhoneIAP2` advertises a fixed minimal subset baked into the firmware"
@@ -15707,7 +15718,7 @@
    "local_id": 192,
    "statement": "Precise list of CCPA advertised capabilities requires Ghidra on IDENTIFICATION sender in ARMiPhoneIAP2.",
    "topic": "ccpa-advertised",
-   "source_lines": "350",
+   "source_lines": "352",
    "confidence": "high",
    "signals": [
     "TODO"
@@ -15720,7 +15731,7 @@
    "local_id": 193,
    "statement": "CCPA currently claims supportsCarPlay and supportsWirelessCarPlay.",
    "topic": "ccpa-claims",
-   "source_lines": "354",
+   "source_lines": "356",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsCarPlay`, `supportsWirelessCarPlay`"
@@ -15731,7 +15742,7 @@
    "local_id": 194,
    "statement": "CCPA currently claims supportsUSBCarPlay (listed under \"Currently claimed (CCPA observed behavior)\")",
    "topic": "ccpa-missing",
-   "source_lines": "354",
+   "source_lines": "356",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsCarPlay`, `supportsWirelessCarPlay`, `supportsUSBCarPlay` | _(USB CarPlay relevant for USB-C iPhones)_ |"
@@ -15742,7 +15753,7 @@
    "local_id": 195,
    "statement": "CCPA currently claims supportsAudio and supportsMixableAudio.",
    "topic": "ccpa-claims",
-   "source_lines": "355",
+   "source_lines": "357",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsAudio` | `supportsMixableAudio`, `supportsDolbyAtmos`, `supportsSpatialAudio` |"
@@ -15753,7 +15764,7 @@
    "local_id": 196,
    "statement": "CCPA does NOT claim supportsDolbyAtmos or supportsSpatialAudio.",
    "topic": "ccpa-missing",
-   "source_lines": "355",
+   "source_lines": "357",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsAudio` | `supportsMixableAudio`, `supportsDolbyAtmos`, `supportsSpatialAudio` |"
@@ -15764,7 +15775,7 @@
    "local_id": 197,
    "statement": "CCPA currently claims supportsCalling and supportsCommunication.",
    "topic": "ccpa-claims",
-   "source_lines": "356",
+   "source_lines": "358",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsCalling`, `supportsCommunication`"
@@ -15775,7 +15786,7 @@
    "local_id": 198,
    "statement": "CCPA does NOT claim supportsSiriZLL or supportsSiriZLLButton.",
    "topic": "ccpa-missing",
-   "source_lines": "356",
+   "source_lines": "358",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsSiriZLL`, `supportsSiriZLLButton`"
@@ -15786,7 +15797,7 @@
    "local_id": 199,
    "statement": "CCPA currently claims supportsTemplates and supportsThemeAssets.",
    "topic": "ccpa-claims",
-   "source_lines": "357",
+   "source_lines": "359",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsTemplates` | `supportsThemeAssets`, `supportsInstrumentClusterContent` ⭐ |"
@@ -15797,7 +15808,7 @@
    "local_id": 200,
    "statement": "CCPA does NOT claim supportsInstrumentClusterContent (marked as most interesting for Bug A/cluster integration).",
    "topic": "ccpa-missing",
-   "source_lines": "275",
+   "source_lines": "277",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsInstrumentClusterContent` | **Cluster-IC content streaming** — gates iPhone sending nav/cluster content to a secondary display |"
@@ -15808,7 +15819,7 @@
    "local_id": 201,
    "statement": "CCPA currently claims supportsMaps and supportsMapContent.",
    "topic": "ccpa-claims",
-   "source_lines": "358",
+   "source_lines": "360",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsMaps` | `supportsMapContent`, `supportsAccNav` ⭐, `supportsHighFrameRateMaps` |"
@@ -15819,7 +15830,7 @@
    "local_id": 202,
    "statement": "CCPA does NOT claim supportsAccNav or supportsHighFrameRateMaps (supportsAccNav marked as most interesting).",
    "topic": "ccpa-missing",
-   "source_lines": "358",
+   "source_lines": "360",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsMaps` | `supportsMapContent`, `supportsAccNav` ⭐, `supportsHighFrameRateMaps` |"
@@ -15830,7 +15841,7 @@
    "local_id": 203,
    "statement": "CCPA currently claims supportsAppearanceMode.",
    "topic": "ccpa-claims",
-   "source_lines": "359",
+   "source_lines": "361",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsAppearanceMode`"
@@ -15841,7 +15852,7 @@
    "local_id": 204,
    "statement": "CCPA does NOT claim supportsPerDisplayNightMode.",
    "topic": "ccpa-missing",
-   "source_lines": "359",
+   "source_lines": "361",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsPerDisplayNightMode`"
@@ -15852,7 +15863,7 @@
    "local_id": 205,
    "statement": "CCPA currently claims supportsElectronicTollCollection.",
    "topic": "ccpa-claims",
-   "source_lines": "360",
+   "source_lines": "362",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsElectronicTollCollection`"
@@ -15863,7 +15874,7 @@
    "local_id": 206,
    "statement": "CCPA does NOT claim supportsCharging, supportsFueling, or supportsParking.",
    "topic": "ccpa-missing",
-   "source_lines": "360",
+   "source_lines": "362",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsCharging`, `supportsFueling`, `supportsParking`"
@@ -15874,7 +15885,7 @@
    "local_id": 207,
    "statement": "CCPA currently claims supportsMutualAuth via real MFi 0x11 IC.",
    "topic": "ccpa-claims",
-   "source_lines": "361",
+   "source_lines": "363",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsMutualAuth` (via real MFi 0x11 IC)"
@@ -15885,7 +15896,7 @@
    "local_id": 208,
    "statement": "CCPA does NOT claim supportsLiveActivities or supportsLodWidgets.",
    "topic": "ccpa-missing",
-   "source_lines": "361",
+   "source_lines": "363",
    "confidence": "medium",
    "signals": [],
    "quote": "| `supportsLiveActivities`, `supportsLodWidgets`"
@@ -15896,7 +15907,7 @@
    "local_id": 209,
    "statement": "supportsInstrumentClusterContent and supportsAccNav marked as most interesting for Bug A / cluster integration angle.",
    "topic": "future-interest",
-   "source_lines": "363",
+   "source_lines": "365",
    "confidence": "high",
    "signals": [],
    "quote": "**⭐ Most interesting from a Bug A / cluster integration angle:** `supportsInstrumentClusterContent` and `supportsAccNav`"
@@ -15907,7 +15918,7 @@
    "local_id": 210,
    "statement": "Claiming supportsInstrumentClusterContent and supportsAccNav MIGHT unlock direct iPhone-to-cluster nav content streaming.",
    "topic": "future-possibility",
-   "source_lines": "363",
+   "source_lines": "365",
    "confidence": "low",
    "signals": [
     "speculative"
@@ -15920,7 +15931,7 @@
    "local_id": 211,
    "statement": "Feature gating Layer 1: USB / Bluetooth transport selection.",
    "topic": "feature-gating-layer",
-   "source_lines": "370",
+   "source_lines": "372",
    "confidence": "high",
    "signals": [],
    "quote": "Layer 1: USB / Bluetooth transport selection"
@@ -15931,7 +15942,7 @@
    "local_id": 212,
    "statement": "Feature gating Layer 2: iAP2 identification with component table and per-component capabilities.",
    "topic": "feature-gating-layer",
-   "source_lines": "372",
+   "source_lines": "374",
    "confidence": "high",
    "signals": [],
    "quote": "Layer 2: iAP2 identification — component table + per-component capabilities"
@@ -15942,7 +15953,7 @@
    "local_id": 213,
    "statement": "Feature gating Layer 3: CarPlay session with CarKit capability dictionary.",
    "topic": "feature-gating-layer",
-   "source_lines": "374",
+   "source_lines": "376",
    "confidence": "high",
    "signals": [],
    "quote": "Layer 3: CarPlay session — CarKit capability dictionary"
@@ -15953,7 +15964,7 @@
    "local_id": 214,
    "statement": "iPhone decides which messages to emit and features to expose based on capability negotiation.",
    "topic": "feature-gating",
-   "source_lines": "376",
+   "source_lines": "378",
    "confidence": "high",
    "signals": [],
    "quote": "Result: iPhone decides which messages to emit, which features to expose"
@@ -15962,14 +15973,15 @@
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#215",
    "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
    "local_id": 215,
-   "statement": "TODO: Capture LGI message wire type ID (0x5204? 0x5205?) by patching ARMiPhoneIAP2.",
+   "statement": "Open item superseded 2026-10-19: the LGI wire ID is 0x5204, seen live on OCBM without MaxLaneGuidanceStorageCapacity; remaining work is the declare-only patch on a stock CPC200, whose behaviour is UNVERIFIED.",
    "topic": "open-item",
-   "source_lines": "385",
-   "confidence": "high",
+   "source_lines": "387",
+   "confidence": "low",
    "signals": [
-    "TODO"
+    "superseded 2026-10-19",
+    "UNVERIFIED"
    ],
-   "quote": "Capture LGI message wire type ID (0x5204? 0x5205?) by patching ARMiPhoneIAP2 to advertise `MaxLaneGuidanceStorageCapacity > 0`"
+   "quote": "*Superseded 2026-10-19: the wire ID is `0x5204`, seen live on OCBM without that parameter."
   },
   {
    "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#216",
@@ -15977,7 +15989,7 @@
    "local_id": 216,
    "statement": "TODO: Decode iAP2 IDENTIFICATION engine in ARMiPhoneIAP2 to recover actual setSupports*: advertisement set.",
    "topic": "open-item",
-   "source_lines": "386",
+   "source_lines": "388",
    "confidence": "high",
    "signals": [
     "TODO"
@@ -15990,7 +16002,7 @@
    "local_id": 217,
    "statement": "TODO: RE supportsInstrumentClusterContent wire format to enable separate cluster nav channel.",
    "topic": "open-item",
-   "source_lines": "387",
+   "source_lines": "389",
    "confidence": "high",
    "signals": [
     "TODO"
@@ -16003,7 +16015,7 @@
    "local_id": 218,
    "statement": "TODO: Decode 0x5200 (StartRouteGuidance) parameter structure; partly done 2026-10-19: stock sends ids 0-2, selector id 3 SupportsExitInfo verified, ids 4/5 unverified.",
    "topic": "open-item",
-   "source_lines": "388",
+   "source_lines": "390",
    "confidence": "high",
    "signals": [
     "TODO",
@@ -16017,7 +16029,7 @@
    "local_id": 219,
    "statement": "TODO: Decode 0x5203 (StopRouteGuidance) parameter structure.",
    "topic": "open-item",
-   "source_lines": "388",
+   "source_lines": "390",
    "confidence": "high",
    "signals": [
     "TODO"
@@ -16030,7 +16042,7 @@
    "local_id": 220,
    "statement": "TODO: Extend Iap2StateParser.kt to handle new 0x5201 fields (lane guidance, time zone, EV battery) and 0x5202 fields 0x0c/0x0d; 0x0d is now observable with the NAV v6 patch, but carlink_native does not parse it yet.",
    "topic": "open-item",
-   "source_lines": "389",
+   "source_lines": "391",
    "confidence": "high",
    "signals": [
     "TODO"
@@ -26948,6 +26960,150 @@
    "confidence": "high",
    "signals": [],
    "quote": "cert serial `IPA_3333AA071227AA02AA0011AA003045`"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#229",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 229,
+   "statement": "Lane guidance wire ids in 0x5204 LaneGuidanceInformation: 0 component, 1 LaneGuidanceIndex, 2 LaneInformation group [Index, LaneStatus, LaneAngle (repeatable), LaneAngleHighlight], 3 LaneGuidanceDescription.",
+   "topic": "lgi-message",
+   "source_lines": "101",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Wire ids: 0 component, 1 LaneGuidanceIndex, 2 LaneInformation group [Index, LaneStatus, LaneAngle (repeatable), LaneAngleHighlight], 3 LaneGuidanceDescription."
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#230",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 230,
+   "statement": "0x5204 was observed live on an independent Rust (OCBM) implementation at declaration tier extended, where 0x5204 is declared as a received message and there is no Start selector for lanes because it rides the 0x5200 route-guidance subscription.",
+   "topic": "lgi-emission",
+   "source_lines": "114",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "observed live on an independent Rust (OCBM) implementation at declaration tier `extended`"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#231",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 231,
+   "statement": "5-9 0x5204 messages arrived per route-start burst on the OCBM implementation, with 54-123 B bodies.",
+   "topic": "lgi-emission",
+   "source_lines": "114",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "5-9 `0x5204` messages arrived per route-start burst (54-123 B bodies)"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#232",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 232,
+   "statement": "0x5202 id 12 LinkedLaneGuidanceInformation has no selector in the spec and was never present on the wire in the captures so far.",
+   "topic": "0x5202-field-0x0c",
+   "source_lines": "114",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "has no selector in the spec and was never present on the wire in the captures so far"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#233",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 233,
+   "statement": "The stock ARMiPhoneIAP2 neither declares nor handles 0x5204; its dispatcher hardcodes 0x5201/0x5202.",
+   "topic": "ccpa-missing-capability",
+   "source_lines": "114",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "neither declares nor handles `0x5204` (its dispatcher hardcodes `0x5201`/`0x5202`)"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#234",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 234,
+   "statement": "The staged declare-only plan for 0x5204 is in iap2_binary_patches.md section 4.2 P2 / next NAV patch, not built.",
+   "topic": "lgi-emission",
+   "source_lines": "114",
+   "confidence": "high",
+   "signals": [],
+   "quote": "the staged declare-only plan is in `../04_Implementation/iap2_binary_patches.md` section"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#235",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 235,
+   "statement": "Apple's note says Identify param 30 sub 8 (MaxLaneGuidanceStorageCapacity) must be included, but 0x5204 arrived on the OCBM implementation at declaration tier extended without it, contradicting treating it as required.",
+   "topic": "capability-trigger",
+   "source_lines": "178",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "so treating `MaxLaneGuidanceStorageCapacity` as required is contradicted"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#236",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 236,
+   "statement": "Whether MaxLaneGuidanceStorageCapacity matters on the stock CPC200 is UNVERIFIED.",
+   "topic": "capability-trigger",
+   "source_lines": "178",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "whether it matters on the stock CPC200 is UNVERIFIED. `0x5201` ids 16/17/18"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md#237",
+   "file": "02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md",
+   "local_id": 237,
+   "statement": "0x5201 ids 16/17/18 are LaneGuidanceCurrentIndex/TotalCount/Showing.",
+   "topic": "0x5201-field-0x10",
+   "source_lines": "178",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`0x5201` ids 16/17/18 are LaneGuidanceCurrentIndex/TotalCount/Showing."
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_message_catalog.md#154",
+   "file": "02_Protocol_Reference/iap2_message_catalog.md",
+   "local_id": 154,
+   "statement": "Lane guidance is the separate message 0x5204 LaneGuidanceInformation with ids 0 component, 1 LaneGuidanceIndex, 2 LaneInformation group, 3 LaneGuidanceDescription.",
+   "topic": "iap2-parser-note",
+   "source_lines": "201",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Lane guidance is the separate message `0x5204` LaneGuidanceInformation (ids 0 component, 1 LaneGuidanceIndex, 2 LaneInformation group, 3 LaneGuidanceDescription)"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_message_catalog.md#155",
+   "file": "02_Protocol_Reference/iap2_message_catalog.md",
+   "local_id": 155,
+   "statement": "0x5204 was seen live on OCBM with 0x5204 declared as a received message and without Identify param 30 sub 8.",
+   "topic": "iap2-parser-note",
+   "source_lines": "201",
+   "confidence": "high",
+   "signals": [],
+   "quote": "seen live on OCBM with `0x5204` declared as a received message and without Identify param 30 sub 8"
+  },
+  {
+   "gid": "02_Protocol_Reference/iap2_message_catalog.md#156",
+   "file": "02_Protocol_Reference/iap2_message_catalog.md",
+   "local_id": 156,
+   "statement": "The staged declare-only plan for 0x5204 on the stock binary is in iap2_binary_patches.md section 4.2 P2 / next NAV patch, not built.",
+   "topic": "iap2-parser-note",
+   "source_lines": "201",
+   "confidence": "high",
+   "signals": [],
+   "quote": "staged plan: `../04_Implementation/iap2_binary_patches.md` section"
   }
  ]
 }
