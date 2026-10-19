@@ -289,10 +289,89 @@ proven on the wire and in the probe, but not delivered to any user-facing app.
 
 **UNVERIFIED:** off-ramp exit types (maneuver types 8/22/23); selectors 4/5 (timezone / EV — only
 inferred to gate `0x5201` ids 21+); lane guidance (`0x5204`) on the stock binary — it neither declares
-nor handles it, and a lane patch ("P2") is under research, not built; persistence of v6 beyond `/tmp`
+nor handles it, and a lane patch ("P2 / next NAV patch, not built") exists only as the researched plan in §4.2; persistence of v6 beyond `/tmp`
 (strategy B never tried); other iOS versions and other firmware builds; whether the on-box factory
 binary of `2025.12.29.1746CAY` is identical to the `2025.10.15` one `build_v6.py` asserts against (the
 hook applied and ran, but its md5 was not recorded). Raw frame logs are not archived in this repo.
+
+### 4.2 P2 / next NAV patch, not built — `0x5204` lane guidance (researched plan, offline analysis only; unverified on hardware)
+
+**Status:** plan only. Nothing is built or scheduled and no version is assigned. Basis: offline disassembly of
+`ARMiPhoneIAP2.unpacked` plus a bounded unicorn run of the stock parser on a synthetic `0x5204` frame; no device run.
+Base = NAV v6 (§4.1). VMA = file + `0x10000`. The earlier idea of appending `0x5204` frames into the `_iap2m` buffer
+is withdrawn (see forwarding below).
+
+**Declaration is a runtime vector insert, not a static table.** Registration fn `0x2cbf4` registers received ids with
+`bl 0x1ff7c` at `0x2cc10` (`0x5201`) and `0x2cc1c` (`0x5202`) and sent ids via `0x1ff74` at `0x2cc28` (`0x5200`) and a
+tail-`b` at `0x2cc38` (`0x5203`); r0 = manager, r1 = id. `0x1ff7c` is `add r0,#0x138; b 0x1ed84`, where `0x1ed84` is
+`std::vector<u16>::push_back`, so appending `0x5204` is a clean insert; the Identify blob is serialized from these
+vectors, so length and checksum recompute downstream (the same finalizer family P1 relies on). Mechanism: redirect the
+`bl` at `0x2cc1c` (bytes `d6 cc ff eb`) to a ~32 B cave stub, `regstub`: `push {r4,lr}; mov r4,r0; bl 0x1ff7c` (r1 =
+`0x5202` still live); `mov r0,r4; movw r1,#0x5204; pop {r4,lr}; b 0x1ff7c`. The required send for `0x5204` (`0x5200`)
+is already in Identify param 6, and `0x5204` has no Start/Stop, so no pairing is needed. The Rust OCBM accessory
+declares it the same way (param 7) and received `0x5204` live with NO Identify param 30 sub 8.
+
+**Registration alone does not route.** The inbound demux `0x18b10` is a hardcoded id search; its `0x520x` arm at
+`0x18c2c` (`sub r3,r4,#0x5200; sub r3,#1; cmp r3,#1; bls 0x1917c; b 0x1919c`) sends only `0x5201`/`0x5202` to the
+engine (`0x1917c` calls vtable[8] = `virtual_8` `0x2d1c8` on a fixed engine pointer; no per-id table). A `0x5204` falls
+to `0x1919c` (verbose log, then cleanup): a safe silent drop. Even if it reached `virtual_8`, the switch at `0x2d1e0`
+sends index 4 to default `0x2da04`, a harmless no-op. Widening the compare at `0x18c34` (`cmp r3,#1` -> `#3`) would
+route it but touches the NAV hot path (and admits inbound `0x5203`), so it is not chosen. **Chosen (Design B):** hook
+`0x18c40` (`b 0x1919c`, bytes `55 01 00 ea`) -> `bl lane_stub`; r4 = msgid and r6 = raw packet are live there. If
+r4 == `0x5204`, `lane_stub` copies BE16(`[r6+2..3]`) - 9 bytes from r6+9 into a lane buffer and bumps a lane-cur
+counter, then `b 0x1919c`. Stage1, `virtual_8` and the dispatcher range stay byte-identical to v6, and the `0x2d0fc`
+map-insert re-entrancy zone is never entered for `0x5204`. The 556 B left in the cave is expected to suffice; if not,
+extend the R-X p_filesz/p_memsz toward `0x77000` (not assembled; size is an estimate).
+
+**Forwarding: a NEW NaviJSON key `_iap2l`, not `_iap2m`.** carlink_native reads `_iap2`/`_iap2m` by explicit key
+(`CarlinkManager.kt`; unknown keys are ignored), and its `Iap2RouteParser` stops the whole burst parse at the first
+frame that is not `52 02`, so mixing lane frames into `_iap2m` would truncate maneuver parsing. `_iap2l` uses the same
+framing as the `0x5202` capture (`40 40 <sesslen BE> 52 04 <TLVs> <cksum>`, linklen-9 bytes from offset 9). Stage2 gains a
+second block cloned from the `_iap2m` one: its own settle gate (lane-cur vs lane-prev), `cJSON_AddStringToObject(obj,
+"_iap2l", hex)` and a cap. bss: lane buffer at `0xAB000` (RW p_memsz `0x14000` -> `0x15000`, memsz only), cap `0x1000`
+(a burst is 5-9 messages of <=123 B, ~1.1 KB), counters at GLOBAL+`0x124`/`+0x128` (in the unreferenced scratch
+`0x991A0..0x99F5F`). Stage2 runs on every `0x5201` (~1 Hz) and the lane burst completes ~0.3 s after `0x5202`, so it
+settles within two stage2 passes. v5 stage2 leaves sp = 4 mod 8 at libc calls (latent); the new block must push an
+even register count. Host work (new code in both apps): an `Iap2LaneParser` with recursive TLV decode, because `0x5204`
+id 2 `LaneInformation` is a nested group (sub0 Index u16, sub1 LaneStatus enum, sub2 LaneAngle int16 [0+], sub3
+LaneAngleHighlight) and the existing parsers are flat. carlink_macOS has no nav decoder/UI (log-only probe);
+carlink_native needs an `_iap2l` branch in `CarlinkManager.kt` plus a new parser (do not extend `Iap2RouteParser`).
+On the OCBM box a route start carried 5-9 `0x5204` messages (54-123 B bodies) and `0x5202` id 12
+(LinkedLaneGuidanceInformation) was never present, so lane records are tied to maneuvers only by the host's own index logic.
+
+**iOS side.** Declaring `0x5204` in param 7 is sufficient per the OCBM live result. `0x5200` needs no lane selector
+(selectors 0-5 = component / SourceName / SourceSupportsRouteGuidance / SupportsExitInfo / DestinationTimeZoneOffsetMinutes
+/ EVChargeInfo); P1's selector 3 is unrelated. The stock param-30 writer `0x21400` sets sub 6 (maneuver storage
+capacity) = 0 and has no sub 7/8, so maneuvers already arrive individually. Identify param 30 sub 8
+(MaxLaneGuidanceStorageCapacity) is UNKNOWN: Apple's note says it must be included, yet OCBM received `0x5204`
+without it. Start without it; it is the only fallback (two heap `uint16` entities via `0x20624`; nontrivial).
+
+**Risks.** (a) An Identify reject (`0x1D03`) is unrecoverable for the session (params 6/7 cannot be stripped, a retry is
+byte-identical). The OCBM wired+tunnel `extended` declaration including `0x5204` was accepted, so the risk is lower than
+the wireless param-6 growth precedent, but it is UNKNOWN for this binary; the declare-only stage is the gate. (b) Crash
+on an unrouted `0x5204`: ruled out statically (`0x1919c` and `0x2da04` both return cleanly). (c) Memory growth (v4 OOM
+precedent): bounded by the settle gate and the `0x1000` cap. (d) The `0x5202` map-insert race is UNVERIFIED in the
+docs; the capture hook sits before any map insert. Rollback: a host push to `/tmp/bin` reverts on reboot; a
+persistent `/usr/sbin` install would need the factory backup (md5 `d933c9d5`) plus reboot; dropbear starts before the
+main service; `/script/ncm_only` is the maintenance mode.
+
+**Staged plan** (each stage host-pushable via the existing carlink_macOS init push; reverts on reboot):
+
+| Stage | Change | Accept | Fail |
+|---|---|---|---|
+| 0 declare-only | `regstub` at `0x2cc1c` only; no host change (the box drops `0x5204`) | iPhone-side capture (`idevicesyslog -p accessoryd -p carkitd`, whose `LOG;` lines include the accessory `0x1D01` Identify) shows `0x5204` in the declared received list and a `0x1D02` accept (not `0x1D03`), and `0x5204` frames appear on the wire after a route starts | `0x1D03`: static declaration is dead for this binary; test sub 8, else abandon |
+| 1 capture + forward | `lane_stub` at `0x18c40`, stage2 `_iap2l` block, RW p_memsz `0x15000` | host log shows `_iap2l` hex; `Iap2LaneParser` decodes id 1 index and the id 2 group on a multi-lane route | no `_iap2l` though Stage 0 saw `0x5204`: capture-hook bug (emulate first) |
+| 2 host render | `Iap2LaneParser` in carlink_native, `_iap2l` decoder in carlink_macOS | host-defined | n/a |
+
+**Emulation.** Done: parser `0x17f48` on a synthetic `0x5204` link frame gives msgid `0x5204`, param area at pkt+15
+(PASS); the routing decision is a constant fold. Proposed once stubs exist: run `regstub` under unicorn with a fake
+manager and r1 = `0x5202`, asserting the received list gets {`0x5202`, `0x5204`} and the manager pointer survives; run
+`lane_stub` on `0x5204` vs non-`0x5204` frames, asserting linklen-9 bytes are copied and other frames reach `0x1919c` untouched.
+
+**Remaining UNKNOWNs (cheapest experiment):** U1 wired `0x1D01` accept of a param-7 `0x5204` on this binary (Stage 0);
+U2 whether sub 8 is needed (only if Stage 0 shows accept but no `0x5204`); U3 lane-burst volume and interleave
+(observe `_iap2l`/`_iap2m` lengths at Stage 1); U4 repack: `modified_upx_arm` is a Linux ARM ELF, so packing runs on
+the box as for v6; an unpacked-file host push is untested.
 
 ---
 
@@ -503,7 +582,8 @@ All three share the **same code cave** and would otherwise collide in `.bss`:
 In practice each host needs only one patch (carlink_native → nav; carlink_macOS → call+comm), so a
 fully combined nav+call+comm build has not been required. The only composition built so far is NAV v5 +
 P1 (§4.1), which uses the cave up to file `0x76dd4` (556 B left); a full nav+call+comm build would need
-to fit call+comm (~450 B by the figures above) into that remainder — arithmetic only, UNVERIFIED.
+to fit call+comm (~450 B by the figures above) into that remainder — arithmetic only, UNVERIFIED. The P2 plan
+(§4.2) would also draw on that remainder and adds `0x1000` B of bss at `0xAB000`; no combined budget has been computed.
 
 ---
 

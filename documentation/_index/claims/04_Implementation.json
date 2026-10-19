@@ -8,7 +8,7 @@
   "04_Implementation/iap2_binary_patches.md",
   "04_Implementation/session_examples.md"
  ],
- "claim_count": 757,
+ "claim_count": 811,
  "claims": [
   {
    "gid": "04_Implementation/capture_playback.md#1",
@@ -5215,7 +5215,7 @@
    "local_id": 31,
    "statement": "The CALL patch is device-verified 2026-06-14 (firmware 2025.10.15.1127CAY, A15W).",
    "topic": "call-patch",
-   "source_lines": "301",
+   "source_lines": "380",
    "confidence": "high",
    "signals": [],
    "quote": "**Status:** device-verified 2026-06-14"
@@ -5226,7 +5226,7 @@
    "local_id": 32,
    "statement": "In the CallState frame the total length is the BE u16 at [2..3] and the iAP2 message starts at offset 9.",
    "topic": "call-patch",
-   "source_lines": "312",
+   "source_lines": "391",
    "confidence": "high",
    "signals": [],
    "quote": "the iAP2 **message** starts at **offset 9**"
@@ -5237,7 +5237,7 @@
    "local_id": 33,
    "statement": "CALL capture hook is at VMA 0x296cc, stock bytes f0 40 2d e9 (push {r4-r7,lr}).",
    "topic": "call-patch",
-   "source_lines": "321",
+   "source_lines": "400",
    "confidence": "high",
    "signals": [],
    "quote": "`0x296cc` | `f0 40 2d e9`"
@@ -5248,7 +5248,7 @@
    "local_id": 34,
    "statement": "CALL emit hook is at VMA 0x29960, stock bytes 5a ff 00 fa (blx cJSON_PrintUnformatted).",
    "topic": "call-patch",
-   "source_lines": "322",
+   "source_lines": "401",
    "confidence": "high",
    "signals": [],
    "quote": "`0x29960` | `5a ff 00 fa`"
@@ -5259,7 +5259,7 @@
    "local_id": 35,
    "statement": "CALL stage 2 hex-encodes the payload and attaches it via cJSON_AddStringToObject(r5, _callraw, hex).",
    "topic": "call-patch",
-   "source_lines": "330",
+   "source_lines": "409",
    "confidence": "high",
    "signals": [],
    "quote": "`cJSON_AddStringToObject(r5, \"_callraw\", hex)`"
@@ -5270,7 +5270,7 @@
    "local_id": 36,
    "statement": "The subtype-100 content is NUL-terminated, so JSONSerialization rejected it and the host call path failed silently until a NUL-trim fix.",
    "topic": "call-host",
-   "source_lines": "346",
+   "source_lines": "425",
    "confidence": "high",
    "signals": [],
    "quote": "subtype-100 content is **NUL-terminated**"
@@ -5281,7 +5281,7 @@
    "local_id": 37,
    "statement": "The host fix trims subtype-100 to the first NUL via Data(content.prefix(while: $0 != 0)).",
    "topic": "call-host",
-   "source_lines": "348",
+   "source_lines": "427",
    "confidence": "high",
    "signals": [],
    "quote": "`Data(content.prefix(while: { $0 != 0 }))`"
@@ -5292,7 +5292,7 @@
    "local_id": 38,
    "statement": "For ordinary 1:1 calls iOS sends exactly 5 flat 0x4155 params, never more.",
    "topic": "call-model",
-   "source_lines": "352",
+   "source_lines": "431",
    "confidence": "high",
    "signals": [],
    "quote": "iOS sends **exactly 5 flat params, never more**"
@@ -5303,7 +5303,7 @@
    "local_id": 39,
    "statement": "The 0x4155 CallUUID is real and equals the stock CallID, not the firmware fabricated fallback.",
    "topic": "call-model",
-   "source_lines": "360",
+   "source_lines": "439",
    "confidence": "high",
    "signals": [],
    "quote": "== the stock `CallID` (not the firmware's fabricated fallback)"
@@ -5314,7 +5314,7 @@
    "local_id": 40,
    "statement": "The extra fields AddressBookID/Label/Service/IsConferenced/ConferenceGroup/DisconnectReason are not present on 0x4155 for normal 1:1 calls regardless of subscription.",
    "topic": "call-model",
-   "source_lines": "370",
+   "source_lines": "449",
    "confidence": "high",
    "signals": [],
    "quote": "are **not** present on `0x4155` for normal 1:1 calls regardless of subscription"
@@ -5325,7 +5325,7 @@
    "local_id": 41,
    "statement": "The Missed recents entry and voicemail badge are rendered by iOS into the H.264 video (pixels), not telephony data.",
    "topic": "call-model",
-   "source_lines": "394",
+   "source_lines": "473",
    "confidence": "high",
    "signals": [],
    "quote": "into the H.264 video stream (pixels)"
@@ -5336,7 +5336,7 @@
    "local_id": 42,
    "statement": "Unlike nav/call, the Communication engine never runs at all on stock firmware, so a passthrough hook has nothing to forward until it is enabled.",
    "topic": "comm-patch",
-   "source_lines": "407",
+   "source_lines": "486",
    "confidence": "high",
    "signals": [],
    "quote": "the **Communication engine never runs at all** on stock firmware"
@@ -5347,7 +5347,7 @@
    "local_id": 43,
    "statement": "Hard rule: never add Communication to any /etc/RiddleBoxData/ datastore.",
    "topic": "comm-poison",
-   "source_lines": "416",
+   "source_lines": "495",
    "confidence": "high",
    "signals": [],
    "quote": "HARD RULE: never add Communication to any `/etc/RiddleBoxData/` datastore"
@@ -5358,7 +5358,7 @@
    "local_id": 44,
    "statement": "A comm datastore edit breaks the datastore signature, so ReadCFValue_FromSystem(IdentifyInfo) fails (kSignatureErr).",
    "topic": "comm-poison",
-   "source_lines": "418",
+   "source_lines": "497",
    "confidence": "high",
    "signals": [],
    "quote": "**breaks the datastore signature**"
@@ -5369,7 +5369,7 @@
    "local_id": 45,
    "statement": "The daemon rewrites CallStateItems_Usablity back to stock ids 0-4 on every connect, so file-edit expansion does not persist.",
    "topic": "comm-poison",
-   "source_lines": "428",
+   "source_lines": "507",
    "confidence": "high",
    "signals": [],
    "quote": "rewrites `CallStateItems_Usablity` back to stock (ids 0–4) on every connect"
@@ -5380,7 +5380,7 @@
    "local_id": 46,
    "statement": "The comm engine is datastore-gated build-then-destroy: factory 0x15ee4 builds it then destroys it if its name is absent from the datastore.",
    "topic": "comm-rootcause",
-   "source_lines": "440",
+   "source_lines": "519",
    "confidence": "high",
    "signals": [],
    "quote": "The comm engine object is datastore-gated build-then-destroy"
@@ -5391,7 +5391,7 @@
    "local_id": 47,
    "statement": "Runtime proof of comm dormancy: the comm singleton [0x9859c] is NULL, the only null engine.",
    "topic": "comm-rootcause",
-   "source_lines": "445",
+   "source_lines": "524",
    "confidence": "high",
    "signals": [],
    "quote": "`[0x9859c] = NULL` (the only null engine)"
@@ -5402,7 +5402,7 @@
    "local_id": 48,
    "statement": "The comm recv handler 0x2846c is never invoked because the dispatcher route null-gates on the comm singleton at dispatch time.",
    "topic": "comm-rootcause",
-   "source_lines": "446",
+   "source_lines": "525",
    "confidence": "high",
    "signals": [],
    "quote": "The recv handler `0x2846c` is never invoked"
@@ -5413,7 +5413,7 @@
    "local_id": 49,
    "statement": "COMM mod 1 force-construct: NOP the datastore keep/destroy gate at 0x1617c so comm is kept and registered.",
    "topic": "comm-patch",
-   "source_lines": "469",
+   "source_lines": "548",
    "confidence": "high",
    "signals": [],
    "quote": "NOP `0x1617c`"
@@ -5424,7 +5424,7 @@
    "local_id": 50,
    "statement": "COMM mod 2 subscribe: hook 0x285b0 to re-select the comm children and set dirty so the sender emits StartCommunicationUpdate 0x4157.",
    "topic": "comm-patch",
-   "source_lines": "470",
+   "source_lines": "549",
    "confidence": "high",
    "signals": [],
    "quote": "hook `0x285b0`"
@@ -5435,7 +5435,7 @@
    "local_id": 51,
    "statement": "COMM mod 3 forward: hook the dispatcher 0x4158 case at 0x18ff8 before the null-gate and broadcast subtype-101 _commraw.",
    "topic": "comm-patch",
-   "source_lines": "471",
+   "source_lines": "550",
    "confidence": "high",
    "signals": [],
    "quote": "hook `0x18ff8`"
@@ -5446,7 +5446,7 @@
    "local_id": 52,
    "statement": "The COMM patch forwards CommunicationUpdate as MetaData subtype-101 _commraw.",
    "topic": "comm-patch",
-   "source_lines": "471",
+   "source_lines": "550",
    "confidence": "high",
    "signals": [],
    "quote": "MetaData **subtype-101 `_commraw`**"
@@ -5457,7 +5457,7 @@
    "local_id": 53,
    "statement": "The comm subscribe set and 0x4158 field map are cross-validated against two shipping wireless-CarPlay head-unit middleware stacks (Cinemo/Nme) and the Apple R14G17 SDK.",
    "topic": "comm-result",
-   "source_lines": "460",
+   "source_lines": "539",
    "confidence": "high",
    "signals": [],
    "quote": "head-unit middleware stacks (Cinemo/Nme — x86-64 and aarch64 builds)"
@@ -5468,7 +5468,7 @@
    "local_id": 54,
    "statement": "All three patches fit one cave: nav ~536B + call ~240B + comm ~208B which is under the 1224B budget.",
    "topic": "patch-combine",
-   "source_lines": "497",
+   "source_lines": "576",
    "confidence": "high",
    "signals": [],
    "quote": "Cave budget: nav (~536 B) + call (~240 B) + comm (~208 B)"
@@ -5479,7 +5479,7 @@
    "local_id": 55,
    "statement": "With a poisoned datastore the iPhone withholds all update messages (no NowPlaying 0x5001, no CallStateUpdate 0x4155): media and telephony go dark.",
    "topic": "comm-poison",
-   "source_lines": "420",
+   "source_lines": "499",
    "confidence": "high",
    "signals": [],
    "quote": "the iPhone withholds ALL update messages"
@@ -6187,14 +6187,14 @@
    "gid": "04_Implementation/iap2_binary_patches.md#115",
    "file": "04_Implementation/iap2_binary_patches.md",
    "local_id": 115,
-   "statement": "Lane guidance (0x5204) on the stock binary is UNVERIFIED: it neither declares nor handles it, and a lane patch (P2) is under research, not built.",
+   "statement": "Lane guidance (0x5204) on the stock binary is UNVERIFIED: it neither declares nor handles it, and the P2 lane patch exists only as the researched plan in §4.2, not built.",
    "topic": "open-item",
    "source_lines": "292",
    "confidence": "low",
    "signals": [
     "UNVERIFIED"
    ],
-   "quote": "nor handles it, and a lane patch (\"P2\") is under research, not built;"
+   "quote": "a lane patch (\"P2 / next NAV patch, not built\") exists only as the researched plan in §4.2"
   },
   {
    "gid": "04_Implementation/iap2_binary_patches.md#116",
@@ -6252,7 +6252,7 @@
    "local_id": 120,
    "statement": "The only composition built so far is NAV v5 + P1 (§4.1), which uses the cave up to file 0x76dd4 (556 B left).",
    "topic": "patch-combine",
-   "source_lines": "505",
+   "source_lines": "584",
    "confidence": "low",
    "signals": [
     "UNVERIFIED"
@@ -6265,12 +6265,700 @@
    "local_id": 121,
    "statement": "A full nav+call+comm build would need to fit call+comm (~450 B by the figures above) into the 556 B remainder; arithmetic only, UNVERIFIED.",
    "topic": "patch-combine",
-   "source_lines": "506",
+   "source_lines": "585",
    "confidence": "low",
    "signals": [
     "UNVERIFIED"
    ],
    "quote": "to fit call+comm (~450 B by the figures above) into that remainder — arithmetic only, UNVERIFIED."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#122",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 122,
+   "statement": "P2 (0x5204 lane guidance) is a researched plan only: nothing is built or scheduled and no version number is assigned.",
+   "topic": "open-item",
+   "source_lines": "299",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "Nothing is built or scheduled and no version is assigned."
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#123",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 123,
+   "statement": "The P2 plan rests on offline disassembly of ARMiPhoneIAP2.unpacked plus a bounded unicorn run of the stock parser on a synthetic 0x5204 frame; no device run.",
+   "topic": "open-item",
+   "source_lines": "300",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "plus a bounded unicorn run of the stock parser on a synthetic `0x5204` frame; no device run"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#124",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 124,
+   "statement": "The P2 plan withdraws the earlier idea of appending 0x5204 frames into the _iap2m buffer.",
+   "topic": "nav-patch",
+   "source_lines": "302",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "is withdrawn (see forwarding below)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#125",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 125,
+   "statement": "The RouteGuidance engine registration function is at 0x2cbf4; it registers received ids with bl 0x1ff7c at 0x2cc10 (0x5201) and 0x2cc1c (0x5202), and sent ids via 0x1ff74 at 0x2cc28 (0x5200) and a tail-b at 0x2cc38 (0x5203).",
+   "topic": "nav-patch",
+   "source_lines": "305",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`bl 0x1ff7c` at `0x2cc10` (`0x5201`) and `0x2cc1c` (`0x5202`)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#126",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 126,
+   "statement": "0x1ff7c is add r0,#0x138; b 0x1ed84, where 0x1ed84 is std::vector<u16>::push_back, so appending 0x5204 to the received-id list is a clean dynamic insert.",
+   "topic": "nav-patch",
+   "source_lines": "307",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "so appending `0x5204` is a clean insert"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#127",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 127,
+   "statement": "The Identify blob is serialized from the registered-id vectors, so its length and checksum recompute downstream (the same finalizer family P1 relies on).",
+   "topic": "nav-patch",
+   "source_lines": "308",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "so length and checksum recompute downstream"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#128",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 128,
+   "statement": "P2 declaration mechanism: redirect the bl at 0x2cc1c (bytes d6 cc ff eb) to a ~32 B cave stub regstub that registers 0x5202 then 0x5204.",
+   "topic": "patch-hook",
+   "source_lines": "309",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`bl` at `0x2cc1c` (bytes `d6 cc ff eb`) to a ~32 B cave stub"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#129",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 129,
+   "statement": "regstub is push {r4,lr}; mov r4,r0; bl 0x1ff7c (r1 = 0x5202 still live); mov r0,r4; movw r1,#0x5204; pop {r4,lr}; b 0x1ff7c.",
+   "topic": "patch-hook",
+   "source_lines": "309",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`push {r4,lr}; mov r4,r0; bl 0x1ff7c`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#130",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 130,
+   "statement": "The required send for 0x5204 (0x5200) is already in Identify param 6, and 0x5204 has no Start/Stop, so no pairing is needed.",
+   "topic": "nav-patch",
+   "source_lines": "311",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "has no Start/Stop, so no pairing is needed"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#131",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 131,
+   "statement": "The Rust OCBM accessory declares 0x5204 in param 7 and received 0x5204 live with no Identify param 30 sub 8.",
+   "topic": "nav-patch",
+   "source_lines": "312",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "received `0x5204` live with NO Identify param 30 sub 8"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#132",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 132,
+   "statement": "Registering 0x5204 alone does not route it: the inbound demux 0x18b10 is a hardcoded id search whose 0x520x arm at 0x18c2c sends only 0x5201/0x5202 to the engine.",
+   "topic": "nav-patch",
+   "source_lines": "315",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "sends only `0x5201`/`0x5202` to the"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#133",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 133,
+   "statement": "The 0x5201/0x5202 route goes via 0x1917c to virtual_8 (0x2d1c8) on a fixed engine pointer; there is no per-id table.",
+   "topic": "nav-patch",
+   "source_lines": "316",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "calls vtable[8] = `virtual_8` `0x2d1c8` on a fixed engine pointer"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#134",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 134,
+   "statement": "An unrouted 0x5204 falls to 0x1919c (verbose log, then cleanup), a safe silent drop.",
+   "topic": "nav-patch",
+   "source_lines": "317",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "a safe silent drop"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#135",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 135,
+   "statement": "Even if 0x5204 reached virtual_8, the switch at 0x2d1e0 sends index 4 to default 0x2da04, a harmless no-op.",
+   "topic": "nav-patch",
+   "source_lines": "318",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "sends index 4 to default `0x2da04`, a harmless no-op"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#136",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 136,
+   "statement": "Widening the compare at 0x18c34 (cmp r3,#1 -> #3) would route 0x5204 but touches the NAV hot path and admits inbound 0x5203, so it is not chosen.",
+   "topic": "nav-patch",
+   "source_lines": "319",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "route it but touches the NAV hot path (and admits inbound `0x5203`), so it is not chosen"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#137",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 137,
+   "statement": "Chosen P2 capture design (Design B): hook 0x18c40 (b 0x1919c, bytes 55 01 00 ea) to bl lane_stub; r4 = msgid and r6 = raw packet are live at that site.",
+   "topic": "patch-hook",
+   "source_lines": "320",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`0x18c40` (`b 0x1919c`, bytes `55 01 00 ea`) -> `bl lane_stub`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#138",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 138,
+   "statement": "lane_stub, if r4 == 0x5204, copies BE16([r6+2..3]) - 9 bytes from r6+9 into a lane buffer and bumps a lane-cur counter, then branches to 0x1919c.",
+   "topic": "patch-hook",
+   "source_lines": "321",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "r4 == `0x5204`, `lane_stub` copies BE16(`[r6+2..3]`) - 9 bytes from"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#139",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 139,
+   "statement": "With Design B, stage1, virtual_8 and the dispatcher range stay byte-identical to v6, and the 0x2d0fc map-insert re-entrancy zone is never entered for 0x5204.",
+   "topic": "patch-hook",
+   "source_lines": "323",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "map-insert re-entrancy zone is never entered for"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#140",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 140,
+   "statement": "The 556 B left in the cave is expected to suffice for P2; if not, the R-X p_filesz/p_memsz would be extended toward 0x77000. The size is an estimate, not assembled.",
+   "topic": "patch-cave",
+   "source_lines": "324",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "not assembled; size is an estimate"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#141",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 141,
+   "statement": "P2 forwards lane frames under a NEW NaviJSON key _iap2l, not _iap2m.",
+   "topic": "nav-patch",
+   "source_lines": "326",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "**Forwarding: a NEW NaviJSON key `_iap2l`, not `_iap2m`.**"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#142",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 142,
+   "statement": "carlink_native's Iap2RouteParser stops the whole burst parse at the first frame that is not 52 02, so mixing lane frames into _iap2m would truncate maneuver parsing.",
+   "topic": "nav-patch",
+   "source_lines": "328",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "frame that is not `52 02`, so mixing lane frames into `_iap2m` would truncate maneuver parsing"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#143",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 143,
+   "statement": "carlink_native reads _iap2/_iap2m by explicit key and ignores unknown keys, so a new _iap2l key is forward-compatible.",
+   "topic": "nav-patch",
+   "source_lines": "327",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "(`CarlinkManager.kt`; unknown keys are ignored)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#144",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 144,
+   "statement": "_iap2l uses the same framing as the 0x5202 capture (40 40 <sesslen BE> 52 04 <TLVs> <cksum>), linklen-9 bytes from offset 9.",
+   "topic": "nav-patch",
+   "source_lines": "329",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`40 40 <sesslen BE> 52 04 <TLVs> <cksum>`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#145",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 145,
+   "statement": "Stage2 gains a second block cloned from the _iap2m one: its own settle gate (lane-cur vs lane-prev), cJSON_AddStringToObject for _iap2l, and a cap.",
+   "topic": "nav-patch",
+   "source_lines": "330",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "second block cloned from the `_iap2m` one"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#146",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 146,
+   "statement": "P2 bss plan: lane buffer at 0xAB000 (RW p_memsz 0x14000 -> 0x15000, memsz only), cap 0x1000, counters at GLOBAL+0x124/+0x128 in the unreferenced scratch 0x991A0..0x99F5F.",
+   "topic": "patch-cave",
+   "source_lines": "331",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "lane buffer at `0xAB000` (RW p_memsz `0x14000` -> `0x15000`, memsz only)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#147",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 147,
+   "statement": "A lane burst is 5-9 messages of at most 123 B (~1.1 KB), so the 0x1000 cap suffices.",
+   "topic": "nav-patch",
+   "source_lines": "332",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "(a burst is 5-9 messages of <=123 B, ~1.1 KB)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#148",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 148,
+   "statement": "Stage2 runs on every 0x5201 (~1 Hz) and the lane burst completes ~0.3 s after 0x5202, so the lane gate settles within two stage2 passes.",
+   "topic": "nav-patch",
+   "source_lines": "334",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "settles within two stage2 passes"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#149",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 149,
+   "statement": "v5 stage2 leaves sp = 4 mod 8 at libc calls (latent); the new P2 block must push an even register count.",
+   "topic": "nav-patch",
+   "source_lines": "335",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "even register count"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#150",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 150,
+   "statement": "The 0x5204 LaneInformation (id 2) is a nested group (sub0 Index u16, sub1 LaneStatus enum, sub2 LaneAngle int16 [0+], sub3 LaneAngleHighlight), so a host needs a recursive TLV decoder; the existing parsers are flat.",
+   "topic": "nav-patch",
+   "source_lines": "336",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "`LaneInformation` is a nested group (sub0 Index u16, sub1 LaneStatus enum, sub2 LaneAngle int16 [0+], sub3"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#151",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 151,
+   "statement": "carlink_native needs an _iap2l branch in CarlinkManager.kt plus a new parser (not an extension of Iap2RouteParser); carlink_macOS has no nav decoder/UI.",
+   "topic": "nav-patch",
+   "source_lines": "338",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "carlink_native needs an `_iap2l` branch in `CarlinkManager.kt` plus a new parser"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#152",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 152,
+   "statement": "On the OCBM box a route start carried 5-9 0x5204 messages (54-123 B bodies) and 0x5202 id 12 (LinkedLaneGuidanceInformation) was never present, so lane records are tied to maneuvers only by the host's own index logic.",
+   "topic": "nav-patch",
+   "source_lines": "339",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "On the OCBM box a route start carried 5-9 `0x5204` messages"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#153",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 153,
+   "statement": "0x5200 needs no lane selector; P1's selector 3 (SupportsExitInfo) is unrelated to lanes.",
+   "topic": "nav-patch",
+   "source_lines": "342",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "`0x5200` needs no lane selector"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#154",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 154,
+   "statement": "The stock param-30 writer 0x21400 sets sub 6 (maneuver storage capacity) = 0 and has no sub 7/8, so maneuvers already arrive individually.",
+   "topic": "nav-patch",
+   "source_lines": "345",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "has no sub 7/8, so maneuvers already arrive individually"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#155",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 155,
+   "statement": "Whether Identify param 30 sub 8 (MaxLaneGuidanceStorageCapacity) is needed for 0x5204 is UNKNOWN: Apple's note says it must be included, yet OCBM received 0x5204 without it; P2 starts without it and it is the only fallback.",
+   "topic": "open-item",
+   "source_lines": "346",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "is UNKNOWN: Apple's note says it must be included"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#156",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 156,
+   "statement": "Adding sub 8 would need two heap uint16 entities linked via 0x20624 and is nontrivial.",
+   "topic": "open-item",
+   "source_lines": "347",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "two heap `uint16` entities via `0x20624`; nontrivial"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#157",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 157,
+   "statement": "An Identify reject (0x1D03) is unrecoverable for the session: params 6/7 cannot be stripped and a retry is byte-identical.",
+   "topic": "nav-patch",
+   "source_lines": "349",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "unrecoverable for the session (params 6/7 cannot be stripped, a retry is"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#158",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 158,
+   "statement": "Risk of a 0x1D03 for a declared 0x5204 is lower than the wireless param-6 growth precedent because the OCBM wired+tunnel extended declaration including 0x5204 was accepted, but it is UNKNOWN for this binary; the declare-only stage is the gate.",
+   "topic": "open-item",
+   "source_lines": "351",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "but it is UNKNOWN for this binary; the declare-only stage is the gate"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#159",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 159,
+   "statement": "Crash on an unrouted 0x5204 is ruled out statically: 0x1919c and 0x2da04 both return cleanly.",
+   "topic": "nav-patch",
+   "source_lines": "352",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "ruled out statically (`0x1919c` and `0x2da04` both return cleanly)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#160",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 160,
+   "statement": "P2 memory growth (v4 OOM precedent) is bounded by the settle gate and the 0x1000 cap.",
+   "topic": "nav-patch",
+   "source_lines": "353",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "bounded by the settle gate and the `0x1000` cap"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#161",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 161,
+   "statement": "The 0x5202 map-insert race is UNVERIFIED in the docs; the P2 capture hook sits before any map insert.",
+   "topic": "open-item",
+   "source_lines": "353",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "The `0x5202` map-insert race is UNVERIFIED in the"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#162",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 162,
+   "statement": "P2 rollback: a host push to /tmp/bin reverts on reboot; a persistent /usr/sbin install would need the factory backup (md5 d933c9d5) plus reboot; dropbear starts before the main service.",
+   "topic": "patch-deploy",
+   "source_lines": "354",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "a host push to `/tmp/bin` reverts on reboot; a"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#163",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 163,
+   "statement": "P2 Stage 0 (declare-only) applies only regstub at 0x2cc1c with no host change; the box drops 0x5204.",
+   "topic": "patch-deploy",
+   "source_lines": "362",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "`regstub` at `0x2cc1c` only; no host change (the box drops `0x5204`)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#164",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 164,
+   "statement": "P2 Stage 0 accepts if the iPhone-side capture shows 0x5204 in the declared received list and a 0x1D02 accept (not 0x1D03), and 0x5204 frames appear on the wire after a route starts.",
+   "topic": "patch-deploy",
+   "source_lines": "362",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "shows `0x5204` in the declared received list and a `0x1D02` accept (not `0x1D03`)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#165",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 165,
+   "statement": "P2 Stage 0 failing with 0x1D03 means the static declaration is dead for this binary; test sub 8, else abandon.",
+   "topic": "patch-deploy",
+   "source_lines": "362",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "static declaration is dead for this binary; test sub 8, else abandon"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#166",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 166,
+   "statement": "P2 Stage 1 adds lane_stub at 0x18c40, the stage2 _iap2l block and RW p_memsz 0x15000; it accepts if the host log shows _iap2l hex and an Iap2LaneParser decodes the id 1 index and id 2 group on a multi-lane route.",
+   "topic": "patch-deploy",
+   "source_lines": "363",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "`lane_stub` at `0x18c40`, stage2 `_iap2l` block, RW p_memsz `0x15000`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#167",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 167,
+   "statement": "P2 Stage 1 failing with no _iap2l although Stage 0 saw 0x5204 on the wire indicates a capture-hook bug (emulate first).",
+   "topic": "patch-deploy",
+   "source_lines": "363",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "capture-hook bug (emulate first)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#168",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 168,
+   "statement": "P2 Stage 2 is host rendering: Iap2LaneParser in carlink_native and an _iap2l decoder in carlink_macOS.",
+   "topic": "patch-deploy",
+   "source_lines": "364",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "`Iap2LaneParser` in carlink_native, `_iap2l` decoder in carlink_macOS"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#169",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 169,
+   "statement": "Emulation done: the stock parser 0x17f48 on a synthetic 0x5204 link frame gives msgid 0x5204 and param area at pkt+15 (PASS); the routing decision is a constant fold.",
+   "topic": "nav-patch",
+   "source_lines": "367",
+   "confidence": "medium",
+   "signals": [
+    "offline analysis"
+   ],
+   "quote": "(PASS); the routing decision is a constant fold"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#170",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 170,
+   "statement": "Proposed emulation once stubs exist: run regstub with a fake manager and assert the received list gets {0x5202, 0x5204}, and run lane_stub on 0x5204 vs non-0x5204 frames asserting linklen-9 bytes are copied and others reach 0x1919c untouched.",
+   "topic": "open-item",
+   "source_lines": "367",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "Proposed once stubs exist: run `regstub` under unicorn"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#171",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 171,
+   "statement": "U1: wired 0x1D01 accept of a param-7 0x5204 on this binary is UNKNOWN; settled by P2 Stage 0.",
+   "topic": "open-item",
+   "source_lines": "371",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "U1 wired `0x1D01` accept of a param-7 `0x5204` on this binary (Stage 0)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#172",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 172,
+   "statement": "U2: whether sub 8 is needed is checked only if Stage 0 shows accept but no 0x5204.",
+   "topic": "open-item",
+   "source_lines": "372",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "only if Stage 0 shows accept but no `0x5204`"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#173",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 173,
+   "statement": "U3: lane-burst volume and interleave are unknown; observe _iap2l/_iap2m lengths at Stage 1.",
+   "topic": "open-item",
+   "source_lines": "373",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "(observe `_iap2l`/`_iap2m` lengths at Stage 1)"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#174",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 174,
+   "statement": "U4: modified_upx_arm is a Linux ARM ELF, so packing a P2 build runs on the box; an unpacked-file host push is untested.",
+   "topic": "open-item",
+   "source_lines": "374",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "an unpacked-file host push is untested"
+  },
+  {
+   "gid": "04_Implementation/iap2_binary_patches.md#175",
+   "file": "04_Implementation/iap2_binary_patches.md",
+   "local_id": 175,
+   "statement": "The P2 plan would also draw on the remaining cave and add 0x1000 B of bss at 0xAB000; no combined budget has been computed.",
+   "topic": "patch-combine",
+   "source_lines": "586",
+   "confidence": "low",
+   "signals": [
+    "UNVERIFIED"
+   ],
+   "quote": "no combined budget has been computed"
   },
   {
    "gid": "04_Implementation/session_examples.md#1",
