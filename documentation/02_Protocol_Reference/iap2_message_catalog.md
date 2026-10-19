@@ -14,7 +14,7 @@ binary analysis, live USB captures (2026-05-28), iAP2 raw-passthrough patch veri
 **Firmware reference:** patched ARMiPhoneIAP2 binary (deployed CCPA `/usr/sbin`, see versionCode 133).
 **Host consumers:** carlink_native versionCode 136+ (`Iap2StateParser.kt`, `Iap2RouteParser.kt`) for
 nav; carlink_macOS (`IAP2CallStateDecoder.swift`) for telephony.
-**Last Updated:** 2026-06-15
+**Last Updated:** 2026-10-19 (ExitInfo `0x5202` id 13 / `0x5200` selector id 3 device-verified with NAV v6)
 
 ---
 
@@ -53,6 +53,8 @@ CPC200-CCPA adapter
     │ stock firmware: strips 16 of 21 fields → forwards ~5 fields as named NaviJSON keys
     │ patched ARMiPhoneIAP2 v5 (deployed /usr/sbin, survives reboot):
     │   ALSO attaches raw 0x5201/0x5202 hex as _iap2 / _iap2m NaviJSON fields
+    │ nav_v6 (= v5 + P1; device-verified 2026-10-19, not shipped by any app yet):
+    │   ALSO appends selector id 3 (SupportsExitInfo) to the accessory's 0x5200, so 0x5202 gains id 13
     ▼
 NaviJSON envelope (USB MediaType=NAVI_JSON, sub-type 200)
     │ ~5 named keys + _iap2 (raw 0x5201 hex) + _iap2m (raw 0x5202 hex on route load)
@@ -192,11 +194,11 @@ iOS 26 SDK-authoritative names from `+[ACCNavigationManeuverUpdateInfo keyForTyp
 | 0x000a | `JunctionElementAngle` | i16 BE | **Multi-occurrence** per junction (one per spoke arm) |
 | 0x000b | `JunctionElementExitAngle` | i16 BE | Signed degrees |
 | 0x000c | `LinkedLaneGuidanceInfo` 🆕 | (group) | Links maneuver to a lane-guidance display block — not yet captured |
-| 0x000d | `ExitInfo` 🆕 | (group) | Highway exit info (exit number, side) — not yet captured |
+| 0x000d | `ExitInfo` 🆕 | utf8 (Apple spec; observed as short text of the form `Exit <n>`) | **Captured 2026-10-19** with NAV v6: appeared on exactly one maneuver of a 20-maneuver highway-route burst (ids 0..11 as before). Only sent if the accessory's `0x5200` StartRouteGuidanceUpdates carries selector id 3 `SupportsExitInfo` (empty TLV, `00 04 00 03`); stock never sends it, so a stock/v5 box never sees it. Off-ramp exit types (maneuver types 8/22/23) UNVERIFIED. See `../04_Implementation/iap2_binary_patches.md` §4.1. |
 
 Adapter parser note: `iAP2UpdateEntity.cpp:314 ASSERT "dict"` historically dropped `JunctionElement*` group data because the legacy adapter parser doesn't handle iAP2 dictionary types. The raw 0x5202 hex in `_iap2m` bypasses this — `Iap2RouteParser.kt` parses multi-occurrence field 0x000a correctly host-side.
 
-Fields `LinkedLaneGuidanceInfo` (0x0c) and `ExitInfo` (0x0d) are iOS 26 additions that require the adapter to advertise corresponding capability flags during component registration (see [SDK Delta doc](iap2_sdk_delta_r14g17_to_ios26.md)).
+Fields `LinkedLaneGuidanceInfo` (0x0c) and `ExitInfo` (0x0d) are iOS 26 additions that require the adapter to opt in. **Correction 2026-10-19:** for `ExitInfo` the opt-in is not an identification-time capability flag but selector id 3 `SupportsExitInfo` in the accessory's `0x5200` StartRouteGuidanceUpdates (device-verified, stock board A15W, via the NAV v6 patch). `LinkedLaneGuidanceInfo`/lane guidance (`0x5204`) is still UNVERIFIED: the stock binary neither declares nor handles it, and its opt-in mechanism has not been tested (see [SDK Delta doc](iap2_sdk_delta_r14g17_to_ios26.md)).
 
 ---
 

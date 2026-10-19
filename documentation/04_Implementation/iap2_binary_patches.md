@@ -8,9 +8,12 @@ re-parses the full TLV itself instead of re-implementing Apple's parsers.
 
 **Artifacts** (builders, patched binaries, deploy scripts): `../../custom/patches/README.md`.
 
-**Status:** NAV — working/production (host carlink_native). CALL — device-verified (host
+**Status:** NAV v5 — working/production (host carlink_native). NAV v6 (= v5 + ExitInfo "P1", §4.1) —
+device-verified 2026-10-19 with the carlink_macOS log-only probe, **not shipped by any app yet**. CALL — device-verified (host
 carlink_macOS). COMM — device-verified end-to-end + host-decoded (host carlink_macOS).
-All on board A15W, firmware `2025.10.15.1127CAY` (NXP i.MX6UL ARMv7, kernel 3.14.52, jffs2 rootfs).
+All on board A15W, firmware `2025.10.15.1127CAY` (NXP i.MX6UL ARMv7, kernel 3.14.52, jffs2 rootfs);
+the v6 test ran on firmware `2025.12.29.1746CAY` of the same board.
+*Last updated 2026-10-19 (NAV v6 / ExitInfo added; §4.1).*
 
 > **Privacy:** real call captures contain genuine numbers/names/UUIDs. Never reproduce that PII;
 > the worked example below uses the established placeholder (`Jenny` / `+15558675309`).
@@ -34,6 +37,9 @@ Examples of what gets stripped:
 - **RouteGuidance** (`0x5201`): iOS sends ~21–26 fields (roads, ETA, maneuver cursor, lane
   guidance); the stock NaviJSON exposes ~5. The maneuver cursor `0x000d` in particular is dropped
   — exactly what an external instrument-cluster nav renderer needs.
+- **RouteGuidance ExitInfo** (`0x5202` id 13): the stock accessory never asks for it (its
+  `StartRouteGuidanceUpdates` `0x5200` omits the `SupportsExitInfo` selector), so the phone never sends it —
+  nothing is stripped; the request itself is missing. Fixed by NAV v6 (§4.1).
 - **CallState** (`0x4155`): the stock subtype-100 JSON exposes only `CallStatus / CallDirection /
   CallName / CallNumber / CallID`. The parser can also hold AddressBookID, Label, Service,
   IsConferenced, ConferenceGroup, DisconnectReason — dropped by the serializer.
@@ -171,7 +177,8 @@ If both are present, the persistent `/usr/sbin` copy wins the gate.
 
 ## 4. NAV patch — RouteGuidance `0x5201`/`0x5202` → NaviJSON `_iap2` / `_iap2m`
 
-**Host:** carlink_native (Android Automotive). **Status:** working, in production. **Deploy:**
+**Host:** carlink_native (Android Automotive). **Status:** v5 working, in production (the build
+carlink_native ships); v6 = v5 + ExitInfo is device-verified but not shipped (§4.1). **Deploy (v5):**
 persistent `/usr/sbin` (strategy B). Field semantics: see
 `../02_Protocol_Reference/iap2_message_catalog.md`.
 
@@ -210,6 +217,82 @@ at `0x9A000`; RW LOAD `p_memsz` extended to `0x14000` so both are zero-mapped.
   list from the firmware's internal tree crashed on a rebalancer race (concurrent writer). The
   shipped design avoids that path. *(This race does NOT apply to the call/comm patches — those use
   flat fixed-offset containers, no tree.)*
+
+### 4.1 NAV v6 = v5 + P1 (ExitInfo) — device-verified 2026-10-19, not shipped
+
+**What it adds:** one extra hook ("P1") so the accessory's `StartRouteGuidanceUpdates` (`0x5200`) asks
+the phone for ExitInfo. Everything else is v5. Artifacts: `production/ARMiPhoneIAP2.nav_v6.{patched,packed}`,
+builder `build_v6.py` (see `../../custom/patches/README.md`).
+
+**Why a selector, not a capability flag.** Apple's spec: `0x5200` selector id 3 `SupportsExitInfo`
+(empty) "must be included to receive ExitInfo in RouteGuidanceManeuverInformation"; `0x5202` id 13
+`ExitInfo` (utf8) is "only sent if SupportsExitInfo is included". The stock `StartGuidanceItems`
+constructor (`0x2db80`) emits only ids 0 (ComponentID), 1 (SourceName), 2 (SourceSupportsRouteGuidance).
+The three selector entities are embedded sub-objects at fixed offsets in a fixed-size heap object with
+an embedded `std::map`; adding id 3 there means resizing that object and fighting the HUD value-clear
+path, so P1 instead appends the TLV to the **already-built wire frame** and lets the firmware's own
+finalizer recompute lengths/checksums (all checksums and the `FF 5A` start marker are computed *after*
+the send call, so only the two length fields need adjusting).
+
+**Bytes** (VMA = file + 0x10000):
+
+| item | VMA (file) | stock -> v6 |
+|---|---|---|
+| P1 hook, in the generic iAP2 sender `0x2f7c4` | `0x2f914` (`0x1f914`) | `19 95 ff eb` (`bl 0x14d80`) -> `0f 5d 01 eb` (`bl 0x86d58`) |
+| P1 stub, 124 B, in the cave right after v5's stage1 | `0x86d58` (`0x76d58`) | zeros -> stub |
+| R-X LOAD (`ph3`) filesz/memsz | | `0x76d58` -> `0x76dd4` |
+
+Stub logic (no stack use; `lr` already set by the `bl`, `r0`/`r1` untouched): if
+`BE16(buf[0xd..0xe]) == 0x5200`, append `00 04 00 03` (length 4, id 3, empty) at `buf+9+msglen`,
+`msglen += 4`, `linklen += 4`, then `b 0x14d80`, which returns into the sender exactly as the original
+call did. The `+0x49`-byte slack of the sender's `malloc(bodylen+0x49)` holds the 4 extra bytes.
+
+**Composition with v5:** v6 differs from `nav_v5.patched` by 123 bytes: the `ph3` size, the hook, the
+stub. v5 stage1/stage2, both v5 hooks (`0x2d1c8`, `0x2d454`) and `ph4` (memsz `0x14000`) are
+byte-identical (`build_v6.py` asserts this when `ARMiPhoneIAP2.v5.patched` is present). Cave used
+`0x76b38..0x76dd4` (668 B); **556 B left**. No CALL/COMM hooks: those remain a separate build (§7).
+
+**Device results (stock CPC200, board A15W, firmware `2025.12.29.1746CAY`).** Method: iPhone-side
+capture (`idevicesyslog -p accessoryd -p carkitd`), where `accessoryd` logs each iAP2 frame's payload
+as hex; plus the macOS host's `[EXITINFO_PROBE]` log, which decodes the forwarded `_iap2m`.
+
+| check | control (NOT a v5 run on this unit; see note) | v6 (stock unit) |
+|---|---|---|
+| accessory `0x5200` params | ids 0-2 (from disassembly of the stock declaration, `0x2db80`) | ids [0,1,2,3] (24 B payload) |
+| `0x5202` burst | 13 maneuvers, ids 0..11 only (from the OCBM-accessory run below, not this box) | 20 maneuvers, ids 0..11 plus id 13 on exactly one maneuver |
+| id 13 content (raw wire bytes) | n/a | utf8 text of the form `Exit <n>` |
+| host probe | n/a | frames=20, `ExitInfo(0x000d)=PRESENT(x1)` |
+| reject / crash / session | n/a | no `0x1D03` reject, no crash, session reached streaming |
+
+(The control column is NOT a measured stock-v5 run: no v5 capture on this unit is recorded. Its burst comes from the earlier OCBM-accessory test; the routes differ, so only the id set is comparable.)
+An independent Rust OCBM accessory (different unit/firmware, ccpa_custom ledger R-49-9) sending the same selector also received ExitInfo, so the gate is
+iOS behaviour, not firmware-specific. Note this corrects the older "capability advertised at
+identification" model in `../02_Protocol_Reference/iap2_sdk_delta_r14g17_to_ios26.md` §6 for ExitInfo.
+
+**Packing gotchas (v6 pack, 2026-10-19):** the box has no UPX tool and no `scp` binary (`sftp-server`
+exists, so macOS `scp` in SFTP mode works). Copy `modified_upx_arm` (Linux ARM ELF) to the box `/tmp`,
+and `chmod +x` the **input** file too, else `CantPackException: file not executable`.
+`modified_upx_arm --best -o v6.packed ARMiPhoneIAP2.v6.patched` gave 494244 -> 233996 B (47.34%); `-d`
+reproduced the patched ELF byte-for-byte.
+
+**Deploy used for the test:** strategy A, via the carlink_macOS host push (SendFile `0x99` of the packed
+file to `/tmp/bin/ARMiPhoneIAP2` at init, push flag enabled). Nothing was written to flash; `/tmp` is
+tmpfs, so a reboot restores the factory binary (rollback = reboot). It took effect on the **first**
+CarPlay session after a box reboot into the default protocol mode on this unit, which differs from the
+strategy-A cold-boot row in §3.5; the reason is not established (UNVERIFIED, single unit). The host app
+can only claim the box in default mode; stock NCM maintenance mode is the flag file `/script/ncm_only`
+(+ reboot), and `rm /script/ncm_only` + `busybox reboot` returns to default.
+
+**Status of consumers:** carlink_native ships the **v5** asset and its `Iap2RouteParser`/`Iap2ManeuverData`
+do not parse `0x5202` id 13; carlink_macOS only has the log-only probe (no nav decoder/UI). So v6 is
+proven on the wire and in the probe, but not delivered to any user-facing app.
+
+**UNVERIFIED:** off-ramp exit types (maneuver types 8/22/23); selectors 4/5 (timezone / EV — only
+inferred to gate `0x5201` ids 21+); lane guidance (`0x5204`) on the stock binary — it neither declares
+nor handles it, and a lane patch ("P2") is under research, not built; persistence of v6 beyond `/tmp`
+(strategy B never tried); other iOS versions and other firmware builds; whether the on-box factory
+binary of `2025.12.29.1746CAY` is identical to the `2025.10.15` one `build_v6.py` asserts against (the
+hook applied and ran, but its md5 was not recorded). Raw frame logs are not archived in this repo.
 
 ---
 
@@ -418,12 +501,14 @@ All three share the **same code cave** and would otherwise collide in `.bss`:
 - Install all hooks and extend the R-X `p_filesz`/`p_memsz` to cover the combined cave.
 
 In practice each host needs only one patch (carlink_native → nav; carlink_macOS → call+comm), so a
-fully combined nav+call+comm build has not been required.
+fully combined nav+call+comm build has not been required. The only composition built so far is NAV v5 +
+P1 (§4.1), which uses the cave up to file `0x76dd4` (556 B left); a full nav+call+comm build would need
+to fit call+comm (~450 B by the figures above) into that remainder — arithmetic only, UNVERIFIED.
 
 ---
 
 ## 8. Related documentation
-- `../02_Protocol_Reference/iap2_message_catalog.md` — field semantics: RouteGuidance (`0x5201`/
+- `../02_Protocol_Reference/iap2_message_catalog.md` — field semantics: RouteGuidance (`0x5200`/`0x5201`/
   `0x5202`), CallState (`0x4155`), CommunicationUpdate (`0x4158`), and the `0x4154`–`0x4159`
   telephony message-id family.
 - `../02_Protocol_Reference/usb_protocol.md` — the outer USB envelope and the MetaData (`0x2A`)

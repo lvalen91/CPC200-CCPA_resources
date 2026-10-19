@@ -4,7 +4,7 @@
 > Build: iPhone18,4 (iPhone Air, A19 Pro), iOS 26.5, build 23F77.
 > Method: `ipsw extract --dyld` then `ipsw class-dump` + `ipsw dyld disass` + `strings` against pre-extracted framework binaries.
 > Cross-verification: 3-agent parallel RE pass. Each agent worked an orthogonal angle (CarKit / iAP2 wire / external + AirPlay layer). Findings only included here when at least 2 agents corroborated, or when a single-agent finding cites a direct binary symbol address.
-> Last updated: 2026-05-28.
+> Last updated: 2026-05-28. Note 2026-10-19: §5.2/§6 ExitInfo rows corrected (opt-in is `0x5200` selector id 3, device-verified via NAV v6).
 > Authors of source RE: this session + prior CPC200-CCPA RE (see Section 11).
 
 ## Table of contents
@@ -324,7 +324,7 @@ Based on observed iPhone behaviour toward a stock CPC200-CCPA running ARMiPhoneI
 ### 5.2 Confirmed CCPA does not claim
 
 - `supportsLaneGuidance` (RouteGuidanceUpdate fields 0x10-0x12 stay at 0 in 567 captures)
-- `supportsExitInfo` (ManeuverItemsUpdate field 0x0d never emitted)
+- `supportsExitInfo` (ManeuverItemsUpdate field 0x0d never emitted by stock/v5 — **2026-10-19:** emitted once the accessory's `0x5200` carries selector id 3; see §6 and `../04_Implementation/iap2_binary_patches.md` §4.1)
 - `supportsTimeZoneOffset` (RouteGuidanceUpdate field 0x15 never emitted)
 - `supportsPreconditioning` (RouteGuidanceUpdate fields 0x17-0x1a never emitted; no EV)
 - `supportsCharging`
@@ -367,7 +367,7 @@ These would be enabled by injecting one or two additional KVPs into the existing
 |---------|------------------------------------------------------|--------|
 | Lane guidance (Bug A field 0x10/0x11/0x12 unlock + LGI message stream) | `MaxLaneGuidanceDescriptionLength` = u32 128, `MaxLaneGuidanceStorageCapacity` = u32 8 | iPhone sets `_supportsLaneGuidance = YES`, emits LGI messages and populates 0x10/0x11/0x12 |
 | Time-zone-aware ETA (field 0x15) | A `supportsTimeZoneOffset` flag (encoding pending Ghidra confirmation; likely a bool KVP within DispComp) | iPhone emits `DestinationTimeZoneOffsetMinutes` (field 0x15) |
-| Exit info (0x5202 field 0x0d) | `supportsExitInfo` flag in DispComp | iPhone emits ExitInfo group in maneuver updates |
+| Exit info (0x5202 field 0x0d) | ~~`supportsExitInfo` flag in DispComp~~ **Superseded 2026-10-19:** `0x5200` StartRouteGuidanceUpdates selector id 3 (empty TLV `00 04 00 03`), no identification change; device-verified (NAV v6) | iPhone emits ExitInfo (utf8 text, e.g. `Exit <n>`) on highway-exit maneuvers |
 
 Speculative wire bytes for the lane-guidance KVPs (assuming ParameterIDs 0x09 / 0x0A — to be confirmed):
 
@@ -401,7 +401,7 @@ These require adding entirely new components to the 19-component identification 
 
 ### 6.4 Patching method on the CCPA
 
-The existing `ARMiPhoneIAP2 v5` patched binary (deployed `/usr/sbin`, see versionCode 133) demonstrates the in-flash patching approach. To add the lane-guidance unlock:
+The existing `ARMiPhoneIAP2 v5` patched binary (deployed `/usr/sbin`, see versionCode 133) demonstrates the in-flash patching approach; `nav_v6` (v5 + ExitInfo, 2026-10-19) adds a wire-level append in the generic sender rather than touching identification. To add the lane-guidance unlock (UNVERIFIED, not built):
 
 1. Disassemble the existing `routeGuidanceDisplayComponent` registration function in ARMiPhoneIAP2 (function address TBD; find by xref to the rodata string `routeGuidanceDisplayComponent` at rodata 0x74xxx).
 2. Locate the KVP-emit loop that builds the sub-dictionary.
@@ -601,7 +601,7 @@ Per-component capability additions (do not require new components):
 | Capability | Existing component | KVP to add |
 |------------|--------------------|------------|
 | Lane guidance | routeGuidanceDisplayComponent | `MaxLaneGuidanceStorageCapacity`, `MaxLaneGuidanceDescriptionLength` |
-| Exit info | routeGuidanceDisplayComponent | `supportsExitInfo` (encoding TBD) |
+| Exit info | ~~routeGuidanceDisplayComponent~~ `0x5200` selector (2026-10-19) | ~~`supportsExitInfo` (encoding TBD)~~ selector id 3, empty TLV — verified |
 | Time-zone-aware ETA | routeGuidanceDisplayComponent | `supportsTimeZoneOffset` (encoding TBD) |
 | EV preconditioning hint | vehicleStatus | `supportsPreconditioning` (encoding TBD) |
 

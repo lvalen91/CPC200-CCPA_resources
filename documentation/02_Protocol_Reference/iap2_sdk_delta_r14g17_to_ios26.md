@@ -141,7 +141,7 @@ The adapter advertises its navigation rendering capabilities via `ACCNav_DispCom
 | `MaxLaneGuidanceStorageCapacity` | iPhone won't send LGI fields if not advertised |
 
 Plus four runtime capability getters on the navigation provider:
-- `supportsExitInfo` — gates 0x5202 ExitInfo field (0x0d)
+- `supportsExitInfo` — gates 0x5202 ExitInfo field (0x0d). *Device result 2026-10-19: the opt-in is `0x5200` StartRouteGuidanceUpdates selector id 3 (`SupportsExitInfo`, empty TLV), not an identification-time flag; see §6 note.*
 - `supportsLaneGuidance` — gates 0x5201 fields 0x10/0x11/0x12 + 0x5202 field 0x0c + entire LGI message
 - `supportsPreconditioning` — gates EV battery fields (0x18-0x1a) and possibly preconditioning controls
 - `supportsTimeZoneOffset` — gates 0x5201 field 0x15 (`DestinationTimeZoneOffsetMinutes`)
@@ -155,7 +155,7 @@ These appear as `setSupports*:` setters on `ACCNavigationAccessoryComponent` —
 The CCPA's `ARMiPhoneIAP2` was compiled against R14G17. Its `routeGuidanceDisplayComponent` registration only advertises the R14G17 capability set. iPhone iOS 26 sees an adapter that:
 - Advertises `routeGuidanceDisplayComponent` ✓ — so basic 0x5201/0x5202 emit
 - Does NOT advertise `MaxLaneGuidanceStorageCapacity` → iPhone keeps `LaneGuidanceCurrentIndex/TotalCount/Showing` at constant 0 and never emits LGI messages
-- Does NOT call `setSupportsExitInfo:` → 0x5202 `ExitInfo` never appears
+- Does NOT call `setSupportsExitInfo:` → 0x5202 `ExitInfo` never appears *(stock/v5 only; with the NAV v6 patch the accessory's `0x5200` carries selector id 3 and ExitInfo does appear — see the 2026-10-19 note below)*
 - Does NOT call `setSupportsTimeZoneOffset:` → 0x5201 `DestinationTimeZoneOffsetMinutes` never appears
 - Does NOT call `setSupportsPreconditioning:` → no EV battery fields, no charging-station list
 - `SourceSupportsRouteGuidance=1` is constant because iPhone always claims this (it IS the source)
@@ -167,11 +167,13 @@ The CCPA's `ARMiPhoneIAP2` was compiled against R14G17. Its `routeGuidanceDispla
 | Adapter capability to advertise | Triggers |
 |---|---|
 | `MaxLaneGuidanceDescriptionLength > 0` + `MaxLaneGuidanceStorageCapacity > 0` | 0x5201 fields 0x10/0x11/0x12 populate; 0x5202 field 0x0c populates; new LGI message stream starts |
-| `setSupportsExitInfo:YES` | 0x5202 ExitInfo (0x0d) populates on highway-exit maneuvers |
+| `setSupportsExitInfo:YES` — **verified 2026-10-19 as `0x5200` selector id 3** | 0x5202 ExitInfo (0x0d) populates (seen as `Exit <n>` text on one maneuver of a highway route) |
 | `setSupportsTimeZoneOffset:YES` | 0x5201 field 0x15 populates on cross-timezone routes |
 | `setSupportsPreconditioning:YES` + vehicle profile = EV | 0x5201 fields 0x17/0x18/0x19/0x1a populate; charging-station list streams |
 
 The CCPA firmware would need a binary patch (analogous to the existing ARMiPhoneIAP2 v5 patch that restored full 0x5201/0x5202 forwarding) to inject these advertisement flags during identification. That's a deeper firmware patch — out of scope for the current host-side work but possible.
+
+> **Update 2026-10-19 (supersedes the identification-phase model above for ExitInfo only):** the NAV v6 patch (v5 + "P1", `../04_Implementation/iap2_binary_patches.md` §4.1) appends selector id 3 `SupportsExitInfo` (`00 04 00 03`) to the accessory's `0x5200` StartRouteGuidanceUpdates. On a stock CPC200 (board A15W, fw `2025.12.29.1746CAY`) the phone then sent `0x5202` id 13 with no reject and no crash. Identification was not touched. Still UNVERIFIED: whether lane guidance (`0x5201` ids 0x10-0x12, LGI / `0x5204`), time zone (selector 4?) and EV (selector 5?) are gated the same way (4/5 are only inferred), other iOS versions, and persistence beyond `/tmp`.
 
 Alternatively: a different adapter that advertises these natively (a hypothetical "modern" CCPA generation) would expose them without patching.
 
@@ -383,5 +385,5 @@ The capability negotiation user pointed at IS the gating mechanism — Apple has
 - Capture LGI message wire type ID (0x5204? 0x5205?) by patching ARMiPhoneIAP2 to advertise `MaxLaneGuidanceStorageCapacity > 0`
 - Decode the iAP2 IDENTIFICATION engine in ARMiPhoneIAP2 (not RouteGuidance) — recover the actual `setSupports*:` advertisement set the adapter currently sends
 - RE `supportsInstrumentClusterContent` wire format — could enable a separate cluster nav channel
-- Decode 0x5200 (StartRouteGuidance) and 0x5203 (StopRouteGuidance) parameter structure
-- `Iap2StateParser.kt` — extend to handle new 0x5201 fields (lane guidance, time zone, EV battery) and 0x5202 fields 0x0c/0x0d (forward-compat for adapters that advertise these)
+- Decode 0x5200 (StartRouteGuidance) and 0x5203 (StopRouteGuidance) parameter structure (partly done 2026-10-19: stock sends ids 0-2, selector id 3 `SupportsExitInfo` verified; ids 4/5 unverified)
+- `Iap2StateParser.kt` — extend to handle new 0x5201 fields (lane guidance, time zone, EV battery) and 0x5202 fields 0x0c/0x0d (forward-compat for adapters that advertise these; 0x0d is now observable with the NAV v6 patch, but carlink_native does not parse it yet)
