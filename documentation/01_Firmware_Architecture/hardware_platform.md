@@ -216,7 +216,9 @@ Composite is supported (comma-separated, e.g. `ncm,accessory`, mirroring the pho
 | f_adb | `/dev/android_adb` | (10, 57) |
 | f_mtp | `/dev/mtp_usb` | (10, 58) |
 
-**No arbitrary gadgets — the kernel is locked.** `functionfs` is listed in `/proc/filesystems` but is **not** usably bound to this gadget; there is **no `gadgetfs`** (`/dev/gadget` absent) and **no configfs `usb_gadget`** (`/sys/kernel/config/usb_gadget/` does not exist). You therefore **cannot** define arbitrary interfaces/endpoints/descriptors, and the kernel cannot be replaced (HAB-closed secure boot + per-chip OTPMK-encrypted kernel — see [`secure_boot_hab.md`](secure_boot_hab.md) and [`../05_Security_Analysis/kernel_encryption.md`](../05_Security_Analysis/kernel_encryption.md)). A custom host-facing bulk transport is limited to **repurposing one of the fixed function char-devices**.
+**No arbitrary gadgets — the kernel is locked.** `functionfs` is listed in `/proc/filesystems` but is **not** usably bound to this gadget; there is **no `gadgetfs`** (`/dev/gadget` absent) and **no configfs `usb_gadget`** (`/sys/kernel/config/usb_gadget/` does not exist). You therefore **cannot** define arbitrary interfaces/endpoints/descriptors with the stock kernel. A custom host-facing bulk transport on the stock kernel is limited to **repurposing one of the fixed function char-devices**.
+
+> **[Corrected 2026-10-19]** This used to add "and the kernel cannot be replaced (HAB-closed secure boot + per-chip OTPMK-encrypted kernel)". That is wrong. HAB covers only U-Boot. Only the first 3 × 64 KB of the kernel are per-chip encrypted, and U-Boot itself re-encrypts a new head from the UpgKey staging blocks. A replacement kernel (LIVI 9.5.0, Linux 7.2.10, configfs NCM gadget) has been booted on an IW416 unit [VERIFIED]. See [`kernel_compilation.md`](kernel_compilation.md) and [`../05_Security_Analysis/kernel_encryption.md`](../05_Security_Analysis/kernel_encryption.md).
 
 **Stock bulk transport = f_accessory / `/dev/usb_accessory`.** The stock `ARMadb-driver` opens `/dev/usb_accessory` — confirmed by strings in the unpacked binary (`/dev/usb_accessory`, `/script/start_accessory.sh`, `echo 0 > /sys/class/android_usb_accessory/android0/enable`, `rmmod g_android_accessory && rmmod storage_common`, `fd_usb_accessory_wraper`). So the `0x55AA55AA` USB-bulk protocol (see [`../02_Protocol_Reference/usb_protocol.md`](../02_Protocol_Reference/usb_protocol.md)) rides the **f_accessory** function's bulk endpoints. The kernel driver is a raw byte pipe; all framing is application-defined.
 
@@ -256,7 +258,7 @@ Both directions far exceed CarPlay's needs (video 8–30 Mbps). Coordination not
 - Board silkscreen pads **`TX1` / `RX1`** (+ GND) = i.MX6UL **UART1 = `ttymxc0` = MMIO `0x02020000`** (the "UART (serial)" row in [`flash_layout.md`](flash_layout.md) § Key I/O Regions). **3.3 V logic.**
 - An **always-on passwordless root shell** runs on these pads (inittab `ttymxc0::respawn`).
 - **Default baud is 9600 8N1, NOT 115200.** A CFW inittab comment claiming 115200 is aspirational/wrong for the running default. 115200 can be made persistent via an inittab wrapper that runs `stty 115200` before spawning the shell.
-- **U-Boot is 2015.04**, and its console is **silenced on the pins** in the *active* environment: the saved env sets `console=ttyLogFile0` (a write-only RAM log device), so **nothing prints on the UART pins during U-Boot or kernel boot** — only the post-boot Linux inittab shell appears. The compiled-in default env in mtd0 says `console=ttymxc0,115200` / `baudrate=115200`, but the saved env overrides it (consistent with the "norargs is stale" note in [`flash_layout.md`](flash_layout.md)).
+- **U-Boot is 2015.04**, and **nothing prints on the UART pins during U-Boot or kernel boot** — only the post-boot Linux inittab shell appears. **[Corrected 2026-10-19]** This was explained as "the saved env sets `console=ttyLogFile0`" and "the compiled-in `console=ttymxc0,115200` is overridden". In fact the environment U-Boot runs has `console=ttymxc0`, `stdin/stdout/stderr=serial`, `baudrate=115200`; `console=ttyLogFile0` appears only in the kernel bootargs (`norargs`). So the kernel's silence is explained, but U-Boot's own silence on the pins is [UNRESOLVED] [env VERIFIED, E1; see [`flash_layout.md`](flash_layout.md) § U-Boot Environment].
 
 **i.MX6UL UART map (this board):**
 
@@ -324,6 +326,8 @@ Read 2026-06-30 via `/sys/fsl_otp/` (sysfs interface; direct devmem of OCOTP reg
 | SW_GP3 / GP413 | 0x0 | DCP PAYLOAD[3] for kernel decrypt |
 
 CFG0 and CFG1 are passed to the DCP descriptor as the PAYLOAD field during kernel decryption — they are NOT the AES key. The AES key is derived internally by the DCP from the hardware OTPMK. See `05_Security_Analysis/kernel_encryption.md`.
+
+**[Added 2026-10-19]** CFG0, CFG1, MAC0 and MAC1 (OCOTP words 1, 2, 0x22, 0x23) also form U-Boot's software **UpgKey**: the ASCII text `%08x%08x%08x%08x`, with key = first 16 characters and IV = last 16. It decrypts the update environment and the kernel staging blocks. The same text is the adapter's `uuid` [VERIFIED; see `05_Security_Analysis/kernel_encryption.md`]. The words in the table above are this unit's and are already tracked here, as are both recorded units' `uuid`s (`hardware_revisions.md`); every connected host receives the `uuid` in BoxSettings (`02_Protocol_Reference/device_identification.md`). Adding further units' words or `uuid`s would add those units' identity to the repository, so leave them out unless they are needed.
 
 ## References
 

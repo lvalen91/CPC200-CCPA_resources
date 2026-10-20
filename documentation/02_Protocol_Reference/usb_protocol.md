@@ -1728,7 +1728,7 @@ Log: `"setUSB from HUCMD_ENABLE_CRYPT: %d\n"`
 **Step 5 — All subsequent messages are encrypted/decrypted:**
 The global at `0x11f408` is read by `fcn.00017b74` (4 read sites: `0x1DDBC`, `0x17B96`, `0x17D4A`, `0x18618`). When `> 0`, all messages with payload pass through AES encryption, EXCEPT exempt types.
 
-> **Cipher mode discrepancy:** Firmware binary calls `AES_cbc_encrypt` (OpenSSL CBC), but AutoKit (v2025.03.19.1126) uses `AES/CFB/NoPadding` (Java CFB). Both use the same key derivation and IV construction. AutoKit is the sole working reference for encryption — carlink_native does not implement encryption. See `../03_Security_Analysis/crypto_stack.md` § CBC vs CFB Discrepancy for analysis.
+> **Cipher mode discrepancy:** Firmware binary calls `AES_cbc_encrypt` (OpenSSL CBC), but AutoKit (v2025.03.19.1126) uses `AES/CFB/NoPadding` (Java CFB). Both use the same key derivation and IV construction. AutoKit is the sole working reference for encryption — carlink_native does not implement encryption. See `../05_Security_Analysis/crypto_stack.md` § CBC vs CFB Discrepancy for analysis.
 
 #### State Machine
 

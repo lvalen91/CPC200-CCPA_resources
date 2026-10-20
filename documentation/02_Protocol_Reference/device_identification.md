@@ -429,6 +429,6 @@ Payload: 17 bytes - Connected phone's BT MAC address
 - `usb_protocol.md` - USB message format and payload details
 - `wireless_carplay.md` - Wireless CarPlay protocol, iAP2 + MFi handshake
 - `carplay_handshake.md` - Consolidated end-to-end wireless CarPlay handshake (phases A–G)
-- `../03_Security_Analysis/crypto_stack.md` - SessionToken encryption details
+- `../05_Security_Analysis/crypto_stack.md` - SessionToken encryption details
 - `../04_Implementation/session_examples.md` - Full session capture examples
 

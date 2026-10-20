@@ -11,6 +11,14 @@ See `documentation/05_Security_Analysis/kernel_encryption.md` ("Live DCP
 Attempts") for full context, what's confirmed, and what's still broken before
 picking this back up.
 
+*Note 2026-10-19:* this tool is not needed to read or write the kernel any more. Only the first
+3 × 64 KB of the kernel are DCP-encrypted, and the same bytes sit in the kernel partition's
+staging blocks under a software key (see the 2026-10-19 section of `kernel_encryption.md`).
+The tool itself takes any length (`<total_len>` on the command line) and checks no magic; it was
+the 2026-06-30 attempts that fed it the whole mtd1 region and looked for gzip magic in the
+output, neither of which matches the real format (corrected 2026-10-19; this note first said the
+tool did both).
+
 Build:
 ```
 zig cc -target arm-linux-musleabihf -static -O2 -o dcp_decrypt dcp_decrypt.c

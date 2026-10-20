@@ -192,6 +192,16 @@ For bricked devices, use firmware version based on WiFi chipset:
 
 ---
 
+## Boot Chain in 2025.10.15.1127 (added 2026-10-19)
+
+The table above covers the rootfs. In the 2025.10.15.1127 image, `tmp/AutoBox.img` (U-Boot + kernel partitions) holds:
+- U-Boot `2015.04 (Feb 02 2023 - 23:26:24)`, CSF era 3. Its U-Boot image (mtd0 `0x0`–`0x2CFFF`: the HAB-authenticated `0x1000`–`0x20FFF`, the CSF and the unauthenticated `0x0`–`0xFFF`) is byte-identical to the one on an IW416 unit running this release and to a second unit's 2025.10.15.1127 dump [VERIFIED].
+- A kernel body byte-identical to that unit's `3.14.52+g94d07bb #12 SMP PREEMPT Fri Sep 26 2025` build [VERIFIED]. That it is the same build is also [VERIFIED]: the identical body contains the gzip trailer (CRC32 and size of the uncompressed kernel), so the uncompressed kernel has the same CRC32 and size. The version banner itself sits in the part that is blank in `AutoBox.img`. **[Corrected 2026-10-19]** The same-build statement was labelled INFERRED.
+
+The kernel ships in staging form (blank DCP head; staging under a key that is not the target unit's, presumably re-keyed per unit by `upg` [INFERRED]). See `05_Security_Analysis/kernel_encryption.md` and `secure_boot_hab.md` § AutoBox.img. Other releases' `AutoBox.img` were not compared.
+
+---
+
 ## iAP2 serialNumber Is Not the Firmware Version
 
 The iAP2 `IdentificationInformation` (`0x1D01`) message advertises a `serialNumber` parameter that carries a **firmware build string** — on the 2026-05-21 capture unit this was `2025.02.25.1521626a`. This string is **not** the running firmware version and should not be used to identify the firmware release. The authoritative firmware version is `/etc/software_version` (or the `ver` field in the web `infos` response, e.g. `2025.10.15.1127`); the version table at the top of this document is keyed off that. The iAP2 `firmwareVersion` parameter is likewise a fixed `1.0.0` and not a release identifier.

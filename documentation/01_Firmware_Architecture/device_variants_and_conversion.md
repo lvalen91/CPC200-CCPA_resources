@@ -92,6 +92,8 @@ from OTP fuses) located at offset **0x87D–0x8FD**. The U-Boot executable code 
 identical. This means mtd0 cannot be transplanted between two physical units even of the same
 variant — each carries its own identity bytes.
 
+> **[Corrected 2026-10-19]** The `0x87D` bytes are per-release data, not per-device identity [VERIFIED, `../05_Security_Analysis/kernel_encryption.md` E1 + E4]: two different A15W units on 2025.10.15.1127 (E1 and the `../../flash_dumps/2025.10.15.1127/` unit) are byte-identical below mtd0 `0x2D000`, while that second unit differs from itself in 88 bytes (`0x87C`–`0x916`, 32-character hex strings) between its 2025.02.25.1521 and 2025.10.15.1127 dumps, with the same U-Boot build stamp. The range lies in `0x0`–`0xFFF`, which the boot ROM loads but HAB does not authenticate (the CSF authenticates `0x1000`–`0x20FFF`), so it can change between releases without a new signed U-Boot. The 89-byte 2air/A15W difference above is consistent with two different releases [INFERRED; the 2air dump's release was not re-checked]. What ties mtd0 to a unit is the two encrypted environments at `0x2D000` (UpgKey) and `0x30000` (DCP key). See `secure_boot_hab.md` § U-Boot Code Is Identical.
+
 ### 2air firmware module system (HWFS)
 
 The 2air uses a modular firmware ("HWFS") composed of independently-versioned components,
@@ -239,14 +241,14 @@ between sibling devices:
 
 | Partition | Portable? | Reason |
 |-----------|-----------|--------|
-| mtd0 (U-Boot, 256 KB) | **No** | Carries per-device identity bytes (0x87D–0x8FD) + CSF cert material |
-| mtd1 (kernel, 3,328 KB) | **No** | Encrypted with per-chip OTPMK; cannot be decrypted by a different unit's silicon |
+| mtd0 (U-Boot, 256 KB) | **No** | Per-unit encrypted environments at `0x2D000` (UpgKey) and `0x30000` (DCP). [Corrected 2026-10-19; was "identity bytes (0x87D–0x8FD) + CSF cert material"; the U-Boot image `0x0`–`0x21FFF` (HAB-authenticated `0x1000`–`0x20FFF`; CSF at `0x21000`) is generic within a release; `0x0`–`0xFFF` is unauthenticated per-release data] |
+| mtd1 (kernel, 3,328 KB) | **Not as is** | Only the first 3 × 64 KB are per-chip (DCP); the body is plaintext. Re-keying the staging blocks for the target's UpgKey and erasing its env block makes it portable [Corrected 2026-10-19; method VERIFIED on one unit, cross-unit INFERRED; `../05_Security_Analysis/kernel_encryption.md`] |
 | mtd2 (rootfs, 12,800 KB) | **Yes** | Plain JFFS2 — no signing, no encryption |
 
 Empirical results: a **full** foreign SPI image (A15W → 2air) **fails to boot** — the foreign
 kernel cannot be decrypted by the target's OTPMK. A **hybrid** (target's own boot region +
 foreign rootfs) **boots fully with SSH**. The root cause of full-flash failure is therefore the
-per-chip kernel encryption, not HAB (the SRK table is shared family-wide).
+per-chip kernel encryption, not HAB (the SRK table is shared family-wide). **[Added 2026-10-19]** More precisely: the target cannot decrypt the foreign DCP head, nor the foreign env block or UpgKey update environment [INFERRED from the format].
 
 > JFFS2 note: the rootfs uses Carlinkit's custom compression type `0x16`
 > (`JFFS2_COMPR_CARLINKIT_ZLIB`); standard JFFS2 extractors need patching to read it.

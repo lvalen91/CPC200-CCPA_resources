@@ -17369,7 +17369,7 @@
    "local_id": 14,
    "statement": "Magic 0x55AA55AA means cleartext payload and is default, always used for types 0x06, 0x07, 0x2A, 0x2C.",
    "topic": "usb-dual-magic",
-   "source_lines": "40",
+   "source_lines": "42",
    "confidence": "high",
    "signals": null,
    "quote": "Default; always for types 0x06, 0x07, 0x2A, 0x2C (performance-exempt)"
@@ -17380,7 +17380,7 @@
    "local_id": 15,
    "statement": "Magic 0x55BB55BB means AES-CBC encrypted payload, used for all other types when encryption is enabled via CMD_ENABLE_CRYPT.",
    "topic": "usb-dual-magic",
-   "source_lines": "41",
+   "source_lines": "43",
    "confidence": "high",
    "signals": null,
    "quote": "All other types when encryption is enabled via CMD_ENABLE_CRYPT"
@@ -17391,7 +17391,7 @@
    "local_id": 16,
    "statement": "Assembly proof at fcn.000645ec (0x645f4) uses add.w r2, r2, 0x110011 to transform 0x55AA55AA into 0x55BB55BB.",
    "topic": "usb-dual-magic",
-   "source_lines": "43",
+   "source_lines": "45",
    "confidence": "high",
    "signals": null,
    "quote": "`add.w r2, r2, 0x110011` transforms 0x55AA55AA → 0x55BB55BB"
@@ -17402,7 +17402,7 @@
    "local_id": 17,
    "statement": "The write path at fcn.00064630 normalizes BB magic back to AA after decryption.",
    "topic": "usb-dual-magic",
-   "source_lines": "44",
+   "source_lines": "46",
    "confidence": "high",
    "signals": null,
    "quote": "normalizes BB magic back to AA after decryption"
@@ -17413,7 +17413,7 @@
    "local_id": 18,
    "statement": "Encryption-exempt type 0x06 VideoFrame carries the H.264 video stream.",
    "topic": "usb-exempt",
-   "source_lines": "47",
+   "source_lines": "49",
    "confidence": "high",
    "signals": null,
    "quote": "`0x06` VideoFrame — H.264 video stream"
@@ -17424,7 +17424,7 @@
    "local_id": 19,
    "statement": "Encryption-exempt type 0x07 AudioFrame carries PCM audio data.",
    "topic": "usb-exempt",
-   "source_lines": "48",
+   "source_lines": "50",
    "confidence": "high",
    "signals": null,
    "quote": "`0x07` AudioFrame — PCM audio data"
@@ -17435,7 +17435,7 @@
    "local_id": 20,
    "statement": "Encryption-exempt type 0x2A DashBoard_DATA carries media/nav metadata.",
    "topic": "usb-exempt",
-   "source_lines": "49",
+   "source_lines": "51",
    "confidence": "high",
    "signals": null,
    "quote": "`0x2A` DashBoard_DATA — Media/nav metadata"
@@ -17446,7 +17446,7 @@
    "local_id": 21,
    "statement": "Encryption-exempt type 0x2C AltVideoFrame carries the navigation video stream.",
    "topic": "usb-exempt",
-   "source_lines": "50",
+   "source_lines": "52",
    "confidence": "high",
    "signals": null,
    "quote": "`0x2C` AltVideoFrame — Navigation video stream"
@@ -17457,7 +17457,7 @@
    "local_id": 22,
    "statement": "Type 1 (0x01) Open is an OUT message with 28-byte payload to initialize a session with display params.",
    "topic": "usb-msgtype",
-   "source_lines": "60",
+   "source_lines": "62",
    "confidence": "high",
    "signals": null,
    "quote": "Open | OUT | 28 | Initialize session with display params"
@@ -17468,7 +17468,7 @@
    "local_id": 23,
    "statement": "Type 2 (0x02) Plugged is an IN message with 8-byte payload for phone connected notification.",
    "topic": "usb-msgtype",
-   "source_lines": "61",
+   "source_lines": "63",
    "confidence": "high",
    "signals": null,
    "quote": "Plugged | IN | 8 | Phone connected notification"
@@ -17479,7 +17479,7 @@
    "local_id": 24,
    "statement": "Type 3 (0x03) Phase is an IN message with 4-byte payload for connection phase update.",
    "topic": "usb-msgtype",
-   "source_lines": "62",
+   "source_lines": "64",
    "confidence": "high",
    "signals": null,
    "quote": "Phase | IN | 4 | Connection phase update"
@@ -17490,7 +17490,7 @@
    "local_id": 25,
    "statement": "Type 4 (0x04) Unplugged is an IN message with 0-byte payload for phone disconnected.",
    "topic": "usb-msgtype",
-   "source_lines": "63",
+   "source_lines": "65",
    "confidence": "high",
    "signals": null,
    "quote": "Unplugged | IN | 0 | Phone disconnected"
@@ -17501,7 +17501,7 @@
    "local_id": 26,
    "statement": "Type 15 (0x0F) DisconnectPhone is an OUT message with 0-byte payload to force disconnect phone.",
    "topic": "usb-msgtype",
-   "source_lines": "64",
+   "source_lines": "66",
    "confidence": "high",
    "signals": null,
    "quote": "DisconnectPhone | OUT | 0 | Force disconnect phone"
@@ -17512,7 +17512,7 @@
    "local_id": 27,
    "statement": "Type 21 (0x15) CloseDongle is an OUT message with 0-byte payload to shut down the adapter.",
    "topic": "usb-msgtype",
-   "source_lines": "65",
+   "source_lines": "67",
    "confidence": "high",
    "signals": null,
    "quote": "CloseDongle | OUT | 0 | Shutdown adapter"
@@ -17523,7 +17523,7 @@
    "local_id": 28,
    "statement": "Type 170 (0xAA) HeartBeat is an OUT keep-alive sent every 2 seconds.",
    "topic": "usb-msgtype",
-   "source_lines": "66",
+   "source_lines": "68",
    "confidence": "high",
    "signals": null,
    "quote": "HeartBeat | OUT | 0 | Keep-alive (every 2s)"
@@ -17534,7 +17534,7 @@
    "local_id": 29,
    "statement": "Type 5 (0x05) Touch is an OUT message with 16-byte payload for single touch input.",
    "topic": "usb-msgtype",
-   "source_lines": "72",
+   "source_lines": "74",
    "confidence": "high",
    "signals": null,
    "quote": "Touch | OUT | 16 | Single touch input"
@@ -17545,7 +17545,7 @@
    "local_id": 30,
    "statement": "Type 6 (0x06) VideoData is an IN H.264 video frame with a 36-byte header.",
    "topic": "usb-msgtype",
-   "source_lines": "73",
+   "source_lines": "75",
    "confidence": "high",
    "signals": null,
    "quote": "VideoData | IN | Variable | H.264 video frame (36-byte header)"
@@ -17556,7 +17556,7 @@
    "local_id": 31,
    "statement": "Type 7 (0x07) AudioData is a BOTH-direction message carrying audio data or commands.",
    "topic": "usb-msgtype",
-   "source_lines": "74",
+   "source_lines": "76",
    "confidence": "high",
    "signals": null,
    "quote": "AudioData | BOTH | Variable | Audio data or commands"
@@ -17567,7 +17567,7 @@
    "local_id": 32,
    "statement": "Type 23 (0x17) MultiTouch is an OUT message of 1-5 points at 16 bytes per point.",
    "topic": "usb-msgtype",
-   "source_lines": "75",
+   "source_lines": "77",
    "confidence": "high",
    "signals": null,
    "quote": "MultiTouch | OUT | Variable | Multi-touch (1-5 points, 16 bytes/point)"
@@ -17578,7 +17578,7 @@
    "local_id": 33,
    "statement": "Type 44 (0x2C) NaviVideoData is an IN navigation video with 36-byte header for iOS 13+.",
    "topic": "usb-msgtype",
-   "source_lines": "76",
+   "source_lines": "78",
    "confidence": "high",
    "signals": null,
    "quote": "NaviVideoData | IN | Variable | Navigation video (36-byte header, iOS 13+)"
@@ -17589,7 +17589,7 @@
    "local_id": 34,
    "statement": "VideoData (0x06) is 36 bytes total: 16 USB plus 20 video-specific.",
    "topic": "usb-video-header",
-   "source_lines": "79",
+   "source_lines": "81",
    "confidence": "high",
    "signals": null,
    "quote": "VideoData (0x06): 36 bytes total (16 USB + 20 video-specific)"
@@ -17600,7 +17600,7 @@
    "local_id": 35,
    "statement": "NaviVideoData (0x2C) is 36 bytes total with the same structure as the main video.",
    "topic": "usb-video-header",
-   "source_lines": "80",
+   "source_lines": "82",
    "confidence": "high",
    "signals": null,
    "quote": "same structure as main video"
@@ -17611,7 +17611,7 @@
    "local_id": 36,
    "statement": "VideoData contains live UI projection, not traditional video, and the adapter forwards frames without buffering or policy decisions.",
    "topic": "usb-video-note",
-   "source_lines": "82",
+   "source_lines": "84",
    "confidence": "high",
    "signals": null,
    "quote": "contains **live UI projection**, not traditional video"
@@ -17622,7 +17622,7 @@
    "local_id": 37,
    "statement": "Host apps should drop late video frames over 30-40ms to prevent decoder poisoning.",
    "topic": "usb-video-note",
-   "source_lines": "83",
+   "source_lines": "85",
    "confidence": "medium",
    "signals": null,
    "quote": "Drop late frames (>30-40ms) to prevent decoder poisoning"
@@ -17633,7 +17633,7 @@
    "local_id": 38,
    "statement": "Host apps should keep video buffers shallow at about 150ms jitter absorption.",
    "topic": "usb-video-note",
-   "source_lines": "84",
+   "source_lines": "86",
    "confidence": "medium",
    "signals": null,
    "quote": "Keep buffers shallow (~150ms jitter absorption)"
@@ -17644,7 +17644,7 @@
    "local_id": 39,
    "statement": "Host apps should reset the decoder on corruption rather than wait for self-healing.",
    "topic": "usb-video-note",
-   "source_lines": "85",
+   "source_lines": "87",
    "confidence": "medium",
    "signals": null,
    "quote": "Reset decoder on corruption (don't wait for self-healing)"
@@ -17655,7 +17655,7 @@
    "local_id": 40,
    "statement": "When AudioData (0x07) payload is 13 bytes it is an audio command structured as decodeType:4, volume:4, audioType:4, command:1.",
    "topic": "usb-audio-cmd",
-   "source_lines": "89",
+   "source_lines": "91",
    "confidence": "high",
    "signals": null,
    "quote": "`[decodeType:4][volume:4][audioType:4][command:1]`"
@@ -17666,7 +17666,7 @@
    "local_id": 41,
    "statement": "Siri and phone call events are received via AudioData (0x07), not Command (0x08).",
    "topic": "usb-audio-cmd",
-   "source_lines": "89",
+   "source_lines": "91",
    "confidence": "high",
    "signals": null,
    "quote": "Siri and phone call events are received via AudioData (0x07), NOT Command (0x08)"
@@ -17677,7 +17677,7 @@
    "local_id": 42,
    "statement": "Audio decodeType values are 4 (48kHz stereo, default), 2 (44.1kHz stereo / commands, only when mediaSound=0), and 5 (16kHz mono).",
    "topic": "usb-audio-format",
-   "source_lines": "91",
+   "source_lines": "93",
    "confidence": "high",
    "signals": null,
    "quote": "Values 4 (48kHz stereo, default), 2 (44.1kHz stereo / commands, only when `mediaSound=0`), 5 (16kHz mono)"
@@ -17688,7 +17688,7 @@
    "local_id": 43,
    "statement": "audio_type values are 1=Media, 2=Nav, 3=Mic.",
    "topic": "usb-audio-format",
-   "source_lines": "91",
+   "source_lines": "93",
    "confidence": "high",
    "signals": null,
    "quote": "**audio_type** values: 1=Media, 2=Nav, 3=Mic"
@@ -17699,7 +17699,7 @@
    "local_id": 44,
    "statement": "Type 8 (0x08) Command is a BOTH-direction control command with 4-byte payload.",
    "topic": "usb-msgtype",
-   "source_lines": "97",
+   "source_lines": "99",
    "confidence": "high",
    "signals": null,
    "quote": "Command | BOTH | 4 | Control commands"
@@ -17710,7 +17710,7 @@
    "local_id": 45,
    "statement": "Type 9 (0x09) LogoType is an OUT message with 4-byte payload to set UI branding.",
    "topic": "usb-msgtype",
-   "source_lines": "98",
+   "source_lines": "100",
    "confidence": "high",
    "signals": null,
    "quote": "LogoType | OUT | 4 | Set UI branding"
@@ -17721,7 +17721,7 @@
    "local_id": 46,
    "statement": "Type 11 (0x0B) CarPlayModeChange is an IN message for CarPlay mode state change.",
    "topic": "usb-msgtype",
-   "source_lines": "99",
+   "source_lines": "101",
    "confidence": "high",
    "signals": null,
    "quote": "CarPlayModeChange | IN | Variable | CarPlay mode state change"
@@ -17732,7 +17732,7 @@
    "local_id": 47,
    "statement": "Type 12 (0x0C) Frame/BluetoothPIN is a dual-purpose message type.",
    "topic": "usb-msgtype",
-   "source_lines": "100",
+   "source_lines": "102",
    "confidence": "high",
    "signals": null,
    "quote": "Frame/BluetoothPIN | **DUAL**"
@@ -17743,7 +17743,7 @@
    "local_id": 48,
    "statement": "Type 16 (0x10) AirPlayModeChange is an IN message for AirPlay mode state change.",
    "topic": "usb-msgtype",
-   "source_lines": "101",
+   "source_lines": "103",
    "confidence": "high",
    "signals": null,
    "quote": "AirPlayModeChange | IN | Variable | AirPlay mode state change"
@@ -17754,7 +17754,7 @@
    "local_id": 49,
    "statement": "Type 22 (0x16) CameraFrame is an IN camera/reverse video input, binary name CMD_CAMERA_FRAME.",
    "topic": "usb-msgtype",
-   "source_lines": "102",
+   "source_lines": "104",
    "confidence": "high",
    "signals": null,
    "quote": "CameraFrame | IN | Variable | Camera/reverse video input (Binary: CMD_CAMERA_FRAME)"
@@ -17765,7 +17765,7 @@
    "local_id": 50,
    "statement": "Type 0x16 was previously documented as AudioTransfer but binary analysis confirms it is CMD_CAMERA_FRAME.",
    "topic": "usb-correction",
-   "source_lines": "104",
+   "source_lines": "106",
    "confidence": "high",
    "signals": null,
    "quote": "Binary analysis confirms it is `CMD_CAMERA_FRAME` (camera input)"
@@ -17776,7 +17776,7 @@
    "local_id": 51,
    "statement": "Audio transfer is Command ID 22 sent via type 0x08, not a separate message type.",
    "topic": "usb-correction",
-   "source_lines": "104",
+   "source_lines": "106",
    "confidence": "high",
    "signals": null,
    "quote": "Audio transfer is Command ID 22 sent via type 0x08"
@@ -17787,7 +17787,7 @@
    "local_id": 52,
    "statement": "Camera Frame (0x16) is bidirectional with the first 4 bytes of payload being an int32 sub-command.",
    "topic": "usb-camera",
-   "source_lines": "108",
+   "source_lines": "110",
    "confidence": "high",
    "signals": null,
    "quote": "First 4 bytes of payload = int32 sub-command"
@@ -17798,7 +17798,7 @@
    "local_id": 53,
    "statement": "Camera sub-cmd 1 UPLOAD_INFO is Host to Adapter carrying N 20-byte CameraFrameInfo descriptors.",
    "topic": "usb-camera-subcmd",
-   "source_lines": "112",
+   "source_lines": "114",
    "confidence": "high",
    "signals": null,
    "quote": "1 | UPLOAD_INFO | Host → Adapter | N × 20-byte CameraFrameInfo descriptors"
@@ -17809,7 +17809,7 @@
    "local_id": 54,
    "statement": "Camera sub-cmd 2 SET_CONFIG is Adapter to Host carrying a 20-byte CameraFrameInfo with adapter's chosen resolution.",
    "topic": "usb-camera-subcmd",
-   "source_lines": "113",
+   "source_lines": "115",
    "confidence": "high",
    "signals": null,
    "quote": "2 | SET_CONFIG | Adapter → Host | 20-byte CameraFrameInfo"
@@ -17820,7 +17820,7 @@
    "local_id": 55,
    "statement": "Camera sub-cmd 3 OPEN is Adapter to Host with no payload.",
    "topic": "usb-camera-subcmd",
-   "source_lines": "114",
+   "source_lines": "116",
    "confidence": "high",
    "signals": null,
    "quote": "3 | OPEN | Adapter → Host | (none)"
@@ -17831,7 +17831,7 @@
    "local_id": 56,
    "statement": "Camera sub-cmd 4 CLOSE is Adapter to Host with no payload.",
    "topic": "usb-camera-subcmd",
-   "source_lines": "115",
+   "source_lines": "117",
    "confidence": "high",
    "signals": null,
    "quote": "4 | CLOSE | Adapter → Host | (none)"
@@ -17842,7 +17842,7 @@
    "local_id": 57,
    "statement": "Camera sub-cmd 5 H264_DATA is Host to Adapter carrying raw H.264 frame bytes.",
    "topic": "usb-camera-subcmd",
-   "source_lines": "116",
+   "source_lines": "118",
    "confidence": "high",
    "signals": null,
    "quote": "5 | H264_DATA | Host → Adapter | Raw H.264 frame bytes"
@@ -17853,7 +17853,7 @@
    "local_id": 58,
    "statement": "CameraFrameInfo is 20 bytes little-endian with width at 0, height at 4, minFps at 8, maxFps at 12, format at 16 (1=H.264).",
    "topic": "usb-camera-info",
-   "source_lines": "118",
+   "source_lines": "120",
    "confidence": "high",
    "signals": null,
    "quote": "CameraFrameInfo (20 bytes, little-endian)"
@@ -17864,7 +17864,7 @@
    "local_id": 59,
    "statement": "The camera flow is host sub-cmd 1, adapter sub-cmd 2, adapter sub-cmd 3, host streams sub-cmd 5, adapter sub-cmd 4.",
    "topic": "usb-camera-flow",
-   "source_lines": "128",
+   "source_lines": "130",
    "confidence": "high",
    "signals": null,
    "quote": "Host sends sub-cmd 1"
@@ -17875,7 +17875,7 @@
    "local_id": 60,
    "statement": "Camera Frame source is PhoneMirrorBox CameraFrameInfo.java, CameraManager.java, BoxProtocol.java:2101-2129 with dispatch at 0x17c06/0x17cd8.",
    "topic": "usb-camera-source",
-   "source_lines": "130",
+   "source_lines": "132",
    "confidence": "high",
    "signals": null,
    "quote": "Dispatch at `0x17c06/0x17cd8`"
@@ -17886,7 +17886,7 @@
    "local_id": 61,
    "statement": "Type 12 (0x0C) OUT is Frame requesting an IDR keyframe with 0-byte payload, while IN is BluetoothPIN with variable payload.",
    "topic": "usb-dual-0c",
-   "source_lines": "138",
+   "source_lines": "140",
    "confidence": "high",
    "signals": null,
    "quote": "**Frame** - Request IDR keyframe (0-byte payload) | **BluetoothPIN** - Pairing PIN"
@@ -17897,7 +17897,7 @@
    "local_id": 62,
    "statement": "Sending Type 0x0C OUT with no payload requests a video keyframe (IDR) used when the video decoder needs to resync.",
    "topic": "usb-dual-0c",
-   "source_lines": "142",
+   "source_lines": "144",
    "confidence": "high",
    "signals": null,
    "quote": "Host sends Type 0x0C with no payload to request a video keyframe (IDR)"
@@ -17908,7 +17908,7 @@
    "local_id": 63,
    "statement": "Receiving Type 0x0C IN carries the Bluetooth pairing PIN as payload that the host displays for user verification.",
    "topic": "usb-dual-0c",
-   "source_lines": "148",
+   "source_lines": "150",
    "confidence": "high",
    "signals": null,
    "quote": "Adapter sends Type 0x0C with the Bluetooth pairing PIN as payload"
@@ -17919,7 +17919,7 @@
    "local_id": 64,
    "statement": "The Kotlin app implements MessageType.BLUETOOTH_PIN(0x0C) for receiving pairing PIN and CommandMapping.FRAME(12) as Command payload.",
    "topic": "usb-dual-0c-app",
-   "source_lines": "155",
+   "source_lines": "157",
    "confidence": "high",
    "signals": null,
    "quote": "`MessageType.BLUETOOTH_PIN(0x0C)` for receiving pairing PIN"
@@ -17930,7 +17930,7 @@
    "local_id": 65,
    "statement": "The app uses Command ID 12 via message type 0x08 for keyframe requests, and firmware handles Command 12 identically to Message Type 0x0C with no payload.",
    "topic": "usb-dual-0c-app",
-   "source_lines": "158",
+   "source_lines": "160",
    "confidence": "high",
    "signals": null,
    "quote": "the firmware handles Command 12 identically to Message Type 0x0C with no payload"
@@ -17941,7 +17941,7 @@
    "local_id": 66,
    "statement": "Command (0x08) payload is a 4-byte command ID with full reference in command_ids.md.",
    "topic": "usb-command",
-   "source_lines": "160",
+   "source_lines": "162",
    "confidence": "high",
    "signals": null,
    "quote": "Payload is a 4-byte command ID"
@@ -17952,7 +17952,7 @@
    "local_id": 67,
    "statement": "Basic commands span 1-31 (Mic, Siri, Night Mode, GNSS, WiFi band, Standby, BLE).",
    "topic": "usb-command-range",
-   "source_lines": "162",
+   "source_lines": "164",
    "confidence": "high",
    "signals": null,
    "quote": "Basic (1-31): Mic, Siri, Night Mode, GNSS, WiFi band, Standby, BLE"
@@ -17963,7 +17963,7 @@
    "local_id": 68,
    "statement": "Control commands span 100-114 (D-Pad buttons, Rotary knob).",
    "topic": "usb-command-range",
-   "source_lines": "163",
+   "source_lines": "165",
    "confidence": "high",
    "signals": null,
    "quote": "Controls (100-114): D-Pad buttons, Rotary knob"
@@ -17974,7 +17974,7 @@
    "local_id": 69,
    "statement": "Media commands span 200-205 (Play, Pause, Next, Prev).",
    "topic": "usb-command-range",
-   "source_lines": "164",
+   "source_lines": "166",
    "confidence": "high",
    "signals": null,
    "quote": "Media (200-205): Play, Pause, Next, Prev"
@@ -17985,7 +17985,7 @@
    "local_id": 70,
    "statement": "Phone commands span 300-314 (Answer, HangUp, DTMF tones).",
    "topic": "usb-command-range",
-   "source_lines": "165",
+   "source_lines": "167",
    "confidence": "high",
    "signals": null,
    "quote": "Phone (300-314): Answer, HangUp, DTMF tones"
@@ -17996,7 +17996,7 @@
    "local_id": 71,
    "statement": "Status commands span 1000-1013 (WiFi/BT connection status).",
    "topic": "usb-command-range",
-   "source_lines": "166",
+   "source_lines": "168",
    "confidence": "high",
    "signals": null,
    "quote": "Status (1000-1013): WiFi/BT connection status"
@@ -18007,7 +18007,7 @@
    "local_id": 72,
    "statement": "Type 10 (0x0A) BluetoothAddress is an IN message with 17-byte payload for the box BT address.",
    "topic": "usb-msgtype",
-   "source_lines": "172",
+   "source_lines": "174",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothAddress | IN | 17 | Box BT address"
@@ -18018,7 +18018,7 @@
    "local_id": 73,
    "statement": "Type 12 (0x0C) BluetoothPIN is an IN message carrying the pairing PIN, a dual-purpose type.",
    "topic": "usb-msgtype",
-   "source_lines": "173",
+   "source_lines": "175",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothPIN | IN | Variable | Pairing PIN"
@@ -18029,7 +18029,7 @@
    "local_id": 74,
    "statement": "Type 13 (0x0D) BluetoothDeviceName is an IN message with 8-byte payload for the BT device name.",
    "topic": "usb-msgtype",
-   "source_lines": "174",
+   "source_lines": "176",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothDeviceName | IN | 8 | BT device name"
@@ -18040,7 +18040,7 @@
    "local_id": 75,
    "statement": "Type 14 (0x0E) WifiDeviceName is an IN message with 8-byte payload for the WiFi device name.",
    "topic": "usb-msgtype",
-   "source_lines": "175",
+   "source_lines": "177",
    "confidence": "high",
    "signals": null,
    "quote": "WifiDeviceName | IN | 8 | WiFi device name"
@@ -18051,7 +18051,7 @@
    "local_id": 76,
    "statement": "Type 18 (0x12) BluetoothPairedList is an IN message with 50-byte payload for the paired device list.",
    "topic": "usb-msgtype",
-   "source_lines": "176",
+   "source_lines": "178",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothPairedList | IN | 50 | Paired device list"
@@ -18062,7 +18062,7 @@
    "local_id": 77,
    "statement": "Type 20 (0x14) ManufacturerInfo is an IN message for OEM info.",
    "topic": "usb-msgtype",
-   "source_lines": "177",
+   "source_lines": "179",
    "confidence": "high",
    "signals": null,
    "quote": "ManufacturerInfo | IN | Variable | OEM info"
@@ -18073,7 +18073,7 @@
    "local_id": 78,
    "statement": "Type 204 (0xCC) SoftwareVersion is an IN message with 32-byte payload for firmware version.",
    "topic": "usb-msgtype",
-   "source_lines": "178",
+   "source_lines": "180",
    "confidence": "high",
    "signals": null,
    "quote": "SoftwareVersion | IN | 32 | Firmware version"
@@ -18084,7 +18084,7 @@
    "local_id": 79,
    "statement": "Type 187 (0xBB) StatusValue is an IN message with 4-byte payload for a status/config value.",
    "topic": "usb-msgtype",
-   "source_lines": "179",
+   "source_lines": "181",
    "confidence": "high",
    "signals": null,
    "quote": "StatusValue | IN | 4 | Status/config value"
@@ -18095,7 +18095,7 @@
    "local_id": 80,
    "statement": "Type 25 (0x19) BoxSettings is a BOTH-direction JSON configuration message.",
    "topic": "usb-msgtype",
-   "source_lines": "185",
+   "source_lines": "187",
    "confidence": "high",
    "signals": null,
    "quote": "BoxSettings | BOTH | Variable | JSON configuration"
@@ -18106,7 +18106,7 @@
    "local_id": 81,
    "statement": "Type 153 (0x99) SendFile is an OUT message to write a file to the adapter.",
    "topic": "usb-msgtype",
-   "source_lines": "186",
+   "source_lines": "188",
    "confidence": "high",
    "signals": null,
    "quote": "SendFile | OUT | Variable | Write file to adapter"
@@ -18117,7 +18117,7 @@
    "local_id": 82,
    "statement": "Type 24 (0x18) HiCarLink is an IN message with 113-byte payload for the HiCar connection URL, binary name CMD_CONNECTION_URL.",
    "topic": "usb-msgtype",
-   "source_lines": "192",
+   "source_lines": "194",
    "confidence": "high",
    "signals": null,
    "quote": "HiCarLink | IN | 113 | HiCar connection URL (Binary: CMD_CONNECTION_URL)"
@@ -18128,7 +18128,7 @@
    "local_id": 83,
    "statement": "Type 35 (0x23) BluetoothConnectStart is an IN message with 17-byte payload containing peer address, binary name Bluetooth_ConnectStart.",
    "topic": "usb-msgtype",
-   "source_lines": "193",
+   "source_lines": "195",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothConnectStart | IN | 17"
@@ -18139,7 +18139,7 @@
    "local_id": 84,
    "statement": "Type 36 (0x24) BluetoothConnected is an IN message with 17-byte payload containing peer address, binary name Bluetooth_Connected.",
    "topic": "usb-msgtype",
-   "source_lines": "194",
+   "source_lines": "196",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothConnected | IN | 17"
@@ -18150,7 +18150,7 @@
    "local_id": 85,
    "statement": "Type 37 (0x25) BluetoothDisconnect is an IN message with 0-byte payload, binary name Bluetooth_DisConnect.",
    "topic": "usb-msgtype",
-   "source_lines": "195",
+   "source_lines": "197",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothDisconnect | IN | 0 | BT disconnected notification"
@@ -18161,7 +18161,7 @@
    "local_id": 86,
    "statement": "Type 38 (0x26) BluetoothListen is an IN message with 0-byte payload for BT listening/advertising, binary name Bluetooth_Listen.",
    "topic": "usb-msgtype",
-   "source_lines": "196",
+   "source_lines": "198",
    "confidence": "high",
    "signals": null,
    "quote": "BluetoothListen | IN | 0 | BT listening/advertising"
@@ -18172,7 +18172,7 @@
    "local_id": 87,
    "statement": "Type 40 (0x28) iAP2PlistBinary is an IN message carrying iAP2 plist binary data.",
    "topic": "usb-msgtype",
-   "source_lines": "205",
+   "source_lines": "207",
    "confidence": "high",
    "signals": null,
    "quote": "iAP2PlistBinary | IN | Variable | iAP2 plist binary data"
@@ -18183,7 +18183,7 @@
    "local_id": 88,
    "statement": "Type 41 (0x29) GnssData is an OUT message forwarding GPS/GNSS location data to the phone, binary name GNSS_DATA.",
    "topic": "usb-msgtype",
-   "source_lines": "206",
+   "source_lines": "208",
    "confidence": "high",
    "signals": null,
    "quote": "GnssData | OUT | Variable | GPS/GNSS location data forwarded to phone"
@@ -18194,7 +18194,7 @@
    "local_id": 89,
    "statement": "Type 43 (0x2B) ConnectionPinCode is an IN message carrying the BT pairing PIN code, binary name Connection_PINCODE.",
    "topic": "usb-msgtype",
-   "source_lines": "207",
+   "source_lines": "209",
    "confidence": "high",
    "signals": null,
    "quote": "ConnectionPinCode | IN | Variable | BT pairing PIN code"
@@ -18205,7 +18205,7 @@
    "local_id": 90,
    "statement": "Type 44 (0x2C) NaviVideoData is an IN navigation video stream, binary name AltVideoFrame.",
    "topic": "usb-msgtype",
-   "source_lines": "208",
+   "source_lines": "210",
    "confidence": "high",
    "signals": null,
    "quote": "NaviVideoData | IN | Variable | Navigation video stream (Binary: AltVideoFrame)"
@@ -18216,7 +18216,7 @@
    "local_id": 91,
    "statement": "Type 0x2B is Connection_PINCODE not AltVideoFrame, verified from the binary string table at switch statement fcn.00017b74.",
    "topic": "usb-correction",
-   "source_lines": "210",
+   "source_lines": "212",
    "confidence": "high",
    "signals": null,
    "quote": "Type 0x2B is `Connection_PINCODE`, NOT AltVideoFrame"
@@ -18227,7 +18227,7 @@
    "local_id": 92,
    "statement": "Type 12 (0x0C) binary name CMD_SET_BLUETOOTH_PIN_CODE is a configuration PIN, BOTH direction.",
    "topic": "usb-bt-pin",
-   "source_lines": "219",
+   "source_lines": "221",
    "confidence": "high",
    "signals": null,
    "quote": "CMD_SET_BLUETOOTH_PIN_CODE | Configuration PIN | BOTH"
@@ -18238,7 +18238,7 @@
    "local_id": 93,
    "statement": "Type 43 (0x2B) binary name Connection_PINCODE is a pairing PIN, IN direction.",
    "topic": "usb-bt-pin",
-   "source_lines": "220",
+   "source_lines": "222",
    "confidence": "high",
    "signals": null,
    "quote": "Connection_PINCODE | Pairing PIN | IN"
@@ -18249,7 +18249,7 @@
    "local_id": 94,
    "statement": "Type 0x0C configuration PIN uses config key HU_BT_PIN_CODE in persistent storage with related string 'Set Bluetooth Pin Code: %s' at 0x6e86d.",
    "topic": "usb-bt-pin",
-   "source_lines": "224",
+   "source_lines": "226",
    "confidence": "high",
    "signals": null,
    "quote": "`HU_BT_PIN_CODE` (persistent storage)"
@@ -18260,7 +18260,7 @@
    "local_id": 95,
    "statement": "Type 0x2B pairing PIN is Adapter to Host only with related string 'Send connetion pincode to HU: %s' at 0x6d363, sent by function at 0x1911c using movs r1, 0x2b.",
    "topic": "usb-bt-pin",
-   "source_lines": "234",
+   "source_lines": "236",
    "confidence": "high",
    "signals": null,
    "quote": "Function at 0x1911c uses `movs r1, 0x2b` when sending"
@@ -18271,7 +18271,7 @@
    "local_id": 96,
    "statement": "Type 42 (0x2A) MediaData is an IN message carrying rich media metadata, binary name DashBoard_DATA.",
    "topic": "usb-msgtype",
-   "source_lines": "262",
+   "source_lines": "264",
    "confidence": "high",
    "signals": null,
    "quote": "MediaData | IN | Variable | Rich media metadata (Binary: DashBoard_DATA)"
@@ -18282,7 +18282,7 @@
    "local_id": 97,
    "statement": "MediaData subtype 1 (0x00000001) is JSON metadata (song info, playback time), typically 30-202 bytes.",
    "topic": "usb-mediadata-subtype",
-   "source_lines": "268",
+   "source_lines": "270",
    "confidence": "high",
    "signals": null,
    "quote": "1 | 0x00000001 | JSON metadata (song info, playback time) | 30-202 bytes"
@@ -18293,7 +18293,7 @@
    "local_id": 98,
    "statement": "MediaData subtype 3 (0x00000003) is binary album artwork JPEG, typically 170-180 KB.",
    "topic": "usb-mediadata-subtype",
-   "source_lines": "269",
+   "source_lines": "271",
    "confidence": "high",
    "signals": null,
    "quote": "3 | 0x00000003 | Binary data (album artwork - JPEG) | 170-180 KB"
@@ -18304,7 +18304,7 @@
    "local_id": 99,
    "statement": "MediaData subtype 100 (0x64) carries CallStatus JSON; the CALL patch adds a `_callraw` raw 0x4155 frame.",
    "topic": "usb-mediadata-subtype",
-   "source_lines": "270",
+   "source_lines": "272",
    "confidence": "high",
    "signals": null,
    "quote": "100 | 0x00000064 | CallStatus JSON (phone call state); `_callraw` raw `0x4155` frame added by the CALL patch"
@@ -18315,7 +18315,7 @@
    "local_id": 100,
    "statement": "MediaData subtype 200 (0xC8) carries Navigation JSON; the NAV patch adds `_iap2`/`_iap2m` raw frames.",
    "topic": "usb-mediadata-subtype",
-   "source_lines": "272",
+   "source_lines": "274",
    "confidence": "high",
    "signals": null,
    "quote": "200 | 0x000000C8 | Navigation JSON (route, TBT directions); `_iap2`/`_iap2m` raw frames added by the NAV patch"
@@ -18326,7 +18326,7 @@
    "local_id": 101,
    "statement": "MediaData subtype 201 (0x000000C9) is a navigation maneuver icon AA-only PNG, 1739-2542 bytes.",
    "topic": "usb-mediadata-subtype",
-   "source_lines": "273",
+   "source_lines": "275",
    "confidence": "high",
    "signals": null,
    "quote": "201 | 0x000000C9 | Navigation maneuver icon (AA-only PNG) | 1739-2542 bytes"
@@ -18337,7 +18337,7 @@
    "local_id": 102,
    "statement": "MediaData packet structure has subtype as LE uint32 at offset 0x00 and content (JSON, JPEG, or PNG) at 0x04.",
    "topic": "usb-mediadata-struct",
-   "source_lines": "285",
+   "source_lines": "287",
    "confidence": "high",
    "signals": null,
    "quote": "0x00    4     Subtype"
@@ -18348,7 +18348,7 @@
    "local_id": 103,
    "statement": "MediaData JSON subtype 1 includes fields MediaAPPName, MediaSongName, MediaArtistName, MediaAlbumName, MediaSongDuration, MediaSongPlayTime, MediaPlayStatus.",
    "topic": "usb-mediadata-json",
-   "source_lines": "296",
+   "source_lines": "298",
    "confidence": "high",
    "signals": null,
    "quote": "\"MediaSongDuration\": 171000"
@@ -18359,7 +18359,7 @@
    "local_id": 104,
    "statement": "Album artwork subtype 3 is JPEG data starting at offset 0x04 with JPEG magic FF D8 FF E0.",
    "topic": "usb-artwork",
-   "source_lines": "304",
+   "source_lines": "306",
    "confidence": "high",
    "signals": null,
    "quote": "Starts with JPEG magic: `FF D8 FF E0`"
@@ -18370,7 +18370,7 @@
    "local_id": 105,
    "statement": "Album artwork typical resolution is 300x300 to 600x600 pixels.",
    "topic": "usb-artwork",
-   "source_lines": "305",
+   "source_lines": "307",
    "confidence": "high",
    "signals": null,
    "quote": "Typical resolution: 300x300 to 600x600 pixels"
@@ -18381,7 +18381,7 @@
    "local_id": 106,
    "statement": "Album artwork is transferred via iAP2 file transfer session using mediaItemArtworkFileTransferIdentifier.",
    "topic": "usb-artwork",
-   "source_lines": "306",
+   "source_lines": "308",
    "confidence": "high",
    "signals": null,
    "quote": "`mediaItemArtworkFileTransferIdentifier`"
@@ -18392,7 +18392,7 @@
    "local_id": 107,
    "statement": "CallStatus JSON subtype 100 was discovered 2026-04-11 and live capture verified on wired and wireless CarPlay with iPhone 18,4.",
    "topic": "usb-callstatus",
-   "source_lines": "308",
+   "source_lines": "310",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -18405,7 +18405,7 @@
    "local_id": 108,
    "statement": "CallStatus JSON is sent by the adapter's CiAP2CallStateEngine during phone calls and provides structured call metadata including caller identity.",
    "topic": "usb-callstatus",
-   "source_lines": "310",
+   "source_lines": "312",
    "confidence": "high",
    "signals": null,
    "quote": "Sent by the adapter's `CiAP2CallStateEngine` during phone calls"
@@ -18416,7 +18416,7 @@
    "local_id": 109,
    "statement": "The CallStatus JSON CallID field is a per-call UUID (shown as a placeholder).",
    "topic": "usb-callstatus",
-   "source_lines": "316",
+   "source_lines": "318",
    "confidence": "high",
    "signals": null,
    "quote": "\"CallID\": \"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE\""
@@ -18427,7 +18427,7 @@
    "local_id": 110,
    "statement": "CallStatus enum (corrected 2026-06): 0=ended/idle, 1=dialing(out), 2=ringing(in), 3=connecting(brief), 4=active(long-lived).",
    "topic": "usb-callstatus-field",
-   "source_lines": "324",
+   "source_lines": "326",
    "confidence": "high",
    "signals": null,
    "quote": "0=ended/idle, 1=dialing(out), 2=ringing(in), 3=connecting(brief), 4=active(long-lived)"
@@ -18438,7 +18438,7 @@
    "local_id": 111,
    "statement": "CallDirection int values are 1=incoming, 2=outgoing.",
    "topic": "usb-callstatus-field",
-   "source_lines": "325",
+   "source_lines": "327",
    "confidence": "high",
    "signals": null,
    "quote": "1=incoming, 2=outgoing"
@@ -18449,7 +18449,7 @@
    "local_id": 112,
    "statement": "CallID is a UUID v4 unique per call that correlates all status transitions.",
    "topic": "usb-callstatus-field",
-   "source_lines": "326",
+   "source_lines": "328",
    "confidence": "high",
    "signals": null,
    "quote": "UUID v4, unique per call — correlates all status transitions"
@@ -18460,7 +18460,7 @@
    "local_id": 113,
    "statement": "CallName is the contact name from the iPhone address book or the dialed number if no match.",
    "topic": "usb-callstatus-field",
-   "source_lines": "327",
+   "source_lines": "329",
    "confidence": "high",
    "signals": null,
    "quote": "Contact name from iPhone address book (or dialed number if no match)"
@@ -18471,7 +18471,7 @@
    "local_id": 114,
    "statement": "CallNumber is the full E.164 phone number with country code.",
    "topic": "usb-callstatus-field",
-   "source_lines": "328",
+   "source_lines": "330",
    "confidence": "high",
    "signals": null,
    "quote": "Full E.164 phone number with country code (e.g., \"+15758675309\")"
@@ -18482,7 +18482,7 @@
    "local_id": 115,
    "statement": "The minimal CallStatus form is {\"CallStatus\":0} at 17 bytes, sent at session start and when no call is active.",
    "topic": "usb-callstatus",
-   "source_lines": "330",
+   "source_lines": "332",
    "confidence": "high",
    "signals": null,
    "quote": "`{\"CallStatus\":0}` (17B) — sent at session start and when no call is active"
@@ -18493,7 +18493,7 @@
    "local_id": 116,
    "statement": "Outgoing call CallStatus lifecycle: 0 → 1 (dialing) → 4 (active) → 0 (ended).",
    "topic": "usb-callstatus-sm",
-   "source_lines": "334",
+   "source_lines": "336",
    "confidence": "high",
    "signals": [
     "verified"
@@ -18506,7 +18506,7 @@
    "local_id": 117,
    "statement": "Incoming answered call CallStatus lifecycle: 0 → 2 (ringing) → 3 (connecting) → 4 (active) → 0 (ended).",
    "topic": "usb-callstatus-sm",
-   "source_lines": "335",
+   "source_lines": "337",
    "confidence": "high",
    "signals": null,
    "quote": "Incoming answer:  0 → 2 (ringing)  → 3 (connecting) → 4 (active) → 0 (ended)"
@@ -18517,7 +18517,7 @@
    "local_id": 118,
    "statement": "Incoming rejected call CallStatus lifecycle: 0 → 2 (ringing) → 0 (ended), skipping 3/4.",
    "topic": "usb-callstatus-sm",
-   "source_lines": "336",
+   "source_lines": "338",
    "confidence": "high",
    "signals": null,
    "quote": "Incoming reject:  0 → 2 (ringing)  → 0 (ended, skips 3/4)"
@@ -18528,7 +18528,7 @@
    "local_id": 119,
    "statement": "Incoming-to-voicemail CallStatus lifecycle: 0 → 2 (ringing) → 0 (ended) after ~20s ring, skipping 3/4.",
    "topic": "usb-callstatus-sm",
-   "source_lines": "337",
+   "source_lines": "339",
    "confidence": "high",
    "signals": null,
    "quote": "Incoming voicemail: 0 → 2 (ringing)  → 0 (ended, skips 3/4, after ~20s ring)"
@@ -18539,7 +18539,7 @@
    "local_id": 120,
    "statement": "Audio commands INCOMING_CALL_INIT and PHONECALL_START/STOP are the primary session triggers.",
    "topic": "usb-callstatus-timing",
-   "source_lines": "344",
+   "source_lines": "346",
    "confidence": "high",
    "signals": null,
    "quote": "the primary session triggers"
@@ -18550,7 +18550,7 @@
    "local_id": 121,
    "statement": "CallStatus JSON arrives about 300ms after the corresponding audio command.",
    "topic": "usb-callstatus-timing",
-   "source_lines": "345",
+   "source_lines": "347",
    "confidence": "high",
    "signals": null,
    "quote": "CallStatus JSON arrives ~300ms AFTER the corresponding audio command"
@@ -18561,7 +18561,7 @@
    "local_id": 122,
    "statement": "CallStatus=0 idle is the definitive end signal, more reliable than duplicate PHONECALL_STOP audio commands.",
    "topic": "usb-callstatus-timing",
-   "source_lines": "347",
+   "source_lines": "349",
    "confidence": "high",
    "signals": null,
    "quote": "more reliable than duplicate PHONECALL_STOP audio commands"
@@ -18572,7 +18572,7 @@
    "local_id": 123,
    "statement": "CallStatus payload sizes are 17B idle-only, ~119B outgoing, and ~130B incoming.",
    "topic": "usb-callstatus",
-   "source_lines": "349",
+   "source_lines": "351",
    "confidence": "high",
    "signals": null,
    "quote": "17B (idle-only) / ~119B (outgoing) / ~130B (incoming, longer phone number field)"
@@ -18583,7 +18583,7 @@
    "local_id": 124,
    "statement": "CallStatus subtype 100 is generated by CiAP2CallStateEngine which is always enabled regardless of the DashboardInfo bitmask value.",
    "topic": "usb-callstatus-dashboard",
-   "source_lines": "351",
+   "source_lines": "353",
    "confidence": "high",
    "signals": [
     "verified"
@@ -18596,7 +18596,7 @@
    "local_id": 125,
    "statement": "CallStatus captures were performed with DashboardInfo=5 (bits 0+2 MediaPlayer + RouteGuidance, no LocationEngine bit 1).",
    "topic": "usb-callstatus-dashboard",
-   "source_lines": "351",
+   "source_lines": "353",
    "confidence": "high",
    "signals": null,
    "quote": "Captures were performed with `DashboardInfo=5`"
@@ -18607,7 +18607,7 @@
    "local_id": 126,
    "statement": "Navigation JSON subtype 200 is sent when DashboardInfo bit 2 is set and the iPhone has active navigation, containing TBT route guidance from Apple Maps.",
    "topic": "usb-navijson",
-   "source_lines": "355",
+   "source_lines": "357",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -18620,7 +18620,7 @@
    "local_id": 127,
    "statement": "NaviStatus int is 0=inactive/flush, 1=active.",
    "topic": "usb-navijson-field",
-   "source_lines": "359",
+   "source_lines": "361",
    "confidence": "high",
    "signals": null,
    "quote": "0=inactive/flush, 1=active"
@@ -18631,7 +18631,7 @@
    "local_id": 128,
    "statement": "NaviTimeToDestination int is ETA in seconds.",
    "topic": "usb-navijson-field",
-   "source_lines": "360",
+   "source_lines": "362",
    "confidence": "high",
    "signals": null,
    "quote": "ETA in seconds"
@@ -18642,7 +18642,7 @@
    "local_id": 129,
    "statement": "NaviDistanceToDestination int is total remaining distance in meters.",
    "topic": "usb-navijson-field",
-   "source_lines": "362",
+   "source_lines": "364",
    "confidence": "high",
    "signals": null,
    "quote": "Total remaining distance (meters)"
@@ -18653,7 +18653,7 @@
    "local_id": 130,
    "statement": "NaviRemainDistance int is distance to next maneuver in meters.",
    "topic": "usb-navijson-field",
-   "source_lines": "364",
+   "source_lines": "366",
    "confidence": "high",
    "signals": null,
    "quote": "Distance to next maneuver (meters)"
@@ -18664,7 +18664,7 @@
    "local_id": 131,
    "statement": "NaviRoadName string is extracted from iAP2 ManeuverDescription and has a duplicated key bug.",
    "topic": "usb-navijson-field",
-   "source_lines": "365",
+   "source_lines": "367",
    "confidence": "high",
    "signals": null,
    "quote": "Extracted from iAP2 ManeuverDescription (⚠ duplicated key bug)"
@@ -18675,7 +18675,7 @@
    "local_id": 132,
    "statement": "NaviOrderType int is turn order type enum with observed values 6 and 16.",
    "topic": "usb-navijson-field",
-   "source_lines": "366",
+   "source_lines": "368",
    "confidence": "high",
    "signals": null,
    "quote": "observed 6, 16 — range wider than initially assumed"
@@ -18686,7 +18686,7 @@
    "local_id": 133,
    "statement": "NaviManeuverType int is CPManeuverType 0-53.",
    "topic": "usb-navijson-field",
-   "source_lines": "367",
+   "source_lines": "369",
    "confidence": "high",
    "signals": null,
    "quote": "CPManeuverType 0–53"
@@ -18697,7 +18697,7 @@
    "local_id": 134,
    "statement": "NaviTurnAngle int is an enum/type value not degrees, only sent for non-roundabout turns.",
    "topic": "usb-navijson-field",
-   "source_lines": "368",
+   "source_lines": "370",
    "confidence": "high",
    "signals": null,
    "quote": "NOT degrees (only sent for non-roundabout turns)"
@@ -18708,7 +18708,7 @@
    "local_id": 135,
    "statement": "NaviTurnSide int is driving side 0=RHD, 1=LHD, 2=observed undocumented value.",
    "topic": "usb-navijson-field",
-   "source_lines": "369",
+   "source_lines": "371",
    "confidence": "high",
    "signals": null,
    "quote": "0=RHD, 1=LHD, 2=observed undocumented value"
@@ -18719,7 +18719,7 @@
    "local_id": 136,
    "statement": "NaviRoundaboutExit int is exit number 1-19, only sent for roundabout maneuvers.",
    "topic": "usb-navijson-field",
-   "source_lines": "370",
+   "source_lines": "372",
    "confidence": "high",
    "signals": null,
    "quote": "Exit number 1–19 (only sent for roundabout maneuvers)"
@@ -18730,7 +18730,7 @@
    "local_id": 137,
    "statement": "NaviJunctionType never appears in any observed NaviJSON message.",
    "topic": "usb-navijson-notfwd",
-   "source_lines": "373",
+   "source_lines": "375",
    "confidence": "high",
    "signals": null,
    "quote": "never appears in any observed NaviJSON message"
@@ -18741,7 +18741,7 @@
    "local_id": 138,
    "statement": "JunctionElementAngle and JunctionElementExitAngle are dropped by the adapter parser due to ASSERT on dict types.",
    "topic": "usb-navijson-notfwd",
-   "source_lines": "374",
+   "source_lines": "376",
    "confidence": "high",
    "signals": null,
    "quote": "dropped by adapter parser (ASSERT on dict types)"
@@ -18752,7 +18752,7 @@
    "local_id": 139,
    "statement": "AfterManeuverRoadName is stripped from NaviJSON.",
    "topic": "usb-navijson-notfwd",
-   "source_lines": "375",
+   "source_lines": "377",
    "confidence": "high",
    "signals": null,
    "quote": "`AfterManeuverRoadName` — stripped"
@@ -18763,7 +18763,7 @@
    "local_id": 140,
    "statement": "Lane guidance is stripped from NaviJSON.",
    "topic": "usb-navijson-notfwd",
-   "source_lines": "376",
+   "source_lines": "378",
    "confidence": "high",
    "signals": null,
    "quote": "Lane guidance — stripped"
@@ -18774,7 +18774,7 @@
    "local_id": 141,
    "statement": "A roundabout exit-1 NaviJSON example has NaviOrderType 16, NaviRoundaboutExit 1, NaviManeuverType 28.",
    "topic": "usb-navijson-ex",
-   "source_lines": "382",
+   "source_lines": "384",
    "confidence": "high",
    "signals": null,
    "quote": "\"NaviOrderType\":16,\"NaviRoundaboutExit\":1,\"NaviManeuverType\":28"
@@ -18785,7 +18785,7 @@
    "local_id": 142,
    "statement": "A roundabout exit-2 NaviJSON example has NaviRoundaboutExit 2 and NaviManeuverType 29.",
    "topic": "usb-navijson-ex",
-   "source_lines": "387",
+   "source_lines": "389",
    "confidence": "high",
    "signals": null,
    "quote": "\"NaviRoundaboutExit\":2,\"NaviManeuverType\":29"
@@ -18796,7 +18796,7 @@
    "local_id": 143,
    "statement": "A right turn NaviJSON example has NaviOrderType 6, NaviTurnAngle 2, NaviTurnSide 2, NaviManeuverType 2.",
    "topic": "usb-navijson-ex",
-   "source_lines": "392",
+   "source_lines": "394",
    "confidence": "high",
    "signals": null,
    "quote": "\"NaviOrderType\":6,\"NaviTurnAngle\":2,\"NaviTurnSide\":2,\"NaviManeuverType\":2"
@@ -18807,7 +18807,7 @@
    "local_id": 144,
    "statement": "In the W Main St route capture, 12 consecutive roundabouts all had NaviOrderType=16, turnAngle=0, turnSide=0, junction=0.",
    "topic": "usb-navijson-capture",
-   "source_lines": "406",
+   "source_lines": "408",
    "confidence": "high",
    "signals": null,
    "quote": "12 consecutive roundabouts captured. ALL had: `NaviOrderType=16`, `turnAngle=0`, `turnSide=0`, `junction=0`"
@@ -18818,7 +18818,7 @@
    "local_id": 145,
    "statement": "Only CPTypes 28 (exit 1) and 29 (exit 2) were observed, the iPhone sent paramCount=21 per 0x5201, and the adapter forwards only about 5 fields.",
    "topic": "usb-navijson-capture",
-   "source_lines": "407",
+   "source_lines": "409",
    "confidence": "high",
    "signals": null,
    "quote": "iPhone sent `paramCount=21` per 0x5201"
@@ -18829,7 +18829,7 @@
    "local_id": 146,
    "statement": "AAOS cluster showed wrong icons for every roundabout due to missing exit angle data.",
    "topic": "usb-navijson-capture",
-   "source_lines": "408",
+   "source_lines": "410",
    "confidence": "high",
    "signals": null,
    "quote": "AAOS cluster showed wrong icons for every roundabout due to"
@@ -18840,7 +18840,7 @@
    "local_id": 147,
    "statement": "On ManeuverIdx change the adapter emits two _SendNaviJSON calls back-to-back: first with NaviRemainDistance, second with maneuver-specific fields.",
    "topic": "usb-navijson-delivery",
-   "source_lines": "411",
+   "source_lines": "413",
    "confidence": "high",
    "signals": null,
    "quote": "adapter emits TWO _SendNaviJSON calls"
@@ -18851,7 +18851,7 @@
    "local_id": 148,
    "statement": "iAP2 0x5200 StartRouteGuidanceUpdate is the adapter requesting TBT data.",
    "topic": "usb-iap2-msg",
-   "source_lines": "416",
+   "source_lines": "418",
    "confidence": "high",
    "signals": null,
    "quote": "`0x5200` StartRouteGuidanceUpdate - Adapter requests TBT data"
@@ -18862,7 +18862,7 @@
    "local_id": 149,
    "statement": "iAP2 0x5201 RouteGuidanceUpdate is route status from the iPhone about 1/sec triggering ManeuverIdx advances.",
    "topic": "usb-iap2-msg",
-   "source_lines": "417",
+   "source_lines": "419",
    "confidence": "high",
    "signals": null,
    "quote": "`0x5201` RouteGuidanceUpdate - Route status from iPhone (~1/sec"
@@ -18873,7 +18873,7 @@
    "local_id": 150,
    "statement": "iAP2 0x5202 RouteGuidanceManeuverUpdate is the full maneuver list burst on route start of about 20 messages in 200ms.",
    "topic": "usb-iap2-msg",
-   "source_lines": "418",
+   "source_lines": "420",
    "confidence": "high",
    "signals": null,
    "quote": "~20 messages in 200ms"
@@ -18884,7 +18884,7 @@
    "local_id": 151,
    "statement": "The parser limitation at iAP2UpdateEntity.cpp:314 ASSERTs on unknown dict/group field types and silently drops them.",
    "topic": "usb-iap2-evidence",
-   "source_lines": "424",
+   "source_lines": "426",
    "confidence": "high",
    "signals": null,
    "quote": "`iAP2UpdateEntity.cpp:314` ASSERTs on unknown dict/group field types, silently drops them"
@@ -18895,7 +18895,7 @@
    "local_id": 152,
    "statement": "Type 163 (0xA3) SessionToken is an IN encrypted-session-data message of variable length (~428-508 bytes); the size varies with session content (connected device, test/production environment).",
    "topic": "usb-session-token",
-   "source_lines": "432",
+   "source_lines": "434",
    "confidence": "high",
    "signals": null,
    "quote": "**Variable length** — the Base64 blob carries per-session JSON"
@@ -18906,7 +18906,7 @@
    "local_id": 153,
    "statement": "SessionToken is sent once during session establishment immediately after BoxSettings (Type 25) and appears in both CarPlay and Android Auto sessions.",
    "topic": "usb-session-token",
-   "source_lines": "436",
+   "source_lines": "438",
    "confidence": "high",
    "signals": null,
    "quote": "Sent once during session establishment, immediately after BoxSettings"
@@ -18917,7 +18917,7 @@
    "local_id": 154,
    "statement": "SessionToken packet has a 16-byte protocol header then a 492-byte ASCII Base64 payload that decodes to 368 bytes of high-entropy binary (7.45 bits/byte).",
    "topic": "usb-session-token",
-   "source_lines": "446",
+   "source_lines": "448",
    "confidence": "high",
    "signals": null,
    "quote": "368 bytes of high-entropy binary (7.45 bits/byte entropy)"
@@ -18928,7 +18928,7 @@
    "local_id": 155,
    "statement": "SessionToken is sent about 8 seconds into the session, follows BoxSettings, and precedes the Phase update and first video frames.",
    "topic": "usb-session-token",
-   "source_lines": "450",
+   "source_lines": "452",
    "confidence": "high",
    "signals": null,
    "quote": "Sent ~8 seconds into session during establishment phase"
@@ -18939,7 +18939,7 @@
    "local_id": 156,
    "statement": "SessionToken first 4 bytes are f4 08 08 74 and the payload is not ASN.1 DER format.",
    "topic": "usb-session-token",
-   "source_lines": "456",
+   "source_lines": "458",
    "confidence": "high",
    "signals": null,
    "quote": "First 4 bytes: `f4 08 08 74`"
@@ -18950,7 +18950,7 @@
    "local_id": 157,
    "statement": "For CarPlay the SessionToken Base64 payload is 492 bytes decoding to 368 bytes in 23 x 16-byte AES blocks.",
    "topic": "usb-session-token",
-   "source_lines": "466",
+   "source_lines": "468",
    "confidence": "high",
    "signals": null,
    "quote": "23 × 16-byte blocks"
@@ -18961,7 +18961,7 @@
    "local_id": 158,
    "statement": "For Android Auto the SessionToken Base64 payload is 428 bytes decoding to 320 bytes in 20 x 16-byte AES blocks.",
    "topic": "usb-session-token",
-   "source_lines": "466",
+   "source_lines": "468",
    "confidence": "high",
    "signals": null,
    "quote": "20 × 16-byte blocks"
@@ -18972,7 +18972,7 @@
    "local_id": 159,
    "statement": "The SessionToken decoded structure is a 16-byte IV/Nonce at 0x00 followed by AES-CBC or AES-CTR ciphertext.",
    "topic": "usb-session-token",
-   "source_lines": "473",
+   "source_lines": "475",
    "confidence": "medium",
    "signals": null,
    "quote": "IV/Nonce        Likely AES initialization vector"
@@ -18983,7 +18983,7 @@
    "local_id": 160,
    "statement": "SessionToken decryption succeeded using AES-128-CBC with key W2EC1X1NbZ58TXtn (USB Communication Key) and IV being the first 16 bytes of the decoded payload.",
    "topic": "usb-session-token",
-   "source_lines": "482",
+   "source_lines": "484",
    "confidence": "high",
    "signals": null,
    "quote": "Key | `W2EC1X1NbZ58TXtn` (USB Communication Key)"
@@ -18994,7 +18994,7 @@
    "local_id": 161,
    "statement": "The decrypted CarPlay SessionToken contains a phone object with model iPhone18,4 and a box object with model A15W and version 2025.10.15.1127.",
    "topic": "usb-session-token",
-   "source_lines": "490",
+   "source_lines": "492",
    "confidence": "high",
    "signals": null,
    "quote": "\"model\": \"iPhone18,4\""
@@ -19005,7 +19005,7 @@
    "local_id": 162,
    "statement": "SessionToken field box.mfd is the manufacturing date in YYYYMMDD format.",
    "topic": "usb-session-token",
-   "source_lines": "523",
+   "source_lines": "525",
    "confidence": "high",
    "signals": null,
    "quote": "Manufacturing date (YYYYMMDD)"
@@ -19016,7 +19016,7 @@
    "local_id": 163,
    "statement": "SessionToken purpose is session telemetry sent from adapter to host containing device statistics and adapter identification for logging/analytics.",
    "topic": "usb-session-token",
-   "source_lines": "525",
+   "source_lines": "527",
    "confidence": "high",
    "signals": null,
    "quote": "Session telemetry sent from adapter to host"
@@ -19027,7 +19027,7 @@
    "local_id": 164,
    "statement": "Type 506 (0x1FA) NaviFocus is an OUT message with 0-byte payload to request nav focus.",
    "topic": "usb-navfocus",
-   "source_lines": "533",
+   "source_lines": "535",
    "confidence": "high",
    "signals": null,
    "quote": "NaviFocus | OUT | 0 | Request nav focus"
@@ -19038,7 +19038,7 @@
    "local_id": 165,
    "statement": "Type 507 (0x1FB) NaviRelease is an OUT message with 0-byte payload to release nav focus.",
    "topic": "usb-navfocus",
-   "source_lines": "534",
+   "source_lines": "536",
    "confidence": "high",
    "signals": null,
    "quote": "NaviRelease | OUT | 0 | Release nav focus"
@@ -19049,7 +19049,7 @@
    "local_id": 166,
    "statement": "Type 508 (0x1FC) RequestNaviScreenFocus is a BOTH-direction message that starts the 0x2C nav-screen video stream, and for wireless CarPlay the host must proactively send the 508 kick.",
    "topic": "usb-navfocus",
-   "source_lines": "535",
+   "source_lines": "537",
    "confidence": "high",
    "signals": [
     "verified"
@@ -19062,7 +19062,7 @@
    "local_id": 167,
    "statement": "Type 509 (0x1FD) ReleaseNaviScreenFocus is an OUT message that stops the 0x2C nav-screen video stream (a video-focus release, not audio).",
    "topic": "usb-navfocus",
-   "source_lines": "536",
+   "source_lines": "538",
    "confidence": "high",
    "signals": null,
    "quote": "Release nav screen — **stops the 0x2C nav-screen video stream"
@@ -19073,7 +19073,7 @@
    "local_id": 168,
    "statement": "Type 110 (0x6E) NaviFocusRequest is an IN message of nav requesting focus.",
    "topic": "usb-navfocus",
-   "source_lines": "537",
+   "source_lines": "539",
    "confidence": "high",
    "signals": null,
    "quote": "NaviFocusRequest | IN | 0 | Nav requesting focus"
@@ -19084,7 +19084,7 @@
    "local_id": 169,
    "statement": "Type 111 (0x6F) NaviFocusRelease is an IN message of nav released focus.",
    "topic": "usb-navfocus",
-   "source_lines": "538",
+   "source_lines": "540",
    "confidence": "high",
    "signals": null,
    "quote": "NaviFocusRelease | IN | 0 | Nav released focus"
@@ -19095,7 +19095,7 @@
    "local_id": 170,
    "statement": "Commands 1000-1013 are pure status notifications reporting WiFi/Bluetooth internal state that never indicate session failure and must never trigger disconnect.",
    "topic": "usb-status-cmd",
-   "source_lines": "542",
+   "source_lines": "544",
    "confidence": "high",
    "signals": null,
    "quote": "Commands 1000-1013 are **pure status notifications** sent by the adapter to report WiFi/Bluetooth internal state. They never indicate session failure and must never trigger disconnect. CMD 1010 (DeviceWifiNotConnected) is the most commonly misinterpreted -- it is a WiFi hotspot status check, completely irrelevant for USB CarPlay sessions. Use `Unplugged` (0x04) or `Phase 0` for session termination detection."
@@ -19106,7 +19106,7 @@
    "local_id": 171,
    "statement": "CMD 1010 DeviceWifiNotConnected is the most commonly misinterpreted message, a WiFi hotspot status check irrelevant for USB CarPlay.",
    "topic": "usb-status-cmd",
-   "source_lines": "542",
+   "source_lines": "544",
    "confidence": "high",
    "signals": null,
    "quote": "CMD 1010 (DeviceWifiNotConnected) is the most commonly misinterpreted"
@@ -19117,7 +19117,7 @@
    "local_id": 172,
    "statement": "Use Unplugged (0x04) or Phase 0 for session termination detection.",
    "topic": "usb-status-cmd",
-   "source_lines": "542",
+   "source_lines": "544",
    "confidence": "high",
    "signals": null,
    "quote": "Use `Unplugged` (0x04) or `Phase 0` for session termination detection"
@@ -19128,7 +19128,7 @@
    "local_id": 173,
    "statement": "Plugged (0x02) payload has phoneType at offset 0x00 (4 bytes) and wifi transport flag at 0x04 (0=USB, 1=Wireless).",
    "topic": "usb-plugged",
-   "source_lines": "556",
+   "source_lines": "558",
    "confidence": "high",
    "signals": null,
    "quote": "Transport flag: 0=USB, 1=Wireless"
@@ -19139,7 +19139,7 @@
    "local_id": 174,
    "statement": "device_identification.md is authoritative that Plugged offset 0x04 is the wifi transport flag, the discriminator for USB vs Wireless CarPlay.",
    "topic": "usb-plugged",
-   "source_lines": "559",
+   "source_lines": "561",
    "confidence": "high",
    "signals": null,
    "quote": "offset 0x04 is the **wifi transport flag** (0=USB, 1=Wireless)"
@@ -19150,7 +19150,7 @@
    "local_id": 175,
    "statement": "One wired USB capture reported the Plugged 0x04 field as 1 which is unexpected for a pure wifi flag, and whether Plugged carries a distinct connected flag is unconfirmed.",
    "topic": "usb-plugged",
-   "source_lines": "559",
+   "source_lines": "561",
    "confidence": "low",
    "signals": [
     "unconfirmed"
@@ -19163,7 +19163,7 @@
    "local_id": 176,
    "statement": "phoneType 1 is AndroidMirror over USB, unverified.",
    "topic": "usb-phonetype",
-   "source_lines": "564",
+   "source_lines": "566",
    "confidence": "low",
    "signals": [
     "Unverified"
@@ -19176,7 +19176,7 @@
    "local_id": 177,
    "statement": "phoneType 2 is Carlife over USB, unverified.",
    "topic": "usb-phonetype",
-   "source_lines": "565",
+   "source_lines": "567",
    "confidence": "low",
    "signals": [
     "Unverified"
@@ -19189,7 +19189,7 @@
    "local_id": 178,
    "statement": "phoneType 3 is CarPlay over USB, verified.",
    "topic": "usb-phonetype",
-   "source_lines": "566",
+   "source_lines": "568",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -19202,7 +19202,7 @@
    "local_id": 179,
    "statement": "phoneType 4 is iPhoneMirror over USB, unverified.",
    "topic": "usb-phonetype",
-   "source_lines": "567",
+   "source_lines": "569",
    "confidence": "low",
    "signals": [
     "Unverified"
@@ -19215,7 +19215,7 @@
    "local_id": 180,
    "statement": "phoneType 5 is AndroidAuto over USB, verified.",
    "topic": "usb-phonetype",
-   "source_lines": "568",
+   "source_lines": "570",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -19228,7 +19228,7 @@
    "local_id": 181,
    "statement": "phoneType 6 is HiCar over USB, unverified.",
    "topic": "usb-phonetype",
-   "source_lines": "569",
+   "source_lines": "571",
    "confidence": "low",
    "signals": [
     "Unverified"
@@ -19241,7 +19241,7 @@
    "local_id": 182,
    "statement": "phoneType 7 is ICCOA over USB, unverified.",
    "topic": "usb-phonetype",
-   "source_lines": "570",
+   "source_lines": "572",
    "confidence": "low",
    "signals": [
     "Unverified"
@@ -19254,7 +19254,7 @@
    "local_id": 183,
    "statement": "phoneType 8 is CarPlay wireless, verified.",
    "topic": "usb-phonetype",
-   "source_lines": "571",
+   "source_lines": "573",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -19267,7 +19267,7 @@
    "local_id": 184,
    "statement": "Open (0x01) payload has width at 0x00, height at 0x04, fps at 0x08, format at 0x0C, packetMax at 0x10, boxVersion at 0x14, phoneMode at 0x18.",
    "topic": "usb-open",
-   "source_lines": "580",
+   "source_lines": "582",
    "confidence": "high",
    "signals": null,
    "quote": "0x00    4     width        Display width"
@@ -19278,7 +19278,7 @@
    "local_id": 185,
    "statement": "Open packetMax example is 49152.",
    "topic": "usb-open",
-   "source_lines": "584",
+   "source_lines": "586",
    "confidence": "high",
    "signals": null,
    "quote": "Max packet size (e.g., 49152)"
@@ -19289,7 +19289,7 @@
    "local_id": 186,
    "statement": "Open format field value 1 is Basic Mode with minimal IDR insertion.",
    "topic": "usb-open-format",
-   "source_lines": "593",
+   "source_lines": "595",
    "confidence": "high",
    "signals": null,
    "quote": "1 | Basic Mode | Minimal IDR insertion"
@@ -19300,7 +19300,7 @@
    "local_id": 187,
    "statement": "Open format field value 5 is Full H.264 Mode responsive to Frame sync with aggressive IDR.",
    "topic": "usb-open-format",
-   "source_lines": "594",
+   "source_lines": "596",
    "confidence": "high",
    "signals": null,
    "quote": "5 | Full H.264 Mode | Responsive to Frame sync, aggressive IDR"
@@ -19311,7 +19311,7 @@
    "local_id": 188,
    "statement": "With format=5, 107 IDR frames and 118 SPS repetitions were received.",
    "topic": "usb-open-format",
-   "source_lines": "597",
+   "source_lines": "599",
    "confidence": "high",
    "signals": null,
    "quote": "format=5: 107 IDR frames received, 118 SPS repetitions"
@@ -19322,7 +19322,7 @@
    "local_id": 189,
    "statement": "With format=1, 27 IDR frames and 33 SPS repetitions were received.",
    "topic": "usb-open-format",
-   "source_lines": "598",
+   "source_lines": "600",
    "confidence": "high",
    "signals": null,
    "quote": "format=1: 27 IDR frames received, 33 SPS repetitions"
@@ -19333,7 +19333,7 @@
    "local_id": 190,
    "statement": "ProceessCmdOpen (fcn.00021cb0) auto-rewrites HU_VIEWAREA_INFO to full-screen when Open width/height differ from the stored value, and phoneMode 2 = CarPlay.",
    "topic": "usb-open-handler",
-   "source_lines": "602",
+   "source_lines": "604",
    "confidence": "high",
    "signals": null,
    "quote": "`phoneMode` 2 = CarPlay"
@@ -19344,7 +19344,7 @@
    "local_id": 191,
    "statement": "Command ID range 1-31 is Basic Session Control, universal for CarPlay and Android Auto, with 20 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "612",
+   "source_lines": "614",
    "confidence": "high",
    "signals": null,
    "quote": "1-31 | Basic Session Control | Various | 20"
@@ -19355,7 +19355,7 @@
    "local_id": 192,
    "statement": "Command ID range 100-106 is D-Pad Navigation, CarPlay-specific, with 7 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "613",
+   "source_lines": "615",
    "confidence": "high",
    "signals": null,
    "quote": "100-106 | D-Pad Navigation | H→A→P | 7"
@@ -19366,7 +19366,7 @@
    "local_id": 193,
    "statement": "Command ID range 111-114 is Rotary Knob, CarPlay-specific, with 4 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "614",
+   "source_lines": "616",
    "confidence": "high",
    "signals": null,
    "quote": "111-114 | Rotary Knob | H→A→P | 4"
@@ -19377,7 +19377,7 @@
    "local_id": 194,
    "statement": "Command ID range 200-205 is Media Playback, CarPlay-specific, with 6 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "615",
+   "source_lines": "617",
    "confidence": "high",
    "signals": null,
    "quote": "200-205 | Media Playback | H→A→P | 6"
@@ -19388,7 +19388,7 @@
    "local_id": 195,
    "statement": "Command ID range 300-314 is Phone/DTMF, CarPlay-specific, with 15 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "616",
+   "source_lines": "618",
    "confidence": "high",
    "signals": null,
    "quote": "300-314 | Phone/DTMF | H→A→P | 15"
@@ -19399,7 +19399,7 @@
    "local_id": 196,
    "statement": "Command ID range 400-403 is App Launch, CarPlay-specific, with 4 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "617",
+   "source_lines": "619",
    "confidence": "high",
    "signals": null,
    "quote": "400-403 | App Launch | H→A→P | 4"
@@ -19410,7 +19410,7 @@
    "local_id": 197,
    "statement": "Command ID range 410-412 is UI Control, CarPlay-specific, with 3 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "618",
+   "source_lines": "620",
    "confidence": "high",
    "signals": null,
    "quote": "410-412 | UI Control | H→A→P | 3"
@@ -19421,7 +19421,7 @@
    "local_id": 198,
    "statement": "Command ID range 500-509 are focus commands managing video/audio/nav focus; mainly Android Auto, but 506/507 and 508/509 are also used by CarPlay (wired and wireless).",
    "topic": "usb-cmd-range",
-   "source_lines": "619",
+   "source_lines": "621",
    "confidence": "high",
    "signals": null,
    "quote": "Mainly Android Auto; 506/507 and 508/509 (NaviScreen video focus) also used by CarPlay (wired + wireless)"
@@ -19432,7 +19432,7 @@
    "local_id": 199,
    "statement": "Command ID range 600-601 is DVR dead code in FW 2025.10, with 2 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "620",
+   "source_lines": "622",
    "confidence": "high",
    "signals": null,
    "quote": "600-601 | DVR (Dead Code) | H→A | 2"
@@ -19443,7 +19443,7 @@
    "local_id": 200,
    "statement": "Command ID range 700-702 is Custom Commands, CarPlay-specific, with 3 commands.",
    "topic": "usb-cmd-range",
-   "source_lines": "621",
+   "source_lines": "623",
    "confidence": "high",
    "signals": null,
    "quote": "700-702 | Custom Commands | H→A→P | 3"
@@ -19454,7 +19454,7 @@
    "local_id": 201,
    "statement": "Command ID range 1000-1013 is Connection Status, universal, with 14 pure status notifications that never trigger disconnect.",
    "topic": "usb-cmd-range",
-   "source_lines": "622",
+   "source_lines": "624",
    "confidence": "high",
    "signals": null,
    "quote": "1000-1013 | Connection Status | Both | 14"
@@ -19465,7 +19465,7 @@
    "local_id": 202,
    "statement": "BoxSettings (0x19) is a JSON message sent Host to Adapter during initialization.",
    "topic": "usb-boxsettings",
-   "source_lines": "628",
+   "source_lines": "630",
    "confidence": "high",
    "signals": null,
    "quote": "BoxSettings (0x19) is a JSON message sent H→A during initialization"
@@ -19476,7 +19476,7 @@
    "local_id": 203,
    "statement": "The wifiName, btName, and oemIconLabel BoxSettings fields are vulnerable to command injection because passed to popen() shell commands without sanitization.",
    "topic": "usb-boxsettings-sec",
-   "source_lines": "630",
+   "source_lines": "632",
    "confidence": "high",
    "signals": null,
    "quote": "vulnerable to **command injection**"
@@ -19487,7 +19487,7 @@
    "local_id": 204,
    "statement": "The BoxSettings generic parser path FUN_0001658c walks a 29-entry field-to-riddle.conf-key table at 0x93f90 writing strings via SetBoxConfigStr and numbers via SetBoxConfig to /etc/riddle.conf.",
    "topic": "usb-boxsettings-table",
-   "source_lines": "636",
+   "source_lines": "638",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -19500,7 +19500,7 @@
    "local_id": 205,
    "statement": "BoxSettings field btName maps to riddle.conf key CustomBluetoothName and is a popen cmd-injection vector.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "642",
+   "source_lines": "644",
    "confidence": "high",
    "signals": null,
    "quote": "`btName` | CustomBluetoothName | BT name (⚠ popen cmd-injection)"
@@ -19511,7 +19511,7 @@
    "local_id": 206,
    "statement": "BoxSettings field wifiName maps to CustomWifiName and is a cmd-injection vector.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "643",
+   "source_lines": "645",
    "confidence": "high",
    "signals": null,
    "quote": "`wifiName` | CustomWifiName | WiFi SSID (⚠ cmd-injection)"
@@ -19522,7 +19522,7 @@
    "local_id": 207,
    "statement": "BoxSettings field fps maps to CustomFrameRate feeding the Open fps field.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "644",
+   "source_lines": "646",
    "confidence": "high",
    "signals": null,
    "quote": "`fps` | CustomFrameRate | → `Open` fps field"
@@ -19533,7 +19533,7 @@
    "local_id": 208,
    "statement": "BoxSettings field gps maps to HudGPSSwitch enabling GPS/dashboard.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "645",
+   "source_lines": "647",
    "confidence": "high",
    "signals": null,
    "quote": "`gps` | HudGPSSwitch | GPS/dashboard enable"
@@ -19544,7 +19544,7 @@
    "local_id": 209,
    "statement": "BoxSettings field lang maps to BoxConfig_UI_Lang for UI language.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "646",
+   "source_lines": "648",
    "confidence": "high",
    "signals": null,
    "quote": "`lang` | BoxConfig_UI_Lang | UI language"
@@ -19555,7 +19555,7 @@
    "local_id": 210,
    "statement": "BoxSettings field bgMode maps to BackgroundMode for connection-UI visibility.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "647",
+   "source_lines": "649",
    "confidence": "high",
    "signals": null,
    "quote": "`bgMode` | BackgroundMode"
@@ -19566,7 +19566,7 @@
    "local_id": 211,
    "statement": "BoxSettings field syncMode maps to iAP2TransMode for iAP2 framing mode.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "648",
+   "source_lines": "650",
    "confidence": "high",
    "signals": null,
    "quote": "`syncMode` | iAP2TransMode | iAP2 framing mode"
@@ -19577,7 +19577,7 @@
    "local_id": 212,
    "statement": "BoxSettings field startDelay maps to BoxConfig_DelayStart for USB init delay.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "649",
+   "source_lines": "651",
    "confidence": "high",
    "signals": null,
    "quote": "`startDelay` | BoxConfig_DelayStart | USB init delay"
@@ -19588,7 +19588,7 @@
    "local_id": 213,
    "statement": "BoxSettings field mediaDelay maps to MediaLatency for audio buffer ms.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "650",
+   "source_lines": "652",
    "confidence": "high",
    "signals": null,
    "quote": "`mediaDelay` | MediaLatency | audio buffer ms"
@@ -19599,7 +19599,7 @@
    "local_id": 214,
    "statement": "BoxSettings field mediaSound maps to MediaQuality where 0=44.1 kHz and 1=48 kHz PCM.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "651",
+   "source_lines": "653",
    "confidence": "high",
    "signals": null,
    "quote": "`mediaSound` | MediaQuality | 0=44.1 kHz, 1=48 kHz PCM"
@@ -19610,7 +19610,7 @@
    "local_id": 215,
    "statement": "BoxSettings field autoConn maps to NeedAutoConnect for auto-reconnect.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "652",
+   "source_lines": "654",
    "confidence": "high",
    "signals": null,
    "quote": "`autoConn` | NeedAutoConnect | auto-reconnect"
@@ -19621,7 +19621,7 @@
    "local_id": 216,
    "statement": "BoxSettings field androidWorkMode maps to AndroidWorkMode and also fwrites /etc/android_work_mode (0..5).",
    "topic": "usb-boxsettings-field",
-   "source_lines": "653",
+   "source_lines": "655",
    "confidence": "high",
    "signals": null,
    "quote": "also `fwrite /etc/android_work_mode` (0..5)"
@@ -19632,7 +19632,7 @@
    "local_id": 217,
    "statement": "BoxSettings field drivePosition maps to CarDrivePosition where 0=LHD and 1=RHD.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "654",
+   "source_lines": "656",
    "confidence": "high",
    "signals": null,
    "quote": "`drivePosition` | CarDrivePosition | 0=LHD, 1=RHD"
@@ -19643,7 +19643,7 @@
    "local_id": 218,
    "statement": "BoxSettings field echoDelay maps to EchoLatency for WebRTC AEC delay.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "655",
+   "source_lines": "657",
    "confidence": "high",
    "signals": null,
    "quote": "`echoDelay` | EchoLatency | WebRTC AEC delay"
@@ -19654,7 +19654,7 @@
    "local_id": 219,
    "statement": "BoxSettings field androidAutoSizeW maps to AndroidAutoWidth for AA video width.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "656",
+   "source_lines": "658",
    "confidence": "high",
    "signals": null,
    "quote": "`androidAutoSizeW` | AndroidAutoWidth"
@@ -19665,7 +19665,7 @@
    "local_id": 220,
    "statement": "BoxSettings field androidAutoSizeH maps to AndroidAutoHeight for AA video height.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "657",
+   "source_lines": "659",
    "confidence": "high",
    "signals": null,
    "quote": "`androidAutoSizeH` | AndroidAutoHeight"
@@ -19676,7 +19676,7 @@
    "local_id": 221,
    "statement": "BoxSettings field screenPhysicalW maps to ScreenPhysicalW, physical mm to CarPlay DPI.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "658",
+   "source_lines": "660",
    "confidence": "high",
    "signals": null,
    "quote": "`screenPhysicalW` | ScreenPhysicalW | physical mm → CarPlay DPI"
@@ -19687,7 +19687,7 @@
    "local_id": 222,
    "statement": "BoxSettings field screenPhysicalH maps to ScreenPhysicalH, physical mm to CarPlay DPI.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "659",
+   "source_lines": "661",
    "confidence": "high",
    "signals": null,
    "quote": "`screenPhysicalH` | ScreenPhysicalH"
@@ -19698,7 +19698,7 @@
    "local_id": 223,
    "statement": "BoxSettings field brand maps to CarBrand with special handler FUN_00068218 that rewrites airplay.conf and logo.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "660",
+   "source_lines": "662",
    "confidence": "high",
    "signals": null,
    "quote": "special handler `FUN_00068218`: rewrites airplay.conf + logo"
@@ -19709,7 +19709,7 @@
    "local_id": 224,
    "statement": "BoxSettings field ScreenDPI maps to ScreenDPI for CarPlay render density.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "661",
+   "source_lines": "663",
    "confidence": "high",
    "signals": null,
    "quote": "`ScreenDPI` | ScreenDPI | CarPlay render density"
@@ -19720,7 +19720,7 @@
    "local_id": 225,
    "statement": "BoxSettings field boxName maps to CustomBoxName for device display name.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "662",
+   "source_lines": "664",
    "confidence": "high",
    "signals": null,
    "quote": "`boxName` | CustomBoxName | device display name"
@@ -19731,7 +19731,7 @@
    "local_id": 226,
    "statement": "BoxSettings field WiFiChannel maps to WiFiChannel for adapter AP channel feeding 0x5703 WifiConfigInfo.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "663",
+   "source_lines": "665",
    "confidence": "high",
    "signals": null,
    "quote": "adapter AP channel (→ `0x5703 WifiConfigInfo`)"
@@ -19742,7 +19742,7 @@
    "local_id": 227,
    "statement": "BoxSettings field UseBTPhone maps to UseBTPhone to route calls via BT-HFP.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "664",
+   "source_lines": "666",
    "confidence": "high",
    "signals": null,
    "quote": "`UseBTPhone` | UseBTPhone | route calls via BT-HFP"
@@ -19753,7 +19753,7 @@
    "local_id": 228,
    "statement": "BoxSettings field HiCarConnectMode maps to HiCarConnectMode.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "665",
+   "source_lines": "667",
    "confidence": "high",
    "signals": null,
    "quote": "`HiCarConnectMode` | HiCarConnectMode | HiCar mode"
@@ -19764,7 +19764,7 @@
    "local_id": 229,
    "statement": "BoxSettings field GNSSCapability maps to GNSSCapability for GPS capability advertised.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "666",
+   "source_lines": "668",
    "confidence": "high",
    "signals": null,
    "quote": "`GNSSCapability` | GNSSCapability | GPS capability advertised"
@@ -19775,7 +19775,7 @@
    "local_id": 230,
    "statement": "BoxSettings field AutoResetUSB maps to AutoResetUSB for USB reset on disconnect.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "667",
+   "source_lines": "669",
    "confidence": "high",
    "signals": null,
    "quote": "`AutoResetUSB` | AutoResetUSB | USB reset on disconnect"
@@ -19786,7 +19786,7 @@
    "local_id": 231,
    "statement": "BoxSettings field DashboardInfo maps to DashboardInfo, a cluster/dashboard capability bitmask.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "668",
+   "source_lines": "670",
    "confidence": "high",
    "signals": null,
    "quote": "`DashboardInfo` | DashboardInfo | cluster/dashboard capability bitmask"
@@ -19797,7 +19797,7 @@
    "local_id": 232,
    "statement": "BoxSettings field DayNightMode maps to DayNightMode.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "669",
+   "source_lines": "671",
    "confidence": "high",
    "signals": null,
    "quote": "`DayNightMode` | DayNightMode | day/night mode"
@@ -19808,7 +19808,7 @@
    "local_id": 233,
    "statement": "BoxSettings field DockPosition maps to DuckPosition (firmware typo) and copies HU_SCREEN_INFO to HU_VIEWAREA_INFO.",
    "topic": "usb-boxsettings-field",
-   "source_lines": "670",
+   "source_lines": "672",
    "confidence": "high",
    "signals": null,
    "quote": "`DockPosition` | DuckPosition (fw typo) | copies `HU_SCREEN_INFO` → `HU_VIEWAREA_INFO`"
@@ -19819,7 +19819,7 @@
    "local_id": 234,
    "statement": "BoxSettings syncTime is a special handler setting the system clock via settimeofday(val + 28800), hardcoded UTC+8.",
    "topic": "usb-boxsettings-special",
-   "source_lines": "676",
+   "source_lines": "678",
    "confidence": "high",
    "signals": null,
    "quote": "`settimeofday(val + 28800)` — hardcoded UTC+8"
@@ -19830,7 +19830,7 @@
    "local_id": 235,
    "statement": "BoxSettings volume fields mediaVol/callVol/speechVol/ringVol/navVol/otherVol map to HU_AUDIOVOLUME_INFO[0..5] in shared memory.",
    "topic": "usb-boxsettings-special",
-   "source_lines": "677",
+   "source_lines": "679",
    "confidence": "high",
    "signals": null,
    "quote": "`HU_AUDIOVOLUME_INFO[0..5]` | shared memory"
@@ -19841,7 +19841,7 @@
    "local_id": 236,
    "statement": "BoxSettings naviScreenInfo{width,height,fps} maps to HU_NAVISCREEN_INFO (24 B) in shared memory and enables CarPlay nav/cluster video USB type 0x2C.",
    "topic": "usb-boxsettings-special",
-   "source_lines": "678",
+   "source_lines": "680",
    "confidence": "high",
    "signals": null,
    "quote": "enables CarPlay nav/cluster video (USB type `0x2C`)"
@@ -19852,7 +19852,7 @@
    "local_id": 237,
    "statement": "BoxSettings naviScreenInfo.safearea maps to HU_NAVISCREEN_SAFEAREA_INFO (20 B) and HU_NAVISCREEN_VIEWAREA_INFO (24 B) in shared memory.",
    "topic": "usb-boxsettings-special",
-   "source_lines": "679",
+   "source_lines": "681",
    "confidence": "high",
    "signals": null,
    "quote": "`HU_NAVISCREEN_SAFEAREA_INFO` (20 B) + `HU_NAVISCREEN_VIEWAREA_INFO` (24 B)"
@@ -19863,7 +19863,7 @@
    "local_id": 238,
    "statement": "There is no main-screen SafeArea key in BoxSettings; HU_SAFEAREA_INFO is settable only via SendFile (0x99) or SSH.",
    "topic": "usb-boxsettings-special",
-   "source_lines": "681",
+   "source_lines": "683",
    "confidence": "high",
    "signals": null,
    "quote": "`HU_SAFEAREA_INFO` is settable only via\n> `SendFile` (0x99) (or SSH)"
@@ -19874,7 +19874,7 @@
    "local_id": 239,
    "statement": "BoxSettings autoPlay is NOT MAPPED, missing from the ARMadb-driver BoxSettings parser, and set via web UI only.",
    "topic": "usb-boxsettings-core",
-   "source_lines": "694",
+   "source_lines": "696",
    "confidence": "high",
    "signals": null,
    "quote": "`autoPlay` | bool | Auto-start playback | ⚠️ **NOT MAPPED**"
@@ -19885,7 +19885,7 @@
    "local_id": 240,
    "statement": "BoxSettings callQuality maps to CallQuality but was REMOVED/BROKEN, removed from web UI in 2025.10.X firmware.",
    "topic": "usb-boxsettings-audio",
-   "source_lines": "723",
+   "source_lines": "725",
    "confidence": "medium",
    "signals": null,
    "quote": "`callQuality` | int | Voice call quality | `CallQuality` | ⚠️ **REMOVED/BROKEN**"
@@ -19896,7 +19896,7 @@
    "local_id": 241,
    "statement": "BoxSettings WiFiChannel range is 1-11 and 36-165.",
    "topic": "usb-boxsettings-net",
-   "source_lines": "731",
+   "source_lines": "733",
    "confidence": "high",
    "signals": null,
    "quote": "WiFi channel (1-11, 36-165)"
@@ -19907,7 +19907,7 @@
    "local_id": 242,
    "statement": "BoxSettings UseBTPhone 0=disabled, 1=enabled routes phone calls via BT HFP directly bypassing adapter audio pipeline.",
    "topic": "usb-boxsettings-net",
-   "source_lines": "736",
+   "source_lines": "738",
    "confidence": "high",
    "signals": null,
    "quote": "Route phone calls via BT HFP directly (bypassing adapter audio pipeline)"
@@ -19918,7 +19918,7 @@
    "local_id": 243,
    "statement": "naviScreenInfo.width default is 480, height default 272, fps default 30 (range 10-60, recommended 24-60).",
    "topic": "usb-boxsettings-navivideo",
-   "source_lines": "753",
+   "source_lines": "755",
    "confidence": "high",
    "signals": null,
    "quote": "Nav screen FPS (default: 30, range: 10-60, recommended: 24-60)"
@@ -19929,7 +19929,7 @@
    "local_id": 244,
    "statement": "BoxSettings androidWorkMode is the phone link daemon mode 0=Idle, 1=AA, 2=CarLife, 3=Mirror, 4=HiCar, 5=ICCOA, resetting to 0 on disconnect.",
    "topic": "usb-boxsettings-aa",
-   "source_lines": "759",
+   "source_lines": "761",
    "confidence": "high",
    "signals": null,
    "quote": "0=Idle, 1=AA, 2=CarLife, 3=Mirror, 4=HiCar, 5=ICCOA — resets to 0 on disconnect"
@@ -19940,7 +19940,7 @@
    "local_id": 245,
    "statement": "The command injection example sets wifiName to a shell payload that executes riddleBoxCfg immediately as root.",
    "topic": "usb-boxsettings-sec",
-   "source_lines": "802",
+   "source_lines": "804",
    "confidence": "high",
    "signals": null,
    "quote": "This executes `riddleBoxCfg` immediately as root"
@@ -19951,7 +19951,7 @@
    "local_id": 246,
    "statement": "Android Auto does not populate MDOSVersion and MDLinkVersion contains the Android Auto protocol version.",
    "topic": "usb-boxsettings-aa",
-   "source_lines": "844",
+   "source_lines": "846",
    "confidence": "high",
    "signals": null,
    "quote": "Android Auto does not populate MDOSVersion"
@@ -19962,7 +19962,7 @@
    "local_id": 247,
    "statement": "SendFile (0x99) payload has pathLen at 0x00, null-terminated filePath, contentLen, then content bytes.",
    "topic": "usb-sendfile",
-   "source_lines": "851",
+   "source_lines": "853",
    "confidence": "high",
    "signals": null,
    "quote": "0x00    4     pathLen      Path string length"
@@ -19973,7 +19973,7 @@
    "local_id": 248,
    "statement": "SendFile temporary staging location is /tmp/uploadFileTmp with logging strings SEND FILE and UPLOAD FILE.",
    "topic": "usb-sendfile",
-   "source_lines": "862",
+   "source_lines": "864",
    "confidence": "high",
    "signals": null,
    "quote": "/tmp/uploadFileTmp            - Temporary staging location"
@@ -19984,7 +19984,7 @@
    "local_id": 249,
    "statement": "SendFile target /tmp/screen_dpi takes an integer and sets display DPI.",
    "topic": "usb-sendfile-target",
-   "source_lines": "869",
+   "source_lines": "871",
    "confidence": "high",
    "signals": null,
    "quote": "`/tmp/screen_dpi` | Integer (e.g., 240) | Sets display DPI"
@@ -19995,7 +19995,7 @@
    "local_id": 250,
    "statement": "SendFile target /tmp/night_mode takes 0 or 1 and triggers StartNightMode/StopNightMode.",
    "topic": "usb-sendfile-target",
-   "source_lines": "872",
+   "source_lines": "874",
    "confidence": "high",
    "signals": null,
    "quote": "Triggers `StartNightMode`/`StopNightMode`"
@@ -20006,7 +20006,7 @@
    "local_id": 251,
    "statement": "SendFile target /tmp/charge_mode takes 0 or 1 to set USB charging speed.",
    "topic": "usb-sendfile-target",
-   "source_lines": "874",
+   "source_lines": "876",
    "confidence": "high",
    "signals": null,
    "quote": "`/tmp/charge_mode` | 0 or 1 | USB charging speed"
@@ -20017,7 +20017,7 @@
    "local_id": 252,
    "statement": "SendFile target /etc/android_work_mode takes 0-5 as the phone link daemon mode selector.",
    "topic": "usb-sendfile-target",
-   "source_lines": "878",
+   "source_lines": "880",
    "confidence": "high",
    "signals": null,
    "quote": "Phone link daemon mode selector (0=Idle, 1=AA, 2=CarLife, 3=Mirror, 4=HiCar, 5=ICCOA)"
@@ -20028,7 +20028,7 @@
    "local_id": 253,
    "statement": "SendFile target /etc/RiddleBoxData/HU_SCREEN_INFO is a 24B uint32-LE struct of width, height, 0, 0, fps, dpi.",
    "topic": "usb-sendfile-target",
-   "source_lines": "879",
+   "source_lines": "881",
    "confidence": "high",
    "signals": null,
    "quote": "24B struct (uint32-LE) | width, height, 0, 0, fps, dpi"
@@ -20039,7 +20039,7 @@
    "local_id": 254,
    "statement": "SendFile target /etc/RiddleBoxData/HU_VIEWAREA_INFO is a 24B uint32-LE struct of width, height, viewW, viewH, originX, originY.",
    "topic": "usb-sendfile-target",
-   "source_lines": "880",
+   "source_lines": "882",
    "confidence": "high",
    "signals": null,
    "quote": "width, height, viewW, viewH, originX, originY"
@@ -20050,7 +20050,7 @@
    "local_id": 255,
    "statement": "SendFile target /etc/RiddleBoxData/HU_SAFEAREA_INFO is a 20B uint32-LE struct of width, height, originX, originY, drawUIOutsideSafeArea and is the only path to set main-screen SafeArea.",
    "topic": "usb-sendfile-target",
-   "source_lines": "881",
+   "source_lines": "883",
    "confidence": "high",
    "signals": null,
    "quote": "**only path to set main-screen SafeArea**"
@@ -20061,7 +20061,7 @@
    "local_id": 256,
    "statement": "SendFile target /tmp/carlogo.png is PNG data copied to /etc/boa/images/.",
    "topic": "usb-sendfile-target",
-   "source_lines": "882",
+   "source_lines": "884",
    "confidence": "high",
    "signals": null,
    "quote": "Custom car logo (copied to `/etc/boa/images/`)"
@@ -20072,7 +20072,7 @@
    "local_id": 257,
    "statement": "SendFile target /tmp/hwfs.tar.gz is auto-extracted to /tmp via tar -xvf.",
    "topic": "usb-sendfile-target",
-   "source_lines": "883",
+   "source_lines": "885",
    "confidence": "high",
    "signals": null,
    "quote": "**Auto-extracted to /tmp** via `tar -xvf`"
@@ -20083,7 +20083,7 @@
    "local_id": 258,
    "statement": "SendFile files matching /tmp/*Update.img trigger the OTA update process.",
    "topic": "usb-sendfile-target",
-   "source_lines": "884",
+   "source_lines": "886",
    "confidence": "high",
    "signals": null,
    "quote": "Triggers OTA update process"
@@ -20094,7 +20094,7 @@
    "local_id": 259,
    "statement": "SendFile has no path whitelist; no strncmp(\"/tmp/\") or similar validation was found.",
    "topic": "usb-sendfile-path",
-   "source_lines": "890",
+   "source_lines": "892",
    "confidence": "high",
    "signals": null,
    "quote": "No `strncmp(\"/tmp/\")` or similar validation found"
@@ -20105,7 +20105,7 @@
    "local_id": 260,
    "statement": "SendFile has no path traversal filter; no ../ or sanitization logic was found.",
    "topic": "usb-sendfile-path",
-   "source_lines": "891",
+   "source_lines": "893",
    "confidence": "high",
    "signals": null,
    "quote": "No `../` or sanitization logic found"
@@ -20116,7 +20116,7 @@
    "local_id": 261,
    "statement": "/etc is writable; scripts cp/rm files to /etc/ which is not squashfs read-only.",
    "topic": "usb-sendfile-path",
-   "source_lines": "892",
+   "source_lines": "894",
    "confidence": "high",
    "signals": null,
    "quote": "Scripts cp/rm files to `/etc/` (not squashfs read-only)"
@@ -20127,7 +20127,7 @@
    "local_id": 262,
    "statement": "SendFile can write to any path, restricted only by filesystem permissions.",
    "topic": "usb-sendfile-path",
-   "source_lines": "893",
+   "source_lines": "895",
    "confidence": "high",
    "signals": null,
    "quote": "Filesystem permissions only restriction"
@@ -20138,7 +20138,7 @@
    "local_id": 263,
    "statement": "The adapter /tmp tmpfs space is about 50-80MB RAM-backed.",
    "topic": "usb-sendfile-limit",
-   "source_lines": "900",
+   "source_lines": "902",
    "confidence": "medium",
    "signals": null,
    "quote": "~50-80MB | `/tmp` is RAM-backed tmpfs"
@@ -20149,7 +20149,7 @@
    "local_id": 264,
    "statement": "The adapter flash space is about 16MB total compressed rootfs.",
    "topic": "usb-sendfile-limit",
-   "source_lines": "901",
+   "source_lines": "903",
    "confidence": "medium",
    "signals": null,
    "quote": "~16MB total | Compressed rootfs"
@@ -20160,7 +20160,7 @@
    "local_id": 265,
    "statement": "Archive auto-extraction runs mv, tar -xvf -C /tmp, rm -f, sync for files uploaded to /tmp/hwfs.tar.gz.",
    "topic": "usb-sendfile-archive",
-   "source_lines": "905",
+   "source_lines": "907",
    "confidence": "high",
    "signals": null,
    "quote": "mv %s %s;tar -xvf %s -C /tmp;rm -f %s;sync"
@@ -20171,7 +20171,7 @@
    "local_id": 266,
    "statement": "Charge mode is controlled via GPIO pins 6 and 7.",
    "topic": "usb-charge",
-   "source_lines": "918",
+   "source_lines": "920",
    "confidence": "high",
    "signals": null,
    "quote": "Controls USB charging speed via GPIO pins 6 and 7"
@@ -20182,7 +20182,7 @@
    "local_id": 267,
    "statement": "charge_mode 0 or missing sets GPIO6=1 GPIO7=1 for SLOW charge (default).",
    "topic": "usb-charge",
-   "source_lines": "922",
+   "source_lines": "924",
    "confidence": "high",
    "signals": null,
    "quote": "0 (or missing) | 1 | 1 | **SLOW** charge (default)"
@@ -20193,7 +20193,7 @@
    "local_id": 268,
    "statement": "charge_mode 1 sets GPIO6=1 GPIO7=0 for FAST charge.",
    "topic": "usb-charge",
-   "source_lines": "923",
+   "source_lines": "925",
    "confidence": "high",
    "signals": null,
    "quote": "1 | 1 | 0 | **FAST** charge"
@@ -20204,7 +20204,7 @@
    "local_id": 269,
    "statement": "OnlyCharge is a separate iPhone work mode indicating the phone is connected for charging only with no projection.",
    "topic": "usb-charge",
-   "source_lines": "929",
+   "source_lines": "931",
    "confidence": "high",
    "signals": null,
    "quote": "\"OnlyCharge\" is a separate iPhone work mode"
@@ -20215,7 +20215,7 @@
    "local_id": 270,
    "statement": "GPS data for CarPlay navigation is sent via the /tmp/gnss_info file in standard NMEA 0183 sentences.",
    "topic": "usb-gps",
-   "source_lines": "937",
+   "source_lines": "939",
    "confidence": "high",
    "signals": null,
    "quote": "Standard NMEA 0183 sentences"
@@ -20226,7 +20226,7 @@
    "local_id": 271,
    "statement": "NMEA $GPGGA provides position, altitude, and satellites.",
    "topic": "usb-gps-nmea",
-   "source_lines": "941",
+   "source_lines": "943",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPGGA` | Global Positioning System Fix | Position, altitude, satellites"
@@ -20237,7 +20237,7 @@
    "local_id": 272,
    "statement": "NMEA $GPRMC provides position, speed, course, and date.",
    "topic": "usb-gps-nmea",
-   "source_lines": "942",
+   "source_lines": "944",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPRMC` | Recommended Minimum | Position, speed, course, date"
@@ -20248,7 +20248,7 @@
    "local_id": 273,
    "statement": "NMEA $GPGSV provides satellites-in-view information.",
    "topic": "usb-gps-nmea",
-   "source_lines": "943",
+   "source_lines": "945",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPGSV` | Satellites in View | Satellite information"
@@ -20259,7 +20259,7 @@
    "local_id": 274,
    "statement": "The GPS flow is host writes NMEA, iAP2LocationEngine parses, then forwarded to the iPhone via CarPlay.",
    "topic": "usb-gps-flow",
-   "source_lines": "957",
+   "source_lines": "959",
    "confidence": "high",
    "signals": null,
    "quote": "Host writes NMEA → `iAP2LocationEngine` parses → forwarded to iPhone"
@@ -20270,7 +20270,7 @@
    "local_id": 275,
    "statement": "GPS config requires HudGPSSwitch=1 and GNSSCapability=1 in riddle.conf.",
    "topic": "usb-gps-config",
-   "source_lines": "960",
+   "source_lines": "962",
    "confidence": "high",
    "signals": null,
    "quote": "`HudGPSSwitch=1` in riddle.conf"
@@ -20281,7 +20281,7 @@
    "local_id": 276,
    "statement": "Firmware logs GNSSSentencesSize too long if GPS data exceeds the buffer.",
    "topic": "usb-gps",
-   "source_lines": "963",
+   "source_lines": "965",
    "confidence": "high",
    "signals": null,
    "quote": "`GNSSSentencesSize:%zu, GNSSSentences too long`"
@@ -20292,7 +20292,7 @@
    "local_id": 277,
    "statement": "GnssData (0x29) is Host to Adapter, forwarding GPS location data from head unit to the connected phone.",
    "topic": "usb-gnss29",
-   "source_lines": "970",
+   "source_lines": "972",
    "confidence": "high",
    "signals": null,
    "quote": "Forward GPS location data from head unit to connected phone"
@@ -20303,7 +20303,7 @@
    "local_id": 278,
    "statement": "CarPlay receives GPS via iAP2 LocationInformation (NMEA to CiAP2LocationEngine to iPhone).",
    "topic": "usb-gnss29",
-   "source_lines": "972",
+   "source_lines": "974",
    "confidence": "high",
    "signals": null,
    "quote": "**CarPlay** receives GPS via iAP2 LocationInformation"
@@ -20314,7 +20314,7 @@
    "local_id": 279,
    "statement": "Android Auto receives GPS via protobuf gps_location messages but the adapter's timestamp derivation is broken.",
    "topic": "usb-gnss29",
-   "source_lines": "972",
+   "source_lines": "974",
    "confidence": "high",
    "signals": null,
    "quote": "the adapter's timestamp derivation is broken"
@@ -20325,7 +20325,7 @@
    "local_id": 280,
    "statement": "The CPC200-CCPA has a fully implemented GPS forwarding pipeline.",
    "topic": "usb-gnss29",
-   "source_lines": "974",
+   "source_lines": "976",
    "confidence": "high",
    "signals": null,
    "quote": "**fully implemented GPS forwarding pipeline**"
@@ -20336,7 +20336,7 @@
    "local_id": 281,
    "statement": "GnssData (0x29) payload has nmeaLength as LE uint32 at 0x00 then nmeaData NMEA 0183 sentences ASCII CRLF-terminated.",
    "topic": "usb-gnss29-struct",
-   "source_lines": "981",
+   "source_lines": "983",
    "confidence": "high",
    "signals": null,
    "quote": "0x00    4     nmeaLength    Length of NMEA data in bytes (LE uint32)"
@@ -20347,7 +20347,7 @@
    "local_id": 282,
    "statement": "A GnssData header example has payload length 158 bytes, type 0x29, type check D6 FF FF FF.",
    "topic": "usb-gnss29-struct",
-   "source_lines": "988",
+   "source_lines": "990",
    "confidence": "high",
    "signals": null,
    "quote": "9E 00 00 00    Payload length (158 bytes, LE uint32)"
@@ -20358,7 +20358,7 @@
    "local_id": 283,
    "statement": "GnssData $GPGGA maps to iAP2 globalPositionSystemFixData and is required.",
    "topic": "usb-gnss29-nmea",
-   "source_lines": "997",
+   "source_lines": "999",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPGGA` | `globalPositionSystemFixData`"
@@ -20369,7 +20369,7 @@
    "local_id": 284,
    "statement": "GnssData $GPRMC maps to iAP2 recommendedMinimumSpecificGPSTransitData and is required.",
    "topic": "usb-gnss29-nmea",
-   "source_lines": "998",
+   "source_lines": "1000",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPRMC` | `recommendedMinimumSpecificGPSTransitData`"
@@ -20380,7 +20380,7 @@
    "local_id": 285,
    "statement": "GnssData $GPGSV maps to iAP2 gpsSatellitesInView and is optional.",
    "topic": "usb-gnss29-nmea",
-   "source_lines": "999",
+   "source_lines": "1001",
    "confidence": "high",
    "signals": null,
    "quote": "`$GPGSV` | `gpsSatellitesInView`"
@@ -20391,7 +20391,7 @@
    "local_id": 286,
    "statement": "GnssData $PASCD is proprietary vehicle-specific data and optional.",
    "topic": "usb-gnss29-nmea",
-   "source_lines": "1000",
+   "source_lines": "1002",
    "confidence": "high",
    "signals": null,
    "quote": "`$PASCD` | (proprietary) | Vehicle-specific data | Optional"
@@ -20402,7 +20402,7 @@
    "local_id": 287,
    "statement": "The type 0x29 handler at 0x1f5ce reads NMEA from message offset +0x10 skipping the 4-byte length prefix.",
    "topic": "usb-gnss29-proc",
-   "source_lines": "1004",
+   "source_lines": "1006",
    "confidence": "high",
    "signals": null,
    "quote": "The type 0x29 handler at `0x1f5ce`"
@@ -20413,7 +20413,7 @@
    "local_id": 288,
    "statement": "If strstr finds $GPGGA, the handler writes to /tmp/RiddleBoxData/HU_GPS_DATA via fopen wb.",
    "topic": "usb-gnss29-proc",
-   "source_lines": "1006",
+   "source_lines": "1008",
    "confidence": "high",
    "signals": null,
    "quote": "writes to `/tmp/RiddleBoxData/HU_GPS_DATA` via `fopen(\"wb\")`"
@@ -20424,7 +20424,7 @@
    "local_id": 289,
    "statement": "Regardless of strstr result the handler forwards to the phone as internal type 0x22 via fcn.00017328 link dispatch.",
    "topic": "usb-gnss29-proc",
-   "source_lines": "1007",
+   "source_lines": "1009",
    "confidence": "high",
    "signals": null,
    "quote": "forwards to phone as internal type `0x22` via `fcn.00017328`"
@@ -20435,7 +20435,7 @@
    "local_id": 290,
    "statement": "The GnssData size limit is 0x400 (1KB) buffer for NMEA.",
    "topic": "usb-gnss29-proc",
-   "source_lines": "1008",
+   "source_lines": "1010",
    "confidence": "high",
    "signals": null,
    "quote": "if NMEA exceeds 0x400 (1KB) buffer"
@@ -20446,7 +20446,7 @@
    "local_id": 291,
    "statement": "The $GPGGA check only controls file writing; all NMEA data is forwarded to the phone unconditionally.",
    "topic": "usb-gnss29-proc",
-   "source_lines": "1010",
+   "source_lines": "1012",
    "confidence": "high",
    "signals": null,
    "quote": "All NMEA data is forwarded to the phone unconditionally"
@@ -20457,7 +20457,7 @@
    "local_id": 292,
    "statement": "Type 0x28 iAP2 PlistBinary does no file write and forwards in CarPlay only state 3.",
    "topic": "usb-gnss-2829",
-   "source_lines": "1038",
+   "source_lines": "1040",
    "confidence": "high",
    "signals": null,
    "quote": "0x28 | iAP2 PlistBinary | No | CarPlay only (state 3)"
@@ -20468,7 +20468,7 @@
    "local_id": 293,
    "statement": "Type 0x29 GNSS_DATA does a file write if $GPGGA and forwards in CarPlay state 3 and Android Auto states 5-7.",
    "topic": "usb-gnss-2829",
-   "source_lines": "1039",
+   "source_lines": "1041",
    "confidence": "high",
    "signals": null,
    "quote": "0x29 | GNSS_DATA | Yes (if $GPGGA) | CarPlay (3), Android Auto (5-7)"
@@ -20479,7 +20479,7 @@
    "local_id": 294,
    "statement": "/tmp/RiddleBoxData/HU_GPS_DATA is written by the ARMadb-driver type 0x29 handler as raw NMEA binary for debug/diagnostic dump.",
    "topic": "usb-gps-paths",
-   "source_lines": "1045",
+   "source_lines": "1047",
    "confidence": "high",
    "signals": null,
    "quote": "Debug/diagnostic dump of incoming GPS data"
@@ -20490,7 +20490,7 @@
    "local_id": 295,
    "statement": "/tmp/gnss_info is written by CiAP2LocationEngine fcn.0002c190 storing which NMEA sentence types are enabled.",
    "topic": "usb-gps-paths",
-   "source_lines": "1046",
+   "source_lines": "1048",
    "confidence": "high",
    "signals": null,
    "quote": "Stores which NMEA sentence types are enabled"
@@ -20501,7 +20501,7 @@
    "local_id": 296,
    "statement": "HudGPSSwitch required value is 1 with default 1 to enable GPS from head unit.",
    "topic": "usb-gnss-config",
-   "source_lines": "1052",
+   "source_lines": "1054",
    "confidence": "high",
    "signals": null,
    "quote": "`HudGPSSwitch` | 1 | 1 | Enable GPS from head unit"
@@ -20512,7 +20512,7 @@
    "local_id": 297,
    "statement": "GNSSCapability required value is at least 1 but defaults to 0 and MUST be changed to register locationInformationComponent.",
    "topic": "usb-gnss-config",
-   "source_lines": "1053",
+   "source_lines": "1055",
    "confidence": "high",
    "signals": null,
    "quote": "`GNSSCapability` | ≥ 1 | **0** | Register `locationInformationComponent`"
@@ -20523,7 +20523,7 @@
    "local_id": 298,
    "statement": "GNSSCapability bit 0 value 1 enables $GPGGA Global Positioning System Fix Data.",
    "topic": "usb-gnss-bitmask",
-   "source_lines": "1059",
+   "source_lines": "1061",
    "confidence": "high",
    "signals": null,
    "quote": "0 | 1 | `$GPGGA` | Global Positioning System Fix Data"
@@ -20534,7 +20534,7 @@
    "local_id": 299,
    "statement": "GNSSCapability bit 1 value 2 enables $GPRMC Recommended Minimum Specific GPS Transit Data.",
    "topic": "usb-gnss-bitmask",
-   "source_lines": "1060",
+   "source_lines": "1062",
    "confidence": "high",
    "signals": null,
    "quote": "1 | 2 | `$GPRMC`"
@@ -20545,7 +20545,7 @@
    "local_id": 300,
    "statement": "GNSSCapability bit 3 value 8 enables $PASCD proprietary dead-reckoning/compass.",
    "topic": "usb-gnss-bitmask",
-   "source_lines": "1061",
+   "source_lines": "1063",
    "confidence": "high",
    "signals": null,
    "quote": "3 | 8 | `$PASCD` | Proprietary (dead-reckoning/compass)"
@@ -20556,7 +20556,7 @@
    "local_id": 301,
    "statement": "GNSSCapability=1 enables GPGGA only, =3 enables GPGGA+GPRMC, =11 enables all three.",
    "topic": "usb-gnss-bitmask",
-   "source_lines": "1063",
+   "source_lines": "1065",
    "confidence": "high",
    "signals": null,
    "quote": "`GNSSCapability=11` enables all three"
@@ -20567,7 +20567,7 @@
    "local_id": 302,
    "statement": "DashboardInfo does not gate location; bit 0 controls vehicleInformation, bit 1 vehicleStatus, bit 2 routeGuidanceDisplay.",
    "topic": "usb-dashboardinfo",
-   "source_lines": "1065",
+   "source_lines": "1067",
    "confidence": "high",
    "signals": null,
    "quote": "DashboardInfo does NOT gate location"
@@ -20578,7 +20578,7 @@
    "local_id": 303,
    "statement": "Location/GPS is gated only by GNSSCapability greater than 0.",
    "topic": "usb-gnss",
-   "source_lines": "1070",
+   "source_lines": "1072",
    "confidence": "high",
    "signals": null,
    "quote": "Location/GPS is gated **only** by `GNSSCapability > 0`"
@@ -20589,7 +20589,7 @@
    "local_id": 304,
    "statement": "When GNSSCapability=0 the GPS pipeline is blocked at CiAP2IdentifyEngine.virtual_8 at 0x240e4 and fcn.00015ee4 at 0x15fa4.",
    "topic": "usb-gnss-block",
-   "source_lines": "1072",
+   "source_lines": "1074",
    "confidence": "high",
    "signals": null,
    "quote": "the GPS pipeline is blocked at **two** points"
@@ -20600,7 +20600,7 @@
    "local_id": 305,
    "statement": "With GNSSCapability=0 the iPhone never learns the adapter can provide location and never sends StartLocationInformation.",
    "topic": "usb-gnss-block",
-   "source_lines": "1076",
+   "source_lines": "1078",
    "confidence": "high",
    "signals": null,
    "quote": "never sends `StartLocationInformation`"
@@ -20611,7 +20611,7 @@
    "local_id": 306,
    "statement": "The GNSSCapability fix is to ssh and run riddleBoxCfg -s GNSSCapability 3, remove AIEIPIEREngines.datastore, and reboot.",
    "topic": "usb-gnss-fix",
-   "source_lines": "1080",
+   "source_lines": "1082",
    "confidence": "high",
    "signals": null,
    "quote": "/usr/sbin/riddleBoxCfg -s GNSSCapability 3"
@@ -20622,7 +20622,7 @@
    "local_id": 307,
    "statement": "There are 7 iAP2 location data sub-types in AskStartItems, IDs 1-7.",
    "topic": "usb-gnss-subtypes",
-   "source_lines": "1087",
+   "source_lines": "1089",
    "confidence": "high",
    "signals": null,
    "quote": "iAP2 Location Data Types (7 sub-types in AskStartItems)"
@@ -20633,7 +20633,7 @@
    "local_id": 308,
    "statement": "iAP2 location sub-type 1 GloblePositionSystemFixData comes from NMEA $GPGGA.",
    "topic": "usb-gnss-subtype",
-   "source_lines": "1091",
+   "source_lines": "1093",
    "confidence": "high",
    "signals": null,
    "quote": "1 | +0x38 | GloblePositionSystemFixData | NMEA `$GPGGA`"
@@ -20644,7 +20644,7 @@
    "local_id": 309,
    "statement": "iAP2 location sub-types 4-7 (VehicleSpeedData, VehicleGyroData, VehicleAccelerometerData, VehicleHeadingData) come from CAN/sensor.",
    "topic": "usb-gnss-subtype",
-   "source_lines": "1094",
+   "source_lines": "1096",
    "confidence": "high",
    "signals": null,
    "quote": "4 | +0x98 | VehicleSpeedData | CAN/sensor"
@@ -20655,7 +20655,7 @@
    "local_id": 310,
    "statement": "The iAP2 location string names contain firmware typos Globle, Transist, Sataellites.",
    "topic": "usb-gnss-subtype",
-   "source_lines": "1099",
+   "source_lines": "1101",
    "confidence": "high",
    "signals": null,
    "quote": "firmware typos (\"Globle\", \"Transist\", \"Sataellites\")"
@@ -20666,7 +20666,7 @@
    "local_id": 311,
    "statement": "Command 18 StartGNSSReport is H to A to start GPS forwarding to the phone.",
    "topic": "usb-gnss-cmd",
-   "source_lines": "1105",
+   "source_lines": "1107",
    "confidence": "high",
    "signals": null,
    "quote": "18 | StartGNSSReport | H→A | Tell adapter to start GPS forwarding to phone"
@@ -20677,7 +20677,7 @@
    "local_id": 312,
    "statement": "Command 19 StopGNSSReport is H to A to stop GPS forwarding.",
    "topic": "usb-gnss-cmd",
-   "source_lines": "1106",
+   "source_lines": "1108",
    "confidence": "high",
    "signals": null,
    "quote": "19 | StopGNSSReport | H→A | Tell adapter to stop GPS forwarding"
@@ -20688,7 +20688,7 @@
    "local_id": 313,
    "statement": "ARMiPhoneIAP2 CiAP2LocationEngine handles NMEA to iAP2 conversion and iAP2 identification GPS registration.",
    "topic": "usb-gnss-binaries",
-   "source_lines": "1115",
+   "source_lines": "1117",
    "confidence": "high",
    "signals": null,
    "quote": "`CiAP2LocationEngine` — NMEA→iAP2 conversion"
@@ -20699,7 +20699,7 @@
    "local_id": 314,
    "statement": "The GPS pipeline was live-tested Feb 2026 with CarLink Native on GM AAOS emulator, CPC200-CCPA firmware 2025.10.15.1127, and iPhone Air iOS 18.",
    "topic": "usb-gnss-verify",
-   "source_lines": "1125",
+   "source_lines": "1127",
    "confidence": "high",
    "signals": null,
    "quote": "The complete GPS pipeline was verified"
@@ -20710,7 +20710,7 @@
    "local_id": 315,
    "statement": "The adapter sends LocationInformation 0xFFFB at about 1Hz with msgLen 148.",
    "topic": "usb-gnss-verify",
-   "source_lines": "1140",
+   "source_lines": "1142",
    "confidence": "high",
    "signals": null,
    "quote": "Send_changes:LocationInformation(0xFFFB), msgLen: 148"
@@ -20721,7 +20721,7 @@
    "local_id": 316,
    "statement": "The iPhone uses a best-accuracy-wins fusion model and does not simply switch to vehicle GPS.",
    "topic": "usb-gps-fusion",
-   "source_lines": "1155",
+   "source_lines": "1157",
    "confidence": "high",
    "signals": null,
    "quote": "**best-accuracy-wins fusion model**"
@@ -20732,7 +20732,7 @@
    "local_id": 317,
    "statement": "The iPhone recognizes the accessory as make Magic Tec., model Magic-Car-Link-1.00.",
    "topic": "usb-gps-fusion",
-   "source_lines": "1157",
+   "source_lines": "1159",
    "confidence": "high",
    "signals": null,
    "quote": "make=\"Magic Tec.\", model=\"Magic-Car-Link-1.00\""
@@ -20743,7 +20743,7 @@
    "local_id": 318,
    "statement": "Vehicle GPS is more likely to win when the phone is in a pocket/bag, on wireless CarPlay, or when phone GPS is unavailable.",
    "topic": "usb-gps-fusion",
-   "source_lines": "1160",
+   "source_lines": "1162",
    "confidence": "medium",
    "signals": null,
    "quote": "Vehicle GPS is more likely to win when"
@@ -20754,7 +20754,7 @@
    "local_id": 319,
    "statement": "On Android Auto the adapter converts NMEA to protobuf gps_location with timestamp 0 because the adapter clock is stuck at 2020-01-02.",
    "topic": "usb-aa-gps",
-   "source_lines": "1167",
+   "source_lines": "1169",
    "confidence": "high",
    "signals": null,
    "quote": "adapter clock wrong (stuck 2020-01-02), cannot derive epoch"
@@ -20765,7 +20765,7 @@
    "local_id": 320,
    "statement": "Android Auto clients may reject zero-timestamp fixes.",
    "topic": "usb-aa-gps",
-   "source_lines": "1173",
+   "source_lines": "1175",
    "confidence": "medium",
    "signals": null,
    "quote": "Android Auto clients may reject zero-timestamp fixes"
@@ -20776,7 +20776,7 @@
    "local_id": 321,
    "statement": "Touch (0x05) Format A action values are 0=Down, 1=Move, 2=Up, 3=Menu, 4=Home, 5=Back with normalized float x/y 0.0-1.0.",
    "topic": "usb-touch-a",
-   "source_lines": "1183",
+   "source_lines": "1185",
    "confidence": "high",
    "signals": null,
    "quote": "0=Down, 1=Move, 2=Up, 3=Menu, 4=Home, 5=Back"
@@ -20787,7 +20787,7 @@
    "local_id": 322,
    "statement": "Touch (0x05) Format B action values are 14=Down, 15=Move, 16=Up with raw pixel x/y little-endian int.",
    "topic": "usb-touch-b",
-   "source_lines": "1193",
+   "source_lines": "1195",
    "confidence": "high",
    "signals": null,
    "quote": "14=Down, 15=Move, 16=Up (0x0e, 0x0f, 0x10)"
@@ -20798,7 +20798,7 @@
    "local_id": 323,
    "statement": "Touch Format B action 14 (0x0e) is Touch Down.",
    "topic": "usb-touch-b",
-   "source_lines": "1217",
+   "source_lines": "1219",
    "confidence": "high",
    "signals": null,
    "quote": "14 | 0x0e | Touch Down"
@@ -20809,7 +20809,7 @@
    "local_id": 324,
    "statement": "Touch Format B action 15 (0x0f) is Touch Move.",
    "topic": "usb-touch-b",
-   "source_lines": "1218",
+   "source_lines": "1220",
    "confidence": "high",
    "signals": null,
    "quote": "15 | 0x0f | Touch Move"
@@ -20820,7 +20820,7 @@
    "local_id": 325,
    "statement": "Touch Format B action 16 (0x10) is Touch Up.",
    "topic": "usb-touch-b",
-   "source_lines": "1219",
+   "source_lines": "1221",
    "confidence": "high",
    "signals": null,
    "quote": "16 | 0x10 | Touch Up"
@@ -20831,7 +20831,7 @@
    "local_id": 326,
    "statement": "In Format B the X/Y coordinates are raw pixel values relative to a high-resolution coordinate space, not normalized floats.",
    "topic": "usb-touch-b",
-   "source_lines": "1221",
+   "source_lines": "1223",
    "confidence": "medium",
    "signals": null,
    "quote": "raw pixel values relative to a high-resolution coordinate space"
@@ -20842,7 +20842,7 @@
    "local_id": 327,
    "statement": "HeartBeat (0xAA) message format is header-only with length 0, type 170, type check 0xFFFFFF55.",
    "topic": "usb-heartbeat",
-   "source_lines": "1228",
+   "source_lines": "1230",
    "confidence": "high",
    "signals": null,
    "quote": "0x000000AA     |   0xFFFFFF55"
@@ -20853,7 +20853,7 @@
    "local_id": 328,
    "statement": "HeartBeat purpose is USB keepalive plus firmware boot stabilization signal.",
    "topic": "usb-heartbeat",
-   "source_lines": "1233",
+   "source_lines": "1235",
    "confidence": "high",
    "signals": null,
    "quote": "USB keepalive + firmware boot stabilization signal"
@@ -20864,7 +20864,7 @@
    "local_id": 329,
    "statement": "HeartBeat config key is SendHeartBeat in /etc/riddle.conf default 1 with D-Bus signal HUDComand_A_HeartBeat.",
    "topic": "usb-heartbeat",
-   "source_lines": "1236",
+   "source_lines": "1238",
    "confidence": "high",
    "signals": null,
    "quote": "Config key: `SendHeartBeat` in `/etc/riddle.conf`"
@@ -20875,7 +20875,7 @@
    "local_id": 330,
    "statement": "HeartBeat must start before initialization messages on cold start and be sent every ~2 seconds.",
    "topic": "usb-heartbeat",
-   "source_lines": "1247",
+   "source_lines": "1249",
    "confidence": "high",
    "signals": null,
    "quote": "Must start **BEFORE** initialization messages on cold start"
@@ -20886,7 +20886,7 @@
    "local_id": 331,
    "statement": "The HeartBeat timeout binary constant is 15000ms (0x3a98 at 0x21112) but practical testing shows disconnect at ~10-11.7 seconds, so design for ~10 seconds.",
    "topic": "usb-heartbeat",
-   "source_lines": "1249",
+   "source_lines": "1251",
    "confidence": "high",
    "signals": null,
    "quote": "Binary constant shows 15,000ms (0x3a98 at address 0x21112)"
@@ -20897,7 +20897,7 @@
    "local_id": 332,
    "statement": "Phase 0 means Session Terminated / Idle, VERIFIED, used for session end detection.",
    "topic": "usb-phase",
-   "source_lines": "1261",
+   "source_lines": "1263",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -20910,7 +20910,7 @@
    "local_id": 333,
    "statement": "Phase 4 means Waiting for WiFi Hotspot for wireless CarPlay/AA.",
    "topic": "usb-phase",
-   "source_lines": "1262",
+   "source_lines": "1264",
    "confidence": "medium",
    "signals": null,
    "quote": "4 | Waiting for WiFi Hotspot"
@@ -20921,7 +20921,7 @@
    "local_id": 334,
    "statement": "Phase 5 means Waiting for AirPlay session establishment.",
    "topic": "usb-phase",
-   "source_lines": "1263",
+   "source_lines": "1265",
    "confidence": "medium",
    "signals": null,
    "quote": "5 | Waiting for AirPlay"
@@ -20932,7 +20932,7 @@
    "local_id": 335,
    "statement": "Phase 7 means Connecting / Negotiating, VERIFIED, at 4.498s payload 07 00 00 00.",
    "topic": "usb-phase",
-   "source_lines": "1264",
+   "source_lines": "1266",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -20945,7 +20945,7 @@
    "local_id": 336,
    "statement": "Phase 8 means Streaming Ready / Active, VERIFIED, at 7.504s payload 08 00 00 00.",
    "topic": "usb-phase",
-   "source_lines": "1265",
+   "source_lines": "1267",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -20958,7 +20958,7 @@
    "local_id": 337,
    "statement": "Phase 11 means CarLife Download prompt (Baidu CarLife protocol).",
    "topic": "usb-phase",
-   "source_lines": "1266",
+   "source_lines": "1268",
    "confidence": "medium",
    "signals": null,
    "quote": "11 | CarLife Download"
@@ -20969,7 +20969,7 @@
    "local_id": 338,
    "statement": "Phase 13 means Session Negotiation Failed, VERIFIED, typically a viewArea/safeArea constraint violation triggering a Phase 7 to 13 reconnect loop.",
    "topic": "usb-phase",
-   "source_lines": "1267",
+   "source_lines": "1269",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -20982,7 +20982,7 @@
    "local_id": 339,
    "statement": "Phase 1001 means Hardware Error Bluetooth (RTL HCI init or hfpd crash).",
    "topic": "usb-phase",
-   "source_lines": "1268",
+   "source_lines": "1270",
    "confidence": "medium",
    "signals": null,
    "quote": "1001 | Hardware Error: Bluetooth"
@@ -20993,7 +20993,7 @@
    "local_id": 340,
    "statement": "Phase 1002 means Hardware Error WiFi (RTL8822CS driver load or hostapd crash).",
    "topic": "usb-phase",
-   "source_lines": "1269",
+   "source_lines": "1271",
    "confidence": "medium",
    "signals": null,
    "quote": "1002 | Hardware Error: WiFi"
@@ -21004,7 +21004,7 @@
    "local_id": 341,
    "statement": "Phases 1003 and 1004 mean unclassified Hardware Error Unknown.",
    "topic": "usb-phase",
-   "source_lines": "1270",
+   "source_lines": "1272",
    "confidence": "medium",
    "signals": null,
    "quote": "1003 | Hardware Error: Unknown"
@@ -21015,7 +21015,7 @@
    "local_id": 342,
    "statement": "The host sees only phases 0, 7, and 8 over USB while internal phases drive the adapter state machine.",
    "topic": "usb-phase-internal",
-   "source_lines": "1275",
+   "source_lines": "1277",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -21028,7 +21028,7 @@
    "local_id": 343,
    "statement": "Internal Phase 0 DISCONNECTED kills AppleCarPlay/ARMiPhoneIAP2 and cleans up.",
    "topic": "usb-phase-internal",
-   "source_lines": "1279",
+   "source_lines": "1281",
    "confidence": "high",
    "signals": null,
    "quote": "0 | DISCONNECTED | Kill AppleCarPlay/ARMiPhoneIAP2, cleanup"
@@ -21039,7 +21039,7 @@
    "local_id": 344,
    "statement": "Internal Phase 1 CONNECTED sets state=3 and prepares the session.",
    "topic": "usb-phase-internal",
-   "source_lines": "1280",
+   "source_lines": "1282",
    "confidence": "high",
    "signals": null,
    "quote": "1 | CONNECTED | Set state=3, prepare session"
@@ -21050,7 +21050,7 @@
    "local_id": 345,
    "statement": "Internal Phase 2 SCREEN_INFO sends Phase(type=3, value=7) to host.",
    "topic": "usb-phase-internal",
-   "source_lines": "1281",
+   "source_lines": "1283",
    "confidence": "high",
    "signals": null,
    "quote": "2 | SCREEN_INFO | Send Phase(type=3, value=7) to host"
@@ -21061,7 +21061,7 @@
    "local_id": 346,
    "statement": "Internal Phase 3 STREAMING sends Phase(type=3, value=8) to host and starts streaming.",
    "topic": "usb-phase-internal",
-   "source_lines": "1282",
+   "source_lines": "1284",
    "confidence": "high",
    "signals": null,
    "quote": "3 | STREAMING | Send Phase(type=3, value=8) to host, start streaming"
@@ -21072,7 +21072,7 @@
    "local_id": 347,
    "statement": "Internal Phase 100 WIRELESS_PROBE does HNP check for wired and screen info relay.",
    "topic": "usb-phase-internal",
-   "source_lines": "1283",
+   "source_lines": "1285",
    "confidence": "high",
    "signals": null,
    "quote": "100 | WIRELESS_PROBE"
@@ -21083,7 +21083,7 @@
    "local_id": 348,
    "statement": "Internal Phase 101 USB_HNP_OK logs PHASE_USBHNPOK! and launches the AppleCarPlay binary.",
    "topic": "usb-phase-internal",
-   "source_lines": "1284",
+   "source_lines": "1286",
    "confidence": "high",
    "signals": null,
    "quote": "101 | USB_HNP_OK | Log `\"PHASE_USBHNPOK!\"`"
@@ -21094,7 +21094,7 @@
    "local_id": 349,
    "statement": "Internal Phase 102 KILL kills AppleCarPlay and resets the session.",
    "topic": "usb-phase-internal",
-   "source_lines": "1285",
+   "source_lines": "1287",
    "confidence": "high",
    "signals": null,
    "quote": "102 | KILL | Kill AppleCarPlay, reset session"
@@ -21105,7 +21105,7 @@
    "local_id": 350,
    "statement": "Internal Phase 103 UI_CALLBACK is the UI callback handler.",
    "topic": "usb-phase-internal",
-   "source_lines": "1286",
+   "source_lines": "1288",
    "confidence": "high",
    "signals": null,
    "quote": "103 | UI_CALLBACK | UI callback handler"
@@ -21116,7 +21116,7 @@
    "local_id": 351,
    "statement": "Internal Phase 104 RESET_WIFI logs PHASE_ResetWiFi and restarts WiFi.",
    "topic": "usb-phase-internal",
-   "source_lines": "1287",
+   "source_lines": "1289",
    "confidence": "high",
    "signals": null,
    "quote": "104 | RESET_WIFI | Log `\"PHASE_ResetWiFi!!!!\"`"
@@ -21127,7 +21127,7 @@
    "local_id": 352,
    "statement": "Internal Phase 105 PHONE_CALL_START does phone call audio routing setup.",
    "topic": "usb-phase-internal",
-   "source_lines": "1288",
+   "source_lines": "1290",
    "confidence": "high",
    "signals": null,
    "quote": "105 | PHONE_CALL_START | Phone call audio routing setup"
@@ -21138,7 +21138,7 @@
    "local_id": 353,
    "statement": "Internal Phase 106 PHONE_CALL_END ends phone call audio routing.",
    "topic": "usb-phase-internal",
-   "source_lines": "1289",
+   "source_lines": "1291",
    "confidence": "high",
    "signals": null,
    "quote": "106 | PHONE_CALL_END | End phone call audio routing"
@@ -21149,7 +21149,7 @@
    "local_id": 354,
    "statement": "Internal Phase 200 AUTO_CONNECT_TRIGGER triggers the auto-connect sequence.",
    "topic": "usb-phase-internal",
-   "source_lines": "1290",
+   "source_lines": "1292",
    "confidence": "high",
    "signals": null,
    "quote": "200 | AUTO_CONNECT_TRIGGER | Triggers auto-connect sequence"
@@ -21160,7 +21160,7 @@
    "local_id": 355,
    "statement": "For session termination use Unplugged (0x04) or Phase 0, and do not rely on Command 1010.",
    "topic": "usb-phase-internal",
-   "source_lines": "1295",
+   "source_lines": "1297",
    "confidence": "high",
    "signals": null,
    "quote": "Do NOT rely on Command 1010 (DeviceWifiNotConnected) for session end"
@@ -21171,7 +21171,7 @@
    "local_id": 356,
    "statement": "In the verified init sequence, at 0.132s the host sends SendFile setting /tmp/screen_dpi=240.",
    "topic": "usb-init-seq",
-   "source_lines": "1306",
+   "source_lines": "1308",
    "confidence": "high",
    "signals": null,
    "quote": "SendFile (0x99)       /tmp/screen_dpi = 240"
@@ -21182,7 +21182,7 @@
    "local_id": 357,
    "statement": "At 0.253s the host sends Open at 2400x960@60fps format=5.",
    "topic": "usb-init-seq",
-   "source_lines": "1307",
+   "source_lines": "1309",
    "confidence": "high",
    "signals": null,
    "quote": "Open (0x01)           2400x960 @ 60fps, format=5"
@@ -21193,7 +21193,7 @@
    "local_id": 358,
    "statement": "At 4.180s the adapter sends Plugged with phoneType=3 and 0x04=1.",
    "topic": "usb-init-seq",
-   "source_lines": "1323",
+   "source_lines": "1325",
    "confidence": "high",
    "signals": null,
    "quote": "Plugged (0x02)        phoneType=3, 0x04=1"
@@ -21204,7 +21204,7 @@
    "local_id": 359,
    "statement": "At 4.498s the adapter sends Phase 7 (connecting) and at 7.504s Phase 8 (streaming ready).",
    "topic": "usb-init-seq",
-   "source_lines": "1326",
+   "source_lines": "1328",
    "confidence": "high",
    "signals": null,
    "quote": "Phase (0x03)          phase=8 (streaming ready)"
@@ -21215,7 +21215,7 @@
    "local_id": 360,
    "statement": "AutoKit v2025.03.19.1126 is the sole authority for its init sequence and has not been tested with carlink_native.",
    "topic": "usb-autokit-init",
-   "source_lines": "1333",
+   "source_lines": "1335",
    "confidence": "high",
    "signals": null,
    "quote": "AutoKit is the sole authority for this sequence"
@@ -21226,7 +21226,7 @@
    "local_id": 361,
    "statement": "AutoKit's init sends app identification (0xA0) and enables USB transport encryption (0xF0) before the Open message.",
    "topic": "usb-autokit-init",
-   "source_lines": "1335",
+   "source_lines": "1337",
    "confidence": "high",
    "signals": null,
    "quote": "sending app identification (0xA0) and enabling USB transport encryption (0xF0) before the Open message"
@@ -21237,7 +21237,7 @@
    "local_id": 362,
    "statement": "AutoKit init step 1 H0() sends 0xA0 minimal PID JSON for app identification first pass.",
    "topic": "usb-autokit-init",
-   "source_lines": "1340",
+   "source_lines": "1342",
    "confidence": "high",
    "signals": null,
    "quote": "1     H0()     0xA0   PID JSON (minimal)"
@@ -21248,7 +21248,7 @@
    "local_id": 363,
    "statement": "AutoKit init step 2 V0() sends 0xF0 with a 4-byte random seed greater than 0 to enable USB transport encryption, adapter ACKs with empty 0xF0.",
    "topic": "usb-autokit-init",
-   "source_lines": "1341",
+   "source_lines": "1343",
    "confidence": "high",
    "signals": null,
    "quote": "2     V0()     0xF0   4-byte random seed (> 0)"
@@ -21259,7 +21259,7 @@
    "local_id": 364,
    "statement": "AutoKit init step 5 X0() sends 0x01 Open and the adapter echoes Open plus info.",
    "topic": "usb-autokit-init",
-   "source_lines": "1345",
+   "source_lines": "1347",
    "confidence": "high",
    "signals": null,
    "quote": "5     X0()     0x01   Open (resolution, fps, format)"
@@ -21270,7 +21270,7 @@
    "local_id": 365,
    "statement": "AutoKit init step 7 i0() sends 0xA0 full AppInfo JSON, the second-pass app identification.",
    "topic": "usb-autokit-init",
-   "source_lines": "1348",
+   "source_lines": "1350",
    "confidence": "high",
    "signals": null,
    "quote": "7     i0()     0xA0   AppInfo JSON (full)"
@@ -21281,7 +21281,7 @@
    "local_id": 366,
    "statement": "All AutoKit messages after step 2 are encrypted with magic 0x55BB55BB except exempt types 0x06, 0x07, 0x2A, 0x2C.",
    "topic": "usb-autokit-init",
-   "source_lines": "1352",
+   "source_lines": "1354",
    "confidence": "high",
    "signals": null,
    "quote": "All messages after Step 2 (0xF0 ACK) are encrypted"
@@ -21292,7 +21292,7 @@
    "local_id": 367,
    "statement": "CMD_APP_INFO (0xA0) payload is a JSON with version, code, lang, uuid, size, model, platform, android, huid fields.",
    "topic": "usb-appinfo",
-   "source_lines": "1358",
+   "source_lines": "1360",
    "confidence": "high",
    "signals": null,
    "quote": "\"version\": \"2025.03.19.1126\""
@@ -21303,7 +21303,7 @@
    "local_id": 368,
    "statement": "The firmware has no dispatch handler for 0xA0; it falls through to Unkown_RiddleHUDComand_ logging and is effectively ignored by firmware 2025.10.15.",
    "topic": "usb-appinfo",
-   "source_lines": "1370",
+   "source_lines": "1372",
    "confidence": "high",
    "signals": null,
    "quote": "The firmware has no dispatch handler for 0xA0"
@@ -21314,7 +21314,7 @@
    "local_id": 369,
    "statement": "USB transport encryption (0xF0) exists primarily to gate Android Mirror (workMode=3) asset deployment.",
    "topic": "usb-crypt-purpose",
-   "source_lines": "1378",
+   "source_lines": "1380",
    "confidence": "high",
    "signals": null,
    "quote": "exists primarily to gate **Android Mirror** (workMode=3) asset deployment"
@@ -21325,7 +21325,7 @@
    "local_id": 370,
    "statement": "On firmware >= 2022 a single archive other_link.hwfs (1.1MB) is uploaded via SendFile to /tmp/other_link.hwfs and the .hwfs extension triggers hwfsTools decryption to tar.gz.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1380",
+   "source_lines": "1382",
    "confidence": "high",
    "signals": null,
    "quote": "Single archive `other_link.hwfs` (1.1MB) uploaded via SendFile"
@@ -21336,7 +21336,7 @@
    "local_id": 371,
    "statement": "mirrorcoper.apk is a 29KB minimal Android service app Phonemirror signed by lijian in 2016, installed on the phone via ADB.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1390",
+   "source_lines": "1392",
    "confidence": "high",
    "signals": null,
    "quote": "`mirrorcoper.apk` | 29KB | Minimal Android service app"
@@ -21347,7 +21347,7 @@
    "local_id": 372,
    "statement": "HWTouch.dex is a 12KB touch event injection DEX loaded on the phone via ADB.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1391",
+   "source_lines": "1393",
    "confidence": "high",
    "signals": null,
    "quote": "`HWTouch.dex` | 12KB | Touch event injection DEX"
@@ -21358,7 +21358,7 @@
    "local_id": 373,
    "statement": "mirror.bgd is a 268KB nested binary container with header 06 09 01 containing HWMirror.jar.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1392",
+   "source_lines": "1394",
    "confidence": "high",
    "signals": null,
    "quote": "`mirror.bgd` | 268KB | Nested binary container (header `06 09 01`)"
@@ -21369,7 +21369,7 @@
    "local_id": 374,
    "statement": "libby265n.so is a 317KB ARM H.265 video encoder and libby265n_x86.so is a 586KB x86 H.265 encoder.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1410",
+   "source_lines": "1412",
    "confidence": "high",
    "signals": null,
    "quote": "`libby265n.so` | 317KB | ARM H.265 video encoder"
@@ -21380,7 +21380,7 @@
    "local_id": 375,
    "statement": "The bundled adb asset is a 1.7KB RSA private key (PEM format) for ADB authentication, not the adb binary.",
    "topic": "usb-mirror-asset",
-   "source_lines": "1417",
+   "source_lines": "1419",
    "confidence": "high",
    "signals": null,
    "quote": "**RSA private key** (PEM format) for ADB authentication — NOT the adb binary"
@@ -21391,7 +21391,7 @@
    "local_id": 376,
    "statement": "libimobiledevice presence indicates the mirroring system also supports iPhone screen mirroring (iOSMirror, workMode=4).",
    "topic": "usb-mirror-asset",
-   "source_lines": "1429",
+   "source_lines": "1431",
    "confidence": "medium",
    "signals": null,
    "quote": "also supports iPhone screen mirroring (iOSMirror, workMode=4)"
@@ -21402,7 +21402,7 @@
    "local_id": 377,
    "statement": "Without encryption on firmware >= 2024.07.08 AutoKit logs box not support crypt, sets unauthorized flag, triggers error 123, and Android Mirror is blocked.",
    "topic": "usb-crypt-block",
-   "source_lines": "1448",
+   "source_lines": "1450",
    "confidence": "high",
    "signals": null,
    "quote": "AutoKit logs `\"box not support crypt!!!\"`, sets unauthorized flag, triggers error 123"
@@ -21413,7 +21413,7 @@
    "local_id": 378,
    "statement": "CarPlay and Android Auto are not affected by encryption gating as neither path involves asset upload.",
    "topic": "usb-crypt",
-   "source_lines": "1450",
+   "source_lines": "1452",
    "confidence": "high",
    "signals": null,
    "quote": "**CarPlay and Android Auto are NOT affected**"
@@ -21424,7 +21424,7 @@
    "local_id": 379,
    "statement": "The .hwfs encryption serves primarily as a compatibility gate ensuring only Carlinkit-branded host apps can activate Android Mirror.",
    "topic": "usb-crypt-sec",
-   "source_lines": "1452",
+   "source_lines": "1454",
    "confidence": "high",
    "signals": null,
    "quote": "The encryption serves primarily as a **compatibility gate**"
@@ -21435,7 +21435,7 @@
    "local_id": 380,
    "statement": "The adapter DOES convert AA navigation protobuf to NaviJSON and sends it as MediaData 0x2A subtype 200.",
    "topic": "usb-aa-nav",
-   "source_lines": "1462",
+   "source_lines": "1464",
    "confidence": "high",
    "signals": null,
    "quote": "The adapter DOES convert AA navigation protobuf to NaviJSON and sends it as `MediaData 0x2A subtype 200`"
@@ -21446,7 +21446,7 @@
    "local_id": 381,
    "statement": "AA uses NaviOrderType for maneuver type, not NaviManeuverType, causing all maneuvers to fall back to type 0 STRAIGHT.",
    "topic": "usb-aa-nav",
-   "source_lines": "1474",
+   "source_lines": "1476",
    "confidence": "high",
    "signals": null,
    "quote": "AA uses `NaviOrderType` for maneuver type, NOT `NaviManeuverType`"
@@ -21457,7 +21457,7 @@
    "local_id": 382,
    "statement": "ARMAndroidAuto uses the OpenAuto SDK (aasdk) navigation protobuf types.",
    "topic": "usb-aa-nav",
-   "source_lines": "1485",
+   "source_lines": "1487",
    "confidence": "high",
    "signals": null,
    "quote": "ARMAndroidAuto uses the OpenAuto SDK (`aasdk`)"
@@ -21468,7 +21468,7 @@
    "local_id": 383,
    "statement": "The AA NavigationTurnEvent protobuf has NextTurn enum, turn_side, turn_angle, turn_number, image PNG bytes.",
    "topic": "usb-aa-proto",
-   "source_lines": "1489",
+   "source_lines": "1491",
    "confidence": "high",
    "signals": null,
    "quote": "`NavigationTurnEvent` | NextTurn enum, turn_side, turn_angle, turn_number, image (PNG bytes)"
@@ -21479,7 +21479,7 @@
    "local_id": 384,
    "statement": "The AA NextTurn enum has 18 values and is not CPManeuverType.",
    "topic": "usb-aa-nextturn",
-   "source_lines": "1494",
+   "source_lines": "1496",
    "confidence": "high",
    "signals": null,
    "quote": "AA NextTurn Enum (18 values — NOT CPManeuverType)"
@@ -21490,7 +21490,7 @@
    "local_id": 385,
    "statement": "The 18 AA NextTurn values include DEPART, DESTINATION, FERRY_BOAT, ROUNDABOUT_ENTER, SHARP_TURN, U_TURN, UNKNOWN.",
    "topic": "usb-aa-nextturn",
-   "source_lines": "1497",
+   "source_lines": "1499",
    "confidence": "high",
    "signals": null,
    "quote": "DEPART, DESTINATION, FERRY_BOAT"
@@ -21501,7 +21501,7 @@
    "local_id": 386,
    "statement": "AA's turn_side field provides direction separately as LEFT/RIGHT/UNSPECIFIED.",
    "topic": "usb-aa-nextturn",
-   "source_lines": "1503",
+   "source_lines": "1505",
    "confidence": "high",
    "signals": null,
    "quote": "The `turn_side` field (LEFT/RIGHT/UNSPECIFIED) provides direction separately"
@@ -21512,7 +21512,7 @@
    "local_id": 387,
    "statement": "AA navigation started sends RequestNaviFocus(506) plus NaviStatus=1 via NaviJSON.",
    "topic": "usb-aa-host",
-   "source_lines": "1509",
+   "source_lines": "1511",
    "confidence": "high",
    "signals": null,
    "quote": "`RequestNaviFocus(506)` + `NaviStatus=1` via NaviJSON"
@@ -21523,7 +21523,7 @@
    "local_id": 388,
    "statement": "AA maneuver icons are sent as MediaData 0x2A sub-type 201 (1739-2542 byte PNGs) which carlink_native drops because MediaType.fromId(201) is UNKNOWN.",
    "topic": "usb-aa-host",
-   "source_lines": "1513",
+   "source_lines": "1515",
    "confidence": "high",
    "signals": null,
    "quote": "carlink_native drops them (`MediaType.fromId(201)` = UNKNOWN)"
@@ -21534,7 +21534,7 @@
    "local_id": 389,
    "statement": "In AA NaviJSON NaviOrderType corresponds to CarPlay NaviManeuverType with different field name and enum values.",
    "topic": "usb-aa-mapping",
-   "source_lines": "1519",
+   "source_lines": "1521",
    "confidence": "high",
    "signals": null,
    "quote": "**Different field name AND different enum values**"
@@ -21545,7 +21545,7 @@
    "local_id": 390,
    "statement": "NaviNextTurnTimeSeconds is an AA-specific time-to-turn field not present in CarPlay.",
    "topic": "usb-aa-mapping",
-   "source_lines": "1525",
+   "source_lines": "1527",
    "confidence": "high",
    "signals": null,
    "quote": "AA-specific time-to-turn field"
@@ -21556,7 +21556,7 @@
    "local_id": 391,
    "statement": "In AA NaviJSON NaviStatus is 1=active, 2=inactive.",
    "topic": "usb-aa-mapping",
-   "source_lines": "1526",
+   "source_lines": "1528",
    "confidence": "high",
    "signals": null,
    "quote": "Same field (1=active, 2=inactive)"
@@ -21567,7 +21567,7 @@
    "local_id": 392,
    "statement": "NaviManeuverType is missing in AA NaviJSON causing ManeuverMapper fallback to 0.",
    "topic": "usb-aa-mapping",
-   "source_lines": "1527",
+   "source_lines": "1529",
    "confidence": "high",
    "signals": null,
    "quote": "**Missing in AA NaviJSON — causes ManeuverMapper fallback to 0**"
@@ -21578,7 +21578,7 @@
    "local_id": 393,
    "statement": "carlink_native NavigationStateManager.kt reads NaviManeuverType, but AA sends NaviOrderType, so ManeuverMapper maps type 0 to TYPE_STRAIGHT producing a straight arrow regardless of actual turn.",
    "topic": "usb-wrong-arrow",
-   "source_lines": "1535",
+   "source_lines": "1537",
    "confidence": "high",
    "signals": null,
    "quote": "producing a straight arrow regardless of the actual turn direction"
@@ -21589,7 +21589,7 @@
    "local_id": 394,
    "statement": "The fix is for NavigationStateManager to fall back to NaviOrderType when NaviManeuverType is absent, with value 1 = DEPART observed.",
    "topic": "usb-wrong-arrow",
-   "source_lines": "1537",
+   "source_lines": "1539",
    "confidence": "medium",
    "signals": null,
    "quote": "value 1 = DEPART observed, other values TBD"
@@ -21600,7 +21600,7 @@
    "local_id": 395,
    "statement": "ARMAndroidAuto build path is /home/hcw/M6PackTools/HeweiPackTools/AndroidAuto_Wireless/openauto-v2/.",
    "topic": "usb-aa-binary",
-   "source_lines": "1541",
+   "source_lines": "1543",
    "confidence": "high",
    "signals": null,
    "quote": "`/home/hcw/M6PackTools/HeweiPackTools/AndroidAuto_Wireless/openauto-v2/`"
@@ -21611,7 +21611,7 @@
    "local_id": 396,
    "statement": "ARMAndroidAuto uses a custom LZMA packer (magic 0x55225522), statically linked with no section headers.",
    "topic": "usb-aa-binary",
-   "source_lines": "1543",
+   "source_lines": "1545",
    "confidence": "high",
    "signals": null,
    "quote": "Custom LZMA (magic `0x55225522`)"
@@ -21622,7 +21622,7 @@
    "local_id": 397,
    "statement": "ARMAndroidAuto packed size 489KB unpacks to a 1.4MB code segment (1,445,888 bytes at 0x10000-0x171000).",
    "topic": "usb-aa-binary",
-   "source_lines": "1544",
+   "source_lines": "1546",
    "confidence": "high",
    "signals": null,
    "quote": "489KB → **Unpacked code segment:** 1.4MB (1,445,888 bytes"
@@ -21633,7 +21633,7 @@
    "local_id": 398,
    "statement": "ARMAndroidAuto has 13 service channels including Video, 3 Audio, AVInput, Input, Sensor, Navigation, Bluetooth, Phone, Media, Notification, VendorExtension.",
    "topic": "usb-aa-binary",
-   "source_lines": "1546",
+   "source_lines": "1548",
    "confidence": "high",
    "signals": null,
    "quote": "**13 service channels:**"
@@ -21644,7 +21644,7 @@
    "local_id": 399,
    "statement": "Navigation video (Type 0x2C AltVideoFrame) is configured by sending naviScreenInfo in BoxSettings, the only confirmed BoxSettings requirement on wired sessions.",
    "topic": "usb-navi-video",
-   "source_lines": "1558",
+   "source_lines": "1560",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -21657,7 +21657,7 @@
    "local_id": 400,
    "statement": "For wireless CarPlay the host must additionally send the 508 kick to start the 0x2C nav-screen video stream.",
    "topic": "usb-navi-video",
-   "source_lines": "1558",
+   "source_lines": "1560",
    "confidence": "high",
    "signals": null,
    "quote": "the host must additionally send the 508 kick"
@@ -21668,7 +21668,7 @@
    "local_id": 401,
    "statement": "The firmware parses naviScreenInfo at 0x16e5c and branches to the HU_SCREEN_INFO path at 0x170d6, bypassing the AdvancedFeatures config check.",
    "topic": "usb-navi-video",
-   "source_lines": "1558",
+   "source_lines": "1560",
    "confidence": "high",
    "signals": null,
    "quote": "parses `naviScreenInfo` at `0x16e5c` and immediately branches to the `HU_SCREEN_INFO` path at `0x170d6`"
@@ -21679,7 +21679,7 @@
    "local_id": 402,
    "statement": "With naviScreenInfo Yes and AdvancedFeatures 0 nav video works via the HU_SCREEN_INFO path bypassing the check.",
    "topic": "usb-navi-activation",
-   "source_lines": "1586",
+   "source_lines": "1588",
    "confidence": "high",
    "signals": null,
    "quote": "**Yes** | 0 | **Works** — HU_SCREEN_INFO path (bypasses check)"
@@ -21690,7 +21690,7 @@
    "local_id": 403,
    "statement": "With naviScreenInfo No and AdvancedFeatures 0, nav video is rejected with Not support NaviScreenInfo, return.",
    "topic": "usb-navi-activation",
-   "source_lines": "1589",
+   "source_lines": "1591",
    "confidence": "high",
    "signals": null,
    "quote": "No | 0 | Rejected — \"Not support NaviScreenInfo, return\""
@@ -21701,7 +21701,7 @@
    "local_id": 404,
    "statement": "AdvancedFeatures=1 is NOT required for navigation video; sending naviScreenInfo is sufficient regardless of AdvancedFeatures.",
    "topic": "usb-navi-video",
-   "source_lines": "1593",
+   "source_lines": "1595",
    "confidence": "high",
    "signals": null,
    "quote": "**`AdvancedFeatures=1` is NOT required.**"
@@ -21712,7 +21712,7 @@
    "local_id": 405,
    "statement": "Command 508 RequestNaviScreenFocus starts the 0x2C nav-screen video stream, and when the host echoes 508 back the adapter emits HU_NEEDNAVI_STREAM D-Bus signal.",
    "topic": "usb-cmd508",
-   "source_lines": "1597",
+   "source_lines": "1599",
    "confidence": "high",
    "signals": [
     "verified"
@@ -21725,7 +21725,7 @@
    "local_id": 406,
    "statement": "Type 11 (0x0B) CMD_CARPLAY_MODE_CHANGE is A to H only, ACTIVE, forwarded from the iPhone CarPlay stack.",
    "topic": "usb-undoc-type",
-   "source_lines": "1625",
+   "source_lines": "1627",
    "confidence": "high",
    "signals": null,
    "quote": "11 | 0x0B | CMD_CARPLAY_MODE_CHANGE | A→H only"
@@ -21736,7 +21736,7 @@
    "local_id": 407,
    "statement": "Type 16 (0x10) CMD_CARPLAY_AirPlayModeChanges is A to H only, ACTIVE, forwarded from iPhone AirPlay.",
    "topic": "usb-undoc-type",
-   "source_lines": "1626",
+   "source_lines": "1628",
    "confidence": "high",
    "signals": null,
    "quote": "16 | 0x10 | CMD_CARPLAY_AirPlayModeChanges | A→H only"
@@ -21747,7 +21747,7 @@
    "local_id": 408,
    "statement": "Type 17 (0x11) AutoConnect_By_BluetoothAddress is BOTH, ACTIVE, an auto-reconnect trigger carrying a BT MAC string.",
    "topic": "usb-undoc-type",
-   "source_lines": "1627",
+   "source_lines": "1629",
    "confidence": "high",
    "signals": null,
    "quote": "17 | 0x11 | AutoConnect_By_BluetoothAddress | BOTH"
@@ -21758,7 +21758,7 @@
    "local_id": 409,
    "statement": "Type 19 (0x13) CMD_BLUETOOTH_ONLINE_LIST is BOTH, ACTIVE, BT device enumeration.",
    "topic": "usb-undoc-type",
-   "source_lines": "1628",
+   "source_lines": "1630",
    "confidence": "high",
    "signals": null,
    "quote": "19 | 0x13 | CMD_BLUETOOTH_ONLINE_LIST | BOTH"
@@ -21769,7 +21769,7 @@
    "local_id": 410,
    "statement": "Type 27 (0x1B) BTAudioDevice_Signal is H to A and is DEAD CODE, logged and discarded with no handler.",
    "topic": "usb-undoc-type",
-   "source_lines": "1629",
+   "source_lines": "1631",
    "confidence": "high",
    "signals": null,
    "quote": "27 | 0x1B | BTAudioDevice_Signal | H→A | Unknown | **DEAD CODE**"
@@ -21780,7 +21780,7 @@
    "local_id": 411,
    "statement": "Type 30 (0x1E) is DUAL: Bluetooth_Search inbound and BroadCastRemoteCxCy outbound (28B resolution), ACTIVE outbound NO-OP inbound.",
    "topic": "usb-undoc-type",
-   "source_lines": "1630",
+   "source_lines": "1632",
    "confidence": "high",
    "signals": null,
    "quote": "Bluetooth_Search (IN) / BroadCastRemoteCxCy (OUT)"
@@ -21791,7 +21791,7 @@
    "local_id": 412,
    "statement": "Type 119 (0x77) FactorySetting is BOTH: A to H empty idle notification, H to A 4B factory reset, ACTIVE dual-purpose.",
    "topic": "usb-undoc-type",
-   "source_lines": "1631",
+   "source_lines": "1633",
    "confidence": "high",
    "signals": null,
    "quote": "119 | 0x77 | FactorySetting | BOTH"
@@ -21802,7 +21802,7 @@
    "local_id": 413,
    "statement": "Type 136 (0x88) CMD_DEBUG_TEST is H to A with 4B subcommand, ACTIVE, log capture/retrieval.",
    "topic": "usb-undoc-type",
-   "source_lines": "1632",
+   "source_lines": "1634",
    "confidence": "high",
    "signals": null,
    "quote": "136 | 0x88 | CMD_DEBUG_TEST | H→A | 4B (subcommand)"
@@ -21813,7 +21813,7 @@
    "local_id": 414,
    "statement": "Type 160 (0xA0) CMD_APP_INFO is HOST-ONLY, not in firmware dispatch, sent twice (PID only before Open, full after Open).",
    "topic": "usb-undoc-type",
-   "source_lines": "1633",
+   "source_lines": "1635",
    "confidence": "high",
    "signals": null,
    "quote": "160 | 0xA0 | CMD_APP_INFO | H→A | Variable JSON | **HOST-ONLY**"
@@ -21824,7 +21824,7 @@
    "local_id": 415,
    "statement": "Type 161 (0xA1) ICCOA Open/Info is A to H 12-24B, ACTIVE for ICCOA protocol only.",
    "topic": "usb-undoc-type",
-   "source_lines": "1634",
+   "source_lines": "1636",
    "confidence": "high",
    "signals": null,
    "quote": "161 | 0xA1 | ICCOA Open/Info | A→H | 12-24B"
@@ -21835,7 +21835,7 @@
    "local_id": 416,
    "statement": "Type 162 (0xA2) CMD_BOX_CONFIG is HOST-ONLY, AutoKit sends DayNightMode and WiFiChannel as a separate config channel.",
    "topic": "usb-undoc-type",
-   "source_lines": "1635",
+   "source_lines": "1637",
    "confidence": "high",
    "signals": null,
    "quote": "162 | 0xA2 | CMD_BOX_CONFIG | H→A | Variable JSON | **HOST-ONLY**"
@@ -21846,7 +21846,7 @@
    "local_id": 417,
    "statement": "Type 205 (0xCD) HUDComand_A_Reboot is H to A with no payload, ACTIVE full system reboot.",
    "topic": "usb-undoc-type",
-   "source_lines": "1636",
+   "source_lines": "1638",
    "confidence": "high",
    "signals": null,
    "quote": "205 | 0xCD | HUDComand_A_Reboot | H→A | None"
@@ -21857,7 +21857,7 @@
    "local_id": 418,
    "statement": "Type 206 (0xCE) HUDComand_A_ResetUSB is H to A with no payload, ACTIVE USB gadget reset.",
    "topic": "usb-undoc-type",
-   "source_lines": "1637",
+   "source_lines": "1639",
    "confidence": "high",
    "signals": null,
    "quote": "206 | 0xCE | HUDComand_A_ResetUSB | H→A | None"
@@ -21868,7 +21868,7 @@
    "local_id": 419,
    "statement": "Type 240 (0xF0) CMD_ENABLE_CRYPT is H to A trigger and A to H ack, ACTIVE.",
    "topic": "usb-undoc-type",
-   "source_lines": "1638",
+   "source_lines": "1640",
    "confidence": "high",
    "signals": null,
    "quote": "240 | 0xF0 | CMD_ENABLE_CRYPT"
@@ -21879,7 +21879,7 @@
    "local_id": 420,
    "statement": "Type 253 (0xFD) HUDComand_D_Ready is H to A with no payload, ACTIVE display-ready signal.",
    "topic": "usb-undoc-type",
-   "source_lines": "1639",
+   "source_lines": "1641",
    "confidence": "high",
    "signals": null,
    "quote": "253 | 0xFD | HUDComand_D_Ready | H→A | None (ignored)"
@@ -21890,7 +21890,7 @@
    "local_id": 421,
    "statement": "Type 255 (0xFF) CMD_ACK is A to H with no payload, ACTIVE Open session acknowledgment.",
    "topic": "usb-undoc-type",
-   "source_lines": "1640",
+   "source_lines": "1642",
    "confidence": "high",
    "signals": null,
    "quote": "255 | 0xFF | CMD_ACK | A→H | None"
@@ -21901,7 +21901,7 @@
    "local_id": 422,
    "statement": "0xF0 CMD_ENABLE_CRYPT is a standalone message type, not a sub-command of type 0x08.",
    "topic": "usb-crypt",
-   "source_lines": "1642",
+   "source_lines": "1644",
    "confidence": "high",
    "signals": null,
    "quote": "This is a standalone message type, NOT a sub-command of type 0x08"
@@ -21912,7 +21912,7 @@
    "local_id": 423,
    "statement": "Type 0xF1 IPC_REGISTRATION is used for MiddleMan IPC registration/keepalive between internal processes and is not sent over USB.",
    "topic": "usb-f1",
-   "source_lines": "1644",
+   "source_lines": "1646",
    "confidence": "high",
    "signals": null,
    "quote": "**Not sent over USB** — internal only"
@@ -21923,7 +21923,7 @@
    "local_id": 424,
    "statement": "The updated total is 51 message types (49 USB dispatch + 0xF0 + 0xF1 internal).",
    "topic": "usb-total",
-   "source_lines": "1646",
+   "source_lines": "1648",
    "confidence": "high",
    "signals": null,
    "quote": "**Updated total: 51 message types**"
@@ -21934,7 +21934,7 @@
    "local_id": 425,
    "statement": "FactorySetting (0x77) A to H idle notification is header-only 16 bytes sent during idle state, observed ~33s into session.",
    "topic": "usb-factorysetting",
-   "source_lines": "1663",
+   "source_lines": "1665",
    "confidence": "high",
    "signals": null,
    "quote": "Sent by adapter to host during idle state (observed ~33s into session"
@@ -21945,7 +21945,7 @@
    "local_id": 426,
    "statement": "FactorySetting (0x77) H to A factory reset deletes /etc/riddle.conf, restores from /etc/riddle_default.conf, clears BT pairings, resets WiFi, and generates a new device serial.",
    "topic": "usb-factorysetting",
-   "source_lines": "1674",
+   "source_lines": "1676",
    "confidence": "high",
    "signals": null,
    "quote": "deletes `/etc/riddle.conf`, restores from `/etc/riddle_default.conf`"
@@ -21956,7 +21956,7 @@
    "local_id": 427,
    "statement": "CMD_ENABLE_CRYPT (0xF0) dispatch is method.CAccessory_fd.virtual_24 at 0x1deea to handler at 0x1f798, not in fcn.00017b74 dispatch table.",
    "topic": "usb-crypt-dispatch",
-   "source_lines": "1683",
+   "source_lines": "1685",
    "confidence": "high",
    "signals": null,
    "quote": "`method.CAccessory_fd.virtual_24` at `0x1deea` → handler at `0x1f798`"
@@ -21967,7 +21967,7 @@
    "local_id": 428,
    "statement": "Previous documentation listing a RemoteDisplay type at 0xF0 was incorrect; the string RemoteDisplay does not exist in the binary and 0xF0 is exclusively CMD_ENABLE_CRYPT.",
    "topic": "usb-crypt-correction",
-   "source_lines": "1686",
+   "source_lines": "1688",
    "confidence": "high",
    "signals": null,
    "quote": "the string \"RemoteDisplay\" does NOT exist in the binary"
@@ -21978,7 +21978,7 @@
    "local_id": 429,
    "statement": "CMD_ENABLE_CRYPT step 1 has the host send 0xF0 with a uint32 crypto_mode that must be greater than 0 to enable encryption.",
    "topic": "usb-crypt-protocol",
-   "source_lines": "1694",
+   "source_lines": "1696",
    "confidence": "high",
    "signals": null,
    "quote": "crypto_mode  uint32, must be > 0 to enable encryption"
@@ -21989,7 +21989,7 @@
    "local_id": 430,
    "statement": "CMD_ENABLE_CRYPT step 2 validates payload length is exactly 4 bytes and crypto_mode is greater than 0, rejecting otherwise.",
    "topic": "usb-crypt-protocol",
-   "source_lines": "1701",
+   "source_lines": "1703",
    "confidence": "high",
    "signals": null,
    "quote": "cmp r3, 4             ; must be exactly 4 bytes"
@@ -22000,7 +22000,7 @@
    "local_id": 431,
    "statement": "CMD_ENABLE_CRYPT step 3 has the adapter send an empty 0xF0 ack back to the host.",
    "topic": "usb-crypt-protocol",
-   "source_lines": "1715",
+   "source_lines": "1717",
    "confidence": "high",
    "signals": null,
    "quote": "SEND empty 0xF0 back to host"
@@ -22011,7 +22011,7 @@
    "local_id": 432,
    "statement": "CMD_ENABLE_CRYPT step 4 stores crypto_mode to the global at 0x11f408 in .bss.",
    "topic": "usb-crypt-protocol",
-   "source_lines": "1722",
+   "source_lines": "1724",
    "confidence": "high",
    "signals": null,
    "quote": "WRITE to global at 0x11f408 (.bss)"
@@ -22022,7 +22022,7 @@
    "local_id": 433,
    "statement": "After enabling, all subsequent messages with payload pass through AES encryption except exempt types, controlled by the global at 0x11f408.",
    "topic": "usb-crypt-protocol",
-   "source_lines": "1727",
+   "source_lines": "1729",
    "confidence": "high",
    "signals": null,
    "quote": "all messages with payload pass through AES encryption, EXCEPT exempt types"
@@ -22033,7 +22033,7 @@
    "local_id": 434,
    "statement": "The firmware binary calls AES_cbc_encrypt (OpenSSL CBC) but AutoKit uses AES/CFB/NoPadding (Java CFB), a cipher mode discrepancy.",
    "topic": "usb-crypt-discrepancy",
-   "source_lines": "1729",
+   "source_lines": "1731",
    "confidence": "high",
    "signals": null,
    "quote": "Firmware binary calls `AES_cbc_encrypt` (OpenSSL CBC), but AutoKit"
@@ -22044,7 +22044,7 @@
    "local_id": 435,
    "statement": "Encryption cannot be disabled mid-session and is reset only via adapter reboot (0x11f408 to 0).",
    "topic": "usb-crypt-sm",
-   "source_lines": "1751",
+   "source_lines": "1753",
    "confidence": "high",
    "signals": null,
    "quote": "Only reset via adapter reboot (0x11f408 → 0)"
@@ -22055,7 +22055,7 @@
    "local_id": 436,
    "statement": "The AES base key is SkBRDy3gmrw1ieH0 (16 bytes at 0x6d0d4).",
    "topic": "usb-crypt-key",
-   "source_lines": "1757",
+   "source_lines": "1759",
    "confidence": "high",
    "signals": null,
    "quote": "**Base key:** `\"SkBRDy3gmrw1ieH0\"` (16 bytes at `0x6d0d4`)"
@@ -22066,7 +22066,7 @@
    "local_id": 437,
    "statement": "The derived key is the base key rotated by crypto_mode % 16, giving only 16 possible key rotations, which is obfuscation not security.",
    "topic": "usb-crypt-key",
-   "source_lines": "1761",
+   "source_lines": "1763",
    "confidence": "high",
    "signals": null,
    "quote": "derived_key[i] = base_key[(i + crypto_mode) % 16]"
@@ -22077,7 +22077,7 @@
    "local_id": 438,
    "statement": "AutoKit BoxInterface/f.java line 2519 implements identical key derivation and IV construction with seed bytes scattered at offsets 1, 4, 9, 12.",
    "topic": "usb-crypt-key",
-   "source_lines": "1765",
+   "source_lines": "1767",
    "confidence": "high",
    "signals": null,
    "quote": "IV construction also matches (seed bytes scattered at offsets 1, 4, 9, 12)"
@@ -22088,7 +22088,7 @@
    "local_id": 439,
    "statement": "The IV is 16 zero bytes then crypto_mode bytes scattered to iv[1], iv[4], iv[9], iv[12].",
    "topic": "usb-crypt-iv",
-   "source_lines": "1767",
+   "source_lines": "1769",
    "confidence": "high",
    "signals": null,
    "quote": "16 zero bytes, then scatter `crypto_mode` bytes"
@@ -22099,7 +22099,7 @@
    "local_id": 440,
    "statement": "The AES call is AES_cbc_encrypt where direction 1 encrypts outbound host-to-adapter and direction 0 decrypts inbound adapter-to-host.",
    "topic": "usb-crypt-call",
-   "source_lines": "1776",
+   "source_lines": "1778",
    "confidence": "high",
    "signals": null,
    "quote": "Direction 1 = encrypt (outbound, host→adapter"
@@ -22110,7 +22110,7 @@
    "local_id": 441,
    "statement": "The encryption bypass at 0x17d60-0x17d72 skips types 6-7, 0x2C, and 0x2A while all others get the 0x55BB55BB magic.",
    "topic": "usb-crypt-bypass",
-   "source_lines": "1787",
+   "source_lines": "1789",
    "confidence": "high",
    "signals": null,
    "quote": "all others → SET 0x55BB55BB magic"
@@ -22121,7 +22121,7 @@
    "local_id": 442,
    "statement": "The encryption key space of 16 rotations of a known key is a CRITICAL trivially-brute-forceable risk.",
    "topic": "usb-crypt-sec",
-   "source_lines": "1802",
+   "source_lines": "1804",
    "confidence": "high",
    "signals": null,
    "quote": "16 rotations of known key | CRITICAL — trivially brute-forceable"
@@ -22132,7 +22132,7 @@
    "local_id": 443,
    "statement": "The same hardcoded encryption key is shared across all adapters, a CRITICAL risk.",
    "topic": "usb-crypt-sec",
-   "source_lines": "1807",
+   "source_lines": "1809",
    "confidence": "high",
    "signals": null,
    "quote": "Yes — same hardcoded key | CRITICAL — one key for all units"
@@ -22143,7 +22143,7 @@
    "local_id": 444,
    "statement": "MultiTouch (0x17) is Host to Adapter variable-length with each touch point 16 bytes little-endian and no count header.",
    "topic": "usb-multitouch",
-   "source_lines": "1811",
+   "source_lines": "1813",
    "confidence": "high",
    "signals": null,
    "quote": "Each touch point is 16 bytes (little-endian), no count header"
@@ -22154,7 +22154,7 @@
    "local_id": 445,
    "statement": "MultiTouch point fields are xPercent float at +0, yPercent float at +4, action int32 at +8 (0=UP,1=DOWN,2=MOVE), pointerId int32 at +12 (0-4).",
    "topic": "usb-multitouch",
-   "source_lines": "1817",
+   "source_lines": "1819",
    "confidence": "high",
    "signals": null,
    "quote": "action | 0=UP, 1=DOWN, 2=MOVE"
@@ -22165,7 +22165,7 @@
    "local_id": 446,
    "statement": "MultiTouch supports a max of 5 simultaneous points.",
    "topic": "usb-multitouch",
-   "source_lines": "1820",
+   "source_lines": "1822",
    "confidence": "high",
    "signals": null,
    "quote": "**Max 5 simultaneous points**"
@@ -22176,7 +22176,7 @@
    "local_id": 447,
    "statement": "HiCar is the only mode where PMB enables multi-touch by default.",
    "topic": "usb-multitouch",
-   "source_lines": "1821",
+   "source_lines": "1823",
    "confidence": "high",
    "signals": null,
    "quote": "HiCar is the only mode where PMB enables multi-touch by default"
@@ -22187,7 +22187,7 @@
    "local_id": 448,
    "statement": "CMD_CARPLAY_MODE_CHANGE (0x0B) is Adapter to Host only; inbound from host is logged as unsupported and dropped.",
    "topic": "usb-0b",
-   "source_lines": "1828",
+   "source_lines": "1830",
    "confidence": "high",
    "signals": null,
    "quote": "Adapter → Host ONLY (inbound from host is logged as unsupported and dropped)"
@@ -22198,7 +22198,7 @@
    "local_id": 449,
    "statement": "The 0x0B OniPhoneWorkModeChanged handler is fcn.000176bc.",
    "topic": "usb-0b",
-   "source_lines": "1832",
+   "source_lines": "1834",
    "confidence": "high",
    "signals": null,
    "quote": "`OniPhoneWorkModeChanged` handler (`fcn.000176bc`)"
@@ -22209,7 +22209,7 @@
    "local_id": 450,
    "statement": "iPhone work mode 0 is None/Idle, 1 AirPlay, 2 CarPlay, 3 iOSMirror, 4 OnlyCharge.",
    "topic": "usb-0b-modes",
-   "source_lines": "1838",
+   "source_lines": "1840",
    "confidence": "high",
    "signals": null,
    "quote": "2 | CarPlay | Display projection active"
@@ -22220,7 +22220,7 @@
    "local_id": 451,
    "statement": "The 0x0B StModeChange payload is 28 bytes with handDriveMode, nightMode, screenMode, audioMode, phoneMode, speechMode, naviMode int32 LE fields.",
    "topic": "usb-0b-stmode",
-   "source_lines": "1849",
+   "source_lines": "1851",
    "confidence": "high",
    "signals": null,
    "quote": "#### StModeChange Payload (28 bytes)"
@@ -22231,7 +22231,7 @@
    "local_id": 452,
    "statement": "In StModeChange screenMode values are 0=n/a, 1=take, 2=untake, 3=borrow, 4=unborrow with default 1.",
    "topic": "usb-0b-stmode",
-   "source_lines": "1857",
+   "source_lines": "1859",
    "confidence": "high",
    "signals": null,
    "quote": "screenMode | 1 | 0=n/a, 1=take, 2=untake, 3=borrow, 4=unborrow"
@@ -22242,7 +22242,7 @@
    "local_id": 453,
    "statement": "In StModeChange speechMode values are -1=not in speech, 0=n/a, 1=speaking, 2=recognizing.",
    "topic": "usb-0b-stmode",
-   "source_lines": "1860",
+   "source_lines": "1862",
    "confidence": "high",
    "signals": null,
    "quote": "speechMode | 0 | -1=not in speech, 0=n/a, 1=speaking, 2=recognizing"
@@ -22253,7 +22253,7 @@
    "local_id": 454,
    "statement": "CMD_CARPLAY_AirPlayModeChanges (0x10) is Adapter to Host only, forwarded from CarPlay data sub-type 0x65 (101) at 0x219be.",
    "topic": "usb-0x10",
-   "source_lines": "1872",
+   "source_lines": "1874",
    "confidence": "high",
    "signals": null,
    "quote": "Forwarded from CarPlay data sub-type `0x65` (101) at `0x219be`"
@@ -22264,7 +22264,7 @@
    "local_id": 455,
    "statement": "AutoConnect_By_BluetoothAddress (0x11) carries a null-terminated Bluetooth MAC address string and is primarily Host to Adapter.",
    "topic": "usb-0x11",
-   "source_lines": "1884",
+   "source_lines": "1886",
    "confidence": "high",
    "signals": null,
    "quote": "Null-terminated Bluetooth MAC address string"
@@ -22275,7 +22275,7 @@
    "local_id": 456,
    "statement": "AutoConnect_By_BluetoothAddress H to A requires config NeedAutoConnect set to 1.",
    "topic": "usb-0x11",
-   "source_lines": "1888",
+   "source_lines": "1890",
    "confidence": "high",
    "signals": null,
    "quote": "Config `NeedAutoConnect` must be `1`"
@@ -22286,7 +22286,7 @@
    "local_id": 457,
    "statement": "In auto-connect flow the adapter detects link type via fcn.00069874 which returns 0x1E for BT.",
    "topic": "usb-0x11",
-   "source_lines": "1891",
+   "source_lines": "1893",
    "confidence": "high",
    "signals": null,
    "quote": "`fcn.00069874` (returns `0x1E` for BT)"
@@ -22297,7 +22297,7 @@
    "local_id": 458,
    "statement": "CMD_BLUETOOTH_ONLINE_LIST (0x13) is bidirectional carrying a list of Bluetooth devices from the adapter's BT daemon.",
    "topic": "usb-0x13",
-   "source_lines": "1902",
+   "source_lines": "1904",
    "confidence": "high",
    "signals": null,
    "quote": "list of Bluetooth devices from adapter's BT daemon"
@@ -22308,7 +22308,7 @@
    "local_id": 459,
    "statement": "CMD_BLUETOOTH_ONLINE_LIST A to H is triggered by phone command 0x3F5 GetBluetoothOnlineList at 0x19514.",
    "topic": "usb-0x13",
-   "source_lines": "1905",
+   "source_lines": "1907",
    "confidence": "high",
    "signals": null,
    "quote": "Phone command `0x3F5` (`GetBluetoothOnlineList`) at `0x19514`"
@@ -22319,7 +22319,7 @@
    "local_id": 460,
    "statement": "When receiving CarPlay sub-type 0x13 with payload 8 bytes the adapter reads screen size and logs recv CarPlay altScreen size info.",
    "topic": "usb-0x13",
-   "source_lines": "1911",
+   "source_lines": "1913",
    "confidence": "high",
    "signals": null,
    "quote": "logs `\"recv CarPlay altScreen size info: %dx%d\"`"
@@ -22330,7 +22330,7 @@
    "local_id": 461,
    "statement": "BTAudioDevice_Signal (0x1B) is Host to Adapter and DEAD CODE in firmware 2025.10.15.1127.",
    "topic": "usb-0x1b",
-   "source_lines": "1921",
+   "source_lines": "1923",
    "confidence": "high",
    "signals": null,
    "quote": "**Status: DEAD CODE** in firmware 2025.10.15.1127"
@@ -22341,7 +22341,7 @@
    "local_id": 462,
    "statement": "The 0x1B handler at 0x17d46 loads BTAudioDevice_Signal and falls through to Not support decrypt cmd at 0x17d3a with no payload processing.",
    "topic": "usb-0x1b",
-   "source_lines": "1923",
+   "source_lines": "1925",
    "confidence": "high",
    "signals": null,
    "quote": "falls through to `\"Not support decrypt cmd: %s !!!\"` at `0x17d3a`"
@@ -22352,7 +22352,7 @@
    "local_id": 463,
    "statement": "CMD_DEBUG_TEST (0x88) is Host to Adapter, dispatch at 0x1deac to handler 0x1f6e0, with exactly 4 bytes uint32 subcommand.",
    "topic": "usb-0x88",
-   "source_lines": "1933",
+   "source_lines": "1935",
    "confidence": "high",
    "signals": null,
    "quote": "**Payload:** Exactly 4 bytes — `uint32 subcommand`"
@@ -22363,7 +22363,7 @@
    "local_id": 464,
    "statement": "CMD_DEBUG_TEST subcommand 1 starts log capture running /script/open_log.sh, 2 reads and sends the log as type 0x99, 3 enables periodic streaming.",
    "topic": "usb-0x88",
-   "source_lines": "1938",
+   "source_lines": "1940",
    "confidence": "high",
    "signals": null,
    "quote": "1=open log, 2=read log, 3=enable periodic"
@@ -22374,7 +22374,7 @@
    "local_id": 465,
    "statement": "CMD_DEBUG_TEST subcommand 2 opens /tmp/userspace.log, reads up to 16MB, and packages it as a type 0x99 message sent back to host.",
    "topic": "usb-0x88",
-   "source_lines": "1944",
+   "source_lines": "1946",
    "confidence": "high",
    "signals": null,
    "quote": "reads up to 16MB, packages as **type 0x99** message"
@@ -22385,7 +22385,7 @@
    "local_id": 466,
    "statement": "HUDComand_A_Reboot (0xCD) is Host to Adapter with no payload, dispatch at 0x1dee0 to fcn.00067b18.",
    "topic": "usb-0xcd",
-   "source_lines": "1957",
+   "source_lines": "1959",
    "confidence": "high",
    "signals": null,
    "quote": "`method.CAccessory_fd.virtual_24` at `0x1dee0` → `fcn.00067b18`"
@@ -22396,7 +22396,7 @@
    "local_id": 467,
    "statement": "HUDComand_A_Reboot saves diagnostic logs to /var/log/box_last_reboot.log then executes sync; sleep 1; reboot.",
    "topic": "usb-0xcd",
-   "source_lines": "1967",
+   "source_lines": "1969",
    "confidence": "high",
    "signals": null,
    "quote": "Executes: `sync; sleep 1; reboot`"
@@ -22407,7 +22407,7 @@
    "local_id": 468,
    "statement": "After sending 0xCD reboot the host should expect USB detach then re-enumeration after about 10-15 seconds.",
    "topic": "usb-0xcd",
-   "source_lines": "1969",
+   "source_lines": "1971",
    "confidence": "high",
    "signals": null,
    "quote": "re-enumeration after reboot (~10-15 seconds)"
@@ -22418,7 +22418,7 @@
    "local_id": 469,
    "statement": "HUDComand_A_ResetUSB (0xCE) is Host to Adapter with no payload, dispatch at 0x1dece to 0x1f786, log $$$ ResetUSB from HU.",
    "topic": "usb-0xce",
-   "source_lines": "1976",
+   "source_lines": "1978",
    "confidence": "high",
    "signals": null,
    "quote": "**Log:** `\"$$$ ResetUSB from HU\\n\"` at `0x1f78a`"
@@ -22429,7 +22429,7 @@
    "local_id": 470,
    "statement": "HUDComand_A_ResetUSB writes echo 0 to android_usb_accessory enable to disable the USB gadget forcing a USB-level disconnect.",
    "topic": "usb-0xce",
-   "source_lines": "1981",
+   "source_lines": "1983",
    "confidence": "high",
    "signals": null,
    "quote": "This **disables the USB gadget**, forcing a USB-level disconnect"
@@ -22440,7 +22440,7 @@
    "local_id": 471,
    "statement": "0xCE ResetUSB is softer than 0xCD Reboot, only tearing down the USB link while the adapter process continues running.",
    "topic": "usb-0xce",
-   "source_lines": "1986",
+   "source_lines": "1988",
    "confidence": "high",
    "signals": null,
    "quote": "Only tears down the USB link, does not reboot the entire adapter"
@@ -22451,7 +22451,7 @@
    "local_id": 472,
    "statement": "HUDComand_D_Ready (0xFD) is Host to Adapter with ignored payload, dispatch at 0x1def0 to handler 0x1dfbe.",
    "topic": "usb-0xfd",
-   "source_lines": "1995",
+   "source_lines": "1997",
    "confidence": "high",
    "signals": null,
    "quote": "`method.CAccessory_fd.virtual_24` at `0x1def0` → handler at `0x1dfbe`"
@@ -22462,7 +22462,7 @@
    "local_id": 473,
    "statement": "HUDComand_D_Ready sets the display-ready global byte flag at 0x96ea8 to 1 and should be sent after the host video surface/decoder is ready.",
    "topic": "usb-0xfd",
-   "source_lines": "2000",
+   "source_lines": "2002",
    "confidence": "high",
    "signals": null,
    "quote": "Sets global byte flag at `0x96ea8` to `1` — the **display-ready** indicator"
@@ -22473,7 +22473,7 @@
    "local_id": 474,
    "statement": "CMD_ACK (0xFF) is Adapter to Host with empty payload and is only recognized in the name-resolver at 0x17c6e, not in the main dispatcher binary search tree.",
    "topic": "usb-0xff",
-   "source_lines": "2009",
+   "source_lines": "2011",
    "confidence": "high",
    "signals": null,
    "quote": "only recognized in the name-resolver at `0x17c6e`"
@@ -22484,7 +22484,7 @@
    "local_id": 475,
    "statement": "The adapter sends 0xFF after processing type 0x05 Open for CarPlay session types at 0x1e110, as the session-open acknowledgment.",
    "topic": "usb-0xff",
-   "source_lines": "2018",
+   "source_lines": "2020",
    "confidence": "high",
    "signals": null,
    "quote": "**When sent:** The adapter sends 0xFF **after processing type 0x05 \"Open\"** for CarPlay session types (at `0x1e110`). It is the session-open acknowledgment."
@@ -22495,7 +22495,7 @@
    "local_id": 476,
    "statement": "BroadCastRemoteCxCy (0x1E outbound) is Adapter to Host only via function fcn.0001b574 with a 28-byte payload (inner type 0xF0 plus resolution struct from 0x11f3d4).",
    "topic": "usb-0x1e",
-   "source_lines": "2031",
+   "source_lines": "2033",
    "confidence": "high",
    "signals": null,
    "quote": "**Payload:** 28 bytes (inner type 0xF0 + resolution struct from `0x11f3d4`)"
@@ -22506,7 +22506,7 @@
    "local_id": 477,
    "statement": "The 0xF0 value inside the 0x1E message is an inner/sub-type, not a separate USB message type, and the wire type is 0x1E.",
    "topic": "usb-0x1e",
-   "source_lines": "2033",
+   "source_lines": "2035",
    "confidence": "high",
    "signals": null,
    "quote": "the 0xF0 value inside this message is an **inner/sub-type**"
@@ -22517,7 +22517,7 @@
    "local_id": 478,
    "statement": "BroadCastRemoteCxCy struct fields are Cx remote display width at 0x00 and Cy remote display height at 0x04.",
    "topic": "usb-0x1e",
-   "source_lines": "2051",
+   "source_lines": "2053",
    "confidence": "high",
    "signals": null,
    "quote": "Cx       Remote display width (pixels)"
@@ -22528,7 +22528,7 @@
    "local_id": 479,
    "statement": "Inbound 0x1E Bluetooth_Search is unsupported; the adapter logs Not support decrypt cmd: Bluetooth_Search and drops it.",
    "topic": "usb-0x1e",
-   "source_lines": "2058",
+   "source_lines": "2060",
    "confidence": "high",
    "signals": null,
    "quote": "the adapter logs `\"Not support decrypt cmd: Bluetooth_Search !!!\"` and drops it"
@@ -22539,7 +22539,7 @@
    "local_id": 480,
    "statement": "ICCOA Open/Info (0xA1) is Adapter to Host with 12-24 bytes sent only for ICCOA protocol link type 0x14 (decimal 20).",
    "topic": "usb-0xa1",
-   "source_lines": "2065",
+   "source_lines": "2067",
    "confidence": "high",
    "signals": null,
    "quote": "Only for **ICCOA protocol** (link type `0x14` / decimal 20)"
@@ -22550,7 +22550,7 @@
    "local_id": 481,
    "statement": "The link-type-to-message-type mapper maps 3 to 0x06, 5 to 0x09, 6 to 0x0B, 7 to 0x0D, 8 to 0x0F, and 20 to 0xA1.",
    "topic": "usb-0xa1-mapper",
-   "source_lines": "2074",
+   "source_lines": "2076",
    "confidence": "high",
    "signals": null,
    "quote": "**20 (0x14)** | **ICCOA** | **0xA1**"
@@ -22561,7 +22561,7 @@
    "local_id": 482,
    "statement": "The 0xA1 handler at 0x1faaa performs floating-point coordinate conversion converting integer lat/lon to floating-point degrees.",
    "topic": "usb-0xa1",
-   "source_lines": "2076",
+   "source_lines": "2078",
    "confidence": "high",
    "signals": null,
    "quote": "performs floating-point coordinate conversion"
@@ -22572,7 +22572,7 @@
    "local_id": 483,
    "statement": "Message sender fcn.00018628 at 0x18628 sends types 0x06, 0x09, 0x0B, 0x0D, 0xA1 as a link-type-dependent info response.",
    "topic": "usb-senders",
-   "source_lines": "2098",
+   "source_lines": "2100",
    "confidence": "high",
    "signals": null,
    "quote": "0x18628` | 0x06, 0x09, 0x0B, 0x0D, 0xA1 | Link-type-dependent info response"
@@ -22583,7 +22583,7 @@
    "local_id": 484,
    "statement": "Message sender fcn.0001b574 at 0x1b574 sends 0x1E BroadCastRemoteCxCy as a 28B resolution broadcast with inner type 0xF0.",
    "topic": "usb-senders",
-   "source_lines": "2101",
+   "source_lines": "2103",
    "confidence": "high",
    "signals": null,
    "quote": "0x1E (BroadCastRemoteCxCy) | Resolution broadcast (28B, inner type 0xF0)"
@@ -22594,7 +22594,7 @@
    "local_id": 485,
    "statement": "0x1af48 was previously listed as a function but is actually a data table of string pointers for command name logging.",
    "topic": "usb-correction",
-   "source_lines": "2106",
+   "source_lines": "2108",
    "confidence": "high",
    "signals": null,
    "quote": "It is actually a **data table**"
@@ -22605,7 +22605,7 @@
    "local_id": 486,
    "statement": "iPhone modes from OniPhoneWorkModeChanged are 0 None/Idle, 1 AirPlay, 2 CarPlay, 3 iOSMirror, 4 OnlyCharge.",
    "topic": "usb-modes",
-   "source_lines": "2110",
+   "source_lines": "2112",
    "confidence": "high",
    "signals": null,
    "quote": "**iPhone modes** (from `fcn.000176bc` / `OniPhoneWorkModeChanged`)"
@@ -22616,7 +22616,7 @@
    "local_id": 487,
    "statement": "Android modes from OnAndroidWorkModeChanged are 0 None/Idle, 1 AndroidAuto, 2 CarLife, 3 AndroidMirror, 4 HiCar, 5 ICCOA.",
    "topic": "usb-modes",
-   "source_lines": "2120",
+   "source_lines": "2122",
    "confidence": "high",
    "signals": null,
    "quote": "**Android modes** (from `fcn.0001777c` / `OnAndroidWorkModeChanged`)"
@@ -22627,7 +22627,7 @@
    "local_id": 488,
    "statement": "The Open message phoneMode field controls only the iPhone stack while the Android stack reads its mode from persisted /etc/android_work_mode.",
    "topic": "usb-open-dispatch",
-   "source_lines": "2143",
+   "source_lines": "2145",
    "confidence": "high",
    "signals": null,
    "quote": "The `phoneMode` field in the Open message controls ONLY the iPhone stack"
@@ -22638,7 +22638,7 @@
    "local_id": 489,
    "statement": "HiCar DevList sent via 0x0B subtype is a 32-byte payload containing DevList and type JSON fields.",
    "topic": "usb-hicar-devlist",
-   "source_lines": "2145",
+   "source_lines": "2147",
    "confidence": "high",
    "signals": null,
    "quote": "HiCar DevList (0x0B subtype) — 32 bytes payload"
@@ -22649,7 +22649,7 @@
    "local_id": 490,
    "statement": "The Box Info JSON format string at 0x5c2ce includes uuid, MFD, boxType, OemName, productType, HiCar, hwVersion, WiFiChannel, CusCode, DevList, ChannelList.",
    "topic": "usb-json-strings",
-   "source_lines": "2157",
+   "source_lines": "2159",
    "confidence": "high",
    "signals": null,
    "quote": "**Box Info JSON** (String @ `0x5c2ce`)"
@@ -22660,7 +22660,7 @@
    "local_id": 491,
    "statement": "The Phone Link Info JSON format string at 0x5be16 includes MDLinkType, MDModel, MDOSVersion, MDLinkVersion, btMacAddr, btName, cpuTemp.",
    "topic": "usb-json-strings",
-   "source_lines": "2164",
+   "source_lines": "2166",
    "confidence": "high",
    "signals": null,
    "quote": "**Phone Link Info JSON** (String @ `0x5be16`)"
@@ -22671,7 +22671,7 @@
    "local_id": 492,
    "statement": "The D-Bus string OnCarPlayPhase %d at 0x5c415 triggers on CarPlay phase change Type 0x03.",
    "topic": "usb-dbus",
-   "source_lines": "2174",
+   "source_lines": "2176",
    "confidence": "high",
    "signals": null,
    "quote": "`OnCarPlayPhase %d` | `0x5c415`"
@@ -22682,7 +22682,7 @@
    "local_id": 493,
    "statement": "The inbound message handling classifications were verified by tracing the firmware binary outbound paths and the _SendPhoneCommandToCar dispatcher at fcn.00019244.",
    "topic": "usb-inbound-ref",
-   "source_lines": "2187",
+   "source_lines": "2189",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -22695,7 +22695,7 @@
    "local_id": 494,
    "statement": "Type 0x02 PlugIn (8B phoneType + connected) requires preparing video/audio pipelines and transitioning to DEVICE_CONNECTED.",
    "topic": "usb-inbound-critical",
-   "source_lines": "2195",
+   "source_lines": "2197",
    "confidence": "high",
    "signals": null,
    "quote": "Prepare video/audio pipelines. Transition to DEVICE_CONNECTED state"
@@ -22706,7 +22706,7 @@
    "local_id": 495,
    "statement": "Type 0x03 Phase 0 requires a full session teardown.",
    "topic": "usb-inbound-critical",
-   "source_lines": "2196",
+   "source_lines": "2198",
    "confidence": "high",
    "signals": null,
    "quote": "**Phase 0: FULL SESSION TEARDOWN**"
@@ -22717,7 +22717,7 @@
    "local_id": 496,
    "statement": "Type 0x04 PlugOut (0B) means the phone was physically unplugged, requiring immediate disconnect.",
    "topic": "usb-inbound-critical",
-   "source_lines": "2197",
+   "source_lines": "2199",
    "confidence": "high",
    "signals": null,
    "quote": "**Immediate disconnect.** Phone was physically unplugged"
@@ -22728,7 +22728,7 @@
    "local_id": 497,
    "statement": "MediaData 0x2A subtype dispatch: 1=media JSON, 3=album art, 100=CallStatus (`_callraw` if CALL patch), 101=comm `_commraw` (COMM patch only), 200=NaviJSON, 201=NAVI_IMAGE.",
    "topic": "usb-inbound-critical",
-   "source_lines": "2200",
+   "source_lines": "2202",
    "confidence": "high",
    "signals": null,
    "quote": "1=media JSON, 3=album art, 100=CallStatus JSON (`_callraw` if CALL patch), 101=comm JSON `_commraw` (COMM patch only), 200=NaviJSON, 201=NAVI_IMAGE"
@@ -22739,7 +22739,7 @@
    "local_id": 498,
    "statement": "Firmware proof at 0x1c6c4 shows the Phase 0 handler executes killall AppleCarPlay and killall ARMiPhoneIAP2, a full teardown.",
    "topic": "usb-phase0",
-   "source_lines": "2207",
+   "source_lines": "2209",
    "confidence": "high",
    "signals": null,
    "quote": "Phase 0 handler executes `killall AppleCarPlay` and `killall ARMiPhoneIAP2`"
@@ -22750,7 +22750,7 @@
    "local_id": 499,
    "statement": "On Phase 0 the host must stop the video decoder, audio playback, microphone capture, GNSS forwarding, transition to DISCONNECTED, and await a new PlugIn.",
    "topic": "usb-phase0",
-   "source_lines": "2219",
+   "source_lines": "2221",
    "confidence": "high",
    "signals": null,
    "quote": "Stop video decoder"
@@ -22761,7 +22761,7 @@
    "local_id": 500,
    "statement": "AudioCmd 1 OUTPUT_START signals media playback beginning, prepare media AudioTrack.",
    "topic": "usb-audiocmd",
-   "source_lines": "2232",
+   "source_lines": "2234",
    "confidence": "high",
    "signals": null,
    "quote": "1 | OUTPUT_START | Media playback beginning"
@@ -22772,7 +22772,7 @@
    "local_id": 501,
    "statement": "AudioCmd 4 PHONECALL_START signals an active phone call, start microphone capture and route call audio.",
    "topic": "usb-audiocmd",
-   "source_lines": "2235",
+   "source_lines": "2237",
    "confidence": "high",
    "signals": null,
    "quote": "4 | PHONECALL_START | Active phone call"
@@ -22783,7 +22783,7 @@
    "local_id": 502,
    "statement": "AudioCmd 6 NAVI_START signals navigation audio starting, duck media or route to nav AudioTrack.",
    "topic": "usb-audiocmd",
-   "source_lines": "2237",
+   "source_lines": "2239",
    "confidence": "high",
    "signals": null,
    "quote": "6 | NAVI_START | Navigation audio starting"
@@ -22794,7 +22794,7 @@
    "local_id": 503,
    "statement": "AudioCmd 8 SIRI_START signals Siri activated, start microphone capture.",
    "topic": "usb-audiocmd",
-   "source_lines": "2239",
+   "source_lines": "2241",
    "confidence": "high",
    "signals": null,
    "quote": "8 | SIRI_START | Siri activated"
@@ -22805,7 +22805,7 @@
    "local_id": 504,
    "statement": "AudioCmd 12 ALERT_START signals a system alert sound, duck media or route alert audio.",
    "topic": "usb-audiocmd",
-   "source_lines": "2243",
+   "source_lines": "2245",
    "confidence": "high",
    "signals": null,
    "quote": "12 | ALERT_START | System alert sound"
@@ -22816,7 +22816,7 @@
    "local_id": 505,
    "statement": "AudioCmd 14 PHONECALL_Incoming signals an incoming call ring, distinct from PHONECALL_START active call.",
    "topic": "usb-audiocmd",
-   "source_lines": "2245",
+   "source_lines": "2247",
    "confidence": "high",
    "signals": null,
    "quote": "14 | PHONECALL_Incoming | Incoming call ringing"
@@ -22827,7 +22827,7 @@
    "local_id": 506,
    "statement": "Type 0x0A SetBluetoothAddress (17B) is the adapter's BT MAC address, store for reference, no state change.",
    "topic": "usb-informational",
-   "source_lines": "2255",
+   "source_lines": "2257",
    "confidence": "high",
    "signals": null,
    "quote": "0x0A | SetBluetoothAddress | 17B | Adapter's BT MAC address"
@@ -22838,7 +22838,7 @@
    "local_id": 507,
    "statement": "Type 0x25 Bluetooth_DisConnect (0B) means BT disconnected, log only, do NOT disconnect the USB session.",
    "topic": "usb-informational",
-   "source_lines": "2266",
+   "source_lines": "2268",
    "confidence": "high",
    "signals": null,
    "quote": "Log. Do NOT disconnect USB session"
@@ -22849,7 +22849,7 @@
    "local_id": 508,
    "statement": "Type 0x77 FactorySetting A to H (0B) is an adapter idle notification, log only, do NOT disconnect.",
    "topic": "usb-informational",
-   "source_lines": "2270",
+   "source_lines": "2272",
    "confidence": "high",
    "signals": null,
    "quote": "0x77 | FactorySetting (A→H) | 0B | Adapter idle notification"
@@ -22860,7 +22860,7 @@
    "local_id": 509,
    "statement": "These frequently-misinterpreted messages are pure status notifications generated by _SendPhoneCommandToCar (fcn.00019244) that do not indicate session failure.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2278",
+   "source_lines": "2280",
    "confidence": "high",
    "signals": null,
    "quote": "generated by `_SendPhoneCommandToCar` (`fcn.00019244`)"
@@ -22871,7 +22871,7 @@
    "local_id": 510,
    "statement": "Cmd 3 RequestHostUI at 0x1de52 is notification only; the CarPlay session remains active in the background.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2282",
+   "source_lines": "2284",
    "confidence": "high",
    "signals": null,
    "quote": "3 | RequestHostUI | `0x1de52`"
@@ -22882,7 +22882,7 @@
    "local_id": 511,
    "statement": "Cmd 14 Hide at 0x19536 means CarPlay going to background and is NOT a disconnect.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2283",
+   "source_lines": "2285",
    "confidence": "high",
    "signals": null,
    "quote": "14 | Hide | `0x19536` — CarPlay going to background"
@@ -22893,7 +22893,7 @@
    "local_id": 512,
    "statement": "Cmd 28 StartStandbyMode and 29 StopStandbyMode are power management; the session is paused not terminated.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2284",
+   "source_lines": "2286",
    "confidence": "high",
    "signals": null,
    "quote": "28 | StartStandbyMode | `0x19572` — low-power mode"
@@ -22904,7 +22904,7 @@
    "local_id": 513,
    "statement": "Cmd 1008 DeviceBluetoothNotConnected can fire during active USB CarPlay and losing BT does not affect USB video/audio streaming.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2294",
+   "source_lines": "2296",
    "confidence": "high",
    "signals": null,
    "quote": "**CAN fire during active USB CarPlay.**"
@@ -22915,7 +22915,7 @@
    "local_id": 514,
    "statement": "Cmd 1010 DeviceWifiNotConnected (WiFi check returns 3 or 4) is the most misinterpreted message and is a WiFi hotspot status check not a session error.",
    "topic": "usb-never-disconnect",
-   "source_lines": "2296",
+   "source_lines": "2298",
    "confidence": "high",
    "signals": null,
    "quote": "**THE MOST MISINTERPRETED MESSAGE.**"
@@ -22926,7 +22926,7 @@
    "local_id": 515,
    "statement": "The old app incorrectly treated 1010 DeviceWifiNotConnected as a session termination signal; ignoring 1010 and all 1000-1013 commands dramatically improved session stability.",
    "topic": "usb-1010-bug",
-   "source_lines": "2301",
+   "source_lines": "2303",
    "confidence": "high",
    "signals": null,
    "quote": "Ignoring 1010 (and all 1000-1013 commands) dramatically improved session stability"
@@ -22937,7 +22937,7 @@
    "local_id": 516,
    "statement": "Inbound Cmd 3 RequestHostUI requires showing native HU UI while the session stays active.",
    "topic": "usb-cmd-class",
-   "source_lines": "2311",
+   "source_lines": "2313",
    "confidence": "high",
    "signals": null,
    "quote": "3 | RequestHostUI | Show native HU UI (hide CarPlay overlay). Session stays active"
@@ -22948,7 +22948,7 @@
    "local_id": 517,
    "statement": "Inbound Cmd 508 RequestNaviScreenFocus requires echoing 508 back which starts the 0x2C nav-screen video stream and is required for wireless CarPlay nav video.",
    "topic": "usb-cmd-class",
-   "source_lines": "2312",
+   "source_lines": "2314",
    "confidence": "high",
    "signals": [
     "verified"
@@ -22961,7 +22961,7 @@
    "local_id": 518,
    "statement": "Inbound Cmd 1 StartRecordMic requires starting microphone capture and Cmd 2 StopRecordMic stops it.",
    "topic": "usb-cmd-class",
-   "source_lines": "2318",
+   "source_lines": "2320",
    "confidence": "high",
    "signals": null,
    "quote": "1 | StartRecordMic | Start microphone capture"
@@ -22972,7 +22972,7 @@
    "local_id": 519,
    "statement": "Inbound Cmds 7 UseCarMic, 8 UseBoxMic, 21 UsePhoneMic route to car, adapter, and phone microphones respectively.",
    "topic": "usb-cmd-class",
-   "source_lines": "2320",
+   "source_lines": "2322",
    "confidence": "high",
    "signals": null,
    "quote": "7 | UseCarMic | Route to car microphone"
@@ -22983,7 +22983,7 @@
    "local_id": 520,
    "statement": "Inbound Cmds 22 UseBluetoothAudio and 23 UseBoxTransAudio route audio via Bluetooth and via USB.",
    "topic": "usb-cmd-class",
-   "source_lines": "2323",
+   "source_lines": "2325",
    "confidence": "high",
    "signals": null,
    "quote": "22 | UseBluetoothAudio | Route audio via Bluetooth"
@@ -22994,7 +22994,7 @@
    "local_id": 521,
    "statement": "Type 0x0F CMD_MANUAL_DISCONNECT_PHONE is H to A only per fcn.000178e8; the adapter never sends this type.",
    "topic": "usb-direction-correction",
-   "source_lines": "2338",
+   "source_lines": "2340",
    "confidence": "high",
    "signals": [
     "Verified"
@@ -23007,7 +23007,7 @@
    "local_id": 522,
    "statement": "Type 0x15 CMD_STOP_PHONE_CONNECTION is H to A only per fcn.00017940 aggressive disconnect; the adapter never sends this type.",
    "topic": "usb-direction-correction",
-   "source_lines": "2339",
+   "source_lines": "2341",
    "confidence": "high",
    "signals": null,
    "quote": "**H→A ONLY** | `fcn.00017940` (full stop)"
@@ -23018,7 +23018,7 @@
    "local_id": 523,
    "statement": "Type 0x77 FactorySetting was previously documented A to H only but is corrected to BOTH.",
    "topic": "usb-direction-correction",
-   "source_lines": "2340",
+   "source_lines": "2342",
    "confidence": "high",
    "signals": null,
    "quote": "FactorySetting | A→H only | **BOTH**"
@@ -23029,7 +23029,7 @@
    "local_id": 524,
    "statement": "Phase 0 detection was a HIGH-severity gap now FIXED; CarlinkManager.kt handles Phase 0 in multiple scenarios as of Mar 2026.",
    "topic": "usb-gaps",
-   "source_lines": "2348",
+   "source_lines": "2350",
    "confidence": "high",
    "signals": [
     "FIXED"
@@ -23042,7 +23042,7 @@
    "local_id": 525,
    "statement": "AudioCmd 14 handling was a gap now FIXED; CarlinkManager.kt handles AUDIO_INCOMING_CALL_INIT command 14 as of Mar 2026.",
    "topic": "usb-gaps",
-   "source_lines": "2350",
+   "source_lines": "2352",
    "confidence": "high",
    "signals": [
     "FIXED"
@@ -23055,7 +23055,7 @@
    "local_id": 526,
    "statement": "DISCONNECT_PHONE (0x0F) and CLOSE_DONGLE (0x15) are H to A only and the app should never receive them.",
    "topic": "usb-gaps",
-   "source_lines": "2351",
+   "source_lines": "2353",
    "confidence": "high",
    "signals": null,
    "quote": "`DISCONNECT_PHONE` (0x0F) and `CLOSE_DONGLE` (0x15) are defined in MessageTypes but are H→A only"
@@ -23066,7 +23066,7 @@
    "local_id": 527,
    "statement": "The binary-verified message type table was extracted via radare2 disassembly of ARMadb-driver_2025.10_unpacked from the switch statement at fcn.00017b74.",
    "topic": "usb-appendix",
-   "source_lines": "2358",
+   "source_lines": "2360",
    "confidence": "high",
    "signals": null,
    "quote": "Switch statement at `fcn.00017b74` (0x17b74 - 0x17d48)"
@@ -23077,7 +23077,7 @@
    "local_id": 528,
    "statement": "In the binary table type 0x01 Open compares at 0x17bb2 with handler 0x17c84.",
    "topic": "usb-appendix-row",
-   "source_lines": "2362",
+   "source_lines": "2364",
    "confidence": "high",
    "signals": null,
    "quote": "0x01 |   1 | Open                             | 0x17bb2      | 0x17c84"
@@ -23088,7 +23088,7 @@
    "local_id": 529,
    "statement": "In the binary table type 0x0C is CMD_SET_BLUETOOTH_PIN_CODE at compare 0x17bde handler 0x17cb0.",
    "topic": "usb-appendix-row",
-   "source_lines": "2373",
+   "source_lines": "2375",
    "confidence": "high",
    "signals": null,
    "quote": "0x0C |  12 | CMD_SET_BLUETOOTH_PIN_CODE"
@@ -23099,7 +23099,7 @@
    "local_id": 530,
    "statement": "In the binary table type 0x12 is kRiddleHUDComand_D_Bluetooth_BondList.",
    "topic": "usb-appendix-row",
-   "source_lines": "2379",
+   "source_lines": "2381",
    "confidence": "high",
    "signals": null,
    "quote": "0x12 |  18 | kRiddleHUDComand_D_Bluetooth_BondList"
@@ -23110,7 +23110,7 @@
    "local_id": 531,
    "statement": "In the binary table type 0x1A is CMD_PAY_RESULT at compare 0x17c16 handler 0x17ce8.",
    "topic": "usb-appendix-row",
-   "source_lines": "2387",
+   "source_lines": "2389",
    "confidence": "high",
    "signals": null,
    "quote": "0x1A |  26 | CMD_PAY_RESULT"
@@ -23121,7 +23121,7 @@
    "local_id": 532,
    "statement": "In the binary table type 0x22 is ForgetBluetoothAddr.",
    "topic": "usb-appendix-row",
-   "source_lines": "2393",
+   "source_lines": "2395",
    "confidence": "high",
    "signals": null,
    "quote": "0x22 |  34 | ForgetBluetoothAddr"
@@ -23132,7 +23132,7 @@
    "local_id": 533,
    "statement": "In the binary table type 0x99 is HUDComand_A_UploadFile and 0xAA is HUDComand_A_HeartBeat.",
    "topic": "usb-appendix-row",
-   "source_lines": "2405",
+   "source_lines": "2407",
    "confidence": "high",
    "signals": null,
    "quote": "0x99 | 153 | HUDComand_A_UploadFile"
@@ -23143,7 +23143,7 @@
    "local_id": 534,
    "statement": "Gaps not defined in the binary are 0x1C (28), 0x1D (29), and 0x27 (39).",
    "topic": "usb-appendix",
-   "source_lines": "2414",
+   "source_lines": "2416",
    "confidence": "high",
    "signals": null,
    "quote": "**Gaps in sequence (not defined in binary):** 0x1C (28), 0x1D (29), 0x27 (39)"
@@ -23154,7 +23154,7 @@
    "local_id": 535,
    "statement": "Unknown types are logged as Unkown_RiddleHUDComand_ at 0x17c6a.",
    "topic": "usb-appendix",
-   "source_lines": "2418",
+   "source_lines": "2420",
    "confidence": "high",
    "signals": null,
    "quote": "Unknown types - logged as \"Unkown_RiddleHUDComand_\" at 0x17c6a"
@@ -23165,7 +23165,7 @@
    "local_id": 536,
    "statement": "Verification was 25+ controlled CarPlay capture sessions plus a Jan 2026 Android Auto capture with Pixel 10 and YouTube Music.",
    "topic": "usb-references",
-   "source_lines": "2426",
+   "source_lines": "2428",
    "confidence": "high",
    "signals": null,
    "quote": "25+ controlled CarPlay capture sessions"

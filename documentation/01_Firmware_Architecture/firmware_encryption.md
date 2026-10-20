@@ -15,8 +15,12 @@ This is **completely separate** from USB communication encryption (CMD_ENABLE_CR
 |-----------------|-----------|-----|---------|
 | **Firmware .img** (this doc) | AES-128-CBC | `AutoPlay9uPT4n17` | Protect firmware files |
 | USB Communication | AES-128-CTR | `W2EC1X1NbZ58TXtn` | Encrypt runtime USB traffic |
+| U-Boot update env + kernel staging blocks (added 2026-10-19) | AES-128-CBC | Per unit: **UpgKey** = ASCII `%08x%08x%08x%08x` of OCOTP CFG0, CFG1, MAC0, MAC1 (key = first 16 chars, IV = last 16), the same text as the adapter's `uuid` | Carry the boot environment and the kernel head in a form U-Boot converts on the unit |
+| Kernel head + live env block (added 2026-10-19) | AES-128-CBC (DCP) | Per chip, hardware-only (DCP unique/OTP key) | First 3 × 64 KB of the zImage and the 64 KB env block |
 
-See `03_Security_Analysis/crypto_stack.md` for complete cryptographic stack documentation.
+The last two rows are documented in `05_Security_Analysis/kernel_encryption.md` [UpgKey row VERIFIED 2026-10-19 on two units' flash dumps; DCP row: the head is VERIFIED not to be plaintext on one unit, the DCP key is INFERRED; see that file for evidence and labels]. Neither key is the `.img` key.
+
+See `05_Security_Analysis/crypto_stack.md` for complete cryptographic stack documentation (path corrected 2026-10-19; it said `03_Security_Analysis/`).
 
 **See also:** The firmware-image AES here is also distinct from the **MFi authentication coprocessor** (a genuine Apple IC on I2C bus 1) — see the "MFi Authentication Coprocessor" subsection in `hardware_platform.md`. Do not conflate the firmware-image AES key with MFi credentials.
 
@@ -33,6 +37,8 @@ See `03_Security_Analysis/crypto_stack.md` for complete cryptographic stack docu
 +------------------------------------------------------------------+
 ```
 
+**[Added 2026-10-19]** In the 2025.10.15.1127 image (`carlinkit/firmware_stock/A15W_Update_2025.10.15.1127.img`, decrypted with the key below), `tmp/` also holds `AutoBox.img` (3,670,016 B) and `upg`. `once.sh` moves both to `/tmp` and runs `/tmp/upg`. `upg` is a statically linked ARM ELF with no section headers, byte entropy 7.999 bits/byte over the whole file (packed or encrypted), and was not analysed [VERIFIED]. `AutoBox.img` carries the kernel in "staging form": blank DCP head and env block, and staging/update-env blocks that do not decrypt with either recorded unit's UpgKey, the `.img` key, the USB key or trivial keys; their key is [UNRESOLVED]. So `upg` presumably re-keys them per unit [INFERRED]. Details: `05_Security_Analysis/kernel_encryption.md` § Vendor update image; `secure_boot_hab.md` § AutoBox.img.
+
 **Decrypted Contents:**
 ```
 .img (encrypted) -> .tar.gz (gzip compressed) -> tar archive containing:
@@ -46,7 +52,9 @@ See `03_Security_Analysis/crypto_stack.md` for complete cryptographic stack docu
 |- tmp/
 |   |- once.sh        (pre-update script)
 |   |- finish.sh      (post-update script)
-|   +- remove_unnecessary_file.sh
+|   |- remove_unnecessary_file.sh
+|   |- AutoBox.img    (full releases: U-Boot + kernel partitions, 0x380000 B; see below)
+|   +- upg            (full releases: the tool that writes AutoBox.img; once.sh runs /tmp/upg)
 +- usr/
     +- lib/
 ```

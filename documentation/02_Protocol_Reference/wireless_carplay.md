@@ -522,7 +522,7 @@ For USB transport encryption:
 | **Key** | `SkBRDy3gmrw1ieH0` (hardcoded at `0x6d0d4`; note: `W2EC1X1NbZ58TXtn` is the SessionToken 0xA3 key only) |
 | **Payload** | 4-byte seed (must be > 0) |
 
-**Security Note:** All adapters share the same hardcoded AES key. See `../03_Security_Analysis/crypto_stack.md` for the complete two-key system.
+**Security Note:** All adapters share the same hardcoded AES key. See `../05_Security_Analysis/crypto_stack.md` for the complete two-key system.
 
 ---
 

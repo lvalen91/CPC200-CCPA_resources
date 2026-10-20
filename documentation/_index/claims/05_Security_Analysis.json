@@ -6,7 +6,7 @@
   "05_Security_Analysis/kernel_encryption.md",
   "05_Security_Analysis/security_findings.md"
  ],
- "claim_count": 441,
+ "claim_count": 497,
  "claims": [
   {
    "gid": "05_Security_Analysis/crypto_stack.md#1",
@@ -1885,1188 +1885,1760 @@
    "gid": "05_Security_Analysis/kernel_encryption.md#1",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 1,
-   "statement": "The kernel encryption analysis is dated 2026-01-29.",
+   "statement": "The kernel encryption analysis spans sessions from 2026-01-29 through 2026-10-19, the last decoding the on-flash format from the U-Boot environment.",
    "topic": "document-metadata",
    "source_lines": "4",
    "confidence": "high",
    "signals": [],
-   "quote": "**Analysis Date:** 2026-01-29"
+   "quote": "**Analysis Date:** 2026-01-29 (initial)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#2",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 2,
-   "statement": "As of this document, the kernel encryption key has not been identified.",
+   "statement": "Status 2026-10-19: kernel read and write are both solved without DCP access from Linux; earlier routes are kept as history.",
    "topic": "kernel-encryption-status",
    "source_lines": "5",
    "confidence": "high",
    "signals": [
-    "unconfirmed"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "**Status:** Encryption key NOT yet identified"
+   "quote": "**Solved in both directions (2026-10-19).**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#3",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 3,
-   "statement": "The kernel stored in flash (mtd1) is encrypted using a separate mechanism from the firmware image encryption.",
-   "topic": "kernel-encryption",
-   "source_lines": "11",
+   "statement": "The stock kernel on flash is a plain ARM zImage whose first three 64 KB blocks are DCP-encrypted.",
+   "topic": "kernel-format",
+   "source_lines": "5",
    "confidence": "high",
-   "signals": [],
-   "quote": "The kernel stored in flash (mtd1) is encrypted using a separate mechanism from the firmware image encryption."
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "The stock kernel on flash is a plain ARM zImage whose first three 64 KB blocks are DCP-encrypted"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#4",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 4,
-   "statement": "The firmware encryption key `AutoPlay9uPT4n17` does NOT decrypt the kernel.",
-   "topic": "firmware-key",
-   "source_lines": "11",
+   "statement": "Writing new staging blocks and erasing the U-Boot env block makes U-Boot re-encrypt a new kernel head with the DCP key on the next boot.",
+   "topic": "kernel-write-path",
+   "source_lines": "5",
    "confidence": "high",
-   "signals": [],
-   "quote": "The firmware encryption key (`AutoPlay9uPT4n17`) does NOT decrypt the kernel."
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "makes U-Boot itself re-encrypt a new kernel head with the DCP key on the next boot"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#5",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 5,
-   "statement": "The kernel binary is located at mtd1 (/dev/mtd1).",
-   "topic": "kernel-binary-location",
-   "source_lines": "19",
+   "statement": "The 2026-10-19 material uses the labels VERIFIED, OWNER-REPORTED, OBSERVED-NOT-RECORDED, INFERRED, UNTESTED and UNRESOLVED.",
+   "topic": "document-metadata",
+   "source_lines": "7",
    "confidence": "high",
    "signals": [],
-   "quote": "| Location | mtd1 (/dev/mtd1) |"
+   "quote": "Labels used in the 2026-10-19 material:"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#6",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 6,
-   "statement": "The kernel binary size is 3,407,872 bytes (3.3MB).",
-   "topic": "kernel-binary-size",
-   "source_lines": "20",
+   "statement": "E1's mtd0.bin and mtd1.bin have the same sha256 as flash_dumps/CCPA_stripped/mtd0.bin and mtd1.bin (and the same bytes are in nor_backup/full_nor.bin), so they are in the repo; only mtd2, the run logs, the dry-run files and the recovered zImage are local.",
+   "topic": "evidence",
+   "source_lines": "11",
    "confidence": "high",
-   "signals": [],
-   "quote": "3,407,872 bytes (3.3MB)"
+   "signals": [
+    "2026-10-19",
+    "Corrected 2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "This entry said E1 is \"not in this repo\". Its `mtd0.bin` and `mtd1.bin` are:"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#7",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 7,
-   "statement": "The kernel flash offset is 0x100000 (1MB from start).",
-   "topic": "kernel-flash-offset",
-   "source_lines": "21",
+   "statement": "The recovered stock zImage file has sha256 starting 35014617e11d455e.",
+   "topic": "stock-zimage",
+   "source_lines": "11",
    "confidence": "high",
-   "signals": [],
-   "quote": "Flash Offset | 0x100000 (1MB from start)"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`stock_zImage_recovered_3.14.52_build12.bin` (sha256 `35014617e11d455e…`)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#8",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 8,
-   "statement": "The kernel RAM load address is 0x80800000.",
-   "topic": "kernel-ram-address",
-   "source_lines": "22",
+   "statement": "Evidence E2 is the stock A15W_Update_2025.10.15.1127.img in this repo, containing tmp/AutoBox.img, tmp/upg, tmp/once.sh and tmp/finish.sh.",
+   "topic": "evidence",
+   "source_lines": "12",
    "confidence": "high",
    "signals": [],
-   "quote": "| RAM Load Address | 0x80800000 |"
+   "quote": "**E2** — `carlinkit/firmware_stock/A15W_Update_2025.10.15.1127.img`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#9",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 9,
-   "statement": "The kernel encryption algorithm/key is unknown.",
-   "topic": "kernel-encryption",
-   "source_lines": "23",
+   "statement": "Evidence E3 is LIVI's GPL-3.0-or-later source (imx6ul-uboot lib.rs, provisioning boot.rs, imx6ul build.sh), read and not copied.",
+   "topic": "evidence",
+   "source_lines": "13",
    "confidence": "high",
-   "signals": [
-    "unconfirmed"
-   ],
-   "quote": "| Encryption | Unknown algorithm/key |"
+   "signals": [],
+   "quote": "**E3** — LIVI (GPL-3.0-or-later, external)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#10",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 10,
-   "statement": "The kernel compression is unknown, likely gzip after decryption.",
-   "topic": "kernel-compression",
-   "source_lines": "24",
-   "confidence": "low",
+   "statement": "U-Boot reads 0x302fd8 bytes (3,157,976 B, build-specific) from flash 0x40000, the start of mtd1, to RAM 0x80800000.",
+   "topic": "kernel-load",
+   "source_lines": "20",
+   "confidence": "high",
    "signals": [
-    "speculative",
-    "hedging"
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
    ],
-   "quote": "| Compression | Unknown (likely gzip after decryption) |"
+   "quote": "U-Boot reads `0x302fd8` bytes (3,157,976 B; this length is build-specific"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#11",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 11,
-   "statement": "U-Boot string at offset 0x1641e is `UPGkey: %s`, significance: upgrade/kernel key logging.",
-   "topic": "uboot-strings",
-   "source_lines": "34",
+   "statement": "U-Boot decrypts only the first three 64 KB blocks in place with mm w before bootz.",
+   "topic": "kernel-format",
+   "source_lines": "19",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0x1641e | `UPGkey: %s` | Upgrade/kernel key logging |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "decrypts **only the first three 64 KB blocks** in place"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#12",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 12,
-   "statement": "U-Boot string at offset 0x1643b is `do_decrypt_decompress ret=%d dstLen=%d`, the decryption function.",
-   "topic": "uboot-strings",
-   "source_lines": "35",
+   "statement": "mtd1 from offset 0x30000 to 0x302fd8 is plaintext zImage byte-identical to the recovered zImage.",
+   "topic": "kernel-format",
+   "source_lines": "19",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0x1643b | `do_decrypt_decompress ret=%d dstLen=%d` | Decryption function |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "Everything from mtd1 offset `0x30000` to `0x302fd8` is plaintext zImage"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#13",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 13,
-   "statement": "U-Boot string at offset 0x17483 is `heweiencrypt`, a HeWei (manufacturer) encryption marker.",
-   "topic": "uboot-strings",
-   "source_lines": "36",
+   "statement": "Three 64 KB staging blocks at mtd1 offset 0x302fd8 (flash 0x342fd8/0x352fd8/0x362fd8) hold the zImage head encrypted with the UpgKey.",
+   "topic": "staging-blocks",
+   "source_lines": "20",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0x17483 | `heweiencrypt` | HeWei (manufacturer) encryption marker |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "Three 64 KB \"staging\" blocks at mtd1 offset `0x302fd8`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#14",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 14,
-   "statement": "U-Boot string at offset 0x16484 is `Can't start, Bad Keys.`, a key validation failure message.",
-   "topic": "uboot-strings",
-   "source_lines": "37",
+   "statement": "Each staging block is AES-128-CBC encrypted on its own with the same IV; one continuous CBC stream over 192 KB does not reproduce the flash.",
+   "topic": "staging-blocks",
+   "source_lines": "20",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0x16484 | `Can't start, Bad Keys.` | Key validation failure |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "one continuous CBC stream over the 192 KB does *not* reproduce the flash bytes"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#15",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 15,
-   "statement": "At U-Boot offset 0x800: `q86ce5527082c08c ab96d863d895861a 8`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "42",
+   "statement": "UpgKey is the ASCII text printf(\"%08x%08x%08x%08x\", CFG0, CFG1, MAC0, MAC1) of OCOTP words 1, 2, 0x22, 0x23; key = first 16 characters, IV = last 16.",
+   "topic": "upgkey",
+   "source_lines": "21",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x800: q86ce5527082c08c ab96d863d895861a 8"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "**UpgKey** = the 32 ASCII characters"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#16",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 16,
-   "statement": "At U-Boot offset 0x820: `V1bc3d222374b83000d70fe 20a83afcd2`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "43",
+   "statement": "U-Boot contains the format string %08x%08x%08x%08x at mtd0 0x1640d, just before UPGkey: %s at 0x1641e.",
+   "topic": "upgkey",
+   "source_lines": "21",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x820: V1bc3d222374b83000d70fe 20a83afcd2"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "U-Boot carries the format string `%08x%08x%08x%08x` at mtd0 `0x1640d`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#17",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 17,
-   "statement": "At U-Boot offset 0x850: `u9e02fb58972989f6c628561fee75c 6cc`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "44",
+   "statement": "The UpgKey text equals the adapter's uuid for the two units recorded in hardware_revisions.md.",
+   "topic": "upgkey-uuid",
+   "source_lines": "22",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x850: u9e02fb58972989f6c628561fee75c 6cc"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "**The UpgKey text is the adapter's `uuid`.**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#18",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 18,
-   "statement": "At U-Boot offset 0x878: `z0b8dbc1388ff2249f1df e7dbf7a8f8b5`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "45",
+   "statement": "The adapter sends the uuid to the host in BoxSettings, so any connected host learns the UpgKey; it is not a secret.",
+   "topic": "upgkey-uuid",
+   "source_lines": "22",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x878: z0b8dbc1388ff2249f1df e7dbf7a8f8b5"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "so any connected host learns the key. It is not a secret."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#19",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 19,
-   "statement": "At U-Boot offset 0x8a0: `j4261f4de0511ee9f2832680f763 d0077`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "46",
+   "statement": "Decrypting the staging blocks and prepending them to mtd1[0x30000:kernel_len] recovers the plaintext stock kernel from flash.",
+   "topic": "kernel-recovery",
+   "source_lines": "23",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x8a0: j4261f4de0511ee9f2832680f763 d0077"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "decrypt the three staging blocks with the unit's UpgKey and prepend them"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#20",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 20,
-   "statement": "At U-Boot offset 0x8c8: `vecb99e6ffea7be1e5419350f725da86b`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "47",
+   "statement": "The recovered zImage has magic 0x016f2818 at +0x24 and a gzip payload at 0x400f inflating to 0x5e8b6c bytes with the 3.14.52+g94d07bb #12 banner.",
+   "topic": "stock-zimage",
+   "source_lines": "23",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x8c8: vecb99e6ffea7be1e5419350f725da86b"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "a gzip payload at `0x400f` that inflates to `0x5e8b6c` bytes"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#21",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 21,
-   "statement": "At U-Boot offset 0x8f0: `?7479ae0220b1464b40b14bc0f04d1244`.",
-   "topic": "uboot-hash-values",
-   "source_lines": "48",
+   "statement": "Re-encrypting the recovered head with the UpgKey reproduces the staging bytes exactly.",
+   "topic": "staging-blocks",
+   "source_lines": "23",
    "confidence": "high",
-   "signals": [],
-   "quote": "0x8f0: ?7479ae0220b1464b40b14bc0f04d1244"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "Re-encrypting that head reproduces the staging bytes exactly."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#22",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 22,
-   "statement": "The values at 0x800-0x900 appear to be SHA256 hashes or device-specific identifiers, NOT encryption keys.",
-   "topic": "uboot-hash-values",
-   "source_lines": "51",
-   "confidence": "medium",
+   "statement": "LIVI 9.5.0's mainline 7.2.10 zImage was staged on the unit, the env block erased, and U-Boot booted it; U-Boot does not verify the kernel.",
+   "topic": "kernel-write-path",
+   "source_lines": "24",
+   "confidence": "high",
    "signals": [
-    "hedging",
-    "appears to"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "These appear to be SHA256 hashes or device-specific identifiers, NOT encryption keys."
+   "quote": "U-Boot does not verify the kernel."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#23",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 23,
-   "statement": "Key `AutoPlay9uPT4n17` tested with AES-128-CBC failed with random output.",
-   "topic": "decryption-attempts",
-   "source_lines": "61",
-   "confidence": "high",
+   "statement": "The 2026-06-30 DCP details (AES-128-CBC, KEY_SELECT=0xfe) still describe the head encryption but were not re-verified on 2026-10-19.",
+   "topic": "dcp-head",
+   "source_lines": "26",
+   "confidence": "medium",
    "signals": [],
-   "quote": "| `AutoPlay9uPT4n17` | AES-128-CBC | Failed - random output |"
+   "quote": "still describe how the **head** is encrypted; they were not re-verified on 2026-10-19"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#24",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 24,
-   "statement": "Key W2EC1X1NbZ58TXtn with AES-128-CBC: decryption attempt Failed - random output.",
-   "topic": "decryption-attempts",
-   "source_lines": "62",
+   "statement": "mtd0 0x2D000-0x2FFFF holds the UpgKey-encrypted update environment, with its length in the last 4 bytes of the 0x20000 block (0x3000 on E1).",
+   "topic": "update-env",
+   "source_lines": "38",
    "confidence": "high",
    "signals": [
-    "TODO"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| `W2EC1X1NbZ58TXtn` | AES-128-CBC | Failed - random output |"
+   "quote": "Update environment: payload length in the block's last 4 bytes"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#25",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 25,
-   "statement": "Key `q86ce5527082c08c` tested with AES-128-CBC failed.",
-   "topic": "decryption-attempts",
-   "source_lines": "63",
-   "confidence": "high",
-   "signals": [],
-   "quote": "| `q86ce5527082c08c` | AES-128-CBC | Failed |"
+   "statement": "mtd0 0x30000-0x3FFFF is the 64 KB live environment block, high-entropy (7.997 bits/byte), DCP-encrypted (inferred from heweiencrypt's mm m).",
+   "topic": "env-block",
+   "source_lines": "39",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "Live environment, 64 KB, entropy 7.997 bits/byte"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#26",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 26,
-   "statement": "Key `ab96d863d895861a` tested with AES-128-CBC failed.",
-   "topic": "decryption-attempts",
-   "source_lines": "64",
+   "statement": "The update payload inflates to a 64 KB U-Boot environment with a little-endian CRC32 over env[4:0x800] in its first 4 bytes.",
+   "topic": "update-env",
+   "source_lines": "41",
    "confidence": "high",
-   "signals": [],
-   "quote": "| `ab96d863d895861a` | AES-128-CBC | Failed |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "whose first 4 bytes are a CRC32 (little-endian) over `env[4:0x800]`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#27",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 27,
-   "statement": "Key `V1bc3d222374b830` tested with AES-128-CBC failed.",
-   "topic": "decryption-attempts",
-   "source_lines": "65",
+   "statement": "The live environment's bootcmd is run norboot and bootdelay is 3.",
+   "topic": "uboot-env",
+   "source_lines": "49",
    "confidence": "high",
-   "signals": [],
-   "quote": "| `V1bc3d222374b830` | AES-128-CBC | Failed |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "bootcmd=run norboot;"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#28",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 28,
-   "statement": "Key `u9e02fb58972989f` tested with AES-128-CBC failed.",
-   "topic": "decryption-attempts",
-   "source_lines": "66",
+   "statement": "The live norargs sets console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 with mtdparts 256k(uboot),3328K(kernel),12800K(rootfs).",
+   "topic": "uboot-env",
+   "source_lines": "53",
    "confidence": "high",
-   "signals": [],
-   "quote": "| `u9e02fb58972989f` | AES-128-CBC | Failed |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "norargs=setenv bootargs console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#29",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 29,
-   "statement": "Decryption attempt output is completely random with no magic bytes visible.",
-   "topic": "decryption-observations",
-   "source_lines": "70",
+   "statement": "norboot copies 0xf800 units (0x3E000 B if cp uses .l, inferred) from RAM 0x80800800 to 0x83000000, reads 0x302fd8 B from flash 0x40000, runs mm w on three 64 KB blocks and bootz.",
+   "topic": "uboot-env",
+   "source_lines": "55",
    "confidence": "high",
-   "signals": [],
-   "quote": "Output is completely random - no magic bytes visible"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "norboot=run norargs; sf probe 0; cp 0x80800800 0x83000000 0xf800;"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#30",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 30,
-   "statement": "No ARM boot signatures (0xea000000, etc.) found in decryption output.",
-   "topic": "decryption-observations",
-   "source_lines": "71",
+   "statement": "heweiencrypt reads each staging block, runs mm d then mm m, and writes it to 0x40000/0x50000/0x60000; then rebuilds the env from the 0x2d000 payload and writes it to 0x30000.",
+   "topic": "heweiencrypt",
+   "source_lines": "59",
    "confidence": "high",
-   "signals": [],
-   "quote": "No ARM boot signatures (0xea000000, etc.) found"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "heweiencrypt=sf probe 0;"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#31",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 31,
-   "statement": "No compression signatures (1f8b for gzip, etc.) found in decryption output.",
-   "topic": "decryption-observations",
-   "source_lines": "72",
+   "statement": "norargs builds exactly the kernel command line captured live.",
+   "topic": "uboot-env",
+   "source_lines": "68",
    "confidence": "high",
-   "signals": [],
-   "quote": "No compression signatures (1f8b for gzip, etc.) found"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`norargs` builds exactly the kernel command line captured live"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#32",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 32,
-   "statement": "Encryption appears to cover the entire partition.",
-   "topic": "decryption-observations",
-   "source_lines": "73",
-   "confidence": "medium",
+   "statement": "The previously documented bootdelay=0 / mtdblock3 / 0x100000 / DTB-from-0x5F0000 environment is U-Boot's built-in default plus NXP EVK template text, not the environment that runs.",
+   "topic": "uboot-env",
+   "source_lines": "68",
+   "confidence": "high",
    "signals": [
-    "appears to"
+    "Corrected 2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "Encryption appears to cover entire partition"
+   "quote": "it is U-Boot's built-in default plus NXP 14x14-EVK template text left in the image"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#33",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 33,
-   "statement": "U-Boot norboot command runs `sf probe 0` to probe SPI flash.",
-   "topic": "boot-flow",
-   "source_lines": "82",
+   "statement": "mm d decrypts AES-128-CBC with the UpgKey (verified by equivalence).",
+   "topic": "mm-commands",
+   "source_lines": "74",
    "confidence": "high",
-   "signals": [],
-   "quote": "sf probe 0                              # Probe SPI flash"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "| `mm d <addr> <len>` | AES-128-CBC decrypt with the UpgKey"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#34",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 34,
-   "statement": "U-Boot norboot reads kernel (5MB) to RAM with `sf read 0x80800000 0x100000 0x4F0000`.",
-   "topic": "boot-flow",
-   "source_lines": "83",
-   "confidence": "high",
-   "signals": [],
-   "quote": "sf read 0x80800000 0x100000 0x4F0000"
+   "statement": "mm m encrypts with the DCP unique key (inferred).",
+   "topic": "mm-commands",
+   "source_lines": "75",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "| `mm m <addr> <len>` | encrypt with the DCP unique (OTP) key"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#35",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 35,
-   "statement": "U-Boot norboot reads DTB (64KB) to RAM with `sf read 0x83000000 0x5F0000 0x10000`.",
-   "topic": "boot-flow",
-   "source_lines": "84",
-   "confidence": "high",
-   "signals": [],
-   "quote": "sf read 0x83000000 0x5F0000 0x10000     # Read DTB (64KB) to RAM"
+   "statement": "mm w decrypts in place with the DCP unique key (inferred).",
+   "topic": "mm-commands",
+   "source_lines": "76",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "| `mm w <addr> <len>` | decrypt in place with the DCP unique key"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#36",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 36,
-   "statement": "U-Boot norboot boots zImage with DTB via `bootz 0x80800000 - 0x83000000`.",
-   "topic": "boot-flow",
-   "source_lines": "85",
-   "confidence": "high",
-   "signals": [],
-   "quote": "bootz 0x80800000 - 0x83000000           # Boot zImage with DTB"
+   "statement": "mm z is gunzip (inferred).",
+   "topic": "mm-commands",
+   "source_lines": "77",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "| `mm z <src> <srclen> <dst> <dstlen>` | gunzip"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#37",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 37,
-   "statement": "Decryption likely occurs between `sf read` and `bootz` commands, handled by the do_decrypt_decompress function.",
-   "topic": "boot-flow",
-   "source_lines": "90",
-   "confidence": "medium",
+   "statement": "The 64 KB environment carries an FDT at offset 0x800: version 17, totalsize 0x8103 (33,027 B), 0xFF-padded.",
+   "topic": "stock-dtb",
+   "source_lines": "82",
+   "confidence": "high",
    "signals": [
-    "hedging",
-    "likely"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "Decryption likely occurs between `sf read` and `bootz` commands. The `do_decrypt_decompress` function handles this."
+   "quote": "carries a flattened device tree at offset `0x800`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#38",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 38,
-   "statement": "The kernel has CONFIG_STRICT_DEVMEM enabled, blocking direct /dev/mem access to kernel memory regions.",
-   "topic": "memory-protection",
-   "source_lines": "98",
-   "confidence": "high",
-   "signals": [],
-   "quote": "The kernel has `CONFIG_STRICT_DEVMEM` enabled, blocking direct `/dev/mem` access to kernel memory regions"
+   "statement": "norboot's cp copies from env+0x800 to the DTB address 0x83000000 before the kernel load; that the env sits at RAM 0x80800000 then is inferred.",
+   "topic": "stock-dtb",
+   "source_lines": "82",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "copies from `env+0x800` to the DTB address"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#39",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 39,
-   "statement": "Attempting `dd if=/dev/mem ... skip=$((0x80008000/4096)) count=1400` returns `dd: /dev/mem: Bad address`.",
-   "topic": "memory-protection",
-   "source_lines": "102",
+   "statement": "Flash 0x5F0000 is inside mtd2 and its 64 KB holds JFFS2 nodes (magic 0x1985, 107 times), not a DTB.",
+   "topic": "stock-dtb",
+   "source_lines": "82",
    "confidence": "high",
-   "signals": [],
-   "quote": "# Result: dd: /dev/mem: Bad address"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "its 64 KB holds JFFS2 nodes: magic `0x1985` from its first byte, 107 times"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#40",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 40,
-   "statement": "/proc/kallsyms exposes full kernel symbols (48,959 entries).",
-   "topic": "accessible-memory",
-   "source_lines": "108",
+   "statement": "The stock DTB is the NXP 14x14 EVK tree: model Freescale i.MX6 UltraLite 14x14 EVK Board, compatible fsl,imx6ul-14x14-evk/fsl,imx6ull.",
+   "topic": "stock-dtb",
+   "source_lines": "84",
    "confidence": "high",
-   "signals": [],
-   "quote": "/proc/kallsyms - Full kernel symbols (48,959 entries)"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`model = \"Freescale i.MX6 UltraLite 14x14 EVK Board\"`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#41",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 41,
-   "statement": "/proc/iomem exposes the memory map.",
-   "topic": "accessible-memory",
-   "source_lines": "109",
+   "statement": "The stock DTB /memory node declares 512 MiB (EVK value) while the running system reports 128 MiB System RAM.",
+   "topic": "stock-dtb",
+   "source_lines": "84",
    "confidence": "high",
-   "signals": [],
-   "quote": "/proc/iomem    - Memory map"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`/memory` `reg = <0x80000000 0x20000000>` (512 MiB, the EVK value"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#42",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 42,
-   "statement": "/proc/modules exposes loaded modules.",
-   "topic": "accessible-memory",
-   "source_lines": "110",
+   "statement": "The stock DTB's QSPI child is micronix,mx25l12805d without partition nodes; it has crypto@2280000 fsl,imx6ull-dcp and both USB controllers dr_mode otg.",
+   "topic": "stock-dtb",
+   "source_lines": "84",
    "confidence": "high",
-   "signals": [],
-   "quote": "/proc/modules  - Loaded modules"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "QSPI child `micronix,mx25l12805d` with no partition nodes"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#43",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 43,
-   "statement": "ptrace and ftrace disabled was verified 2026-05-21.",
-   "topic": "anti-debug",
-   "source_lines": "113",
+   "statement": "mtd1 0x0-0x2FFFF is the DCP-encrypted zImage head (no zImage magic at +0x24).",
+   "topic": "kernel-layout",
+   "source_lines": "90",
    "confidence": "high",
    "signals": [
-    "verified"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "### Anti-Debug: ptrace and ftrace Disabled (Verified 2026-05-21)"
+   "quote": "zImage head, DCP-encrypted (the word at `+0x24` is not the zImage magic)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#44",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 44,
-   "statement": "The kernel rejects ptrace entirely; every request (PTRACE_SEIZE, PTRACE_ATTACH, etc.) returns EINVAL kernel-wide.",
-   "topic": "anti-debug-ptrace",
-   "source_lines": "115",
+   "statement": "mtd1 0x30000-0x302FD7 is the plaintext zImage body.",
+   "topic": "kernel-layout",
+   "source_lines": "91",
    "confidence": "high",
    "signals": [
-    "verified"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "The kernel **rejects `ptrace` entirely** — every request (`PTRACE_SEIZE`, `PTRACE_ATTACH`, …)\nreturns `EINVAL`, kernel-wide."
+   "quote": "zImage body, **plaintext**, byte-identical to the recovered zImage"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#45",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 45,
-   "statement": "ptrace rejection was verified to fail even when attaching to a self-spawned process; there is no yama LSM and nothing else tracing the target.",
-   "topic": "anti-debug-ptrace",
-   "source_lines": "116",
+   "statement": "mtd1 0x302FD8-0x332FD7 holds the staging blocks (UpgKey, CBC restarted per block).",
+   "topic": "kernel-layout",
+   "source_lines": "92",
    "confidence": "high",
    "signals": [
-    "verified"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "This was verified to fail even when attaching to a self-spawned\nprocess; there is no yama LSM and nothing else tracing the target."
+   "quote": "Staging: zImage head, UpgKey AES-128-CBC, CBC restarted per 64 KB block"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#46",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 46,
-   "statement": "The ptrace rejection is a deliberate Carlinkit anti-RE hardening measure and is the mechanism behind the known 'blocked strace' behaviour.",
-   "topic": "anti-debug-ptrace",
-   "source_lines": "117",
+   "statement": "mtd1 0x332FD8-0x33FFFF is 0xFF.",
+   "topic": "kernel-layout",
+   "source_lines": "93",
    "confidence": "high",
-   "signals": [],
-   "quote": "This is a deliberate Carlinkit\nanti-RE hardening measure — it is the mechanism behind the known \"blocked strace\" behaviour."
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "| `0x332FD8`–`0x33FFFF` | `0x372FD8`–`0x37FFFF` | `0xFF` |"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#47",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 47,
-   "statement": "There is no ftrace; /sys/kernel/debug/tracing is absent.",
-   "topic": "anti-debug-ftrace",
-   "source_lines": "120",
+   "statement": "Kernel length and staging offset are build-specific and should be read from the unit's own norboot/heweiencrypt.",
+   "topic": "kernel-layout",
+   "source_lines": "95",
    "confidence": "high",
-   "signals": [
-    "verified"
-   ],
-   "quote": "There is also **no ftrace** — `/sys/kernel/debug/tracing` is absent."
+   "signals": [],
+   "quote": "they are build-specific, so read them from the unit's own environment"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#48",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 48,
-   "statement": "No in-place syscall/I²C/function tracing is possible on this firmware; RE must rely on packet capture, /proc/<PID>/mem dumps, static analysis, or LD_PRELOAD shims.",
-   "topic": "anti-debug-consequence",
-   "source_lines": "122",
+   "statement": "A replacement zImage must fit in 0x302fd8 bytes; LIVI 9.5.0 imx6ul_iw416 is 3,124,994 B with 32,982 B spare.",
+   "topic": "kernel-size",
+   "source_lines": "97",
    "confidence": "high",
-   "signals": [],
-   "quote": "no in-place syscall / I²C / function tracing is possible on this firmware. RE\nmust instead rely on packet capture, `/proc/<PID>/mem` dumps, static analysis, or `LD_PRELOAD`\nshims."
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "LIVI 9.5.0 `imx6ul_iw416` is 3,124,994 B, 32,982 B spare"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#49",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 49,
-   "statement": "The anti-debug findings are sourced from MFi_research/CAPTURE_SESSION.md §2, §8.",
-   "topic": "anti-debug-source",
-   "source_lines": "126",
+   "statement": "heweiencrypt decrypts each staging block with the UpgKey, re-encrypts it with the DCP key, writes it over the head block, then writes the rebuilt env block last.",
+   "topic": "heweiencrypt",
+   "source_lines": "101",
    "confidence": "high",
-   "signals": [],
-   "quote": "Source: `_evidence/MFi_research/CAPTURE_SESSION.md` §2, §8."
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "for each of the three blocks it reads staging, decrypts with the UpgKey (`mm d`)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#50",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 50,
-   "statement": "Extraction Method 1 (kernel module) requires compiling against 3.14.52 kernel headers.",
-   "topic": "extraction-kernel-module",
-   "source_lines": "138",
+   "statement": "With the env block erased, U-Boot came back up and rewrote the env block (both 2026-10-19 runs).",
+   "topic": "heweiencrypt",
+   "source_lines": "103",
    "confidence": "high",
-   "signals": [],
-   "quote": "Requires compiling against 3.14.52 kernel headers"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "with the env block erased, U-Boot came back up and the env block was rewritten"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#51",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 51,
-   "statement": "The i.MX6UL has JTAG accessible via test pads.",
-   "topic": "extraction-jtag",
-   "source_lines": "142",
+   "statement": "That U-Boot falls back to the update environment and runs heweiencrypt when the env block is invalid is inferred; the U-Boot code path was not disassembled.",
+   "topic": "heweiencrypt",
+   "source_lines": "103",
    "confidence": "medium",
-   "signals": [],
-   "quote": "The i.MX6UL has JTAG accessible via test pads"
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "the U-Boot code path was not disassembled"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#52",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 52,
-   "statement": "JTAG extraction method: halt CPU during boot (after decryption) and dump RAM at 0x80008000.",
-   "topic": "extraction-jtag",
-   "source_lines": "145",
-   "confidence": "medium",
-   "signals": [],
-   "quote": "3. Dump RAM at 0x80008000"
+   "statement": "Power-loss safety of the conversion (env written last) is inferred and untested.",
+   "topic": "heweiencrypt",
+   "source_lines": "103",
+   "confidence": "low",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "That the conversion survives a power cut because the env is written last is [INFERRED, untested]."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#53",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 53,
-   "statement": "U-Boot modification extraction involves flashing modified U-Boot to mtd0, with risk of bricking the device if U-Boot fails.",
-   "topic": "extraction-uboot-mod",
-   "source_lines": "152",
+   "statement": "AutoBox.img in the 2025.10.15.1127 update is 0x380000 B = U-Boot partition + kernel partition.",
+   "topic": "autobox",
+   "source_lines": "107",
    "confidence": "high",
-   "signals": [],
-   "quote": "**Risk:** Could brick device if U-Boot fails"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`tmp/AutoBox.img` in E2 is `0x380000` B (3,670,016 B)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#54",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 54,
-   "statement": "AES-128-CBC is rated medium likelihood as the kernel encryption algorithm (common, but key unknown).",
-   "topic": "algorithm-candidates",
-   "source_lines": "169",
-   "confidence": "medium",
+   "statement": "AutoBox.img's U-Boot image 0x0-0x2CFFF is byte-identical to E1's, CSF included, and to E4's 2025.10.15.1127 dump.",
+   "topic": "autobox",
+   "source_lines": "109",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| AES-128-CBC | Medium | Common, but key unknown |"
+   "quote": "U-Boot image `0x00000`–`0x2CFFF`: byte-identical to the unit, including the CSF"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#55",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 55,
-   "statement": "AES-256-CBC is rated low likelihood (key would need to be 32 bytes).",
-   "topic": "algorithm-candidates",
-   "source_lines": "170",
-   "confidence": "low",
+   "statement": "AutoBox.img's update payload differs from E1's in 12,228 bytes and does not decrypt.",
+   "topic": "autobox",
+   "source_lines": "110",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| AES-256-CBC | Low | Key would need to be 32 bytes |"
+   "quote": "present (length word `0x3000`) but differs from the unit in 12,228 bytes and does **not** decrypt"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#56",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 56,
-   "statement": "DES/3DES is rated low likelihood (outdated, unlikely).",
-   "topic": "algorithm-candidates",
-   "source_lines": "171",
-   "confidence": "low",
+   "statement": "AutoBox.img's env block is blank (0xFF); E1's has 65,280 non-0xFF bytes.",
+   "topic": "autobox",
+   "source_lines": "111",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| DES/3DES | Low | Outdated, unlikely |"
+   "quote": "Env block `0x30000`–`0x3FFFF`: blank (`0xFF`); the unit's has 65,280 non-`0xFF` bytes."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#57",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 57,
-   "statement": "ChaCha20 is rated low likelihood (less common in bootloaders).",
-   "topic": "algorithm-candidates",
-   "source_lines": "172",
-   "confidence": "low",
+   "statement": "AutoBox.img's kernel body is byte-identical to E1's body and the recovered zImage body.",
+   "topic": "autobox",
+   "source_lines": "113",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| ChaCha20 | Low | Less common in bootloaders |"
+   "quote": "Kernel body: byte-identical to the unit's body and to the recovered zImage body (0 bytes differ)."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#58",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 58,
-   "statement": "XOR is rated low likelihood (too weak for kernel).",
-   "topic": "algorithm-candidates",
-   "source_lines": "173",
-   "confidence": "low",
+   "statement": "AutoBox.img's staging blocks differ from E1's in 195,800 bytes and do not decrypt.",
+   "topic": "autobox",
+   "source_lines": "114",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "| XOR | Low | Too weak for kernel |"
+   "quote": "Staging: present, differs in 195,800 bytes, does **not** decrypt."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#59",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 59,
-   "statement": "Custom encryption is rated medium likelihood; 'HeWei' may indicate proprietary.",
-   "topic": "algorithm-candidates",
-   "source_lines": "174",
-   "confidence": "low",
+   "statement": "The vendor upg tool presumably re-keys staging and update payload for each target unit (inferred; upg is a static ARM ELF without section headers, packed or encrypted, not analysed).",
+   "topic": "autobox-upg",
+   "source_lines": "120",
+   "confidence": "medium",
    "signals": [
-    "speculative",
-    "hedging"
+    "2026-10-19",
+    "INFERRED"
    ],
-   "quote": "| Custom | Medium | \"HeWei\" may indicate proprietary |"
+   "quote": "On a target unit the vendor `tmp/upg` presumably re-keys both"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#60",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 60,
-   "statement": "The encryption key may be derived from hardware ID (OTP fuses in i.MX6).",
-   "topic": "key-derivation",
-   "source_lines": "181",
-   "confidence": "low",
+   "statement": "AutoBox.img's kernel is the same #12 build: the identical 2,961,368-byte body contains the gzip trailer (CRC32 + ISIZE at 0x302f91), so the uncompressed kernel has the same CRC32 and size.",
+   "topic": "autobox",
+   "source_lines": "120",
+   "confidence": "medium",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "**Hardware ID** - OTP fuses in i.MX6"
+   "quote": "That the kernel inside this image is the same #12 build is [VERIFIED]"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#61",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 61,
-   "statement": "The encryption key may be derived from device serial (unique per device).",
-   "topic": "key-derivation",
-   "source_lines": "182",
-   "confidence": "low",
+   "statement": "Round trip: the dry-run plan for the stock zImage equals current mtd1, so only the env block was erased with flash_erase /dev/mtd0 196608 1 (mtd-utils 1.4.8 byte offsets).",
+   "topic": "round-trip",
+   "source_lines": "124",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "**Device Serial** - Unique per device"
+   "quote": "so the only write was erasing the env block: `flash_erase /dev/mtd0 196608 1`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#62",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 62,
-   "statement": "The encryption key may be hardcoded in U-Boot binary (not found yet).",
-   "topic": "key-derivation",
-   "source_lines": "183",
-   "confidence": "low",
+   "statement": "After the round trip the unit was back in about 14 s, mtd1 and mtd0[0,0x30000) unchanged, env block rewritten byte-identical.",
+   "topic": "round-trip",
+   "source_lines": "124",
+   "confidence": "high",
    "signals": [
-    "speculative",
-    "unconfirmed"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "**Hardcoded** - In U-Boot binary (not found yet)"
+   "quote": "The unit was back on NCM about 14 s after the reboot command"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#63",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 63,
-   "statement": "The encryption key may be external, read from secure storage.",
-   "topic": "key-derivation",
-   "source_lines": "184",
-   "confidence": "low",
+   "statement": "The round trip alone cannot show heweiencrypt re-converted the head because the kernel was unchanged.",
+   "topic": "round-trip",
+   "source_lines": "124",
+   "confidence": "high",
    "signals": [
-    "speculative"
+    "2026-10-19",
+    "VERIFIED"
    ],
-   "quote": "**External** - Read from secure storage"
+   "quote": "with an unchanged kernel this run cannot show that `heweiencrypt` re-converted the head"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#64",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 64,
-   "statement": "i.MX6 OTP register OCOTP_CFG0-6 holds the Unique ID.",
-   "topic": "imx6-otp-fuses",
-   "source_lines": "190",
+   "statement": "The LIVI plan kept the stock DCP head unchanged and changed only body and staging.",
+   "topic": "livi-flash",
+   "source_lines": "126",
    "confidence": "high",
-   "signals": [],
-   "quote": "| OCOTP_CFG0-6 | Unique ID |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "The planned mtd1 kept the stock DCP head unchanged"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#65",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 65,
-   "statement": "i.MX6 OTP register OCOTP_SRK0-7 holds secure boot keys.",
-   "topic": "imx6-otp-fuses",
-   "source_lines": "191",
+   "statement": "The LIVI kernel write (flash_erase + cat + sync) took about 20 s and was verified by sha256sum /dev/mtd1.",
+   "topic": "livi-flash",
+   "source_lines": "126",
    "confidence": "high",
-   "signals": [],
-   "quote": "| OCOTP_SRK0-7 | Secure boot keys |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "(about 20 s measured), checked by `sha256sum /dev/mtd1` against the plan"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#66",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 66,
-   "statement": "i.MX6 OTP register OCOTP_MAC0-1 holds the Ethernet MAC.",
-   "topic": "imx6-otp-fuses",
-   "source_lines": "192",
+   "statement": "After env erase and reboot the unit came up within 10 s on Linux 7.2.10 with LIVI's MTD map, and ran LIVI Link after its squashfs rootfs was flashcp'd.",
+   "topic": "livi-flash",
+   "source_lines": "126",
    "confidence": "high",
-   "signals": [],
-   "quote": "| OCOTP_MAC0-1 | Ethernet MAC |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "It came up within 10 s on Linux 7.2.10 in LIVI's rescue initramfs"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#67",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 67,
-   "statement": "U-Boot function at 0xb9f0-0xba66 is the image header processor that parses image headers and checks for the `heweiencrypt` marker.",
-   "topic": "uboot-disassembly",
-   "source_lines": "202",
+   "statement": "The LIVI boot proves heweiencrypt ran (the old head cannot start the new body) and that U-Boot does not check kernel origin or integrity.",
+   "topic": "livi-flash",
+   "source_lines": "126",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0xb9f0-0xba66 | Image header processor | Parses image headers, checks for `heweiencrypt` marker |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "this boot **also proves the `heweiencrypt` conversion ran**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#68",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 68,
-   "statement": "U-Boot function at 0xb824 is an entry counter that counts entries in the image header.",
-   "topic": "uboot-disassembly",
-   "source_lines": "203",
+   "statement": "A power cut between mtd1 erase start and env erase end leaves the old head on a new body and needs a SPI programmer; about 20 s was measured for flash_erase + cat + sync only, the rest of the window was not timed; datasheet estimate 22-54 s.",
+   "topic": "exposure-window",
+   "source_lines": "128",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0xb824 | Entry counter | Counts entries in image header |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "estimate for 52 × 64 KB erases plus programming is 22–54 s"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#69",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 69,
-   "statement": "U-Boot function at 0xb836-0xb884 is a data extractor that extracts data from the header structure (0x40 offset).",
-   "topic": "uboot-disassembly",
-   "source_lines": "204",
-   "confidence": "high",
-   "signals": [],
-   "quote": "| 0xb836-0xb884 | Data extractor | Extracts data from header structure (0x40 offset) |"
+   "statement": "On stock 3.14, mxs-dcp is bound but registers no algorithms; no AF_ALG, no /dev/crypto, DCP IRQ count 0 (live observation, not captured).",
+   "topic": "dcp-linux",
+   "source_lines": "132",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "OBSERVED-NOT-RECORDED"
+   ],
+   "quote": "`mxs-dcp` is bound but registers no algorithms"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#70",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 70,
-   "statement": "U-Boot function at 0xa918 is a printf wrapper called for all log output.",
-   "topic": "uboot-disassembly",
-   "source_lines": "205",
+   "statement": "A modified or unsigned U-Boot cannot replace the vendor one; vendor-signed U-Boot images (e.g. AutoBox.img updates) pass HAB.",
+   "topic": "hab",
+   "source_lines": "139",
    "confidence": "high",
-   "signals": [],
-   "quote": "| 0xa918 | Printf wrapper | Called for all log output |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "U-Boot cannot be replaced by a modified or unsigned U-Boot. Vendor-signed U-Boot images pass HAB"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#71",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 71,
-   "statement": "U-Boot function at 0x13270 is a memory calculator for size/checksum calculations.",
-   "topic": "uboot-disassembly",
-   "source_lines": "206",
-   "confidence": "high",
-   "signals": [],
-   "quote": "| 0x13270 | Memory calculator | Size/checksum calculations |"
+   "statement": "Owner reports (unit, date and port not recorded) no boot-ROM serial-download device with the U-Boot block blank/erased on the tested port; not part of the RUNBOOK runs.",
+   "topic": "hab-serial-download",
+   "source_lines": "140",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "OWNER-REPORTED"
+   ],
+   "quote": "no boot-ROM serial-download device appeared on the USB port tested"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#72",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 72,
-   "statement": "The image processing at 0xb9f0-0xba66 loads an address from the literal pool pointing to the `heweiencrypt` string.",
-   "topic": "uboot-code-flow",
-   "source_lines": "211",
-   "confidence": "high",
-   "signals": [],
-   "quote": "Loads address from literal pool pointing to `heweiencrypt` string"
+   "statement": "Hypothesis (unresolved): the ROM serial downloader uses the first OTG controller ci_hdrc.0 (female USB-A port).",
+   "topic": "hab-serial-download",
+   "source_lines": "140",
+   "confidence": "low",
+   "signals": [
+    "2026-10-19",
+    "UNRESOLVED"
+   ],
+   "quote": "the ROM's serial downloader uses the first OTG controller"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#73",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 73,
-   "statement": "The image processing checks header byte at offset 0x1e, masks with 0xfd, and compares to 4.",
-   "topic": "uboot-code-flow",
-   "source_lines": "212",
+   "statement": "A shell recipe recovers the stock zImage and DTB from mtd0/mtd1 and the UpgKey text, reading KLEN and the staging offset from the env and stopping on a wrong key; tested on E1 (sha256 matched) and E4's 2025.02.25.1521 dump (0x303080).",
+   "topic": "kernel-recovery",
+   "source_lines": "144",
    "confidence": "high",
-   "signals": [],
-   "quote": "Checks header byte at offset 0x1e, masks with 0xfd, compares to 4"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "the result's sha256 matched the recovered zImage"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#74",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 74,
-   "statement": "If the header byte check matches, U-Boot processes image data starting at offset 0x40.",
-   "topic": "uboot-code-flow",
-   "source_lines": "213",
+   "statement": "Adding a further unit's dumps or uuid would add its identity to the repository; leave them out unless needed.",
+   "topic": "identity",
+   "source_lines": "171",
    "confidence": "high",
-   "signals": [],
-   "quote": "If match, processes image data starting at offset 0x40"
+   "signals": [
+    "2026-10-19",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "A further unit's dumps or `uuid` would add that unit's identity to the repository"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#75",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 75,
-   "statement": "The image processing iterates through entries, calling functions at 0xb824 and 0xb836.",
-   "topic": "uboot-code-flow",
-   "source_lines": "214",
+   "statement": "The 2026-06-30 cipher statements describe only the first 0x30000 bytes; the rest of the kernel is plaintext on flash.",
+   "topic": "kernel-format",
+   "source_lines": "177",
    "confidence": "high",
-   "signals": [],
-   "quote": "Iterates through entries, calling functions at 0xb824 and 0xb836"
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "The cipher statements in this section describe only the first `0x30000` bytes of the kernel"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#76",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 76,
-   "statement": "Each iteration processes 4-byte aligned data with byte-reversal (endianness).",
-   "topic": "uboot-code-flow",
-   "source_lines": "215",
+   "statement": "The plaintext kernel was extracted from live RAM on 2026-06-30 without DCP register access.",
+   "topic": "kernel-ram-dump",
+   "source_lines": "179",
    "confidence": "high",
    "signals": [],
-   "quote": "Each iteration processes 4-byte aligned data with byte-reversal (endianness)"
+   "quote": "**The plaintext kernel has been extracted, from live RAM, no DCP register access required.**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#77",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 77,
-   "statement": "An address table at 0x1c000 contains a function pointer table with addresses in format `XX XX 80 87 17 00 00 00`.",
-   "topic": "uboot-address-table",
-   "source_lines": "219",
+   "statement": "The kernel head is AES-128-CBC using the DCP OTP_KEY mode (KEY_SELECT=0xfe, DCP_PAES_KEY_UNIQUE), a per-chip key never software-readable.",
+   "topic": "dcp-head",
+   "source_lines": "181",
    "confidence": "high",
    "signals": [],
-   "quote": "Contains function pointer table with addresses in format `XX XX 80 87 17 00 00 00`"
+   "quote": "The kernel head in mtd1 is encrypted with **AES-128-CBC**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#78",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 78,
-   "statement": "Address table entry at 0x1c2b0 points to 0x1781641e (the UPGkey string).",
-   "topic": "uboot-address-table",
-   "source_lines": "220",
-   "confidence": "high",
+   "statement": "The DCP IV is OCOTP_CFG0 || CFG1 || SW_GP2 || SW_GP3, readable but device-specific.",
+   "topic": "dcp-head",
+   "source_lines": "181",
+   "confidence": "medium",
    "signals": [],
-   "quote": "0x1c2b0: Points to 0x1781641e (UPGkey string)"
+   "quote": "The 16-byte IV is `OCOTP_CFG0 ‖ OCOTP_CFG1 ‖ SW_GP2 ‖ SW_GP3`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#79",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 79,
-   "statement": "Disassembly analysis concludes the key is NOT a simple hardcoded string.",
-   "topic": "key-derivation-theory",
-   "source_lines": "226",
-   "confidence": "medium",
-   "signals": [],
-   "quote": "The key is NOT a simple hardcoded string"
+   "statement": "The DCP mode applies to the three head blocks only and does not make the write side hard.",
+   "topic": "dcp-head",
+   "source_lines": "181",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "This applies to the three head blocks only"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#80",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 80,
-   "statement": "`UPGkey: %s` is printed during boot, indicating the key is dynamically generated.",
-   "topic": "key-derivation-theory",
-   "source_lines": "227",
-   "confidence": "medium",
-   "signals": [],
-   "quote": "`UPGkey: %s` is printed during boot - key is dynamically generated"
+   "statement": "The 2026-06-30 morning CTR/keystream.bin claim was incorrect; no keystream.bin or decrypted_gzip.bin ever existed.",
+   "topic": "keystream-retraction",
+   "source_lines": "183",
+   "confidence": "high",
+   "signals": [
+    "correction"
+   ],
+   "quote": "**The 2026-06-30 morning doc revision claiming \"AES-128 CTR/stream, keystream.bin XOR recipe, SOLVED\" was incorrect.**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#81",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 81,
-   "statement": "The hashes at 0x800-0x900 differ between U-Boot versions (device/build specific).",
-   "topic": "key-derivation-theory",
-   "source_lines": "228",
-   "confidence": "medium",
+   "statement": "The zero-repeated-block test cannot distinguish CBC from CTR on gzip plaintext.",
+   "topic": "keystream-retraction",
+   "source_lines": "183",
+   "confidence": "high",
    "signals": [],
-   "quote": "The hashes at 0x800-0x900 differ between U-Boot versions (device/build specific)"
+   "quote": "doesn't actually distinguish CBC from CTR when the plaintext is gzip-compressed data"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#82",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 82,
-   "statement": "The key is likely derived from a combination of OTP fuse values (device unique ID), build-time generated values, and possible XOR with a known constant.",
-   "topic": "key-derivation-theory",
-   "source_lines": "229",
-   "confidence": "low",
-   "signals": [
-    "speculative",
-    "hedging",
-    "likely"
-   ],
-   "quote": "Key likely derived from combination of:\n   - OTP fuse values (device unique ID)\n   - Build-time generated values\n   - Possible XOR with known constant"
+   "statement": "The kernel partition (mtd1) is 3,407,872 bytes (0x340000).",
+   "topic": "kernel-properties",
+   "source_lines": "192",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| Partition size | 3,407,872 bytes (3.3 MB, `0x340000`) |"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#83",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 83,
-   "statement": "The encrypted kernel in flash differs from the encrypted kernel in firmware images.",
-   "topic": "device-specific-encryption",
-   "source_lines": "236",
+   "statement": "The zImage length read by U-Boot is 3,157,976 bytes (0x302fd8), replacing the 3,358,720-byte payload claim.",
+   "topic": "kernel-properties",
+   "source_lines": "193",
    "confidence": "high",
-   "signals": [],
-   "quote": "**The encrypted kernel in flash differs from the encrypted kernel in firmware images.**"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "| zImage length (U-Boot `sf read`) | **3,157,976 bytes (`0x302fd8`)**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#84",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 84,
-   "statement": "Flash dump (mtd1.bin) first 16 bytes: `9cf8 9a27 dc93 3d73 2248 4be2 0733 b7bb`.",
-   "topic": "device-specific-encryption",
-   "source_lines": "240",
+   "statement": "Only the first 3 x 64 KB (0x30000) of the kernel are encrypted (DCP OTP_KEY, AES-128-CBC); the body is plaintext.",
+   "topic": "kernel-properties",
+   "source_lines": "194",
    "confidence": "high",
-   "signals": [],
-   "quote": "| Flash dump (mtd1.bin) | `9cf8 9a27 dc93 3d73 2248 4be2 0733 b7bb` |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "| Encrypted part | **First 3 × 64 KB (`0x30000`) only**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#85",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 85,
-   "statement": "Firmware (AutoBox.img) first 16 bytes: `988e 6d54 faa3 1d3d 1378 c275 e18d b611`.",
-   "topic": "device-specific-encryption",
-   "source_lines": "241",
+   "statement": "0xFF padding runs from 0x332fd8 to the end of the partition (53,288 bytes), replacing the 49,152-byte claim.",
+   "topic": "kernel-properties",
+   "source_lines": "196",
    "confidence": "high",
-   "signals": [],
-   "quote": "| Firmware (AutoBox.img) | `988e 6d54 faa3 1d3d 1378 c275 e18d b611` |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "| Padding | `0xFF` from `0x332fd8` to the end of the partition (53,288 bytes)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#86",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 86,
-   "statement": "The differing first bytes confirm the kernel encryption is device-specific - the same kernel is encrypted differently for each device.",
-   "topic": "device-specific-encryption",
-   "source_lines": "243",
+   "statement": "The kernel flash offset is 0x40000, replacing the 0x100000 claim.",
+   "topic": "kernel-properties",
+   "source_lines": "197",
    "confidence": "high",
    "signals": [
-    "verified"
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
    ],
-   "quote": "This confirms the kernel encryption is **device-specific** - the same kernel is encrypted differently for each device."
+   "quote": "| Flash offset | **`0x40000`** (start of mtd1)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#87",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 87,
-   "statement": "The decryption key must be derived from hardware-specific values (OTP fuses), generated during U-Boot initialization, and unique to each physical device.",
-   "topic": "device-specific-encryption",
-   "source_lines": "243",
-   "confidence": "medium",
-   "signals": [
-    "inference"
-   ],
-   "quote": "The decryption key must be:\n- Derived from hardware-specific values (OTP fuses)\n- Generated during U-Boot initialization\n- Unique to each physical device"
+   "statement": "The kernel RAM load address is 0x80800000.",
+   "topic": "kernel-properties",
+   "source_lines": "198",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| RAM load address | 0x80800000 |"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#88",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 88,
-   "statement": "Key `AutoPlay9uPT4n17` (firmware encryption type) produced random output.",
-   "topic": "keys-tested",
-   "source_lines": "252",
+   "statement": "The kernel is an ARM zImage that decompresses itself; U-Boot does not gunzip.",
+   "topic": "kernel-properties",
+   "source_lines": "199",
    "confidence": "high",
-   "signals": [],
-   "quote": "| `AutoPlay9uPT4n17` | Firmware encryption | Random output |"
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "U-Boot does not gunzip anything, the zImage decompresses itself"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#89",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 89,
-   "statement": "Key `W2EC1X1NbZ58TXtn` (USB/Session encryption type) produced random output.",
-   "topic": "keys-tested",
-   "source_lines": "253",
+   "statement": "U-Boot mtd0 was re-disassembled (Capstone, Thumb-2, base 0x877FE7D0) around do_decrypt_decompress (file 0x29B0, link 0x87801180) and its worker at 0x87800df4.",
+   "topic": "uboot-disassembly",
+   "source_lines": "205",
    "confidence": "high",
    "signals": [],
-   "quote": "| `W2EC1X1NbZ58TXtn` | USB/Session encryption | Random output |"
+   "quote": "around `do_decrypt_decompress` (file offset `0x29B0`, link addr `0x87801180`)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#90",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 90,
-   "statement": "Key `heweiencryptXXXX` (marker string) produced random output.",
-   "topic": "keys-tested",
-   "source_lines": "254",
+   "statement": "The DCP descriptor matches Linux's struct dcp_dma_desc: control0 0x723 first block / 0x523 continuation, control1 0xfe10.",
+   "topic": "dcp-descriptor",
+   "source_lines": "213",
    "confidence": "high",
    "signals": [],
-   "quote": "| `heweiencryptXXXX` | Marker string | Random output |"
+   "quote": "+0x08: control1    = 0xfe10"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#91",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 91,
-   "statement": "Key `86ce5527082c08c...` (hash from header) produced random output.",
-   "topic": "keys-tested",
-   "source_lines": "255",
-   "confidence": "high",
+   "statement": "The descriptor payload points to the 16-byte IV buffer CFG0||CFG1||SW_GP2||SW_GP3.",
+   "topic": "dcp-descriptor",
+   "source_lines": "217",
+   "confidence": "medium",
    "signals": [],
-   "quote": "| `86ce5527082c08c...` | Hash from header | Random output |"
+   "quote": "+0x18: payload      = <ptr to 16-byte IV buffer: OCOTP_CFG0 ‖ CFG1 ‖ SW_GP2 ‖ SW_GP3>"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#92",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 92,
-   "statement": "Various hybrid key combinations produced random output.",
-   "topic": "keys-tested",
-   "source_lines": "256",
+   "statement": "U-Boot's boot environment calls the DCP decrypt three times on 0x10000 bytes, not one descriptor over 3,358,720 bytes.",
+   "topic": "dcp-descriptor",
+   "source_lines": "221",
    "confidence": "high",
-   "signals": [],
-   "quote": "| Various combinations | Hybrid keys | Random output |"
+   "signals": [
+    "Corrected 2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "calls the DCP-decrypt command three times on `0x10000` bytes each"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#93",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 93,
-   "statement": "Recommended extraction is serial console capture: connect UART to ttymxc0 at 115200 baud, boot, and capture the 'UPGkey: %s' output for use in decryption.",
-   "topic": "recommended-extraction",
-   "source_lines": "261",
+   "statement": "CTRL1 is 0xfe10 (CBC) not 0xfe00 (ECB).",
+   "topic": "dcp-descriptor",
+   "source_lines": "225",
    "confidence": "high",
    "signals": [],
-   "quote": "1. Connect UART to ttymxc0 (115200 baud)\n2. Boot device\n3. Capture \"UPGkey: %s\" output\n4. Use captured key for decryption"
+   "quote": "The actual value, confirmed twice independently from the disassembly literal pool, is **`0xfe10`**."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#94",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 94,
-   "statement": "Disassembling U-Boot is done; key functions identified.",
-   "topic": "next-steps",
-   "source_lines": "270",
+   "statement": "CONTROL0 0x723 sets CIPHER_ENCRYPT; the boot-time recovery uses the encrypt datapath.",
+   "topic": "dcp-descriptor",
+   "source_lines": "226",
    "confidence": "high",
-   "signals": [
-    "DONE"
-   ],
-   "quote": "1. ~~Disassemble U-Boot~~ - DONE - Key functions identified"
+   "signals": [],
+   "quote": "`CONTROL0 = 0x723` also encodes **`CIPHER_ENCRYPT`**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#95",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 95,
-   "statement": "Next step: capture serial boot log to see UPGkey value printed.",
-   "topic": "next-steps",
-   "source_lines": "271",
+   "statement": "PAYLOAD is a 16-byte IV, as in mxs-dcp.c for referenced/OTP keys.",
+   "topic": "dcp-descriptor",
+   "source_lines": "228",
    "confidence": "high",
-   "signals": [
-    "TODO"
-   ],
-   "quote": "**Capture serial boot log** - To see UPGkey value printed"
+   "signals": [],
+   "quote": "`PAYLOAD` is a 16-byte **IV**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#96",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 96,
-   "statement": "Next step: check OTP fuses via /sys/bus/platform/devices/21bc000.ocotp-fuse/.",
-   "topic": "next-steps",
-   "source_lines": "272",
+   "statement": "DCP_BASE is 0x02280000 (crypto@2280000 in /proc/iomem).",
+   "topic": "dcp-registers",
+   "source_lines": "233",
    "confidence": "high",
-   "signals": [
-    "TODO"
-   ],
-   "quote": "**Check OTP fuses** - Via `/sys/bus/platform/devices/21bc000.ocotp-fuse/`"
+   "signals": [],
+   "quote": "DCP_BASE            = 0x02280000"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#97",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 97,
-   "statement": "Next step: kernel module approach to bypass /dev/mem restriction.",
-   "topic": "next-steps",
-   "source_lines": "273",
+   "statement": "CH0STAT_CLR (+0x128) must be cleared before every submission.",
+   "topic": "dcp-registers",
+   "source_lines": "241",
    "confidence": "high",
-   "signals": [
-    "TODO"
-   ],
-   "quote": "**Kernel module approach** - Bypass /dev/mem restriction"
+   "signals": [],
+   "quote": "CH0STAT_CLR        = +0x128"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#98",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 98,
-   "statement": "Next step: compare U-Boot versions, which may reveal key patterns.",
-   "topic": "next-steps",
-   "source_lines": "274",
+   "statement": "Earlier tooling cleared global STAT_CLR but not per-channel CH0STAT_CLR, causing flakiness.",
+   "topic": "dcp-tooling",
+   "source_lines": "244",
    "confidence": "high",
-   "signals": [
-    "TODO"
-   ],
-   "quote": "**Compare U-Boot versions** - May reveal key patterns"
+   "signals": [],
+   "quote": "earlier attempts cleared the *global* `STAT_CLR` (0x18) before each descriptor but never the *per-channel* `CH0STAT_CLR` (0x128)"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#99",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 99,
-   "statement": "Reference: Flash dump located at /mnt/UPAN/flash_dump/.",
-   "topic": "references",
-   "source_lines": "280",
+   "statement": "DCP uses STMP Set/Clear/Toggle aliasing; dcp_decrypt.c ports stmp_reset_block().",
+   "topic": "dcp-reset",
+   "source_lines": "248",
    "confidence": "high",
    "signals": [],
-   "quote": "Flash dump: `/mnt/UPAN/flash_dump/`"
+   "quote": "DCP (and every other \"mxs\"-family Freescale/NXP IP block) uses **STMP-style Set/Clear/Toggle register aliasing**"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#100",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 100,
-   "statement": "Reference: U-Boot binary is mtd0.bin (256KB).",
-   "topic": "references",
-   "source_lines": "281",
+   "statement": "The live DCP attempts fed the whole mtd1 region and expected gzip magic, neither matching the real format.",
+   "topic": "dcp-live-attempts",
+   "source_lines": "254",
    "confidence": "high",
-   "signals": [],
-   "quote": "U-Boot binary: `mtd0.bin` (256KB)"
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "These attempts fed the DCP the whole 3,358,720-byte mtd1 region and looked for gzip magic at its start."
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#101",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 101,
-   "statement": "Reference: Encrypted kernel is mtd1.bin (3.3MB).",
-   "topic": "references",
-   "source_lines": "282",
+   "statement": "A static ARM/musl tool custom/tools/dcp_decrypt.c drives the DCP via /dev/mem with OCRAM 0x00905000-0x0091ffff as scratch.",
+   "topic": "dcp-live-attempts",
+   "source_lines": "256",
    "confidence": "high",
    "signals": [],
-   "quote": "Encrypted kernel: `mtd1.bin` (3.3MB)"
+   "quote": "Built a small static ARM/musl tool (`custom/tools/dcp_decrypt.c`"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#102",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 102,
-   "statement": "Reference: Kernel symbols file is kallsyms_full.txt.",
-   "topic": "references",
-   "source_lines": "283",
+   "statement": "For /dev/mem bulk transfer use mmap, not dd (dd on OCRAM gives EFAULT).",
+   "topic": "devmem",
+   "source_lines": "259",
    "confidence": "high",
    "signals": [],
-   "quote": "Kernel symbols: `kallsyms_full.txt`"
+   "quote": "**Always use mmap, not dd, for /dev/mem bulk transfer on this kernel.**"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#103",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 103,
+   "statement": "A tight retry-with-reset loop wedged the device once; recovered by power-cycle with no flash written.",
+   "topic": "dcp-live-attempts",
+   "source_lines": "263",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**A tight retry-with-full-hardware-reset loop"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#104",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 104,
+   "statement": "Even with all tool bugs fixed, the first DCP trigger on a clean boot never signals completion.",
+   "topic": "dcp-live-attempts",
+   "source_lines": "266",
+   "confidence": "high",
+   "signals": [],
+   "quote": "the very first attempt on a clean boot still never signals completion"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#105",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 105,
+   "statement": "dcp_decrypt.c clamps the chunk size to the OCRAM buffer capacity.",
+   "topic": "dcp-tooling",
+   "source_lines": "266",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`dcp_decrypt.c` now clamps any requested chunk size to the actual OCRAM buffer capacity"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#106",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 106,
+   "statement": "The open DCP questions are no longer needed for reading or writing kernels.",
+   "topic": "dcp-live-attempts",
+   "source_lines": "268",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "none of these is needed any more"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#107",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 107,
+   "statement": "Patching U-Boot is not possible: HAB is closed and the CSF authenticates mtd0 0x1000-0x20FFF (the U-Boot code); the environment outside it drives the kernel path.",
+   "topic": "hab",
+   "source_lines": "271",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "A modified U-Boot does not boot on these units: HAB is closed and the CSF authenticates mtd0 `0x1000`–`0x20FFF`"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#108",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 108,
+   "statement": "/proc/iomem shows System RAM 80000000-87ffffff, Kernel code 80008000-8058b327, Kernel data 805c0000-806684c7.",
+   "topic": "memory-map",
+   "source_lines": "281",
+   "confidence": "high",
+   "signals": [],
+   "quote": "80000000-87ffffff : System RAM"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#109",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 109,
+   "statement": "The RAM dump command was dd if=/dev/mem bs=4096 skip=524296 count=2048 (8 MiB from 0x80008000).",
+   "topic": "kernel-ram-dump",
+   "source_lines": "291",
+   "confidence": "high",
+   "signals": [],
+   "quote": "dd if=/dev/mem bs=4096 skip=524296 count=2048"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#110",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 110,
+   "statement": "/proc/kallsyms had 42,960 entries.",
+   "topic": "kernel-symbols",
+   "source_lines": "296",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Also pulled `/proc/kallsyms` (42,960 entries"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#111",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 111,
+   "statement": "The dump contains the banner Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC)) #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025.",
+   "topic": "kernel-version",
+   "source_lines": "300",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`strings` on the dump surfaces `Linux version 3.14.52+g94d07bb (hcw@ubuntu)"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#112",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 112,
+   "statement": "_stext is at 80008200, 0x200 into the dump.",
+   "topic": "kernel-symbols",
+   "source_lines": "302",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`_stext` at `80008200`, is 0x200 into the dump"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#113",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 113,
+   "statement": "The RAM dump is the linked resident image, not a byte-identical zImage; the flashed zImage is now recovered from staging.",
+   "topic": "kernel-ram-dump",
+   "source_lines": "307",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "The byte-identical flashed zImage is now recovered from the staging blocks"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#114",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 114,
+   "statement": "The write side is solved without DCP or U-Boot changes: plain body, UpgKey-encrypted staging head, erase env block, reboot.",
+   "topic": "kernel-write-path",
+   "source_lines": "309",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "The write side is solved without the DCP and without touching U-Boot"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#115",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 115,
+   "statement": "custom/kernel_dumps/ holds kernel_ram_dump_0x80008000.bin, kallsyms_running.txt and dmesg_boot.txt.",
+   "topic": "artifacts",
+   "source_lines": "315",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| `kernel_ram_dump_0x80008000.bin` | 8 MiB raw dump"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#116",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 116,
+   "statement": "The capture-time /proc/cmdline was console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs) rootwait quiet rw.",
+   "topic": "boot-cmdline",
+   "source_lines": "319",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`/proc/cmdline`: `console=ttyLogFile0 root=/dev/mtdblock2"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#117",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 117,
+   "statement": "The ludwig-v repo is the same platform family: i.MX6ULL, MX25L12835F, identical partition string and kernel version.",
+   "topic": "cross-product",
+   "source_lines": "325",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**it's the same hardware/software platform family**"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#118",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 118,
+   "statement": "U2W 20200122 has a plaintext kernel partition with zImage magic at partition offset 0xC0024.",
+   "topic": "cross-product",
+   "source_lines": "331",
+   "confidence": "high",
+   "signals": [],
+   "quote": "**Plaintext** — real ARM zImage magic (`0x016F2818`) found at partition offset `0xC0024`"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#119",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 119,
+   "statement": "Kernel partition encryption appeared between 2020-01-22 and 2020-08-04.",
+   "topic": "cross-product",
+   "source_lines": "332",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Encryption was introduced **between 2020-01-22 and 2020-08-04**"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#120",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 120,
+   "statement": "CCPA mtd1 encrypts only the first 0x30000 bytes; the plaintext gzip body also looks random.",
+   "topic": "cross-product",
+   "source_lines": "333",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "The earlier reading \"encrypts starting from the partition's first byte\" is right only for the first `0x30000` bytes"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#121",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 121,
+   "statement": "Whether the U2W 20200804+ dumps use the same head+staging layout was not checked (inferred likely).",
+   "topic": "cross-product",
+   "source_lines": "335",
+   "confidence": "low",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "Whether the `U2W 20200804`+ dumps use the same three-block head + staging layout was not checked"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#122",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 122,
+   "statement": "Some same-family builds share byte-identical kernel ciphertext (e.g. U2W_FW_20220124 and U2W_CFW_20231228_FORGED_RTL8822BS).",
+   "topic": "cross-product",
+   "source_lines": "338",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`U2W_FW_20220124` and `U2W_CFW_20231228_FORGED_RTL8822BS` are identical"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#123",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 123,
+   "statement": "Identical leading ciphertext with later divergence is explained equally by a same-unit head with a different plaintext body.",
+   "topic": "cross-product",
+   "source_lines": "339",
+   "confidence": "medium",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "A same-unit head with a different plaintext body explains this equally well"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#124",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 124,
+   "statement": "No static Carlinkit key can be the CCPA kernel-head key, which is hardware-bound per chip.",
+   "topic": "kernel-keys",
+   "source_lines": "343",
+   "confidence": "high",
+   "signals": [],
+   "quote": "can be the CCPA kernel-head key, because it's confirmed hardware-bound per-chip"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#125",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 125,
+   "statement": "The pre/post-encryption U-Boot diff lead now matters only for using the DCP from Linux.",
+   "topic": "cross-product",
+   "source_lines": "343",
+   "confidence": "high",
+   "signals": [
+    "Corrected 2026-10-19"
+   ],
+   "quote": "There is no unsolved half left for reading or writing kernels"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#126",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 126,
+   "statement": "AutoPlay9uPT4n17 is the OTA image key, not the kernel key.",
+   "topic": "kernel-keys",
+   "source_lines": "351",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| `AutoPlay9uPT4n17` | AES-128-CBC | OTA image key, not kernel key |"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#127",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 127,
+   "statement": "W2EC1X1NbZ58TXtn is the USB session key, not the kernel key.",
+   "topic": "kernel-keys",
+   "source_lines": "352",
+   "confidence": "high",
+   "signals": [],
+   "quote": "| `W2EC1X1NbZ58TXtn` | AES-128-CBC | USB session key, not kernel key |"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#128",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 128,
+   "statement": "CFG0+CFG1+GP2+GP3 is the DCP IV, not the AES key.",
+   "topic": "kernel-keys",
+   "source_lines": "354",
+   "confidence": "high",
+   "signals": [],
+   "quote": "This is the IV (DCP `PAYLOAD` field), not the AES key"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#129",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 129,
+   "statement": "The UpgKey decrypts the staging blocks and the update environment; it is not the head key.",
+   "topic": "kernel-keys",
+   "source_lines": "356",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "it is not the head key, but it decrypts the staging blocks (the same head) and the update environment"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#130",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 130,
+   "statement": "/proc/config.gz is absent; CONFIG_STRICT_DEVMEM unconfirmed; dd on the kernel RAM range worked.",
+   "topic": "anti-debug",
+   "source_lines": "362",
+   "confidence": "medium",
+   "signals": [],
+   "quote": "`CONFIG_STRICT_DEVMEM` claim **needs re-verification**"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#131",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 131,
+   "statement": "The recovered stock zImage contains no IKCFG_ST marker, so there is no embedded kernel config.",
+   "topic": "kernel-config",
+   "source_lines": "362",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "contains no `IKCFG_ST` marker, so the stock kernel has no embedded config at all"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#132",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 132,
+   "statement": "ptrace is globally rejected with EINVAL.",
+   "topic": "anti-debug",
+   "source_lines": "363",
+   "confidence": "high",
+   "signals": [],
+   "quote": "`ptrace` globally rejected with `EINVAL`"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#133",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 133,
+   "statement": "There is no ftrace (/sys/kernel/debug/tracing absent).",
+   "topic": "anti-debug",
+   "source_lines": "364",
+   "confidence": "high",
+   "signals": [],
+   "quote": "No ftrace (`/sys/kernel/debug/tracing` absent)"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#134",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 134,
+   "statement": "U-Boot mtd0.bin link base is 0x877FE7D0 with the IVT at file 0x1000.",
+   "topic": "references",
+   "source_lines": "370",
+   "confidence": "high",
+   "signals": [],
+   "quote": "U-Boot binary: `mtd0.bin` (link base 0x877FE7D0; IVT at file 0x1000"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#135",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 135,
+   "statement": "OCOTP values of the 2026-06-30 unit were read via /sys/fsl_otp/ and /dev/mem at 0x021bc410/0x021bc420; SW_GP2 and SW_GP3 are 0.",
+   "topic": "references",
+   "source_lines": "372",
+   "confidence": "high",
+   "signals": [],
+   "quote": "OCOTP live values (2026-06-30"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#136",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 136,
+   "statement": "Flash map and U-Boot environment are documented in 01_Firmware_Architecture/flash_layout.md.",
+   "topic": "references",
+   "source_lines": "377",
+   "confidence": "high",
+   "signals": [],
+   "quote": "Flash map and U-Boot environment: `01_Firmware_Architecture/flash_layout.md`"
   },
   {
    "gid": "05_Security_Analysis/security_findings.md#1",
@@ -5007,6 +5579,316 @@
    "confidence": "high",
    "signals": null,
    "quote": "Firmware binary analysis on 2025.10 firmware using Ghidra 12.0 and radare2."
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#137",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 137,
+   "statement": "Evidence E4 is a second unit's full NOR dumps in this repo: flash_dumps/2025.10.15.1127 and flash_dumps/2025.02.25.1521 (2026.06.07.ncm has the same mtd0/mtd1 as the 2025.10.15.1127 dump).",
+   "topic": "evidence",
+   "source_lines": "14",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19"
+   ],
+   "quote": "a second unit's full NOR dumps in this repo"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#138",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 138,
+   "statement": "E4's update environments and staging blocks decrypt with the uuid listed as Rev A in hardware_revisions.md; E1's decrypt with the one listed as Rev B.",
+   "topic": "upgkey-uuid",
+   "source_lines": "14",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "Their update environments and staging blocks decrypt with the `uuid` listed as Rev A"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#139",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 139,
+   "statement": "Which unit carries which label is unreconciled: flash_dumps/README.md calls the E4 dumps Realtek, hardware_revisions.md lists Rev A as IW416, and hardware_platform.md's OCOTP words are E1's.",
+   "topic": "evidence",
+   "source_lines": "14",
+   "confidence": "low",
+   "signals": [
+    "2026-10-19",
+    "UNRESOLVED"
+   ],
+   "quote": "`flash_dumps/README.md` calls these dumps Realtek"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#140",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 140,
+   "statement": "The UpgKey text decrypting real update environments and staging blocks is verified on both recorded units (E1 and E4).",
+   "topic": "upgkey-uuid",
+   "source_lines": "23",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "That the text actually decrypts a unit's update environment and staging blocks is also VERIFIED on both units"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#141",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 141,
+   "statement": "The 64 KB env carries a second CRC32 (LE) over env[0:0xFFFC] in env[0xFFFC:0x10000].",
+   "topic": "uboot-env",
+   "source_lines": "42",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "A second CRC32 (little-endian) over `env[0:0xFFFC]` sits in `env[0xFFFC:0x10000]`"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#142",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 142,
+   "statement": "The decrypted 0x3000-byte update payload is an 8,391-byte gzip stream, 3,881 zero bytes, and 16 bytes from decrypting the last cipher block, which ends in the raw length word.",
+   "topic": "uboot-env",
+   "source_lines": "44",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "the stream is 8,391 B, then 3,881 zero bytes, then 16 bytes that are the decryption of the payload's last cipher block"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#143",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 143,
+   "statement": "heweiencrypt gunzips only 0x2ff0 bytes to skip the last block; gzip over the whole payload reports trailing garbage.",
+   "topic": "uboot-env",
+   "source_lines": "44",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "That is why `heweiencrypt` gunzips only `0x2ff0` bytes"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#144",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 144,
+   "statement": "U-Boot builds the strings 'mm d 0x' and 'mm u 0x' at mtd0 0x17490/0x17498; mm u's meaning is unknown.",
+   "topic": "mm-subcommands",
+   "source_lines": "78",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "UNRESOLVED"
+   ],
+   "quote": "The U-Boot binary builds the strings `mm d 0x` and `mm u 0x` side by side"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#145",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 145,
+   "statement": "After the 0x8103-byte FDT the env is 0xFF up to 0xFFFB, then the second CRC32 at 0xFFFC-0xFFFF.",
+   "topic": "stock-dtb",
+   "source_lines": "82",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED",
+    "Corrected 2026-10-19"
+   ],
+   "quote": "then `0xFF` padding up to `0xFFFB`, then the second CRC32 at `0xFFFC`–`0xFFFF`"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#146",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 146,
+   "statement": "The cp count 0xf800 is in units; with upstream 2015.04's default .l it is 0x3E000 bytes (inferred; help strings stripped).",
+   "topic": "stock-dtb",
+   "source_lines": "82",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "The count `0xf800` is in units, not bytes"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#147",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 147,
+   "statement": "On 2025.02.25.1521 (kernel #448) kernel_len is 0x303080 and staging starts at partition offset kernel_len (flash 0x343080).",
+   "topic": "kernel-layout",
+   "source_lines": "95",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "on 2025.02.25.1521 (kernel `3.14.52+g94d07bb (sky@sky-vmware-1604)"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#148",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 148,
+   "statement": "AutoBox.img differs from E1's mtd0+mtd1 in 469,107 bytes: 77,508 in mtd0 (12,228 update payload + 65,280 env) and 391,599 in mtd1 (195,799 head + 195,800 staging + 0 body).",
+   "topic": "autobox",
+   "source_lines": "116",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "Totals: the 3,670,016-byte image differs from the unit's mtd0+mtd1 in 469,107 bytes"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#149",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 149,
+   "statement": "AutoBox.img's update payload and staging do not decrypt with E1's or E4's UpgKey, the .img key, the USB key or trivial keys.",
+   "topic": "autobox",
+   "source_lines": "118",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "\"Does not decrypt\" means: neither block yields gzip or zImage magic"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#150",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 150,
+   "statement": "The key of AutoBox.img's staging and update payload is unresolved.",
+   "topic": "autobox",
+   "source_lines": "118",
+   "confidence": "low",
+   "signals": [
+    "2026-10-19",
+    "UNRESOLVED"
+   ],
+   "quote": "Which key they use is [UNRESOLVED]."
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#151",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 151,
+   "statement": "upg (567,436 B) has whole-file byte entropy 7.999 bits/byte, so it is packed or encrypted.",
+   "topic": "autobox",
+   "source_lines": "120",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "its byte entropy is 7.999 bits/byte over the whole 567,436-byte file"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#152",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 152,
+   "statement": "A flashcp was killed mid-write by SIGHUP when its telnet session closed; the setsid rerun completed.",
+   "topic": "livi-flash",
+   "source_lines": "130",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "a `flashcp` was killed mid-write when the telnet session that started it closed (SIGHUP)"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#153",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 153,
+   "statement": "About 20 s was measured for flash_erase + cat + sync of mtd1 only; the sha256 check and env erase were not timed.",
+   "topic": "livi-flash",
+   "source_lines": "128",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "about 20 s for `flash_erase` + `cat` + `sync` of mtd1 only; the rest of the window"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#154",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 154,
+   "statement": "The RUNBOOK runs never wrote U-Boot; the only mtd0 write was the env-block erase.",
+   "topic": "hab",
+   "source_lines": "136",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "The RUNBOOK runs above never wrote U-Boot"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#155",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 155,
+   "statement": "SEC_CONFIG is closed on E1 per the 2026-06-30 OCOTP read (MISC_CONF=0x40) of the same chip; not re-read on 2026-10-19.",
+   "topic": "hab",
+   "source_lines": "138",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`SEC_CONFIG` is closed on E1: the 2026-06-30 OCOTP read of this unit"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#156",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 156,
+   "statement": "The recovery recipe reads KLEN and the staging offset from the decrypted env instead of assuming them.",
+   "topic": "kernel-recovery",
+   "source_lines": "144",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "Corrected 2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "`KLEN` and the staging offset are read from the decrypted env"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#157",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 157,
+   "statement": "Already tracked in the repo: E1's mtd0/mtd1, E4's full dumps, E1's OCOTP words and both recorded units' uuids.",
+   "topic": "identity",
+   "source_lines": "171",
+   "confidence": "high",
+   "signals": [
+    "2026-10-19",
+    "VERIFIED"
+   ],
+   "quote": "What is already tracked in this repository [VERIFIED]:"
+  },
+  {
+   "gid": "05_Security_Analysis/kernel_encryption.md#158",
+   "file": "05_Security_Analysis/kernel_encryption.md",
+   "local_id": 158,
+   "statement": "The tracked uuids and fuse words tell a reader nothing a connected host does not already receive (inferred from BoxSettings uuid = fuse words in hex).",
+   "topic": "identity",
+   "source_lines": "171",
+   "confidence": "medium",
+   "signals": [
+    "2026-10-19",
+    "INFERRED"
+   ],
+   "quote": "so the tracked `uuid`s and fuse words tell a reader nothing"
   }
  ]
 }

@@ -117,15 +117,16 @@ RE_Documention/
 ├── 03_Audio_Processing/
 │   ├── audio_formats.md                # Firmware audio format analysis (decodeType 1-7)
 │   └── microphone_processing.md        # Mic pipeline, WebRTC, AA phone call fix
-├── 03_Security_Analysis/
-│   ├── crypto_stack.md                 # Cryptographic implementations
-│   └── security_findings.md              # Security findings
 ├── 04_Implementation/
 │   ├── host_app_guide.md               # Host application development
 │   ├── iap2_binary_patches.md          # ARMiPhoneIAP2 raw-passthrough patches (nav/call/comm)
 │   ├── session_examples.md             # Captured packet sequences
 │   ├── capture_playback.md             # Capture/playback design reference
 │   └── firmware_update.md              # OTA update mechanism
+├── 05_Security_Analysis/             # (listed as 03_Security_Analysis/ before 2026-10-19; the folder is 05_)
+│   ├── crypto_stack.md                 # Cryptographic implementations
+│   ├── kernel_encryption.md            # Kernel on-flash format, UpgKey staging, recovery/write
+│   └── security_findings.md              # Security findings
 └── 06_Reference/
     ├── external_landscape_survey.md    # Open-source wireless-CarPlay receiver landscape (45clouds fork network, GitHub/GitLab sweep, amineross verified-session reference)
     ├── firmware_internals.md           # DMSDP framework, iAP2 engines, internals
@@ -268,7 +269,7 @@ This consolidation drew from:
 
 ### For Researchers
 
-1. Review security findings in `03_Security_Analysis/`
+1. Review security findings in `05_Security_Analysis/`
 2. Binary analysis details in `06_Reference/binary_analysis/`
 3. Original captures available in source directories
 

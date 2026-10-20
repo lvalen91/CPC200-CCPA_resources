@@ -13,7 +13,7 @@
     "01_Firmware_Architecture/web_interface.md",
     "01_Firmware_Architecture/web_settings_reference.md"
   ],
-  "claim_count": 1174,
+  "claim_count": 1235,
   "claims": [
     {
       "gid": "01_Firmware_Architecture/configuration.md#1",
@@ -3632,12 +3632,14 @@
       "gid": "01_Firmware_Architecture/firmware_encryption.md#5",
       "file": "01_Firmware_Architecture/firmware_encryption.md",
       "local_id": 5,
-      "statement": "Complete cryptographic stack documentation is in 03_Security_Analysis/crypto_stack.md.",
+      "statement": "Complete cryptographic stack documentation is in 05_Security_Analysis/crypto_stack.md (the earlier 03_Security_Analysis/ path was wrong).",
       "topic": "references",
-      "source_lines": "19",
+      "source_lines": "23",
       "confidence": "high",
-      "signals": [],
-      "quote": "See `03_Security_Analysis/crypto_stack.md` for complete cryptographic stack documentation."
+      "signals": [
+        "Corrected 2026-10-19"
+      ],
+      "quote": "See `05_Security_Analysis/crypto_stack.md` for complete cryptographic stack documentation"
     },
     {
       "gid": "01_Firmware_Architecture/firmware_encryption.md#6",
@@ -3645,7 +3647,7 @@
       "local_id": 6,
       "statement": "The firmware-image AES is distinct from the MFi authentication coprocessor, a genuine Apple IC on I2C bus 1.",
       "topic": "mfi-coprocessor",
-      "source_lines": "21",
+      "source_lines": "25",
       "confidence": "high",
       "signals": [],
       "quote": "the **MFi authentication coprocessor** (a genuine Apple IC on I2C bus 1)"
@@ -3656,7 +3658,7 @@
       "local_id": 7,
       "statement": "The firmware-image AES key should not be conflated with MFi credentials.",
       "topic": "mfi-coprocessor",
-      "source_lines": "21",
+      "source_lines": "25",
       "confidence": "high",
       "signals": [],
       "quote": "Do not conflate the firmware-image AES key with MFi credentials."
@@ -3667,7 +3669,7 @@
       "local_id": 8,
       "statement": "The .img file format consists of AES-128-CBC encrypted data that is block-aligned in 16-byte blocks.",
       "topic": "img-file-format",
-      "source_lines": "29",
+      "source_lines": "33",
       "confidence": "high",
       "signals": [],
       "quote": "AES-128-CBC Encrypted Data"
@@ -3678,7 +3680,7 @@
       "local_id": 9,
       "statement": "The .img file format has an unencrypted remainder of 0-15 bytes when file size is not a multiple of 16.",
       "topic": "img-file-format",
-      "source_lines": "32",
+      "source_lines": "36",
       "confidence": "high",
       "signals": [],
       "quote": "Unencrypted Remainder (0-15 bytes if file size % 16 != 0)"
@@ -3689,7 +3691,7 @@
       "local_id": 10,
       "statement": "A decrypted .img produces a .tar.gz (gzip compressed) which contains a tar archive.",
       "topic": "img-file-format",
-      "source_lines": "38",
+      "source_lines": "44",
       "confidence": "high",
       "signals": [],
       "quote": ".img (encrypted) -> .tar.gz (gzip compressed) -> tar archive containing:"
@@ -3700,7 +3702,7 @@
       "local_id": 11,
       "statement": "The decrypted tar archive contains directories including etc/ (with init.d/rcS, boa/cgi-bin/, software_version), lib/, script/, tmp/, and usr/lib/.",
       "topic": "firmware-contents",
-      "source_lines": "39",
+      "source_lines": "45",
       "confidence": "high",
       "signals": [],
       "quote": "|- etc/\n|   |- init.d/rcS\n|   |- boa/cgi-bin/\n|   |- software_version"
@@ -3709,12 +3711,14 @@
       "gid": "01_Firmware_Architecture/firmware_encryption.md#12",
       "file": "01_Firmware_Architecture/firmware_encryption.md",
       "local_id": 12,
-      "statement": "The tmp/ directory of the firmware archive contains once.sh (pre-update script), finish.sh (post-update script), and remove_unnecessary_file.sh.",
+      "statement": "The tmp/ directory of the firmware archive contains once.sh (pre-update), finish.sh (post-update), remove_unnecessary_file.sh and, in full releases, AutoBox.img and upg.",
       "topic": "firmware-contents",
-      "source_lines": "47",
+      "source_lines": "53",
       "confidence": "high",
-      "signals": [],
-      "quote": "|   |- once.sh        (pre-update script)\n|   |- finish.sh      (post-update script)\n|   +- remove_unnecessary_file.sh"
+      "signals": [
+        "Corrected 2026-10-19"
+      ],
+      "quote": "|   |- once.sh        (pre-update script)"
     },
     {
       "gid": "01_Firmware_Architecture/firmware_encryption.md#13",
@@ -3722,7 +3726,7 @@
       "local_id": 13,
       "statement": "For the A15W model, the firmware encryption algorithm is AES-128-CBC.",
       "topic": "a15w-encryption",
-      "source_lines": "62",
+      "source_lines": "70",
       "confidence": "high",
       "signals": [],
       "quote": "**Algorithm** | AES-128-CBC"
@@ -3733,7 +3737,7 @@
       "local_id": 14,
       "statement": "For the A15W model, the encryption key is 'AutoPlay9uPT4n17'.",
       "topic": "a15w-encryption",
-      "source_lines": "63",
+      "source_lines": "71",
       "confidence": "high",
       "signals": [],
       "quote": "**Key** | `AutoPlay9uPT4n17`"
@@ -3744,7 +3748,7 @@
       "local_id": 15,
       "statement": "For the A15W model, the IV is 'AutoPlay9uPT4n17', the same as the key.",
       "topic": "a15w-encryption",
-      "source_lines": "64",
+      "source_lines": "72",
       "confidence": "high",
       "signals": [],
       "quote": "**IV** | `AutoPlay9uPT4n17` (same as key)"
@@ -3755,7 +3759,7 @@
       "local_id": 16,
       "statement": "For the A15W model, the key in hex is 4175746f506c617939755054346e3137.",
       "topic": "a15w-encryption",
-      "source_lines": "65",
+      "source_lines": "73",
       "confidence": "high",
       "signals": [],
       "quote": "**Key (hex)** | `4175746f506c617939755054346e3137`"
@@ -3766,7 +3770,7 @@
       "local_id": 17,
       "statement": "For the A15W model, the block size is 16 bytes.",
       "topic": "a15w-encryption",
-      "source_lines": "66",
+      "source_lines": "74",
       "confidence": "high",
       "signals": [],
       "quote": "**Block Size** | 16 bytes"
@@ -3777,7 +3781,7 @@
       "local_id": 18,
       "statement": "For the A15W model, there is no padding - the last partial block is left unencrypted.",
       "topic": "a15w-encryption",
-      "source_lines": "67",
+      "source_lines": "75",
       "confidence": "high",
       "signals": [],
       "quote": "**Padding** | None - last partial block left unencrypted"
@@ -3788,7 +3792,7 @@
       "local_id": 19,
       "statement": "The U2W model uses firmware key 'CarPlay5KBP6ClJv', sourced from the ludwig-v repo.",
       "topic": "model-keys",
-      "source_lines": "73",
+      "source_lines": "81",
       "confidence": "high",
       "signals": [],
       "quote": "U2W | `CarPlay5KBP6ClJv` | ludwig-v repo"
@@ -3799,7 +3803,7 @@
       "local_id": 20,
       "statement": "The U2AW model uses firmware key 'CarPlayBbnF6ecFP', sourced from the ludwig-v repo.",
       "topic": "model-keys",
-      "source_lines": "74",
+      "source_lines": "83",
       "confidence": "high",
       "signals": [],
       "quote": "U2AW | `CarPlayBbnF6ecFP` | ludwig-v repo"
@@ -3810,7 +3814,7 @@
       "local_id": 21,
       "statement": "The U2AC model uses firmware key 'CarPlayiHXF1o74i', sourced from the ludwig-v repo.",
       "topic": "model-keys",
-      "source_lines": "75",
+      "source_lines": "84",
       "confidence": "high",
       "signals": [],
       "quote": "U2AC | `CarPlayiHXF1o74i` | ludwig-v repo"
@@ -3821,7 +3825,7 @@
       "local_id": 22,
       "statement": "HWFS modules use firmware key '8e15c895KBP6ClJv', sourced from the ludwig-v repo.",
       "topic": "model-keys",
-      "source_lines": "76",
+      "source_lines": "85",
       "confidence": "high",
       "signals": [],
       "quote": "HWFS modules | `8e15c895KBP6ClJv` | ludwig-v repo"
@@ -3832,7 +3836,7 @@
       "local_id": 23,
       "statement": "The A15W key 'AutoPlay9uPT4n17' was extracted from ARMimg_maker.",
       "topic": "model-keys",
-      "source_lines": "77",
+      "source_lines": "86",
       "confidence": "high",
       "signals": [],
       "quote": "**A15W** | `AutoPlay9uPT4n17` | **Extracted from ARMimg_maker**"
@@ -3843,7 +3847,7 @@
       "local_id": 24,
       "statement": "The A15W key was extracted by unpacking ARMimg_maker using ludwig-v's modified UPX with command: upx -d /usr/sbin/ARMimg_maker -o /tmp/ARMimg_maker_unpacked, run on the adapter (ARM device).",
       "topic": "key-extraction",
-      "source_lines": "83",
+      "source_lines": "92",
       "confidence": "high",
       "signals": [],
       "quote": "Unpacking `ARMimg_maker` using ludwig-v's modified UPX"
@@ -3854,7 +3858,7 @@
       "local_id": 25,
       "statement": "The key was found by searching for 16-character alphanumeric strings using: strings ARMimg_maker_unpacked | grep -E \"^[A-Za-z0-9]{16}$\".",
       "topic": "key-extraction",
-      "source_lines": "91",
+      "source_lines": "100",
       "confidence": "high",
       "signals": [],
       "quote": "strings ARMimg_maker_unpacked | grep -E \"^[A-Za-z0-9]{16}$\""
@@ -3865,7 +3869,7 @@
       "local_id": 26,
       "statement": "Decryption with OpenSSL converts the key to hex, uses the key hex as the IV hex, and truncates the file to a 16-byte multiple before decrypting.",
       "topic": "decryption-process",
-      "source_lines": "113",
+      "source_lines": "122",
       "confidence": "high",
       "signals": [],
       "quote": "openssl enc -d -aes-128-cbc -nopad -K \"$KEY_HEX\" -iv \"$IV_HEX\""
@@ -3876,7 +3880,7 @@
       "local_id": 27,
       "statement": "On macOS file size is obtained with 'stat -f %z input.img'; on Linux with 'stat -c%s input.img'.",
       "topic": "decryption-process",
-      "source_lines": "106",
+      "source_lines": "115",
       "confidence": "high",
       "signals": [],
       "quote": "FILESIZE=$(stat -f %z input.img)  # macOS"
@@ -3887,7 +3891,7 @@
       "local_id": 28,
       "statement": "The unencrypted remainder is appended to the decrypted output after the block-aligned portion is decrypted.",
       "topic": "decryption-process",
-      "source_lines": "116",
+      "source_lines": "125",
       "confidence": "high",
       "signals": [],
       "quote": "# Append unencrypted remainder\nif [ $REMAINDER -gt 0 ]; then\n    tail -c $REMAINDER input.img >> output.tar.gz"
@@ -3898,7 +3902,7 @@
       "local_id": 29,
       "statement": "A correctly decrypted firmware output begins with gzip magic bytes 1f 8b (header 00000000: 1f8b 0800).",
       "topic": "verification",
-      "source_lines": "127",
+      "source_lines": "136",
       "confidence": "high",
       "signals": [],
       "quote": "# Check for gzip magic bytes (1f 8b)"
@@ -3909,7 +3913,7 @@
       "local_id": 30,
       "statement": "Gzip integrity can be verified with 'gunzip -t output.tar.gz'.",
       "topic": "verification",
-      "source_lines": "132",
+      "source_lines": "141",
       "confidence": "high",
       "signals": [],
       "quote": "gunzip -t output.tar.gz"
@@ -3920,7 +3924,7 @@
       "local_id": 31,
       "statement": "Encryption to create a custom .img uses 'openssl enc -e -aes-128-cbc -nopad' with the key as hex K and IV, encrypting the block-aligned portion and appending the unencrypted remainder.",
       "topic": "encryption-process",
-      "source_lines": "155",
+      "source_lines": "164",
       "confidence": "high",
       "signals": [],
       "quote": "openssl enc -e -aes-128-cbc -nopad -K \"$KEY_HEX\" -iv \"$IV_HEX\""
@@ -3931,7 +3935,7 @@
       "local_id": 32,
       "statement": "ARMimg_maker is present in firmware 2025.02 at /usr/sbin/ARMimg_maker with size 21,056 bytes.",
       "topic": "armimg-maker",
-      "source_lines": "170",
+      "source_lines": "179",
       "confidence": "high",
       "signals": [],
       "quote": "ARMimg_maker is present in firmware 2025.02 (`/usr/sbin/ARMimg_maker`, 21,056 bytes)"
@@ -3942,7 +3946,7 @@
       "local_id": 33,
       "statement": "ARMimg_maker is confirmed present in both the 2025.02 and 2025.10 extracted rootfs; the earlier analysis claiming removal in 2025.10.15 is overturned, with only on-device re-verification still recommended.",
       "topic": "armimg-maker",
-      "source_lines": "170",
+      "source_lines": "179",
       "confidence": "low",
       "signals": [
         "unconfirmed",
@@ -3956,7 +3960,7 @@
       "local_id": 34,
       "statement": "The on-device update flow (update_box_ota.sh) calls ARMimg_maker for decryption.",
       "topic": "armimg-maker",
-      "source_lines": "170",
+      "source_lines": "179",
       "confidence": "high",
       "signals": [],
       "quote": "The on-device update flow (`update_box_ota.sh`) calls this binary for decryption."
@@ -3967,7 +3971,7 @@
       "local_id": 35,
       "statement": "ARMimg_maker is located at /usr/sbin/ARMimg_maker.",
       "topic": "armimg-maker",
-      "source_lines": "174",
+      "source_lines": "183",
       "confidence": "high",
       "signals": [],
       "quote": "**Location** | `/usr/sbin/ARMimg_maker`"
@@ -3978,7 +3982,7 @@
       "local_id": 36,
       "statement": "ARMimg_maker packed size is 21,056 bytes.",
       "topic": "armimg-maker",
-      "source_lines": "175",
+      "source_lines": "184",
       "confidence": "high",
       "signals": [],
       "quote": "**Size (packed)** | 21,056 bytes"
@@ -3989,7 +3993,7 @@
       "local_id": 37,
       "statement": "ARMimg_maker unpacked size is 37,696 bytes.",
       "topic": "armimg-maker",
-      "source_lines": "176",
+      "source_lines": "185",
       "confidence": "high",
       "signals": [],
       "quote": "**Size (unpacked)** | 37,696 bytes"
@@ -4000,7 +4004,7 @@
       "local_id": 38,
       "statement": "ARMimg_maker is packed with a modified UPX (Carlinkit-specific).",
       "topic": "armimg-maker",
-      "source_lines": "177",
+      "source_lines": "186",
       "confidence": "high",
       "signals": [],
       "quote": "**Packing** | Modified UPX (Carlinkit-specific)"
@@ -4011,7 +4015,7 @@
       "local_id": 39,
       "statement": "ARMimg_maker is NOT removed in 2025.10.15 — its Availability is confirmed present in both the 2025.02 and 2025.10 extracted rootfs (earlier removal claim overturned).",
       "topic": "armimg-maker",
-      "source_lines": "178",
+      "source_lines": "187",
       "confidence": "medium",
       "signals": [
         "contradiction"
@@ -4024,7 +4028,7 @@
       "local_id": 40,
       "statement": "The unpacked ARMimg_maker binary contains the AES key string 'AutoPlay9uPT4n17'.",
       "topic": "armimg-maker-strings",
-      "source_lines": "182",
+      "source_lines": "191",
       "confidence": "high",
       "signals": [],
       "quote": "AutoPlay9uPT4n17          # AES key"
@@ -4035,7 +4039,7 @@
       "local_id": 41,
       "statement": "The unpacked ARMimg_maker binary contains OpenSSL function strings AES_encrypt and AES_decrypt.",
       "topic": "armimg-maker-strings",
-      "source_lines": "183",
+      "source_lines": "192",
       "confidence": "high",
       "signals": [],
       "quote": "AES_encrypt               # OpenSSL function\nAES_decrypt               # OpenSSL function"
@@ -4046,7 +4050,7 @@
       "local_id": 42,
       "statement": "The unpacked ARMimg_maker binary contains the string 'AES for ARMv4, CRYPTOGAMS by <appro@openssl.org>'.",
       "topic": "armimg-maker-strings",
-      "source_lines": "185",
+      "source_lines": "194",
       "confidence": "high",
       "signals": [],
       "quote": "AES for ARMv4, CRYPTOGAMS by <appro@openssl.org>"
@@ -4057,7 +4061,7 @@
       "local_id": 43,
       "statement": "The unpacked ARMimg_maker binary contains the output filename string './update.tar.gz' and '/proc/self/exe'.",
       "topic": "armimg-maker-strings",
-      "source_lines": "186",
+      "source_lines": "195",
       "confidence": "high",
       "signals": [],
       "quote": "./update.tar.gz           # Output filename\n/proc/self/exe"
@@ -4068,7 +4072,7 @@
       "local_id": 44,
       "statement": "ARMimg_maker reads a .img file from a command line argument, decrypts it using AES-128-CBC with hardcoded key, and writes decrypted data to ./update.tar.gz in the current directory.",
       "topic": "armimg-maker-behavior",
-      "source_lines": "193",
+      "source_lines": "202",
       "confidence": "high",
       "signals": [],
       "quote": "Writes decrypted data to `./update.tar.gz` in current directory"
@@ -4079,7 +4083,7 @@
       "local_id": 45,
       "statement": "In the firmware update flow, the downloaded image is at /tmp/A15W_Update.img, ARMimg_maker produces /tmp/update.tar.gz, which is extracted with tar -xzf to /tmp/update/.",
       "topic": "update-flow",
-      "source_lines": "203",
+      "source_lines": "212",
       "confidence": "high",
       "signals": [],
       "quote": "/tmp/A15W_Update.img\n      |\n      v (ARMimg_maker)\n/tmp/update.tar.gz"
@@ -4090,7 +4094,7 @@
       "local_id": 46,
       "statement": "During the update flow, once.sh runs to copy files to rootfs, then finish.sh runs to complete the update and reboot.",
       "topic": "update-flow",
-      "source_lines": "216",
+      "source_lines": "225",
       "confidence": "high",
       "signals": [],
       "quote": "v (once.sh runs)\nFiles copied to rootfs\n      |\n      v (finish.sh runs)\nUpdate complete, reboot"
@@ -4101,7 +4105,7 @@
       "local_id": 47,
       "statement": "The adapter's USB mount can be reached via SCP at root@192.168.43.1:/mnt/UPAN/.",
       "topic": "deployment",
-      "source_lines": "265",
+      "source_lines": "274",
       "confidence": "high",
       "signals": [],
       "quote": "scp A15W_Update.img root@192.168.43.1:/mnt/UPAN/"
@@ -4112,7 +4116,7 @@
       "local_id": 48,
       "statement": "Security issue: the hardcoded encryption key means any adapter can be modified.",
       "topic": "security",
-      "source_lines": "274",
+      "source_lines": "283",
       "confidence": "high",
       "signals": [],
       "quote": "Hardcoded encryption key | Any adapter can be modified"
@@ -4123,7 +4127,7 @@
       "local_id": 49,
       "statement": "Security issue: the same key is used for both key and IV, which is weak cryptographic practice.",
       "topic": "security",
-      "source_lines": "275",
+      "source_lines": "284",
       "confidence": "high",
       "signals": [],
       "quote": "Same key used for key and IV | Weak cryptographic practice"
@@ -4134,7 +4138,7 @@
       "local_id": 50,
       "statement": "Security issue: there is no signature verification, so custom firmware is accepted without validation.",
       "topic": "security",
-      "source_lines": "276",
+      "source_lines": "285",
       "confidence": "high",
       "signals": [],
       "quote": "No signature verification | Custom firmware accepted without validation"
@@ -4145,7 +4149,7 @@
       "local_id": 51,
       "statement": "Security issue: the key format is predictable, as other models use similar patterns.",
       "topic": "security",
-      "source_lines": "277",
+      "source_lines": "286",
       "confidence": "high",
       "signals": [],
       "quote": "Predictable key format | Other models use similar patterns"
@@ -4156,7 +4160,7 @@
       "local_id": 52,
       "statement": "A working shell script FirmwareA15W.sh is available for encrypt/decrypt operations, with key extracted from ARMimg_maker.",
       "topic": "firmware-tool",
-      "source_lines": "283",
+      "source_lines": "292",
       "confidence": "high",
       "signals": [],
       "quote": "A working shell script `FirmwareA15W.sh` is available for encrypt/decrypt operations"
@@ -4167,7 +4171,7 @@
       "local_id": 53,
       "statement": "The FirmwareA15W.sh script defines AES_KEY=\"AutoPlay9uPT4n17\" and AES_IV=\"AutoPlay9uPT4n17\".",
       "topic": "firmware-tool",
-      "source_lines": "294",
+      "source_lines": "303",
       "confidence": "high",
       "signals": [],
       "quote": "AES_KEY=\"AutoPlay9uPT4n17\"\nAES_IV=\"AutoPlay9uPT4n17\""
@@ -4178,7 +4182,7 @@
       "local_id": 54,
       "statement": "The documented firmware version for this analysis is 2025.10.15.1127, with analysis date January 2026.",
       "topic": "references",
-      "source_lines": "334",
+      "source_lines": "343",
       "confidence": "high",
       "signals": [],
       "quote": "Firmware Version: 2025.10.15.1127"
@@ -4189,64 +4193,152 @@
       "local_id": 55,
       "statement": "Sources include cpc200_ccpa_firmware_binaries/IMG_FORMAT_ANALYSIS.md and cpc200_ccpa_firmware_binaries/FirmwareA15W.sh, and external ludwig-v/wireless-carplay-dongle-reverse-engineering.",
       "topic": "references",
-      "source_lines": "331",
+      "source_lines": "340",
       "confidence": "high",
       "signals": [],
       "quote": "cpc200_ccpa_firmware_binaries/IMG_FORMAT_ANALYSIS.md"
     },
     {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#56",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 56,
+      "statement": "The U-Boot update environment and kernel staging blocks use AES-128-CBC with the per-unit UpgKey (ASCII %08x of CFG0, CFG1, MAC0, MAC1), the same text as the adapter's uuid.",
+      "topic": "upgkey",
+      "source_lines": "18",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| U-Boot update env + kernel staging blocks (added 2026-10-19) | AES-128-CBC |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#57",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 57,
+      "statement": "The kernel head and live env block use AES-128-CBC with the hardware-only DCP unique/OTP key.",
+      "topic": "dcp-head",
+      "source_lines": "19",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| Kernel head + live env block (added 2026-10-19) | AES-128-CBC (DCP) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#58",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 58,
+      "statement": "Neither boot-chain key is the .img key; both are documented in kernel_encryption.md.",
+      "topic": "references",
+      "source_lines": "21",
+      "confidence": "high",
+      "signals": [],
+      "quote": "Neither key is the `.img` key."
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#59",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 59,
+      "statement": "In the 2025.10.15.1127 image, tmp/ also holds AutoBox.img (3,670,016 B) and upg; once.sh moves both to /tmp and runs /tmp/upg.",
+      "topic": "firmware-contents",
+      "source_lines": "40",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "`tmp/` also holds `AutoBox.img` (3,670,016 B) and `upg`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#60",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 60,
+      "statement": "upg is a statically linked ARM ELF without section headers, whole-file byte entropy 7.999 bits/byte (packed or encrypted); it was not analysed.",
+      "topic": "upg",
+      "source_lines": "40",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "byte entropy 7.999 bits/byte over the whole file (packed or encrypted), and was not analysed"
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#61",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 61,
+      "statement": "AutoBox.img's staging/update-env blocks do not decrypt with either recorded unit's UpgKey, the .img key, the USB key or trivial keys (their key is unresolved), so upg presumably re-keys them per unit (inferred).",
+      "topic": "autobox",
+      "source_lines": "40",
+      "confidence": "medium",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED",
+        "UNRESOLVED",
+        "INFERRED"
+      ],
+      "quote": "So `upg` presumably re-keys them per unit [INFERRED]."
+    },
+    {
       "gid": "01_Firmware_Architecture/flash_layout.md#1",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 1,
-      "statement": "The device analyzed is the Carlinkit A15W, based on a Freescale i.MX6 UltraLite SoC.",
-      "topic": "hardware",
-      "source_lines": "5",
+      "statement": "The flash analysis/dump was performed on 2026-01-29 and corrected on 2026-10-19.",
+      "topic": "metadata",
+      "source_lines": "4",
       "confidence": "high",
-      "signals": null,
-      "quote": "**Device:** Carlinkit A15W (Freescale i.MX6 UltraLite)"
+      "signals": [
+        "Corrected 2026-10-19"
+      ],
+      "quote": "**Analysis Date:** 2026-01-29; **corrected 2026-10-19**"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#2",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 2,
-      "statement": "The flash analysis/dump was performed on 2026-01-29.",
-      "topic": "metadata",
-      "source_lines": "4",
+      "statement": "The device analyzed is the Carlinkit A15W, based on a Freescale i.MX6 UltraLite SoC.",
+      "topic": "hardware",
+      "source_lines": "5",
       "confidence": "high",
-      "signals": null,
-      "quote": "**Analysis Date:** 2026-01-29"
+      "signals": [],
+      "quote": "**Device:** Carlinkit A15W (Freescale i.MX6 UltraLite)"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#3",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 3,
-      "statement": "MTD partition mtd0 (/dev/mtd0) is at offset 0x000000, size 256KB, raw filesystem, containing the U-Boot bootloader.",
+      "statement": "MTD partition mtd0 (/dev/mtd0) is at offset 0x000000, size 256KB, raw, containing the U-Boot bootloader.",
       "topic": "flash_partitions",
       "source_lines": "15",
       "confidence": "high",
-      "signals": null,
+      "signals": [],
       "quote": "| mtd0 | /dev/mtd0 | 0x000000 | 256KB | Raw | U-Boot bootloader |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#4",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 4,
-      "statement": "MTD partition mtd1 (/dev/mtd1) is at offset 0x040000, size 3328KB, raw filesystem, containing the encrypted Linux kernel.",
+      "statement": "MTD partition mtd1 (/dev/mtd1) is at offset 0x040000, size 3328KB, raw, holding the zImage with only its first 3 x 64 KB encrypted plus 3 staging blocks.",
       "topic": "flash_partitions",
       "source_lines": "16",
       "confidence": "high",
-      "signals": null,
-      "quote": "| mtd1 | /dev/mtd1 | 0x040000 | 3328KB | Raw | Linux kernel (encrypted) |"
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| mtd1 | /dev/mtd1 | 0x040000 | 3328KB | Raw | Linux kernel (zImage; only its first 3 × 64 KB encrypted"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#5",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 5,
-      "statement": "MTD partition mtd2 (/dev/mtd2) is at offset 0x380000, size 12800KB, JFFS2 filesystem, containing the root filesystem.",
+      "statement": "MTD partition mtd2 (/dev/mtd2) is at offset 0x380000, size 12800KB, JFFS2, containing the root filesystem.",
       "topic": "flash_partitions",
       "source_lines": "17",
       "confidence": "high",
-      "signals": null,
+      "signals": [],
       "quote": "| mtd2 | /dev/mtd2 | 0x380000 | 12800KB | JFFS2 | Root filesystem |"
     },
     {
@@ -4257,514 +4349,1062 @@
       "topic": "flash_hardware",
       "source_lines": "19",
       "confidence": "high",
-      "signals": null,
+      "signals": [],
       "quote": "**Total Flash:** 16MB QSPI NOR (21e0000.qspi)"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#7",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 7,
-      "statement": "The boot command line sets console=ttyLogFile0, root=/dev/mtdblock2, rootfstype=jffs2, with mtdparts 21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs), and flags rootwait quiet rw.",
-      "topic": "boot_cmdline",
-      "source_lines": "26",
+      "statement": "The 3-partition layout is authoritative; the running kernel boots with root=/dev/mtdblock2 and there is no 4th MTD partition.",
+      "topic": "flash_partitions",
+      "source_lines": "21",
       "confidence": "high",
-      "signals": null,
-      "quote": "console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2\nmtdparts=21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs)\nrootwait quiet rw"
+      "signals": [],
+      "quote": "There is no 4th MTD partition."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#8",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 8,
-      "statement": "U-Boot string at offset 0x1641e is `UPGkey: %s`, used for upgrade key logging.",
-      "topic": "uboot_strings",
-      "source_lines": "41",
+      "statement": "root=/dev/mtdblock3 comes from NXP 14x14-EVK template text inside the U-Boot image, not from the environment U-Boot runs, which sets root=/dev/mtdblock2.",
+      "topic": "uboot_env",
+      "source_lines": "21",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x1641e | `UPGkey: %s` | Upgrade key logging |"
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "`root=/dev/mtdblock3` is not in the environment U-Boot runs"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#9",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 9,
-      "statement": "U-Boot string at offset 0x1643b is `do_decrypt_decompress ret=%d dstLen=%d`, associated with a decryption function.",
-      "topic": "uboot_strings",
-      "source_lines": "42",
+      "statement": "The boot command line sets console=ttyLogFile0, root=/dev/mtdblock2, rootfstype=jffs2, mtdparts 21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs), rootwait quiet rw.",
+      "topic": "boot_cmdline",
+      "source_lines": "26",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x1643b | `do_decrypt_decompress ret=%d dstLen=%d` | Decryption function |"
+      "signals": [],
+      "quote": "console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#10",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 10,
-      "statement": "U-Boot string at offset 0x17483 is `heweiencrypt`, a HeWei encryption marker.",
-      "topic": "uboot_strings",
-      "source_lines": "43",
+      "statement": "The norargs env text ends in a space, but setenv rejoins its arguments, so bootargs has no trailing space: the captured cmdline is 137 characters plus a newline and dmesg's Kernel command line ends in rw.",
+      "topic": "boot_cmdline",
+      "source_lines": "31",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x17483 | `heweiencrypt` | HeWei encryption marker |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "but `setenv` rejoins its arguments with single spaces, so `bootargs` has none"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#11",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 11,
-      "statement": "U-Boot string at offset 0x16473 is `Can't start, Bad Keys.`, a key validation error.",
-      "topic": "uboot_strings",
-      "source_lines": "44",
+      "statement": "All three MTD partitions carry flags 0xc00 (MTD_WRITEABLE | MTD_BIT_WRITEABLE).",
+      "topic": "mtd_flags",
+      "source_lines": "39",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x16473 | `Can't start, Bad Keys.` | Key validation error |"
+      "signals": [],
+      "quote": "| mtd0 (uboot) | 0xc00 | MTD_WRITEABLE \\| MTD_BIT_WRITEABLE |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#12",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 12,
-      "statement": "The U-Boot environment bootcmd runs norboot.",
-      "topic": "uboot_env",
-      "source_lines": "50",
+      "statement": "All three partitions are Linux-writable from a running root shell, including U-Boot and the kernel.",
+      "topic": "mtd_flags",
+      "source_lines": "43",
       "confidence": "high",
-      "signals": null,
-      "quote": "bootcmd=run norboot; ..."
+      "signals": [],
+      "quote": "**All three partitions are Linux-writable from a running root shell — not just mtd2 (rootfs).**"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#13",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 13,
-      "statement": "The U-Boot norargs sets bootargs console=ttymxc0,115200 root=/dev/mtdblock3 rootfstype=jffs2.",
-      "topic": "uboot_env",
-      "source_lines": "51",
+      "statement": "Writing an unsigned U-Boot or an undecryptable kernel leaves a unit that does not boot.",
+      "topic": "brick_risk",
+      "source_lines": "45",
       "confidence": "high",
-      "signals": null,
-      "quote": "norargs=setenv bootargs console=ttymxc0,115200 root=/dev/mtdblock3 rootfstype=jffs2 ..."
+      "signals": [],
+      "quote": "writing an unsigned U-Boot or an undecryptable kernel leaves a unit that does not boot"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#14",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 14,
-      "statement": "The U-Boot norboot command runs norargs, does sf probe 0, reads flash 0x100000 length 0x4F0000 to RAM 0x80800000, reads flash 0x5F0000 length 0x10000 to RAM 0x83000000, then bootz 0x80800000 - 0x83000000.",
-      "topic": "uboot_env",
-      "source_lines": "52",
+      "statement": "A new kernel can be written through U-Boot's staging path (verified with LIVI's kernel); the risk is a power cut between the start of the mtd1 erase and the end of the env-block erase.",
+      "topic": "kernel_write",
+      "source_lines": "48",
       "confidence": "high",
-      "signals": null,
-      "quote": "norboot=echo Booting from nor flash ...;run norargs;sf probe 0;sf read 0x80800000 0x100000 0x4F0000;sf read 0x83000000 0x5F0000 0x10000;bootz 0x80800000 - 0x83000000"
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "A **new kernel can be written** through U-Boot's own staging path"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#15",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 15,
-      "statement": "U-Boot loads from QSPI flash offset 0x0.",
-      "topic": "boot_process",
-      "source_lines": "59",
-      "confidence": "high",
-      "signals": null,
-      "quote": "U-Boot loads from QSPI flash offset 0x0"
+      "statement": "A non-booting unit is recoverable with a SPI-NOR programmer full-image write because the signed U-Boot is unchanged (inferred; never exercised).",
+      "topic": "recovery",
+      "source_lines": "49",
+      "confidence": "medium",
+      "signals": [
+        "2026-10-19",
+        "INFERRED"
+      ],
+      "quote": "recoverable by writing a full 16 MB backup with a SPI-NOR programmer"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#16",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 16,
-      "statement": "U-Boot reads the kernel from flash at 0x100000 (1MB) to RAM at 0x80800000.",
-      "topic": "boot_process",
-      "source_lines": "60",
-      "confidence": "high",
-      "signals": null,
-      "quote": "Reads kernel from flash at 0x100000 (1MB) to RAM at 0x80800000"
+      "statement": "Owner reports (unit, date and port not recorded) that no boot-ROM serial-download device appeared with the U-Boot block blank/erased on the tested USB port; the other port is unresolved.",
+      "topic": "hab_serial_download",
+      "source_lines": "50",
+      "confidence": "medium",
+      "signals": [
+        "2026-10-19",
+        "OWNER-REPORTED",
+        "UNRESOLVED"
+      ],
+      "quote": "no boot-ROM serial-download device appeared on the USB port that was tested"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#17",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 17,
-      "statement": "There is a discrepancy: mtdparts defines the kernel at 0x040000 (256KB) but U-Boot reads from 0x100000; the 768KB gap (0x40000-0x100000) likely contains an encryption header or padding.",
-      "topic": "boot_process",
-      "source_lines": "60",
-      "confidence": "medium",
-      "signals": null,
-      "quote": "the 768KB gap (0x40000–0x100000) likely contains an encryption header or padding"
+      "statement": "The flash is driven by the fsl-quadspi controller at 0x21e0000.",
+      "topic": "flash_hardware",
+      "source_lines": "55",
+      "confidence": "high",
+      "signals": [],
+      "quote": "The flash is driven by the `fsl-quadspi` controller at `0x21e0000`"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#18",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 18,
-      "statement": "U-Boot reads the DTB from flash at 0x5F0000 to RAM at 0x83000000.",
-      "topic": "boot_process",
+      "statement": "The flash is SPI NOR with 1-byte write size and 64KB erase blocks, matching /proc/mtd erasesize.",
+      "topic": "flash_hardware",
       "source_lines": "61",
       "confidence": "high",
-      "signals": null,
-      "quote": "Reads DTB from flash at 0x5F0000 to RAM at 0x83000000"
+      "signals": [],
+      "quote": "| Erase block size | 65,536 bytes (64KB) |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#19",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 19,
-      "statement": "U-Boot executes `bootz 0x80800000 - 0x83000000`.",
-      "topic": "boot_process",
-      "source_lines": "62",
+      "statement": "U-Boot string at offset 0x1641e is UPGkey: %s.",
+      "topic": "uboot_strings",
+      "source_lines": "73",
       "confidence": "high",
-      "signals": null,
-      "quote": "Executes `bootz 0x80800000 - 0x83000000`"
+      "signals": [],
+      "quote": "| 0x1641e | `UPGkey: %s` | Upgrade key logging |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#20",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 20,
-      "statement": "The kernel (mtd1.bin) is located at mtd1 (/dev/mtd1), size 3,407,872 bytes (3.3MB), flash offset 0x40000 (256KB from start).",
-      "topic": "kernel",
-      "source_lines": "71",
+      "statement": "U-Boot string at offset 0x1643b is do_decrypt_decompress ret=%d dstLen=%d.",
+      "topic": "uboot_strings",
+      "source_lines": "74",
       "confidence": "high",
-      "signals": null,
-      "quote": "| Size | 3,407,872 bytes (3.3MB) |"
+      "signals": [],
+      "quote": "| 0x1643b | `do_decrypt_decompress ret=%d dstLen=%d` | Decryption function |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#21",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 21,
-      "statement": "The kernel is encrypted with a different key than firmware images.",
-      "topic": "kernel_encryption",
-      "source_lines": "74",
+      "statement": "U-Boot string at offset 0x17483 is heweiencrypt.",
+      "topic": "uboot_strings",
+      "source_lines": "75",
       "confidence": "high",
-      "signals": null,
-      "quote": "The kernel is encrypted with a different key than firmware images."
+      "signals": [],
+      "quote": "| 0x17483 | `heweiencrypt` | HeWei encryption marker |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#22",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 22,
-      "statement": "Kernel encryption analysis is documented in 03_Security_Analysis/kernel_encryption.md.",
-      "topic": "references",
-      "source_lines": "74",
+      "statement": "U-Boot string at offset 0x16473 is Can't start, Bad Keys.",
+      "topic": "uboot_strings",
+      "source_lines": "76",
       "confidence": "high",
-      "signals": null,
-      "quote": "see `03_Security_Analysis/kernel_encryption.md`"
+      "signals": [],
+      "quote": "| 0x16473 | `Can't start, Bad Keys.` | Key validation error |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#23",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 23,
-      "statement": "The running kernel is Linux version 3.14.52+g94d07bb, built by hcw@ubuntu with gcc version 4.9.2 (GCC).",
-      "topic": "kernel_version",
-      "source_lines": "79",
+      "statement": "U-Boot string %08x%08x%08x%08x at 0x1640d formats CFG0/CFG1/MAC0/MAC1 into the UpgKey text.",
+      "topic": "uboot_strings",
+      "source_lines": "77",
       "confidence": "high",
-      "signals": null,
-      "quote": "Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC))"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| 0x1640d | `%08x%08x%08x%08x` |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#24",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 24,
-      "statement": "The kernel build is #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025.",
-      "topic": "kernel_version",
-      "source_lines": "80",
+      "statement": "U-Boot banner at 0x1b0f6 is U-Boot 2015.04 (Feb 02 2023 - 23:26:24).",
+      "topic": "uboot_version",
+      "source_lines": "78",
       "confidence": "high",
-      "signals": null,
-      "quote": "#12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| 0x1b0f6 | `U-Boot 2015.04 (Feb 02 2023 - 23:26:24)` |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#25",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 25,
-      "statement": "Physical memory range 0x80008000-0x8058b327 (~5.7MB) is kernel code.",
-      "topic": "memory_map",
-      "source_lines": "91",
+      "statement": "mtd0 0x1000-0x20FFF is the HAB-authenticated U-Boot (IVT at 0x1000, U-Boot code); the CSF's Authenticate Data command has one block, start 0x877FF7D0, length 0x20000; byte-identical to the vendor 2025.10.15.1127 AutoBox.img.",
+      "topic": "mtd0_map",
+      "source_lines": "85",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x80008000-0x8058b327 | ~5.7MB | Kernel code |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x01000`–`0x20FFF` | **HAB-authenticated** U-Boot"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#26",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 26,
-      "statement": "Physical memory range 0x805c0000-0x806684c7 (~0.6MB) is kernel data.",
-      "topic": "memory_map",
-      "source_lines": "92",
+      "statement": "mtd0 0x22000-0x2CFFF is 0xFF.",
+      "topic": "mtd0_map",
+      "source_lines": "87",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x805c0000-0x806684c7 | ~0.6MB | Kernel data |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x22000`–`0x2CFFF` | `0xFF` | — |"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#27",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 27,
-      "statement": "I/O region 0x02020000 is the UART (serial).",
-      "topic": "io_regions",
-      "source_lines": "98",
+      "statement": "mtd0 0x2D000-0x2FFFF is the UpgKey-encrypted update environment payload, with its length word (0x3000) in the last 4 bytes of the 0x20000 block; per unit.",
+      "topic": "mtd0_map",
+      "source_lines": "88",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x02020000 | UART (serial) |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x2D000`–`0x2FFFF` | Update environment payload, AES-128-CBC with the UpgKey"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#28",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 28,
-      "statement": "I/O region 0x02184000 is USB OTG.",
-      "topic": "io_regions",
-      "source_lines": "99",
+      "statement": "mtd0 0x30000-0x3FFFF is the 64 KB live environment block, DCP-encrypted (key inferred); per unit.",
+      "topic": "mtd0_map",
+      "source_lines": "89",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x02184000 | USB OTG |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED",
+        "INFERRED"
+      ],
+      "quote": "| `0x30000`–`0x3FFFF` | Live environment block (64 KB), DCP-encrypted"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#29",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 29,
-      "statement": "I/O region 0x02190000 is MMC/SD (mmc0).",
-      "topic": "io_regions",
-      "source_lines": "100",
+      "statement": "The update payload and env block are outside both the boot-ROM-loaded range (0x0-0x21FFF) and the authenticated range (0x1000-0x20FFF), so HAB does not cover the environment.",
+      "topic": "hab_scope",
+      "source_lines": "91",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x02190000 | MMC/SD (mmc0) |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "The update payload and the env block are outside the loaded and the authenticated range, so HAB does not cover the environment."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#30",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 30,
-      "statement": "I/O region 0x021e0000 is QSPI Flash.",
-      "topic": "io_regions",
-      "source_lines": "101",
+      "statement": "The 0x20000 erase block also holds the end of the authenticated U-Boot (0x20000-0x20FFF) and the CSF, so rewriting the update payload erases a block of the signed U-Boot.",
+      "topic": "mtd0_map",
+      "source_lines": "93",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x021e0000 | QSPI Flash |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "erase block also holds the end of the authenticated U-Boot (`0x20000`–`0x20FFF`) and the CSF"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#31",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 31,
-      "statement": "I/O region 0x02280000 is the DCP (crypto engine).",
-      "topic": "io_regions",
-      "source_lines": "102",
+      "statement": "The previously documented bootdelay=0 / mtdblock3 / 0x100000 / 0x5F0000 environment is not what U-Boot runs.",
+      "topic": "uboot_env",
+      "source_lines": "97",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x02280000 | DCP (crypto engine) |"
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "is **not** what U-Boot runs"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#32",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 32,
-      "statement": "The DCP crypto accelerator is at /sys/bus/platform/devices/2280000.crypto.",
-      "topic": "crypto_hardware",
-      "source_lines": "112",
+      "statement": "U-Boot's built-in default environment at mtd0 0x1611d is only bootdelay=0, baudrate=115200, loadaddr=0x80800000.",
+      "topic": "uboot_env",
+      "source_lines": "99",
       "confidence": "high",
-      "signals": null,
-      "quote": "| /sys/bus/platform/devices/2280000.crypto | DCP crypto accelerator |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "U-Boot's built-in default environment at mtd0 `0x1611d`"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#33",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 33,
-      "statement": "The DCP driver is mxs-dcp at /sys/bus/platform/drivers/mxs-dcp.",
-      "topic": "crypto_hardware",
-      "source_lines": "113",
+      "statement": "NXP 14x14-EVK template text at mtd0 0xc14-0xfe3 holds the old norargs/norboot with mtdparts 1M(uboot),5056K(kernel),64K(dtb),10M(rootfs).",
+      "topic": "uboot_env",
+      "source_lines": "100",
       "confidence": "high",
-      "signals": null,
-      "quote": "| /sys/bus/platform/drivers/mxs-dcp | DCP driver |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "NXP 14x14-EVK template text at mtd0 `0xc14`–`0xfe3`"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#34",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 34,
-      "statement": "Available crypto algorithm: stdrng (kernel RNG).",
-      "topic": "crypto_algorithms",
-      "source_lines": "117",
+      "statement": "The 0x100000/0x4F0000/0x5F0000 values are the EVK template's partitioning, not this board's.",
+      "topic": "uboot_env",
+      "source_lines": "100",
       "confidence": "high",
-      "signals": null,
-      "quote": "- stdrng (kernel RNG)"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "values are that template's 1M/5056K/64K(dtb) partitioning, not this board's"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#35",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 35,
-      "statement": "Available crypto algorithm: michael_mic (TKIP MIC).",
-      "topic": "crypto_algorithms",
-      "source_lines": "118",
+      "statement": "The running environment is per unit: DCP-encrypted in the env block and UpgKey-encrypted+gzipped in the update payload, the readable copy.",
+      "topic": "uboot_env",
+      "source_lines": "102",
       "confidence": "high",
-      "signals": null,
-      "quote": "- michael_mic (TKIP MIC)"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "The environment that runs is the per-unit one."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#36",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 36,
-      "statement": "Available crypto algorithm: AES via DCP hardware.",
-      "topic": "crypto_algorithms",
-      "source_lines": "120",
+      "statement": "The live environment has bootcmd=run norboot.",
+      "topic": "uboot_env",
+      "source_lines": "105",
       "confidence": "high",
-      "signals": null,
-      "quote": "- AES (via DCP hardware)"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "bootcmd=run norboot;"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#37",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 37,
-      "statement": "48,959 kernel symbols were extracted from /proc/kallsyms.",
-      "topic": "kernel_symbols",
-      "source_lines": "126",
+      "statement": "The live environment has bootdelay=3.",
+      "topic": "uboot_env",
+      "source_lines": "106",
       "confidence": "high",
-      "signals": null,
-      "quote": "**48,959 symbols extracted** from `/proc/kallsyms`"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "bootdelay=3"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#38",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 38,
-      "statement": "Kernel symbol _stext (kernel start) is at address 0x80008200.",
-      "topic": "kernel_symbols",
-      "source_lines": "132",
+      "statement": "The live U-Boot console variables are console=ttymxc0, baudrate=115200, stdin/stdout/stderr=serial.",
+      "topic": "uboot_env",
+      "source_lines": "107",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x80008200 | `_stext` (kernel start) |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "console=ttymxc0  baudrate=115200  stdin=serial  stdout=serial  stderr=serial"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#39",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 39,
-      "statement": "Kernel symbol asm_do_IRQ is at address 0x80008200.",
-      "topic": "kernel_symbols",
-      "source_lines": "133",
+      "statement": "The live norargs sets console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 with the 256k/3328K/12800K mtdparts.",
+      "topic": "uboot_env",
+      "source_lines": "108",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x80008200 | `asm_do_IRQ` |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "norargs=setenv bootargs console=ttyLogFile0 root=/dev/mtdblock2"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#40",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 40,
-      "statement": "Kernel symbol secondary_startup is at address 0x80008500.",
-      "topic": "kernel_symbols",
-      "source_lines": "134",
+      "statement": "The live norboot: cp 0x80800800 0x83000000 0xf800; sf read 0x80800000 0x40000 0x302fd8; mm w x3; bootz 0x80800000 - 0x83000000.",
+      "topic": "uboot_env",
+      "source_lines": "109",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x80008500 | `secondary_startup` |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "norboot=run norargs;sf probe 0;cp 0x80800800 0x83000000 0xf800;sf read 0x80800000 0x40000 0x302fd8;"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#41",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 41,
-      "statement": "Kernel symbol do_one_initcall is at address 0x80008700.",
-      "topic": "kernel_symbols",
-      "source_lines": "135",
+      "statement": "kernel_encryption.md is the single source for the full environment, mm subcommands, heweiencrypt, UpgKey and hardware tests.",
+      "topic": "references",
+      "source_lines": "113",
       "confidence": "high",
-      "signals": null,
-      "quote": "| 0x80008700 | `do_one_initcall` |"
+      "signals": [],
+      "quote": "That file is the single source for them."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#42",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 42,
-      "statement": "Flash dump files are stored at /mnt/UPAN/flash_dump/.",
-      "topic": "flash_dump",
-      "source_lines": "142",
+      "statement": "Nothing prints on the TX1/RX1 UART pins during U-Boot or kernel boot (verified live 2026-07-08).",
+      "topic": "uart_console",
+      "source_lines": "115",
       "confidence": "high",
-      "signals": null,
-      "quote": "Dumped to `/mnt/UPAN/flash_dump/`:"
+      "signals": [
+        "device-verified"
+      ],
+      "quote": "**nothing prints on the `TX1`/`RX1` UART pins during U-Boot or kernel boot.**"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#43",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 43,
-      "statement": "Flash dump file mtd0.bin is 256KB, containing the U-Boot bootloader.",
-      "topic": "flash_dump",
-      "source_lines": "146",
+      "statement": "U-Boot is version 2015.04.",
+      "topic": "uboot_version",
+      "source_lines": "115",
       "confidence": "high",
-      "signals": null,
-      "quote": "| mtd0.bin | 256KB | U-Boot bootloader |"
+      "signals": [],
+      "quote": "U-Boot itself is **2015.04**."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#44",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 44,
-      "statement": "Flash dump file mtd1.bin is 3.3MB, containing the encrypted kernel.",
-      "topic": "flash_dump",
-      "source_lines": "147",
+      "statement": "The only output on the physical pins is the post-boot inittab root shell at 9600 8N1.",
+      "topic": "uart_console",
+      "source_lines": "115",
       "confidence": "high",
-      "signals": null,
-      "quote": "| mtd1.bin | 3.3MB | Encrypted kernel |"
+      "signals": [
+        "device-verified"
+      ],
+      "quote": "a passwordless root shell at 9600 8N1"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#45",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 45,
-      "statement": "Flash dump file mtd2.bin is 12.5MB, containing the JFFS2 rootfs.",
-      "topic": "flash_dump",
-      "source_lines": "148",
-      "confidence": "high",
-      "signals": null,
-      "quote": "| mtd2.bin | 12.5MB | JFFS2 rootfs |"
+      "statement": "ttyLogFile0 appears only in kernel bootargs; why U-Boot prints nothing on the pins is unresolved.",
+      "topic": "uart_console",
+      "source_lines": "115",
+      "confidence": "medium",
+      "signals": [
+        "Corrected 2026-10-19",
+        "UNRESOLVED"
+      ],
+      "quote": "Why U-Boot prints nothing on the pins is [UNRESOLVED]."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#46",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 46,
-      "statement": "Flash dump file kallsyms_full.txt is ~2MB, containing kernel symbols.",
-      "topic": "flash_dump",
-      "source_lines": "149",
+      "statement": "Boot step 1: the boot ROM loads mtd0 0x0-0x21FFF and HAB-authenticates 0x1000-0x20FFF (one CSF block).",
+      "topic": "boot_process",
+      "source_lines": "121",
       "confidence": "high",
-      "signals": null,
-      "quote": "| kallsyms_full.txt | ~2MB | Kernel symbols |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "and HAB-authenticates `0x1000`–`0x20FFF` (one CSF block)"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#47",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 47,
-      "statement": "Flash dump file cmdline.txt is 138B, containing the boot command line.",
-      "topic": "flash_dump",
-      "source_lines": "150",
-      "confidence": "high",
-      "signals": null,
-      "quote": "| cmdline.txt | 138B | Boot command line |"
+      "statement": "Boot step 2: U-Boot runs norboot; with an erased/invalid env block it uses the update environment and runs heweiencrypt first (inferred).",
+      "topic": "boot_process",
+      "source_lines": "122",
+      "confidence": "medium",
+      "signals": [
+        "2026-10-19",
+        "INFERRED"
+      ],
+      "quote": "If the env block is erased or invalid it uses the update environment and runs `heweiencrypt` first"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#48",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 48,
-      "statement": "Flash dump file cpuinfo.txt is 352B, containing CPU information.",
-      "topic": "flash_dump",
-      "source_lines": "151",
+      "statement": "Boot step 3: cp copies from env offset 0x800, where the DTB (first 0x8103 bytes) is stored, to 0x83000000 before the kernel load overwrites 0x80800000.",
+      "topic": "boot_process",
+      "source_lines": "123",
       "confidence": "high",
-      "signals": null,
-      "quote": "| cpuinfo.txt | 352B | CPU information |"
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "copies from env offset `0x800`, where the device tree (the first `0x8103` bytes) is stored, to `0x83000000`"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#49",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 49,
-      "statement": "Flash dump file modules.txt is 187B, containing loaded modules.",
-      "topic": "flash_dump",
-      "source_lines": "152",
+      "statement": "Boot step 4: the kernel is read from the start of mtd1 (0x40000); there is no gap and no header.",
+      "topic": "boot_process",
+      "source_lines": "124",
       "confidence": "high",
-      "signals": null,
-      "quote": "| modules.txt | 187B | Loaded modules |"
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "the kernel is read from the **start of mtd1** (`0x40000`). There is no gap and no header."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#50",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 50,
-      "statement": "Kernel decryption Option 1 (U-Boot Analysis): locate do_decrypt_decompress function, extract key from code or environment, replicate decryption algorithm.",
-      "topic": "decryption_strategy",
-      "source_lines": "158",
-      "confidence": "medium",
-      "signals": null,
-      "quote": "### Option 1: U-Boot Analysis\n- Locate `do_decrypt_decompress` function\n- Extract key from code or environment\n- Replicate decryption algorithm"
+      "statement": "Boot step 5: mm w decrypts the first three 64 KB blocks in place; the rest is plaintext on flash.",
+      "topic": "boot_process",
+      "source_lines": "125",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "the first three 64 KB blocks are DCP-decrypted in place"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#51",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 51,
-      "statement": "Kernel decryption Option 2 (Runtime Extraction) requires /dev/mem access, which is currently blocked by CONFIG_STRICT_DEVMEM; could use a kernel module to bypass and dump from physical address 0x80008000.",
-      "topic": "decryption_strategy",
-      "source_lines": "164",
-      "confidence": "medium",
-      "signals": null,
-      "quote": "- Requires `/dev/mem` access (currently blocked by CONFIG_STRICT_DEVMEM)\n- Could use kernel module to bypass restriction\n- Dump from physical address 0x80008000"
+      "statement": "Boot step 6: bootz 0x80800000 - 0x83000000.",
+      "topic": "boot_process",
+      "source_lines": "126",
+      "confidence": "high",
+      "signals": [],
+      "quote": "6. `bootz 0x80800000 - 0x83000000`."
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#52",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 52,
-      "statement": "Kernel decryption Option 3 (JTAG): i.MX6UL has a JTAG interface; could halt CPU and dump RAM; requires hardware access.",
-      "topic": "decryption_strategy",
+      "statement": "Flash 0x5F0000 is inside mtd2 and holds JFFS2 nodes, not a DTB.",
+      "topic": "dtb_location",
+      "source_lines": "128",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "Flash `0x5F0000` is inside mtd2 and holds JFFS2 nodes, not a DTB"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#53",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 53,
+      "statement": "The kernel (mtd1.bin) is 3,407,872 bytes at flash offset 0x40000.",
+      "topic": "kernel",
+      "source_lines": "137",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| Size | 3,407,872 bytes (3.3MB) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#54",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 54,
+      "statement": "The zImage length is 0x302fd8 (3,157,976 B) per norboot in the 2025.10.15.1127 build; it is build-specific (2025.02.25.1521 build #448 uses 0x303080).",
+      "topic": "kernel",
+      "source_lines": "139",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| zImage length | `0x302fd8` (3,157,976 B)"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#55",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 55,
+      "statement": "Only the zImage head is encrypted, not the whole kernel.",
+      "topic": "kernel_encryption",
+      "source_lines": "141",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "Only the zImage head is encrypted"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#56",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 56,
+      "statement": "mtd1 0x000000-0x02FFFF is the DCP-encrypted zImage head.",
+      "topic": "kernel_layout",
+      "source_lines": "145",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x000000`–`0x02FFFF` | zImage head, DCP-encrypted (per-chip key) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#57",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 57,
+      "statement": "mtd1 0x030000-0x302FD7 is the plaintext zImage body.",
+      "topic": "kernel_layout",
+      "source_lines": "146",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x030000`–`0x302FD7` | zImage body, **plaintext** |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#58",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 58,
+      "statement": "mtd1 0x302FD8-0x332FD7 holds 3 x 64 KB staging blocks with the same head under the UpgKey.",
+      "topic": "kernel_layout",
+      "source_lines": "147",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x302FD8`–`0x332FD7` | 3 × 64 KB staging blocks"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#59",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 59,
+      "statement": "mtd1 0x332FD8-0x33FFFF is 0xFF.",
+      "topic": "kernel_layout",
+      "source_lines": "148",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x332FD8`–`0x33FFFF` | `0xFF` |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#60",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 60,
+      "statement": "The .img update key is a different static key; kernel format docs are in 05_Security_Analysis/kernel_encryption.md.",
+      "topic": "references",
+      "source_lines": "150",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19"
+      ],
+      "quote": "Format, keys and recovery are in `05_Security_Analysis/kernel_encryption.md`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#61",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 61,
+      "statement": "The running kernel is Linux version 3.14.52+g94d07bb, built by hcw@ubuntu with gcc 4.9.2.",
+      "topic": "kernel_version",
+      "source_lines": "155",
+      "confidence": "high",
+      "signals": [],
+      "quote": "Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC))"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#62",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 62,
+      "statement": "The kernel build is #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025.",
+      "topic": "kernel_version",
+      "source_lines": "156",
+      "confidence": "high",
+      "signals": [],
+      "quote": "#12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#63",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 63,
+      "statement": "Physical memory range 0x80008000-0x8058b327 (~5.7MB) is kernel code.",
+      "topic": "memory_map",
+      "source_lines": "167",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x80008000-0x8058b327 | ~5.7MB | Kernel code |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#64",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 64,
+      "statement": "Physical memory range 0x805c0000-0x806684c7 (~0.6MB) is kernel data.",
+      "topic": "memory_map",
       "source_lines": "168",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x805c0000-0x806684c7 | ~0.6MB | Kernel data |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#65",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 65,
+      "statement": "I/O region 0x02020000 is UART1/ttymxc0, console pads TX1/RX1 (9600 8N1).",
+      "topic": "io_regions",
+      "source_lines": "174",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x02020000 | UART1 / `ttymxc0`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#66",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 66,
+      "statement": "I/O region 0x02184000 is USB OTG.",
+      "topic": "io_regions",
+      "source_lines": "175",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x02184000 | USB OTG |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#67",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 67,
+      "statement": "I/O region 0x02190000 is MMC/SD (mmc0).",
+      "topic": "io_regions",
+      "source_lines": "176",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x02190000 | MMC/SD (mmc0) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#68",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 68,
+      "statement": "I/O region 0x021e0000 is QSPI Flash.",
+      "topic": "io_regions",
+      "source_lines": "177",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x021e0000 | QSPI Flash |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#69",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 69,
+      "statement": "I/O region 0x02280000 is the DCP crypto engine.",
+      "topic": "io_regions",
+      "source_lines": "178",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x02280000 | DCP (crypto engine) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#70",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 70,
+      "statement": "The DCP crypto accelerator is at /sys/bus/platform/devices/2280000.crypto.",
+      "topic": "crypto_hardware",
+      "source_lines": "188",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| /sys/bus/platform/devices/2280000.crypto | DCP crypto accelerator |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#71",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 71,
+      "statement": "The DCP driver is mxs-dcp at /sys/bus/platform/drivers/mxs-dcp.",
+      "topic": "crypto_hardware",
+      "source_lines": "189",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| /sys/bus/platform/drivers/mxs-dcp | DCP driver |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#72",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 72,
+      "statement": "Listed crypto algorithms: stdrng, michael_mic, ecb(arc4), AES.",
+      "topic": "crypto_algorithms",
+      "source_lines": "193",
+      "confidence": "high",
+      "signals": [],
+      "quote": "- stdrng (kernel RNG)"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#73",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 73,
+      "statement": "The 'AES via DCP hardware' attribution is unsupported; a 2026-10-19 uncaptured live check saw only software ciphers, no AF_ALG, no /dev/crypto, DCP IRQ 0.",
+      "topic": "crypto_algorithms",
+      "source_lines": "198",
       "confidence": "medium",
-      "signals": null,
-      "quote": "### Option 3: JTAG\n- i.MX6UL has JTAG interface\n- Could halt CPU and dump RAM\n- Requires hardware access"
+      "signals": [
+        "Corrected 2026-10-19",
+        "OBSERVED-NOT-RECORDED"
+      ],
+      "quote": "\"via DCP hardware\" is not supported."
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#74",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 74,
+      "statement": "48,959 kernel symbols were extracted from /proc/kallsyms.",
+      "topic": "kernel_symbols",
+      "source_lines": "204",
+      "confidence": "high",
+      "signals": [],
+      "quote": "**48,959 symbols extracted** from `/proc/kallsyms`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#75",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 75,
+      "statement": "Kernel symbol _stext (kernel start) is at 0x80008200.",
+      "topic": "kernel_symbols",
+      "source_lines": "210",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x80008200 | `_stext` (kernel start) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#76",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 76,
+      "statement": "Kernel symbol asm_do_IRQ is at 0x80008200.",
+      "topic": "kernel_symbols",
+      "source_lines": "211",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x80008200 | `asm_do_IRQ` |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#77",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 77,
+      "statement": "Kernel symbol secondary_startup is at 0x80008500.",
+      "topic": "kernel_symbols",
+      "source_lines": "212",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x80008500 | `secondary_startup` |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#78",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 78,
+      "statement": "Kernel symbol do_one_initcall is at 0x80008700.",
+      "topic": "kernel_symbols",
+      "source_lines": "213",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| 0x80008700 | `do_one_initcall` |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#79",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 79,
+      "statement": "Flash dump files are stored at /mnt/UPAN/flash_dump/.",
+      "topic": "flash_dump",
+      "source_lines": "220",
+      "confidence": "high",
+      "signals": [],
+      "quote": "Dumped to `/mnt/UPAN/flash_dump/`:"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#80",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 80,
+      "statement": "Flash dump file mtd0.bin is 256KB, containing the U-Boot bootloader.",
+      "topic": "flash_dump",
+      "source_lines": "224",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| mtd0.bin | 256KB | U-Boot bootloader |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#81",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 81,
+      "statement": "Flash dump file mtd1.bin is 3.3MB, the kernel with its first 3 x 64 KB encrypted.",
+      "topic": "flash_dump",
+      "source_lines": "225",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19"
+      ],
+      "quote": "| mtd1.bin | 3.3MB | Kernel (first 3 × 64 KB encrypted; corrected 2026-10-19) |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#82",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 82,
+      "statement": "Flash dump file mtd2.bin is 12.5MB, containing the JFFS2 rootfs.",
+      "topic": "flash_dump",
+      "source_lines": "226",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| mtd2.bin | 12.5MB | JFFS2 rootfs |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#83",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 83,
+      "statement": "Flash dump file kallsyms_full.txt is ~2MB, containing kernel symbols.",
+      "topic": "flash_dump",
+      "source_lines": "227",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| kallsyms_full.txt | ~2MB | Kernel symbols |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#84",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 84,
+      "statement": "Flash dump file cmdline.txt is 138B, containing the boot command line.",
+      "topic": "flash_dump",
+      "source_lines": "228",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| cmdline.txt | 138B | Boot command line |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#85",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 85,
+      "statement": "Flash dump file cpuinfo.txt is 352B, containing CPU information.",
+      "topic": "flash_dump",
+      "source_lines": "229",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| cpuinfo.txt | 352B | CPU information |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#86",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 86,
+      "statement": "Flash dump file modules.txt is 187B, containing loaded modules.",
+      "topic": "flash_dump",
+      "source_lines": "230",
+      "confidence": "high",
+      "signals": [],
+      "quote": "| modules.txt | 187B | Loaded modules |"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#87",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 87,
+      "statement": "None of the historical kernel decryption options was needed; the plaintext comes from the staging blocks.",
+      "topic": "decryption_strategy",
+      "source_lines": "236",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "None of the options below was needed."
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#88",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 88,
+      "statement": "Historical Option 1 (U-Boot analysis): locate do_decrypt_decompress, extract key, replicate.",
+      "topic": "decryption_strategy",
+      "source_lines": "238",
+      "confidence": "medium",
+      "signals": [
+        "historical"
+      ],
+      "quote": "### Option 1: U-Boot Analysis"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#89",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 89,
+      "statement": "Historical Option 2 (runtime extraction) assumed /dev/mem was blocked by CONFIG_STRICT_DEVMEM, disproved 2026-06-30.",
+      "topic": "decryption_strategy",
+      "source_lines": "244",
+      "confidence": "medium",
+      "signals": [
+        "historical"
+      ],
+      "quote": "- Requires `/dev/mem` access (currently blocked by CONFIG_STRICT_DEVMEM)"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#90",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 90,
+      "statement": "Historical Option 3 (JTAG): halt CPU and dump RAM; requires hardware access.",
+      "topic": "decryption_strategy",
+      "source_lines": "248",
+      "confidence": "medium",
+      "signals": [
+        "historical"
+      ],
+      "quote": "### Option 3: JTAG"
     },
     {
       "gid": "01_Firmware_Architecture/hardware_platform.md#1",
@@ -4803,12 +5443,12 @@
       "gid": "01_Firmware_Architecture/hardware_platform.md#4",
       "file": "01_Firmware_Architecture/hardware_platform.md",
       "local_id": 4,
-      "statement": "The processor is an NXP i.MX6UL (ARM Cortex-A7).",
+      "statement": "The processor is an NXP i.MX6ULL (ARM Cortex-A7); the ULL variant is confirmed by DCP at 0x02280000 and OCOTP at 0x021BC000.",
       "topic": "soc",
       "source_lines": "13",
       "confidence": "high",
       "signals": null,
-      "quote": "**Processor** | NXP i.MX6UL (ARM Cortex-A7)"
+      "quote": "**Processor** | NXP i.MX6ULL (ARM Cortex-A7)"
     },
     {
       "gid": "01_Firmware_Architecture/hardware_platform.md#5",
@@ -4871,7 +5511,7 @@
       "local_id": 10,
       "statement": "The WM8960 is the primary audio codec at I2C address 0x1a, providing full-duplex stereo high-quality audio.",
       "topic": "audio_codec",
-      "source_lines": "32",
+      "source_lines": "38",
       "confidence": "high",
       "signals": null,
       "quote": "**WM8960** (Primary) | 0x1a | Full-duplex stereo, high-quality audio"
@@ -4882,7 +5522,7 @@
       "local_id": 11,
       "statement": "The AC6966 is an alternative audio codec at I2C address 0x15, optimized for Bluetooth SCO voice calls.",
       "topic": "audio_codec",
-      "source_lines": "34",
+      "source_lines": "40",
       "confidence": "high",
       "signals": null,
       "quote": "**AC6966** (Alternative) | 0x15 | Bluetooth SCO optimized, voice calls"
@@ -4893,7 +5533,7 @@
       "local_id": 12,
       "statement": "Codec detection: if i2cdetect finds 0x1a on bus 0, audioCodec is set to wm8960.",
       "topic": "audio_codec_detection",
-      "source_lines": "38",
+      "source_lines": "44",
       "confidence": "high",
       "signals": null,
       "quote": "i2cdetect -y -a 0 0x1a 0x1a | grep \"1a\" && audioCodec=wm8960"
@@ -4904,7 +5544,7 @@
       "local_id": 13,
       "statement": "Codec detection: if i2cdetect finds 0x15 on bus 0, audioCodec is set to ac6966.",
       "topic": "audio_codec_detection",
-      "source_lines": "39",
+      "source_lines": "45",
       "confidence": "high",
       "signals": null,
       "quote": "i2cdetect -y -a 0 0x15 0x15 | grep \"15\" && audioCodec=ac6966"
@@ -4915,7 +5555,7 @@
       "local_id": 14,
       "statement": "Audio kernel modules loaded include snd-soc-wm8960.ko, snd-soc-imx-wm8960.ko, snd-soc-bt-sco.ko, and snd-soc-imx-btsco.ko from /tmp.",
       "topic": "audio_kernel_modules",
-      "source_lines": "44",
+      "source_lines": "50",
       "confidence": "high",
       "signals": null,
       "quote": "insmod /tmp/snd-soc-wm8960.ko"
@@ -4926,7 +5566,7 @@
       "local_id": 15,
       "statement": "The adapter carries a genuine Apple MFi authentication IC, not a software MFi spoof, driven over I2C during every wireless CarPlay pairing.",
       "topic": "mfi_auth",
-      "source_lines": "78",
+      "source_lines": "84",
       "confidence": "high",
       "signals": null,
       "quote": "The adapter carries a **genuine Apple MFi authentication IC** — not a software MFi spoof. The firmware drives it over I2C during every wireless CarPlay pairing."
@@ -4937,7 +5577,7 @@
       "local_id": 16,
       "statement": "The MFi authentication coprocessor is on bus /dev/i2c-1 (I2C bus 1).",
       "topic": "mfi_auth",
-      "source_lines": "82",
+      "source_lines": "88",
       "confidence": "high",
       "signals": null,
       "quote": "**Bus** | `/dev/i2c-1` (I2C bus 1)"
@@ -4948,7 +5588,7 @@
       "local_id": 17,
       "statement": "The MFi authentication coprocessor uses 7-bit address 0x11 (8-bit 0x22).",
       "topic": "mfi_auth",
-      "source_lines": "83",
+      "source_lines": "89",
       "confidence": "high",
       "signals": null,
       "quote": "**Address** | 7-bit `0x11` (8-bit `0x22`)"
@@ -4959,7 +5599,7 @@
       "local_id": 18,
       "statement": "The MFi IC is identified as a genuine Apple IC by firmware log 'mfi ic is from APPLE'.",
       "topic": "mfi_auth",
-      "source_lines": "84",
+      "source_lines": "90",
       "confidence": "high",
       "signals": null,
       "quote": "Genuine Apple MFi authentication IC — firmware log: `mfi ic is from APPLE`"
@@ -4970,7 +5610,7 @@
       "local_id": 19,
       "statement": "The MFi certificate serial is IPA_3333AA071227AA02AA0011AA003045 (subject serial 33 33 AA 07 12 27 AA 02 AA 00 11 AA 00 30 45).",
       "topic": "mfi_auth",
-      "source_lines": "85",
+      "source_lines": "91",
       "confidence": "high",
       "signals": null,
       "quote": "**Certificate serial** | `IPA_3333AA071227AA02AA0011AA003045` (subject serial `33 33 AA 07 12 27 AA 02 AA 00 11 AA 00 30 45`)"
@@ -4981,7 +5621,7 @@
       "local_id": 20,
       "statement": "The MFi IC output is a 128-byte RSA signature (RSA-1024, PKCS#1 v1.5).",
       "topic": "mfi_auth",
-      "source_lines": "86",
+      "source_lines": "92",
       "confidence": "high",
       "signals": null,
       "quote": "**Output** | 128-byte RSA signature (RSA-1024, PKCS#1 v1.5)"
@@ -4992,7 +5632,7 @@
       "local_id": 21,
       "statement": "The firmware reads MFI_AUTH_COP_REG_ADDR_SIGNATURE_LEN then MFI_AUTH_COP_REG_ADDR_SIGNATURE_DATA to retrieve the signature after writing the challenge.",
       "topic": "mfi_auth",
-      "source_lines": "88",
+      "source_lines": "94",
       "confidence": "high",
       "signals": null,
       "quote": "The firmware reads `MFI_AUTH_COP_REG_ADDR_SIGNATURE_LEN` then `MFI_AUTH_COP_REG_ADDR_SIGNATURE_DATA` to retrieve the signature after writing the challenge."
@@ -5003,7 +5643,7 @@
       "local_id": 22,
       "statement": "This is real MFi hardware, NOT a software spoof; contrasted with the CPC200-U2W which spoofs MFi in software.",
       "topic": "mfi_auth",
-      "source_lines": "90",
+      "source_lines": "96",
       "confidence": "high",
       "signals": null,
       "quote": "**This is real hardware, NOT a software MFi spoof.** (Contrast the CPC200-U2W, which spoofs MFi in software.)"
@@ -5014,7 +5654,7 @@
       "local_id": 23,
       "statement": "The MFi chip is exercised twice per wireless pairing.",
       "topic": "mfi_auth",
-      "source_lines": "90",
+      "source_lines": "96",
       "confidence": "high",
       "signals": null,
       "quote": "The chip is exercised **twice per wireless pairing**"
@@ -5025,7 +5665,7 @@
       "local_id": 24,
       "statement": "First MFi exercise is at the iAP2/Bluetooth layer: challenge-response carried in iAP2 messages 0xAA00–0xAA05 over BT RFCOMM, with 945-byte cert, 20-byte challenge, 128-byte signature.",
       "topic": "mfi_auth",
-      "source_lines": "91",
+      "source_lines": "97",
       "confidence": "high",
       "signals": null,
       "quote": "**iAP2 / Bluetooth layer** — challenge-response carried in iAP2 messages `0xAA00`–`0xAA05` over BT RFCOMM (945-byte cert, 20-byte challenge, 128-byte signature)."
@@ -5036,7 +5676,7 @@
       "local_id": 25,
       "statement": "Second MFi exercise is at the AirPlay layer: a second 'MFi auth create signature' after the HomeKit pair-verify exchange, on the WiFi side.",
       "topic": "mfi_auth",
-      "source_lines": "92",
+      "source_lines": "98",
       "confidence": "high",
       "signals": null,
       "quote": "**AirPlay layer** — a second `MFi auth create signature` after the HomeKit `pair-verify` exchange, on the WiFi side."
@@ -5047,7 +5687,7 @@
       "local_id": 26,
       "statement": "The cert is identical between the two MFi exercises; the signatures differ because the input challenges differ.",
       "topic": "mfi_auth",
-      "source_lines": "94",
+      "source_lines": "100",
       "confidence": "high",
       "signals": null,
       "quote": "The cert is identical between the two; the signatures differ because the input challenges differ."
@@ -5058,7 +5698,7 @@
       "local_id": 27,
       "statement": "A live register-level I2C trace of the MFi chip was not captured because the firmware kernel rejects ptrace (EINVAL, kernel-wide) and has no ftrace, so /dev/i2c-1 cannot be snooped in-place.",
       "topic": "mfi_auth",
-      "source_lines": "96",
+      "source_lines": "102",
       "confidence": "high",
       "signals": null,
       "quote": "A live register-level I2C trace of this chip was *not* captured — the firmware's kernel rejects `ptrace` (`EINVAL`, kernel-wide) and has no ftrace, so `/dev/i2c-1` cannot be snooped in-place."
@@ -5069,7 +5709,7 @@
       "local_id": 28,
       "statement": "The MFi cryptographic material was instead captured on the wire (BT iAP2 0xAA0x + firmware ttyLog).",
       "topic": "mfi_auth",
-      "source_lines": "96",
+      "source_lines": "102",
       "confidence": "high",
       "signals": null,
       "quote": "The cryptographic material was instead captured on the wire (BT iAP2 `0xAA0x` + firmware `ttyLog`)."
@@ -5080,7 +5720,7 @@
       "local_id": 29,
       "statement": "On the iPhone-facing gadget interface, idVendor is 0x08e4 (2276), Magic Communication Technology.",
       "topic": "usb_gadget",
-      "source_lines": "106",
+      "source_lines": "123",
       "confidence": "high",
       "signals": null,
       "quote": "idVendor | 0x08e4 (2276) | Magic Communication Technology"
@@ -5091,7 +5731,7 @@
       "local_id": 30,
       "statement": "On the iPhone-facing gadget interface, idProduct is 0x01c0 (448), Auto Box product ID.",
       "topic": "usb_gadget",
-      "source_lines": "107",
+      "source_lines": "124",
       "confidence": "high",
       "signals": null,
       "quote": "idProduct | 0x01c0 (448) | Auto Box product ID"
@@ -5102,7 +5742,7 @@
       "local_id": 31,
       "statement": "The gadget iManufacturer string is 'Magic Communication Tec.'.",
       "topic": "usb_gadget",
-      "source_lines": "108",
+      "source_lines": "125",
       "confidence": "high",
       "signals": null,
       "quote": "iManufacturer | \"Magic Communication Tec.\" | Manufacturer string"
@@ -5113,7 +5753,7 @@
       "local_id": 32,
       "statement": "The gadget iProduct string is 'Auto Box'.",
       "topic": "usb_gadget",
-      "source_lines": "109",
+      "source_lines": "126",
       "confidence": "high",
       "signals": null,
       "quote": "iProduct | \"Auto Box\" | Product string"
@@ -5124,7 +5764,7 @@
       "local_id": 33,
       "statement": "The gadget functions are iap2,ncm (IAP2 protocol + USB NCM networking).",
       "topic": "usb_gadget",
-      "source_lines": "110",
+      "source_lines": "127",
       "confidence": "high",
       "signals": null,
       "quote": "functions | iap2,ncm | IAP2 protocol + USB NCM networking"
@@ -5135,7 +5775,7 @@
       "local_id": 34,
       "statement": "The USB gadget is configured via /sys/class/android_usb/android0/ by writing enable, idVendor, idProduct, iManufacturer, iProduct, and functions.",
       "topic": "usb_gadget",
-      "source_lines": "115",
+      "source_lines": "132",
       "confidence": "high",
       "signals": null,
       "quote": "echo 0x08e4 > /sys/class/android_usb/android0/idVendor"
@@ -5146,7 +5786,7 @@
       "local_id": 35,
       "statement": "The head unit-facing host mode VID is 0x1314 (4884), configurable in riddle.conf.",
       "topic": "usb_host",
-      "source_lines": "127",
+      "source_lines": "146",
       "confidence": "high",
       "signals": null,
       "quote": "VID | 0x1314 (4884) | Configurable in riddle.conf"
@@ -5157,7 +5797,7 @@
       "local_id": 36,
       "statement": "The head unit-facing host mode PID is 0x1521 (5409), configurable in riddle.conf.",
       "topic": "usb_host",
-      "source_lines": "128",
+      "source_lines": "147",
       "confidence": "high",
       "signals": null,
       "quote": "PID | 0x1521 (5409) | Configurable in riddle.conf"
@@ -5168,7 +5808,7 @@
       "local_id": 37,
       "statement": "iPhone detection (from start_hnp.sh) uses iphoneRoleSwitch_test 0x05ac 0x12a8, where 0x05ac is Apple Inc. vendor ID and 0x12a8 is iPhone product ID.",
       "topic": "iphone_detection",
-      "source_lines": "133",
+      "source_lines": "154",
       "confidence": "high",
       "signals": null,
       "quote": "iphoneRoleSwitch_test 0x05ac 0x12a8"
@@ -5179,7 +5819,7 @@
       "local_id": 38,
       "statement": "g_iphone.ko is the IAP2 USB gadget driver.",
       "topic": "usb_gadget_modules",
-      "source_lines": "142",
+      "source_lines": "163",
       "confidence": "high",
       "signals": null,
       "quote": "`g_iphone.ko` | IAP2 USB gadget driver"
@@ -5190,7 +5830,7 @@
       "local_id": 39,
       "statement": "f_ptp_appledev.ko is a PTP Apple device function.",
       "topic": "usb_gadget_modules",
-      "source_lines": "143",
+      "source_lines": "164",
       "confidence": "high",
       "signals": null,
       "quote": "`f_ptp_appledev.ko` | PTP Apple device function"
@@ -5201,7 +5841,7 @@
       "local_id": 40,
       "statement": "f_ptp_appledev2.ko is an alternative PTP function.",
       "topic": "usb_gadget_modules",
-      "source_lines": "144",
+      "source_lines": "165",
       "confidence": "high",
       "signals": null,
       "quote": "`f_ptp_appledev2.ko` | Alternative PTP function"
@@ -5212,7 +5852,7 @@
       "local_id": 41,
       "statement": "g_android_accessory.ko is the Android AOA gadget driver.",
       "topic": "usb_gadget_modules",
-      "source_lines": "145",
+      "source_lines": "166",
       "confidence": "high",
       "signals": null,
       "quote": "`g_android_accessory.ko` | Android AOA gadget"
@@ -5223,7 +5863,7 @@
       "local_id": 42,
       "statement": "cdc_ncm.ko provides USB NCM networking.",
       "topic": "usb_gadget_modules",
-      "source_lines": "146",
+      "source_lines": "167",
       "confidence": "high",
       "signals": null,
       "quote": "`cdc_ncm.ko` | USB NCM networking"
@@ -5234,7 +5874,7 @@
       "local_id": 43,
       "statement": "storage_common.ko provides USB mass storage.",
       "topic": "usb_gadget_modules",
-      "source_lines": "147",
+      "source_lines": "168",
       "confidence": "high",
       "signals": null,
       "quote": "`storage_common.ko` | USB mass storage"
@@ -5245,7 +5885,7 @@
       "local_id": 44,
       "statement": "In Android Auto AOA mode, idVendor is 0x18d1 (Google Inc.).",
       "topic": "aoa",
-      "source_lines": "155",
+      "source_lines": "178",
       "confidence": "high",
       "signals": null,
       "quote": "idVendor | 0x18d1 | Google Inc."
@@ -5256,7 +5896,7 @@
       "local_id": 45,
       "statement": "In AOA mode, idProduct is 0x2d00 (AOA accessory) or 0x4ee1 (AOA+ADB composite, seen with Pixel 10).",
       "topic": "aoa",
-      "source_lines": "156",
+      "source_lines": "179",
       "confidence": "high",
       "signals": null,
       "quote": "idProduct | 0x2d00 or 0x4ee1 | AOA accessory (0x2d00) or AOA+ADB composite (0x4ee1, seen with Pixel 10)"
@@ -5267,7 +5907,7 @@
       "local_id": 46,
       "statement": "The AOA protocol used is AOA 2.0 (USB Accessory Protocol).",
       "topic": "aoa",
-      "source_lines": "157",
+      "source_lines": "180",
       "confidence": "high",
       "signals": null,
       "quote": "Protocol | AOA 2.0 | USB Accessory Protocol"
@@ -5278,7 +5918,7 @@
       "local_id": 47,
       "statement": "Observed device (TTY log Jan 2026): Pixel 10 with idVendor=18d1, idProduct=4ee1, Manufacturer Google, SerialNumber 57281FDCR00673.",
       "topic": "aoa_observed",
-      "source_lines": "161",
+      "source_lines": "184",
       "confidence": "high",
       "signals": null,
       "quote": "usb 1-1: New USB device found, idVendor=18d1, idProduct=4ee1"
@@ -5289,7 +5929,7 @@
       "local_id": 48,
       "statement": "AOA configuration process: adapter detects USB device arrival via libusb hotplug, ConfigAoa class configures phone into AOA mode, phone re-enumerates with AOA USB identifiers, OpenAuto SDK establishes the Android Auto session.",
       "topic": "aoa",
-      "source_lines": "168",
+      "source_lines": "191",
       "confidence": "high",
       "signals": null,
       "quote": "1. Adapter detects USB device arrival via libusb hotplug\n2. `ConfigAoa` class configures phone into AOA mode"
@@ -5300,7 +5940,7 @@
       "local_id": 49,
       "statement": "/dev/android_iap2 is the USB IAP2 device.",
       "topic": "hw_interfaces",
-      "source_lines": "177",
+      "source_lines": "275",
       "confidence": "high",
       "signals": null,
       "quote": "`/dev/android_iap2` | USB IAP2 device"
@@ -5311,7 +5951,7 @@
       "local_id": 50,
       "statement": "/dev/hwaes is the hardware AES engine.",
       "topic": "hw_interfaces",
-      "source_lines": "178",
+      "source_lines": "276",
       "confidence": "high",
       "signals": null,
       "quote": "`/dev/hwaes` | Hardware AES engine"
@@ -5322,7 +5962,7 @@
       "local_id": 51,
       "statement": "/dev/i2c-1 is the MFi authentication coprocessor (genuine Apple IC, 7-bit addr 0x11).",
       "topic": "hw_interfaces",
-      "source_lines": "179",
+      "source_lines": "277",
       "confidence": "high",
       "signals": null,
       "quote": "`/dev/i2c-1` | MFi authentication coprocessor (genuine Apple IC, 7-bit addr 0x11)"
@@ -5333,7 +5973,7 @@
       "local_id": 52,
       "statement": "/sys/class/android_usb/android0/ is the USB gadget control interface.",
       "topic": "hw_interfaces",
-      "source_lines": "180",
+      "source_lines": "278",
       "confidence": "high",
       "signals": null,
       "quote": "`/sys/class/android_usb/android0/` | USB gadget control"
@@ -5344,7 +5984,7 @@
       "local_id": 53,
       "statement": "/sys/bus/platform/devices/ci_hdrc.1/ is the USB OTG controller.",
       "topic": "hw_interfaces",
-      "source_lines": "181",
+      "source_lines": "279",
       "confidence": "high",
       "signals": null,
       "quote": "`/sys/bus/platform/devices/ci_hdrc.1/` | USB OTG controller"
@@ -5355,7 +5995,7 @@
       "local_id": 54,
       "statement": "GPIO 2 has a suspected purpose of unknown hardware control.",
       "topic": "gpio",
-      "source_lines": "187",
+      "source_lines": "285",
       "confidence": "low",
       "signals": null,
       "quote": "GPIO 2 | Unknown hardware control"
@@ -5366,7 +6006,7 @@
       "local_id": 55,
       "statement": "GPIO 6 is the suspected WiFi/BT module power control.",
       "topic": "gpio",
-      "source_lines": "188",
+      "source_lines": "286",
       "confidence": "low",
       "signals": null,
       "quote": "GPIO 6 | WiFi/BT module power"
@@ -5377,7 +6017,7 @@
       "local_id": 56,
       "statement": "GPIO 7 is the suspected WiFi/BT module reset control.",
       "topic": "gpio",
-      "source_lines": "189",
+      "source_lines": "287",
       "confidence": "low",
       "signals": null,
       "quote": "GPIO 7 | WiFi/BT module reset"
@@ -5388,7 +6028,7 @@
       "local_id": 57,
       "statement": "GPIO 9 has a suspected purpose of unknown hardware control.",
       "topic": "gpio",
-      "source_lines": "190",
+      "source_lines": "288",
       "confidence": "low",
       "signals": null,
       "quote": "GPIO 9 | Unknown hardware control"
@@ -5399,7 +6039,7 @@
       "local_id": 58,
       "statement": "RAM is limited to 128MB, limiting processing to basic format conversion.",
       "topic": "constraints",
-      "source_lines": "198",
+      "source_lines": "296",
       "confidence": "high",
       "signals": null,
       "quote": "RAM | 128MB | Limits processing to basic format conversion"
@@ -5410,7 +6050,7 @@
       "local_id": 59,
       "statement": "Storage is 16MB with a compressed rootfs of approximately 15MB.",
       "topic": "constraints",
-      "source_lines": "199",
+      "source_lines": "297",
       "confidence": "high",
       "signals": null,
       "quote": "Storage | 16MB | Compressed rootfs (~15MB)"
@@ -5421,7 +6061,7 @@
       "local_id": 60,
       "statement": "The CPU is single-core ARM32, with no complex DSP operations possible.",
       "topic": "constraints",
-      "source_lines": "200",
+      "source_lines": "298",
       "confidence": "high",
       "signals": null,
       "quote": "CPU | Single-core ARM32 | No complex DSP operations"
@@ -5432,7 +6072,7 @@
       "local_id": 61,
       "statement": "The architecture follows a 'Smart Interface, Dumb Processing' design: the adapter handles protocol translation and format conversion, delegating sophisticated processing (WebRTC, noise cancellation) to the host application.",
       "topic": "architecture_design",
-      "source_lines": "202",
+      "source_lines": "300",
       "confidence": "high",
       "signals": null,
       "quote": "This architecture results in a **\"Smart Interface, Dumb Processing\"** design where the adapter handles protocol translation and format conversion, delegating sophisticated processing (WebRTC, noise cancellation) to the host application."
@@ -5443,7 +6083,7 @@
       "local_id": 62,
       "statement": "A WM8978 audio codec is an alternate hardware-revision variant (in addition to WM8960 and AC6966), with its own mixer script.",
       "topic": "audio-codec",
-      "source_lines": "33",
+      "source_lines": "39",
       "confidence": "high",
       "signals": null,
       "quote": "**WM8978** (Variant) | — | Alternate hardware revision (own mixer script)"
@@ -5454,7 +6094,7 @@
       "local_id": 63,
       "statement": "/script/init_audio_codec.sh detects the codec by I2C (WM8960 at 0x1a runs /script/set_wm8960_mix.sh; AC6966 at 0x15 loads the BT-SCO module and runs i2cset -f -y 0 0x15 0x01 1 to open record); a WM8978 variant uses /script/set_wm8978_mix.sh.",
       "topic": "audio-codec-init",
-      "source_lines": "52",
+      "source_lines": "58",
       "confidence": "high",
       "signals": null,
       "quote": "`/script/init_audio_codec.sh` detects the codec"
@@ -5465,7 +6105,7 @@
       "local_id": 64,
       "statement": "The codec mixer state is applied with tinymix (/usr/sbin/tinymix); /script/start_mic_record.sh also uses tinymix on the mic path.",
       "topic": "audio-mixer",
-      "source_lines": "52",
+      "source_lines": "58",
       "confidence": "high",
       "signals": null,
       "quote": "applied with `tinymix` (`/usr/sbin/tinymix`)"
@@ -5476,7 +6116,7 @@
       "local_id": 65,
       "statement": "WM8960 mixer config (/script/set_wm8960_mix.sh): master playback volume tinymix 0 60 60 (range 0-255), channel routing tinymix 2 1 0, mic input boost tinymix 35 180 180, right routing tinymix 4 7 / 7 3, right boost tinymix 48 1, tinymix 50 1 / 51 0 / 52 1.",
       "topic": "audio-mixer",
-      "source_lines": "56",
+      "source_lines": "62",
       "confidence": "high",
       "signals": null,
       "quote": "tinymix 0 60 60      # Master playback volume L/R (range 0-255)"
@@ -5487,7 +6127,7 @@
       "local_id": 66,
       "statement": "WM8978 mixer config (/script/set_wm8978_mix.sh): mic mixer at max volume tinymix 9 255 255, additional gain tinymix 48 63 63.",
       "topic": "audio-mixer",
-      "source_lines": "70",
+      "source_lines": "76",
       "confidence": "high",
       "signals": null,
       "quote": "tinymix 9 255 255    # Mic mixer, max volume"
@@ -5498,10 +6138,77 @@
       "local_id": 67,
       "statement": "The ALSA sound card and mixer exist only while an audio session is active; at idle /proc/asound/cards is empty.",
       "topic": "audio-codec",
-      "source_lines": "74",
+      "source_lines": "80",
       "confidence": "high",
       "signals": null,
       "quote": "ALSA card/mixer only exists while an audio session is active; at idle `/proc/asound/cards` is empty"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#68",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 68,
+      "statement": "With the stock kernel, arbitrary USB gadget interfaces/endpoints/descriptors cannot be defined; a custom bulk transport must repurpose a fixed function char-device.",
+      "topic": "usb-gadget-locked",
+      "source_lines": "219",
+      "confidence": "high",
+      "signals": [],
+      "quote": "with the stock kernel. A custom host-facing bulk transport on the stock kernel is limited to"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#69",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 69,
+      "statement": "The claim that the kernel cannot be replaced is wrong: HAB covers only U-Boot, only the first 3 x 64 KB are per-chip encrypted, and a replacement kernel (LIVI 9.5.0, Linux 7.2.10) booted on an IW416 unit.",
+      "topic": "kernel-replacement",
+      "source_lines": "221",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "This used to add \"and the kernel cannot be replaced"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#70",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 70,
+      "statement": "Nothing prints on the UART pins during U-Boot or kernel boot; the U-Boot env actually has console=ttymxc0, stdio=serial, baudrate=115200, and ttyLogFile0 is only in kernel bootargs, so U-Boot's silence is unresolved.",
+      "topic": "uart-console",
+      "source_lines": "261",
+      "confidence": "high",
+      "signals": [
+        "Corrected 2026-10-19",
+        "VERIFIED",
+        "UNRESOLVED"
+      ],
+      "quote": "**nothing prints on the UART pins during U-Boot or kernel boot**"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#71",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 71,
+      "statement": "CFG0, CFG1, MAC0, MAC1 (OCOTP words 1, 2, 0x22, 0x23) form U-Boot's software UpgKey as ASCII %08x%08x%08x%08x (key = first 16 chars, IV = last 16), the same text as the adapter's uuid.",
+      "topic": "upgkey",
+      "source_lines": "330",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "also form U-Boot's software **UpgKey**"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#72",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 72,
+      "statement": "Adding further units' OCOTP words or uuids would add their identity to the repository, so leave them out unless needed.",
+      "topic": "identity",
+      "source_lines": "330",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19"
+      ],
+      "quote": "Adding further units' words or `uuid`s would add those units' identity to the repository"
     },
     {
       "gid": "01_Firmware_Architecture/heartbeat_analysis.md#1",
@@ -9775,7 +10482,7 @@
       "local_id": 79,
       "statement": "The iAP2 IdentificationInformation message has ID 0x1D01.",
       "topic": "iap2_protocol",
-      "source_lines": "197",
+      "source_lines": "207",
       "confidence": "high",
       "signals": [],
       "quote": "The iAP2 `IdentificationInformation` (`0x1D01`) message"
@@ -9786,7 +10493,7 @@
       "local_id": 80,
       "statement": "The iAP2 IdentificationInformation serialNumber parameter carries a firmware build string, which on the 2026-05-21 capture unit was 2025.02.25.1521626a.",
       "topic": "iap2_protocol",
-      "source_lines": "197",
+      "source_lines": "207",
       "confidence": "high",
       "signals": [
         "verified"
@@ -9799,7 +10506,7 @@
       "local_id": 81,
       "statement": "The iAP2 serialNumber string is not the running firmware version and should not be used to identify the firmware release.",
       "topic": "iap2_protocol",
-      "source_lines": "197",
+      "source_lines": "207",
       "confidence": "high",
       "signals": [],
       "quote": "This string is **not** the running firmware version and should not be used to identify the firmware release"
@@ -9810,7 +10517,7 @@
       "local_id": 82,
       "statement": "The authoritative firmware version is found in /etc/software_version or the 'ver' field in the web infos response (e.g. 2025.10.15.1127).",
       "topic": "firmware_version_source",
-      "source_lines": "197",
+      "source_lines": "207",
       "confidence": "high",
       "signals": [],
       "quote": "The authoritative firmware version is `/etc/software_version` (or the `ver` field in the web `infos` response, e.g. `2025.10.15.1127`)"
@@ -9821,7 +10528,7 @@
       "local_id": 83,
       "statement": "The iAP2 firmwareVersion parameter is a fixed 1.0.0 and is not a release identifier.",
       "topic": "iap2_protocol",
-      "source_lines": "197",
+      "source_lines": "207",
       "confidence": "high",
       "signals": [],
       "quote": "The iAP2 `firmwareVersion` parameter is likewise a fixed `1.0.0` and not a release identifier"
@@ -9832,10 +10539,50 @@
       "local_id": 84,
       "statement": "The firmware extraction tool is FirmwareA15W.sh.",
       "topic": "references",
-      "source_lines": "204",
+      "source_lines": "214",
       "confidence": "high",
       "signals": [],
       "quote": "Extraction tool: `FirmwareA15W.sh`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/version_comparison.md#85",
+      "file": "01_Firmware_Architecture/version_comparison.md",
+      "local_id": 85,
+      "statement": "2025.10.15.1127's AutoBox.img U-Boot image (mtd0 0x0-0x2CFFF, U-Boot 2015.04 Feb 02 2023, CSF era 3) is byte-identical to an IW416 unit on this release and to a second unit's dump of the same release.",
+      "topic": "boot-chain",
+      "source_lines": "198",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "is byte-identical to the one on an IW416 unit running this release and to a second unit's 2025.10.15.1127 dump"
+    },
+    {
+      "gid": "01_Firmware_Architecture/version_comparison.md#86",
+      "file": "01_Firmware_Architecture/version_comparison.md",
+      "local_id": 86,
+      "statement": "2025.10.15.1127's AutoBox.img kernel body is byte-identical to the #12 build on that unit, and it is the same build: the identical body contains the gzip trailer (CRC32 and size of the uncompressed kernel).",
+      "topic": "boot-chain",
+      "source_lines": "199",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED",
+        "Corrected 2026-10-19"
+      ],
+      "quote": "A kernel body byte-identical to that unit's"
+    },
+    {
+      "gid": "01_Firmware_Architecture/version_comparison.md#87",
+      "file": "01_Firmware_Architecture/version_comparison.md",
+      "local_id": 87,
+      "statement": "The 2025.10.15.1127 kernel ships in staging form; other releases' AutoBox.img were not compared.",
+      "topic": "boot-chain",
+      "source_lines": "201",
+      "confidence": "high",
+      "signals": [],
+      "quote": "Other releases' `AutoBox.img` were not compared."
     },
     {
       "gid": "01_Firmware_Architecture/web_interface.md#1",
@@ -12864,7 +13611,7 @@
       "local_id": 112,
       "statement": "A community-built drop-in replacement for the OEM Vue.js web UI is included in the repository at web_interface/ (origin: github.com/lvalen91/CPC200-CCPA-Alt-Website), targeting 2025.10.x firmware.",
       "topic": "replacement_web_ui",
-      "source_lines": "419",
+      "source_lines": "421",
       "confidence": "high",
       "signals": [],
       "quote": "A community-built **drop-in replacement** for the OEM Vue.js UI lives in the repo at"
@@ -12952,7 +13699,7 @@
       "local_id": 120,
       "statement": "The installer cpc200_website.sh {install|restore|status} <ip> deploys over SSH, moves /script/custom_init.sh and /mnt/UPAN/www aside to defeat the USB www-override path, and preserves the unpacked OEM web app at web_interface/website_backup/ as the restore source.",
       "topic": "replacement_web_ui",
-      "source_lines": "463",
+      "source_lines": "465",
       "confidence": "high",
       "signals": [],
       "quote": "over SSH. The installer also moves"
@@ -13088,6 +13835,132 @@
       "confidence": "high",
       "signals": null,
       "quote": "honor the 16-byte `0x55AA55AA` length header"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#91",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 91,
+      "statement": "The vendor factory burn mode (check_mfg_mode.sh) erases the first U-Boot block with flash_erase /dev/mtd0 0 1 and reboots on mfgmode=2.",
+      "topic": "factory-burn-mode",
+      "source_lines": "45",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "its `check_mfg_mode.sh` runs `flash_erase /dev/mtd0 0 1 && reboot` on `mfgmode=2`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#92",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 92,
+      "statement": "That the burn-mode U-Boot erase puts the boot ROM into serial-download mode (an escape hatch) is unconfirmed.",
+      "topic": "factory-burn-mode",
+      "source_lines": "45",
+      "confidence": "low",
+      "signals": [
+        "Corrected 2026-10-19",
+        "UNRESOLVED"
+      ],
+      "quote": "That this then puts the boot ROM into serial-download mode, i.e. works as an escape hatch, is **unconfirmed**"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#93",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 93,
+      "statement": "About 20 s was measured for flash_erase + cat + sync of mtd1 alone; the full exposure window was not timed; datasheet estimate 22-54 s.",
+      "topic": "kernel-write-risk",
+      "source_lines": "48",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "About 20 s was measured for `flash_erase` + `cat` + `sync` of mtd1 alone"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#94",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 94,
+      "statement": "The 2026-10-19 RUNBOOK runs never erased U-Boot.",
+      "topic": "hab-serial-download",
+      "source_lines": "50",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "The 2026-10-19 RUNBOOK runs never erased U-Boot."
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#95",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 95,
+      "statement": "mtd0 0x0-0xFFF is loaded by the boot ROM but not HAB-authenticated; it holds NXP EVK template text and per-release data at 0x87C-0x916.",
+      "topic": "mtd0-map",
+      "source_lines": "84",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x00000`–`0x00FFF` | Loaded by the boot ROM but **not** HAB-authenticated"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#96",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 96,
+      "statement": "mtd0 0x21000-0x21F37 is the CSF, then 0xFF to 0x21FFF; it is loaded (boot data ends at 0x21FFF) and its first Authenticate Data command covers the CSF itself.",
+      "topic": "mtd0-map",
+      "source_lines": "86",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED"
+      ],
+      "quote": "| `0x21000`–`0x21FFF` | CSF at `0x21000`–`0x21F37`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/flash_layout.md#97",
+      "file": "01_Firmware_Architecture/flash_layout.md",
+      "local_id": 97,
+      "statement": "The norboot cp count 0xf800 is in units, 0x3E000 bytes if cp uses its upstream default .l (inferred; help strings stripped).",
+      "topic": "uboot-env",
+      "source_lines": "123",
+      "confidence": "medium",
+      "signals": [
+        "2026-10-19",
+        "INFERRED"
+      ],
+      "quote": "The count is `0xf800` units, `0x3E000` bytes if `cp` uses its upstream default `.l`"
+    },
+    {
+      "gid": "01_Firmware_Architecture/firmware_encryption.md#62",
+      "file": "01_Firmware_Architecture/firmware_encryption.md",
+      "local_id": 62,
+      "statement": "The UpgKey row is verified on two units' flash dumps; for the DCP row the head is verified not plaintext on one unit and the DCP key is inferred.",
+      "topic": "firmware-keys",
+      "source_lines": "21",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19",
+        "VERIFIED",
+        "INFERRED"
+      ],
+      "quote": "UpgKey row VERIFIED 2026-10-19 on two units' flash dumps"
+    },
+    {
+      "gid": "01_Firmware_Architecture/hardware_platform.md#73",
+      "file": "01_Firmware_Architecture/hardware_platform.md",
+      "local_id": 73,
+      "statement": "This unit's OCOTP words and both recorded units' uuids are already tracked in the repository; every connected host receives the uuid in BoxSettings.",
+      "topic": "upgkey",
+      "source_lines": "330",
+      "confidence": "high",
+      "signals": [
+        "2026-10-19"
+      ],
+      "quote": "The words in the table above are this unit's and are already tracked here"
     }
   ]
 }
