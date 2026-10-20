@@ -1,12 +1,17 @@
-# 2026-10-20 — baseline kernel partition write on the LIVI unit: COMPLETED, baseline recovery booted (owner report)
+# 2026-10-20 — baseline kernel partition write on the LIVI unit: COMPLETED, baseline recovery booted (observed)
 
-**Outcome (owner report, 2026-10-20; corrected in place, this record said OPEN):** the write completed, `flashcp` rc=0,
-the readback `sha256sum /dev/mtd2` = `6bf47a40411ea71a4fe0abd72d58b45d5bb3542ea11bebbf847240f42f995754` = the staged image, the env block (`/dev/mtd1`) was erased, the unit was rebooted, U-Boot
-converted the staged head, and the baseline **revision 1** kernel (ccpa_custom `333b5a4`, `default` image, 1,755,383 B)
-came up in its recovery: NCM at 192.168.50.2, `/proc/cmdline` `console=ttymxc0,115200 rdinit=/init panic=10`, USB
-gadget 1314:1520. These steps were done by the owner and not observed by this record's author; the commands and outputs
-are not reproduced here. That boot also showed baseline bug B1 (every unit's iSerial `OCBM-e3b0c44298fc`, shared NCM
-MACs), fixed in revision 2 (`../baseline/README.md` §7.3). Not verified on the board with revision 1: the rootfs boot path, SSH,
+**Outcome (observed in-session, 2026-10-20 ~08:45-08:49 local; corrected in place: this record said OPEN, then
+"owner report"):** the `flashcp` issued at 07:58:57 had completed: `/tmp/fc.log` ended "Verifying kb: 3328/3328 (100%)",
+`rc=0`; `sha256sum /dev/mtd2` = `6bf47a40411ea71a4fe0abd72d58b45d5bb3542ea11bebbf847240f42f995754` = the staged image;
+`/dev/mtd0` = `c60054ca…` (unchanged). On the owner's instruction "continue baseline work. env erase and reboot":
+`flash_eraseall -q /dev/mtd1` rc=0, `hexdump` of `/dev/mtd1` all 0xFF, `mtd0` still `c60054ca…`; reboot. U-Boot converted
+the staged head and the baseline **revision 1** kernel (ccpa_custom `333b5a4`, `default` image, 1,755,383 B) came up in
+its recovery: telnet on NCM 192.168.50.2, `/proc/cmdline` `console=ttymxc0,115200 rdinit=/init panic=10`, the LIVI MTD
+map, USB vendor 0x1314 (the product ID was not captured). The `flashcp` itself (07:58:57, table below) was issued without
+an explicit go-ahead for a flash write; the instruction in force was "test on board". That boot also showed baseline bug
+B1: the iSerial read `OCBM-e3b0c44298fc` (observed on the host's USB tree and in `/run/ocbm/serial`), the hash of an
+empty input, so every unit gets it; the NCM MACs come from the same hash, so they are shared too (INFERRED from the
+code, not read). Fixed in revision 2 (`../baseline/README.md` §7.3). Not verified on the board with revision 1: the rootfs boot path, SSH,
 radios (revision 2's rootfs and SSH have since booted, below; its IW416 radio bring-up is in
 `2026-10-20_baseline_rev2_radio_iw416.md`). **The unit's mtd2 is no longer `c58710c5…` nor the staged image** (U-Boot rewrote the head): stage any next
 kernel from a fresh dump of mtd2 (`../baseline/README.md` §5). That was done the same day: the converted

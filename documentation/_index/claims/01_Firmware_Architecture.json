@@ -5212,12 +5212,12 @@
       "gid": "01_Firmware_Architecture/flash_layout.md#74",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 74,
-      "statement": "48,959 kernel symbols were extracted from /proc/kallsyms.",
+      "statement": "42,960 kernel symbols were extracted from /proc/kallsyms (corrected 2026-10-20 from 48,959; kallsyms_running.txt has 42,960 lines).",
       "topic": "kernel_symbols",
       "source_lines": "206",
       "confidence": "high",
       "signals": [],
-      "quote": "**48,959 symbols extracted** from `/proc/kallsyms`"
+      "quote": "**42,960 symbols extracted** from `/proc/kallsyms`"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#75",
@@ -13882,7 +13882,7 @@
       "gid": "01_Firmware_Architecture/flash_layout.md#94",
       "file": "01_Firmware_Architecture/flash_layout.md",
       "local_id": 94,
-      "statement": "The 2026-10-19 RUNBOOK runs never erased U-Boot.",
+      "statement": "The 2026-10-19 RUNBOOK runs never erased the U-Boot image block (only the env block).",
       "topic": "hab-serial-download",
       "source_lines": "52",
       "confidence": "high",
@@ -13890,7 +13890,7 @@
         "2026-10-19",
         "VERIFIED"
       ],
-      "quote": "The 2026-10-19 RUNBOOK runs never erased U-Boot."
+      "quote": "The 2026-10-19 RUNBOOK runs never erased the U-Boot image block"
     },
     {
       "gid": "01_Firmware_Architecture/flash_layout.md#95",

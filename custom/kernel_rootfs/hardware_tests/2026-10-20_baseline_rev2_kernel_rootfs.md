@@ -16,7 +16,7 @@ mtd4 customer, mtd5 bootstate). Times are not recorded.
 | dump the old kernel partition (`mtd2`, revision 1 after U-Boot's head conversion), twice | both `f584a19bbf35162b58cf5e91ef44ccdfecbbc3015cd79c9a4f1a42d0f3dbbc4e` (differs from the `6bf47a40…` written for revision 1, consistent with U-Boot's head rewrite) |
 | host: `stage_kernel.py` on that dump | head unchanged (planned head = current head), headroom 1,030,836 B; planned sha256 `f9651725b4b59a91933477537891188dd3164c6ee65c69e17a2b556be01fe6e9` |
 | unit: `NO_REBOOT=1 flash-kernel 192.168.50.100:5611 <sha256>` (pull from the host) | `mtd2` written and verified, env erased, U-Boot sha256 `c60054cafb6083761c64bceb96095d6731b86db57983558b8db9810d66807bca` unchanged (= the 2026-10-19/20 backups) |
-| reboot | **revision-2 recovery up in ~28 s** on NCM at 192.168.50.2 |
+| reboot | **revision-2 recovery up within 28 s** on NCM at 192.168.50.2 (poll granularity: the first ping, 28 s after the reboot command, answered; corrected 2026-10-20, said "~28 s") |
 | USB serial | `OCBM-<12 hex>`, unit-specific (not repeated here: the no-device-serials rule). Revision 1 had the empty-input hash `OCBM-e3b0c44298fc` on this unit (bug B1, confirmed on hardware); B1 is fixed |
 | SSH | dropbear 2026.94, password login OK in recovery. Key login not tested |
 
@@ -27,7 +27,7 @@ mtd4 customer, mtd5 bootstate). Times are not recorded.
 | host: `scp -O rootfs.img root@192.168.50.2:/tmp/` | OK; 2,560,000 B, sha256 `c424cd3c7be6febcebec449f3c5407a16cb21db058a201cee16f35d2e25c2f59`, checked on the unit |
 | unit: `flash-rootfs` | `mtd3` written and verified, bootstate cleared |
 | reboot | **rootfs booted**; rcS finished: NCM 192.168.50.2, ssh/scp/sftp, `mdev -d`, udhcpd, bootstate cleared |
-| persist | `persist load` found no baseline archive in `mtd4`, so the default password from the build's `ROOT_PASSWORD_HASH` applied; `ssh-up` then made a host key and saved the archive to `mtd4` (`../baseline/common/shared/ssh-up:61`), overwriting LIVI's customer data. *(Corrected 2026-10-20: this row said only "`mtd4` empty".)* |
+| persist | `persist load` found no baseline archive in `mtd4` (its prior contents are unknown: `mtd4` was never dumped), so the default password from the build's `ROOT_PASSWORD_HASH` applied; `ssh-up` then made a host key and saved the archive to `mtd4` (`../baseline/common/shared/ssh-up:61`), overwriting whatever was there. The first-boot save was not read back. *(Corrected 2026-10-20: this row said "`mtd4` empty", then that LIVI's customer data was overwritten.)* |
 | checks | `sftp` ls OK; BusyBox v1.38.0, 410 applets; MemAvailable ~114 MB; `/dev/i2c-0`, `/dev/i2c-1`; LEDs `blue` and `red` present; `radio status` reports the radios off |
 
 ## Found
@@ -47,5 +47,7 @@ since run: `2026-10-20_baseline_rev2_radio_iw416.md`.)
 
 Baseline revision 2 kernel + recovery (`mtd2`; its head converted by U-Boot, so `mtd2` no longer equals `f9651725…`
 [INFERRED from the revision-1 result above]) and revision 2 rootfs (first 2,560,000 B of `mtd3` = `c424cd3c…`). `mtd4` (customer)
-holds the baseline persist archive written at the first rootfs boot (no longer LIVI's data). The unit runs no LIVI component.
+holds the baseline persist archive written at the first rootfs boot (not read back). The unit runs no LIVI component; LIVI's
+squashfs (1,933,312 B) lay wholly inside the 2,560,000 B now on `mtd3`, and past the blocks `flashcp` rewrote `mtd3` still
+holds stale pre-LIVI vendor JFFS2 bytes (INFERRED: `flashcp` erases only the blocks it writes, RUNBOOK "rest stale"; not read).
 To stage another kernel, dump `mtd2` again first.

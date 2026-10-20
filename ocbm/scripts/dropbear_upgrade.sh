@@ -35,7 +35,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BOXSH="$REPO/tools/boxsh.py"
-SRC_TAR="${SRC_TAR:-/Users/zeno/Downloads/ccpa_backups/20260708_042628_vanilla_state/rootfs.tar.gz}"
+SRC_TAR="${SRC_TAR:-$HOME/Downloads/ccpa_backups/20260708_042628_vanilla_state/rootfs.tar.gz}"
 BOX="${BOX:-192.168.50.2}"
 ALT_PORT=2222
 MODE="run"

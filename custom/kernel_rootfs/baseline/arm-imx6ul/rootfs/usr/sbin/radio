@@ -20,7 +20,10 @@
 #       Bluetooth WITHOUT that DT node (btattach on /dev/ttymxc2) is not done here: UNVERIFIED.
 # down  interfaces down, HCI down, radio modules unloaded, MMC host unloaded (reg_wlan off), checked
 # status  what is powered, loaded and up
-# MWIFIEX_DRIVER_MODE=<n> passes driver_mode to mwifiex (0x1 station = default, 0x3 AP + station).
+# MWIFIEX_DRIVER_MODE=<n> passes driver_mode to the mwifiex module (0x1 station = default, 0x3 AP + station).
+# It is a parameter of mwifiex, not of mwifiex_sdio, and is read only when mwifiex loads, so mwifiex is
+# loaded with it before mwifiex_sdio (corrected 2026-10-20: it was passed to mwifiex_sdio, which has no
+# parameters). AP mode itself is UNVERIFIED.
 . /etc/baseline/board.env
 HOST=${RADIO_MMC_HOST:-2190000.mmc}
 HOSTDRV=/sys/bus/platform/drivers/sdhci-esdhc-imx
@@ -117,10 +120,13 @@ up() {
     node=$(bt_node)
     case $chip in
         iw416)
-            say "NXP IW416: mwifiex_sdio${MWIFIEX_DRIVER_MODE:+ driver_mode=$MWIFIEX_DRIVER_MODE}"
+            say "NXP IW416: mwifiex_sdio${MWIFIEX_DRIVER_MODE:+ (mwifiex driver_mode=$MWIFIEX_DRIVER_MODE)}"
             need_fw mrvl/sdiouartiw416_combo_v0.bin
-            # shellcheck disable=SC2086
-            modprobe mwifiex_sdio ${MWIFIEX_DRIVER_MODE:+driver_mode=$MWIFIEX_DRIVER_MODE} || say "modprobe mwifiex_sdio failed"
+            if [ -n "${MWIFIEX_DRIVER_MODE:-}" ]; then
+                loaded mwifiex && say "mwifiex is already loaded: driver_mode=$MWIFIEX_DRIVER_MODE not applied ('radio down' first)"
+                modprobe mwifiex driver_mode="$MWIFIEX_DRIVER_MODE" || say "modprobe mwifiex driver_mode=$MWIFIEX_DRIVER_MODE failed"
+            fi
+            modprobe mwifiex_sdio || say "modprobe mwifiex_sdio failed"
             btmod=btnxpuart btnode=nxp,88w8987-bt
             ;;
         rtl8822cs)

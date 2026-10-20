@@ -77,8 +77,8 @@ mounted() {
 }
 
 # fetch SRC DEST: SRC is a local file (used in place, e.g. /mnt/usb/rootfs.img) or host:port, which is
-# PULLED with nc into DEST. Pull, not push: a macOS nc pushing into busybox nc over NCM truncated at
-# ~146 KB three times (RUNBOOK 2026-10-19), a pull from a host-side server did not.
+# PULLED with nc into DEST. Pull, not push: on 2026-10-19 four macOS nc pushes into busybox nc over NCM
+# failed (the first left 146,432 B), while a pull from a host-side Python server did not (RUNBOOK).
 fetch() {
     if [ -f "$1" ]; then
         echo "$1"

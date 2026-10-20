@@ -3,7 +3,10 @@
 LIVI Link is the dongle firmware of **LIVI** (https://github.com/f-io/LIVI, **GPL-3.0-or-later**, `LICENSE` and
 `package.json` `"license"` there; dongle documentation: `LIVI-LINK.md` in that repository). Credit for the boot flow,
 kernel staging, MTD map, rescue system and provisioner described here belongs to the LIVI authors. Nothing of LIVI is
-copied into this repository; paths below are paths inside the LIVI repository.
+copied into `livi/`; paths below are paths inside the LIVI repository. Elsewhere in this repository `../baseline/` does
+carry LIVI material: kernel patches 0001-0004 unchanged (a header added) and files derived from LIVI (`flash-kernel`,
+`flash-rootfs`, `initramfs/init`, `tools/stage_kernel.py`, `dts/radio-*.dtsi` and others), each with a header naming its
+LIVI source (`../baseline/README.md` §8). *(Corrected 2026-10-20: this said nothing of LIVI is copied into this repository.)*
 
 Version analysed: LIVI **9.5.0**, firmware `imx6ul_iw416` **build `168c4922`** (`assets/livi-link/imx6ul_iw416/firmware.json`:
 file `livi-link-imx6ull.lfwb`, 5,058,338 B, sha256 `8c55db5e89c6f187…`). `build` is `git rev-parse --short=8 HEAD` of the
@@ -14,13 +17,13 @@ Status labels: **PROVEN** = run on the IW416 bench unit and recorded (`../hardwa
 not executed by us; **IMAGE** = measured in the shipped 9.5.0 bundle (2026-10-20 analysis); **INFERRED**; **OPEN/UNTESTED**.
 
 **The bench unit no longer runs LIVI** (2026-10-20): the baseline kernel replaced LIVI's on `mtd2`, the baseline rootfs
-replaced LIVI's on `mtd3`, and the baseline rootfs's first boot saved its persist archive over LIVI's `customer` data
+replaced LIVI's on `mtd3`, and the baseline rootfs's first boot saved its persist archive over whatever `customer` held (never dumped)
 (`../hardware_tests/2026-10-20_baseline_*.md`). LIVI's state is kept only as the dump in `../backups/20261020_livi_pre-baseline/`
 (kernel + uboot partitions; LIVI's rootfs and customer partitions were not dumped).
 
 ## 1. Flash map (LIVI DTB) — PROVEN
 
-`scripts/livi-link/arm/imx6ul/imx6ull.dts:180-215`; the same map read live from `/proc/mtd` on 2026-10-19 and 2026-10-20.
+`scripts/livi-link/arm/imx6ul/imx6ull.dts:177-216`; the same map read live from `/proc/mtd` on 2026-10-19 and 2026-10-20.
 The baseline (`../baseline/`) keeps it unchanged.
 
 | LIVI MTD | Name | Flash range | Size | Notes |
@@ -82,7 +85,7 @@ Kernel device is **mtd1 on vendor firmware, mtd2 under LIVI or the baseline**; t
 - USB gadget (`scripts/livi-link/common/initramfs/net-up:14-22`): **0525:a4a1** NCM (0525:a4a7 for ACM), manufacturer
   `LIVI`, product `LIVI Link`, first UDC. Seen 2026-10-19: `0525:a4a1` "LIVI Link". `net-up` writes **no iSerial** and no
   `dev_addr`/`host_addr` (SOURCE), so the NCM MACs are the kernel's random ones (INFERRED).
-- Two NCM devices on one Mac both answering 10.10.10.1 (this CCPA and a C2Air on LIVI, 2026-10-20 bench): connect with the
+- Two NCM devices on one Mac both answering 10.10.10.1 (this CCPA and a C2Air on LIVI; first hit 2026-10-19 17:16 local): connect with the
   socket bound to one interface — `../tools/tn.py` with `BOUND_IF=<iface>`. That the C2Air uses the same address follows from
   the shared `scripts/livi-link/common/` (INFERRED) and was seen on the bench.
 
@@ -94,8 +97,9 @@ Kernel device is **mtd1 on vendor firmware, mtd2 under LIVI or the baseline**; t
   device id (`0x9159` IW416, `0xc822` RTL8822CS, `0xb822` RTL8822BS; `imx6ul/mod.rs:23-40`). RTL8822BS images have no
   Bluetooth (`board.sh:66-70`).
 - **squashfs** 4.0, xz, 128 KiB blocks, `-all-root -no-xattrs` (`scripts/livi-link/common/build-rootfs.sh:65`), 133 inodes,
-  `bytes_used` 1,929,834, image 1,933,312 B (4 KiB multiple, fits 0xc60000). Contents (IMAGE): static musl 1.2.5, BusyBox
-  1.36.1 (390 applets built in, 72 symlinked), hostapd 2.10, `livid` (Rust multi-call, 8 names), 13 kernel modules, the
+  `bytes_used` 1,929,834, image 1,933,312 B (4 KiB multiple, fits 0xc60000). Contents (IMAGE unless marked): static musl
+  1.2.5 (SOURCE: `MUSL_VER`, `scripts/livi-link/arm/build-userspace.sh:33`), BusyBox 1.36.1 (390 applets built in, 73
+  symlinked; 82 symlinks in all with the 8 `livid` names and `/etc/mtab`), hostapd 2.10, `livid` (Rust multi-call, 8 names), 13 kernel modules, the
   IW416 combo firmware (403,148 B); no dropbear/ssh, no shared libc.
 - **rcS** (`scripts/livi-link/common/rootfs/etc/init.d/rcS`): config from `customer` (`:10`), `br0` 10.10.10.1 with usb0
   (`:16-22`), netd/DHCP (`:24`), httpd :80 (`:26`), `telnetd -l /bin/sh -p 23` (`:30-31`), ledd, mfid (:5000), then
@@ -137,7 +141,8 @@ hand (§5.2).
      `norboot`/`heweiencrypt`; partition image planned.
    - **install** (`boot.rs:181-263`): push the image to `/tmp` (`nc` 5610 + md5, `shell.rs:136-175`); write with
      `flash_erase … 0 0 && cat` if the unit has `flash_erase`, else `flashcp` (300 s); `sha256sum` readback; erase only
-     the env block (vendor: `flash_erase <uboot> 0x30000 1`; LIVI map: `flash_eraseall`); re-pull uboot, its first
+     the env block (vendor: `flash_erase <uboot> 0x30000 1`; LIVI map: `flash_erase <env> 0 0` if the unit has
+     `flash_erase`, else `flash_eraseall -q`, `boot.rs:186-193`); re-pull uboot, its first
      0x30000 B must be unchanged and the env block all 0xFF; reboot `(sleep 1; sync; reboot; sleep 5; reboot -f)`; wait up
      to 30 s for it to go, up to **180 s** to return (`mod.rs:12,151-174`); env block must be non-0xFF again.
    - Require **rescue** (`mod.rs:90-94`).
@@ -159,9 +164,11 @@ hand (§5.2).
   `flash_erase /dev/mtd0 196608 1`; uboot head checked unchanged (`RUNBOOK.txt`). **Not measured**: the second reset that
   LIVI expects after `heweiencrypt` (`boot.rs:246`), and the env block's non-0xFF state after the reboot was not rechecked
   for the LIVI flash (it was for the stock round trip).
-- Rootfs: the `nc` push from the Mac truncated at ~146 KB three times; a pull from a host Python server worked (root cause
-  UNKNOWN; LIVI's own push with md5 check and retries was not tried). The first `flashcp` was killed by SIGHUP when the
-  telnet session closed; rerun under `setsid`, rc=0, `dd | sha256sum` matched; bootstate erased.
+- Rootfs: four `nc` pushes from the Mac failed: the first left 146,432 B, of the next three two left the same sha256 and
+  one a different one (size unrecorded); three pulls from a macOS `nc -N -l` listener then gave 0 B each; a pull from a
+  host Python server worked (root cause UNKNOWN; LIVI's own push with md5 check and retries was not tried). The first
+  `flashcp`, started inside the telnet session, was gone part-way after the session closed (killed by SIGHUP: inferred;
+  the process was found gone, not seen killed); rerun under `setsid`, rc=0, `dd | sha256sum` matched; bootstate erased.
 - Never exercised: LIVI's rescue fallback after a failed rootfs boot, rollback to the OCBM/stock state (§6).
 - Kernel write paths now proven on this hardware: `flash_erase` + `cat` (vendor map, 2026-10-19) and `flashcp` onto the
   LIVI-map `/dev/mtd2` (baseline revisions 1 and 2, 2026-10-20, rc=0 and sha256-verified, `../hardware_tests/`).
@@ -190,8 +197,13 @@ programmer restore has been run).
   (rcS `:14-31`); in rescue telnet :23 and :2323 plus an AP (§3). The default WPA2 passphrase is a fixed string in
   LIVI's public repo (`common/rootfs/etc/hostapd.conf:21`, `arm/imx6ul/initramfs/wifi-up:35`).
 - Web UI on :80 without authentication, including `POST /api/flash` (`crates/livi-web/src/lib.rs:156-157`), which takes an
-  LFWB checked only by its CRC32s (`lib.rs:215-290`) and writes it to flash. Ports 5000-5003 were reported as filtered to
-  the USB link in the 2026-10-20 review; the filter code was not re-located for this note (UNVERIFIED).
+  LFWB and writes it to flash after these checks only: each image's CRC32, an MTD slot for its type, size ≤ slot, the
+  slot's payload magic, and a successful `stage()` for staged slots (`lib.rs:283-351`); there is **no authentication**.
+  The daemon listeners reported as filtered to the USB link (`iap2-mfi` `server.rs:88`, `livid` `wifid.rs:36`,
+  `livi-btd` `linux.rs:66`, `livi-accessoryd` `server.rs:209`; which port each serves was not re-checked) accept through `livi_net::bridge::from_usb`
+  (`native/livi-helperd/crates/livi-net/src/bridge.rs:7-41`): an application-level accept filter that keeps a peer only
+  if it is loopback/local or its ARP entry is on `usb0` (or the bridge FDB puts its MAC on the `usb0` port), and drops
+  the rest. It is not a firewall, and it was not tested (SOURCE).
 - Persistence: livid settings in `customer` (`LVCF` blob). NCM gadget without iSerial and with random MACs (§3).
 - Licences: the image ships no licence texts and no written source offer (IMAGE); `CREDITS.md` names none of BusyBox,
   hostapd, musl, libnl or the linux-firmware blobs (SOURCE, checked 2026-10-20).

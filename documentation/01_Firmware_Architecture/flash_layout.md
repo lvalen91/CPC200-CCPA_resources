@@ -49,7 +49,7 @@ The consequence is asymmetric and unforgiving: because the boot ROM enforces HAB
 > **[Corrected 2026-10-19]**
 > - A **new kernel can be written** through U-Boot's own staging path (`05_Security_Analysis/kernel_encryption.md` § On-Flash Kernel Format) [VERIFIED on hardware with LIVI's kernel]. The risk is a power cut between the start of the mtd1 erase and the end of the env-block erase. About 20 s was measured for `flash_erase` + `cat` + `sync` of mtd1 alone; the full window (also the `sha256sum` check and the env erase) was not timed, and the datasheet estimate for erase + program is 22–54 s. Preconditions and the abort gate: `kernel_compilation.md` § Writing a kernel.
 > - A unit that does not boot is recoverable by writing a full 16 MB backup with a SPI-NOR programmer, because the signed U-Boot is unchanged [INFERRED; no programmer restore has been run].
-> - [OWNER-REPORTED; the unit, the date and the port were not recorded] With the U-Boot block blank or erased, no boot-ROM serial-download device appeared on the USB port that was tested. The 2026-10-19 RUNBOOK runs never erased U-Boot. Whether the ROM uses the other port is [UNRESOLVED].
+> - [OWNER-REPORTED; the unit, the date and the port were not recorded] With the U-Boot block blank or erased, no boot-ROM serial-download device appeared on the USB port that was tested. The 2026-10-19 RUNBOOK runs never erased the U-Boot image block (only the 64 KB env block at `0x30000`). Whether the ROM uses the other port is [UNRESOLVED].
 > - The old path `03_Security_Analysis/secure_boot_hab.md` was wrong; the file is in this folder.
 
 ### QSPI NOR Write/Erase Geometry
@@ -203,7 +203,7 @@ Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC))
 
 ## Kernel Symbols
 
-**48,959 symbols extracted** from `/proc/kallsyms`
+**42,960 symbols extracted** from `/proc/kallsyms` (`custom/kernel_dumps/kallsyms_running.txt`, 42,960 lines; corrected 2026-10-20: said 48,959, which no file in the repo supports)
 
 ### Key Symbols
 
@@ -213,7 +213,7 @@ Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC))
 | 0x80008200 | `asm_do_IRQ` |
 | 0x80008500 | `secondary_startup` |
 | 0x80008700 | `do_one_initcall` |
-| ... | (48,959 total) |
+| ... | (42,960 total) |
 
 ---
 

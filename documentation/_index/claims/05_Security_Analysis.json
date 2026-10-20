@@ -2780,7 +2780,7 @@
    "gid": "05_Security_Analysis/kernel_encryption.md#66",
    "file": "05_Security_Analysis/kernel_encryption.md",
    "local_id": 66,
-   "statement": "After env erase and reboot the unit came up within 10 s on Linux 7.2.10 with LIVI's MTD map, and ran LIVI Link after its squashfs rootfs was flashcp'd.",
+   "statement": "After env erase and reboot the unit's kernel was up about 10-12 s after the reboot command (corrected 2026-10-20 from \"within 10 s\") on Linux 7.2.10 with LIVI's MTD map, and ran LIVI Link after its squashfs rootfs was flashcp'd.",
    "topic": "livi-flash",
    "source_lines": "126",
    "confidence": "high",
@@ -2788,7 +2788,7 @@
     "2026-10-19",
     "VERIFIED"
    ],
-   "quote": "It came up within 10 s on Linux 7.2.10 in LIVI's rescue initramfs"
+   "quote": "Its kernel was up about 10-12 s after the reboot command"
   },
   {
    "gid": "05_Security_Analysis/kernel_encryption.md#67",

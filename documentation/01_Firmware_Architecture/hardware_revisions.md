@@ -2,14 +2,20 @@
 
 The CPC200-CCPA is a single **model** sold across multiple **hardware revisions**. Two
 physical A15W units have been observed directly; they differ in `hwVersion`, manufacture
-date (`MFD`), `UUID`, and MAC, while sharing the same product type (A15W), WLAN silicon
-class (NXP/Marvell IW416, SDIO card id `0x9159`), and firmware build (`2025.10.15.1127`).
+date (`MFD`), `UUID`, MAC **and WLAN silicon** (Rev A Realtek RTL8822CS, Rev B NXP/Marvell IW416, SDIO card id
+`0x9159`), while sharing the same product type (A15W) and firmware build (`2025.10.15.1127`).
 
-> Provenance: Rev A (WR2C) is the unit documented throughout the rest of this repo
-> (telemetry / box-info JSON captures). Rev B (WN16) was observed on a **GM Info 3.7
-> (gminfo37)** head unit, Feb 2026, and is migrated here from that platform's research so
-> its identity/firmware facts live with the adapter. Items not independently confirmed
-> against this repo's own firmware dumps are marked **(observed, not dump-confirmed here)**.
+> Provenance (corrected 2026-10-20): Rev A (WR2C, uuid `651ede98…`) is the unit of the telemetry / box-info JSON
+> captures (`device_identification.md`, `ARMAndroidAuto.md`) and of the full NOR dumps `../../flash_dumps/2025.10.15.1127/`
+> and `../../flash_dumps/2025.02.25.1521/` (E4 in `../05_Security_Analysis/kernel_encryption.md`: their update
+> environments decrypt with this uuid). It is a **Realtek RTL8822CS** unit: `../../flash_dumps/README.md` calls those
+> dumps Realtek, their rootfs ships `rtl8822_ko.tar.gz` and `rtlbt/rtl8822cs_*` and no IW416 driver set, and
+> `../../flash_dumps/2026.06.07.ncm/` (same mtd0/mtd1 bytes) is recorded as an RTL8822CS adapter. Rev B (WN16, uuid
+> `692173ca…`) is the IW416 bench unit E1: the OCOTP words in `hardware_platform.md` § Unit-Specific OCOTP Fuse Values,
+> the flash backups and hardware runs in `../../custom/kernel_rootfs/` and the 2026-10-19 kernel work are this unit's. It
+> was also observed on a **GM Info 3.7 (gminfo37)** head unit, Feb 2026, and migrated here from that platform's research.
+> This page said both units were IW416 and that Rev A was "the unit documented throughout the rest of this repo".
+> Items not independently confirmed against this repo's own firmware dumps are marked **(observed, not dump-confirmed here)**.
 
 ## Observed revisions
 
@@ -21,7 +27,7 @@ class (NXP/Marvell IW416, SDIO card id `0x9159`), and firmware build (`2025.10.1
 | MFD | `20240119` | `2025-02-25` (box JSON `MFD`) |
 | UUID | `651ede982f0a99d7f9138131ec5819fe` | `692173ca1d16c1d7767bb8ecfefd6672` |
 | MAC | — (not recorded) | `00:E0:4C:91:B0:DF` (OUI `00:E0:4C` matches repo) |
-| WLAN silicon | NXP/Marvell IW416 (SDIO `0x9159`) | NXP/Marvell IW416 (SDIO `0x9159`) |
+| WLAN silicon | Realtek RTL8822CS (dump rootfs: `rtl8822_ko.tar.gz`; corrected 2026-10-20, said IW416) | NXP/Marvell IW416 (SDIO `0x9159`) |
 | Firmware build | `2025.10.15.1127` | `2025.10.15.1127` |
 
 Cross-reference for the WR2C identity values: `02_Protocol_Reference/device_identification.md`

@@ -87,10 +87,9 @@ For the two IW416-based variants the hardware is nearly indistinguishable:
 | Kernel vermagic | `3.14.52+g94d07bb` | `3.14.52+g94d07bb` | Identical |
 | Factory | GuanSheng | GuanSheng | Same |
 
-**The 89 differing U-Boot bytes are per-device identity values** (UUID/serial hashes derived
-from OTP fuses) located at offset **0x87D–0x8FD**. The U-Boot executable code is otherwise
-identical. This means mtd0 cannot be transplanted between two physical units even of the same
-variant — each carries its own identity bytes.
+The 2air and A15W U-Boot images differ in 89 bytes at offset **0x87D–0x8FD**; the U-Boot executable code is otherwise
+identical. *(2026-10-20: the superseded reading of these bytes as per-device identity values, and the conclusion drawn
+from it, were deleted; the correction below replaces them.)*
 
 > **[Corrected 2026-10-19]** The `0x87D` bytes are per-release data, not per-device identity [VERIFIED, `../05_Security_Analysis/kernel_encryption.md` E1 + E4]: two different A15W units on 2025.10.15.1127 (E1 and the `../../flash_dumps/2025.10.15.1127/` unit) are byte-identical below mtd0 `0x2D000`, while that second unit differs from itself in 88 bytes (`0x87C`–`0x916`, 32-character hex strings) between its 2025.02.25.1521 and 2025.10.15.1127 dumps, with the same U-Boot build stamp. The range lies in `0x0`–`0xFFF`, which the boot ROM loads but HAB does not authenticate (the CSF authenticates `0x1000`–`0x20FFF`), so it can change between releases without a new signed U-Boot. The 89-byte 2air/A15W difference above is consistent with two different releases [INFERRED; the 2air dump's release was not re-checked]. What ties mtd0 to a unit is the two encrypted environments at `0x2D000` (UpgKey) and `0x30000` (DCP key). See `secure_boot_hab.md` § U-Boot Code Is Identical.
 

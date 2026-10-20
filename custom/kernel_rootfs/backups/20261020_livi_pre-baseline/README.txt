@@ -1,7 +1,7 @@
 LIVI-state backup, 2026-10-20 ~07:57 local (15:57 UTC). Same IW416 unit as ../20261019_IW416_ocbm_baseline_pre-livi/,
 then running LIVI Link 9.5.0 imx6ul_iw416 (Linux 7.2.10 #1 Sat Oct 17 02:36:22 UTC 2026, rootfs /dev/mtdblock3 squashfs ro).
 Taken read-only, immediately BEFORE the baseline kernel write attempt in
-../../hardware_tests/2026-10-20_baseline_kernel_write.md (outcome, owner report 2026-10-20: written, env erased,
+../../hardware_tests/2026-10-20_baseline_kernel_write.md (outcome, observed in-session 2026-10-20: written, env erased,
 baseline revision-1 recovery booted; so this LIVI state is no longer on the unit, corrected 2026-10-20).
 
 Map at dump time (/proc/mtd on the unit, LIVI DTB): mtd0 uboot 0x30000 | mtd1 env 0x10000 | mtd2 kernel 0x340000 |

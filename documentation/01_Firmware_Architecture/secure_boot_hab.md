@@ -122,7 +122,7 @@ Byte-level comparison of mtd0 between two A15W units on the same firmware:
 0x02D000 - 0x040000:  per-unit envs      77,516 bytes differ   per-device   (labelled "CSF / cert region" before 2026-10-19)
 ```
 
-The U-Boot executable code is shipped generically and is identical across devices. Only the ~76 KB CSF certificate region (`0x02D000`–`0x040000`) is per-device — it holds cryptographic material written by U-Boot after it first boots on a new firmware. (Cross-device U-Boot builds otherwise differ only in a small ~89-byte block of per-device identity values, e.g. UUID/serial hashes derived from OTP fuses around offset `0x87D`.)
+The U-Boot executable code is shipped generically and is identical across devices. The per-device bytes are the two encrypted environments at `0x02D000`–`0x040000` (correction below). *(2026-10-20: the superseded prose here, "only the ~76 KB CSF certificate region is per-device" and "~89-byte block of per-device identity values around `0x87D`", was deleted; the correction below replaces it.)*
 
 > **[Corrected 2026-10-19]** `0x02D000`–`0x040000` is not the CSF and holds no certificates [VERIFIED, E1 + E2]:
 > - The IVT's CSF pointer (`0x8781F7D0`) puts the CSF at mtd0 `0x21000`–`0x21F37`, at the end of the image the boot ROM loads (`0x0`–`0x21FFF`, IVT boot-data length `0x22000`). It is byte-identical between unit E1 and the vendor `AutoBox.img`. What the CSF authenticates is one block, `0x877FF7D0` + `0x20000` = mtd0 `0x1000`–`0x20FFF` (see § HAB covers only the U-Boot image).

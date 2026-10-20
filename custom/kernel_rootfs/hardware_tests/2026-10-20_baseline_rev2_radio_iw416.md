@@ -16,7 +16,7 @@ Unit: the IW416 bench adapter (`../backups/20261019_IW416_ocbm_baseline_pre-livi
 | `radio status` before | radios off (as after the rootfs boot) |
 | `radio up`: MMC host load → `reg_wlan` | `reg_wlan` switched on; SDIO card enumerated |
 | SDIO ID | `0x02df:0x9159` (NXP IW416), read from the card's own sysfs `vendor`/`device` |
-| Wi-Fi | `mwifiex_sdio` loaded, combo firmware `mrvl/sdiouartiw416_combo_v0.bin`; `phy0` and `mlan0` appeared; `mlan0` administratively up, **operstate down** (no network joined) |
+| Wi-Fi | `mwifiex_sdio` loaded; firmware: the combo file `mrvl/sdiouartiw416_combo_v0.bin` is the only Marvell file in the image, so it is the one loaded (INFERRED: no firmware filename was logged); `phy0` and `mlan0` appeared; `mlan0` administratively up, **operstate down** (no network joined) |
 | Bluetooth | `btnxpuart` loaded, `"FW already running"` (the combo firmware had started the BT half); `hci0` **UP** with a BD address (address not recorded here) |
 | `radio down` | back to radios off: only `usb0`, `lo`; no SDIO card. The kernel module `bluetooth` stays loaded (`radio down` does not remove it; why is not examined) |
 

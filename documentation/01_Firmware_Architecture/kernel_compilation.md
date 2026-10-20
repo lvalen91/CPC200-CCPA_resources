@@ -47,7 +47,7 @@ No one can produce a DCP-encrypted head off-chip. U-Boot makes it, though: `hewe
 - The update environment decrypted with the unit's UpgKey passes the gzip and CRC32 checks (recipe in `05_Security_Analysis/kernel_encryption.md`). If it does not, the key is wrong: STOP. Staging blocks encrypted with a wrong key become a garbage head when U-Boot converts them.
 - Wall power, with nothing else on the supply.
 - A SPI-NOR programmer and clip on hand with the 16 MB backup, or an explicit decision to go ahead without one. The 2026-10-19 runs had none; without one, a power cut or a bad write in the window below leaves a unit that cannot be recovered until a programmer is found.
-- Run long writes detached from the login session, e.g. `setsid sh -c '…' > /tmp/w.log 2>&1 &`, and poll the log. A closed SSH/telnet session sends SIGHUP to its children; on 2026-10-19 this killed a `flashcp` mid-write (E1 `RUNBOOK.txt`).
+- Run long writes detached from the login session, e.g. `setsid sh -c '…' > /tmp/w.log 2>&1 &`, and poll the log. A closed SSH/telnet session sends SIGHUP to its children; on 2026-10-19 a `flashcp` started in such a session was found gone mid-write after it closed (SIGHUP inferred, not seen; E1 `RUNBOOK.txt`).
 
 **Steps.**
 1. From the unit's own dumps, decrypt the update environment (mtd0 `0x2D000`, UpgKey) and read `kernel_len` from `norboot`'s `sf read 0x80800000 0x40000 <len>`. Read the staging offset from `heweiencrypt`'s first `sf read`. Both are build-specific (`0x302fd8` on 2025.10.15.1127, `0x303080` on 2025.02.25.1521).

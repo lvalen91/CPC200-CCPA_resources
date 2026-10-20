@@ -5,7 +5,8 @@ Carlinkit cruft/latent-trigger scripts deleted; all remaining scripts owned, **d
 and syntax-clean** (`sh -n` all pass, zero dead references, zero dangling refs); early
 self-respawning UART console (`::sysinit` before rcS, 115200); radios on-demand (IW416
 wlan_on/bt_on, slim scripts); NCM always-on. No backup files reside in rootfs.
-Device: A15W "carlink", NXP i.MX6UL, kernel 3.14.52, sw 2025.10.15.1127, serial 2025.02.25.1521626a.
+Device: A15W "carlink", NXP i.MX6UL, kernel 3.14.52, sw 2025.10.15.1127, iAP2 `serialNumber` 2025.02.25.1521626a (a firmware build string, not a device serial;
+`documentation/01_Firmware_Architecture/version_comparison.md`).
 
 ## Files
 - CPC200-CCPA_full_nor_16MB.bin : complete 16MB SPI NOR image (flash @ 0x000000), mtd0+mtd1+mtd2

@@ -4,8 +4,9 @@
 
 The recovery helpers PULL images (`flash-rootfs 192.168.50.100:5611 <sha256>` runs
 `nc 192.168.50.100 5611 > /tmp/rootfs.img` on the unit) because a macOS nc PUSHING into busybox nc
-over NCM truncated at ~146 KB three times on 2026-10-19, while a pull from a host-side Python server
-did not (ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/round_trip/RUNBOOK.txt).
+over NCM failed four times on 2026-10-19 (the first left 146,432 B; pulls from a macOS `nc -l` listener gave
+0 B), while a pull from a host-side Python server did not
+(ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/round_trip/RUNBOOK.txt).
 
   python3 -I serve_once.py FILE [--bind 192.168.50.100] [--port 5611]
 """
