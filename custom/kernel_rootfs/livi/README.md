@@ -83,8 +83,9 @@ closed — run every long write under `setsid` and poll a log (`RUNBOOK.txt`).
 ## 6. Back to stock — UNTESTED
 
 LIVI's own path: `back_to_stock` (`mod.rs:106-118`) → rescue → `restore.rs:133` `write` (vendor backup written back
-from the rescue system), `LIVI-LINK.md:82-83`. Never run on our unit. The manual procedure written from the same map is
-`../../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Getting back from LIVI [UNTESTED]; the SPI
+from the rescue system), `LIVI-LINK.md:82-83`. Never run on our unit. The manual steps, written from the same map, are
+owned by `../../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Getting back from LIVI [UNTESTED] and
+are not restated here; the SPI
 image is `../backups/20261019_IW416_ocbm_baseline_pre-livi/full_16MB_for_programmer.bin` (no programmer restore has been run).
 
 ## 7. What the baseline changes

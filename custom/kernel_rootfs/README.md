@@ -37,8 +37,8 @@ The bench unit's state at the time of writing is **unknown**. It ran LIVI, and a
 | `hardware_tests/2026-10-19_round_trip/` | `RUNBOOK.txt`: env-erase round trip (PASS), LIVI flash (SUCCESS), restore recipe. Also the two offline dry-run reports |
 | `hardware_tests/2026-10-20_baseline_kernel_write.md` | The OPEN baseline kernel write attempt and the read-only next step |
 | `tools/` | `tn.py`, `send.py`, `dryrun.py`, the stock `flash_erase` (ARM); `tools/README.md` says what each does and points to the tools that live elsewhere in the repo |
-| `backups/20261019_IW416_ocbm_baseline_pre-livi/` | IW416 unit before LIVI. The vendor map, each MTD read twice: `mtd0/1/2.bin`, `full_16MB_for_programmer.bin` (SPI image), the recovered stock zImage, `unit_info.txt` (OCOTP words; owner decision to keep), and a rootfs inventory (names/sizes/md5 only) |
-| `backups/20261020_livi_pre-baseline/` | Same unit on LIVI, just before the 2026-10-20 write: `mtd2_dump1/2.bin` (identical), `mtd0_dump.bin`, `SHA256SUMS`, `README.txt` |
+| `backups/20261019_IW416_ocbm_baseline_pre-livi/` | IW416 unit before LIVI. The vendor map, each MTD read twice: `mtd2.bin` (its `mtd0.bin`/`mtd1.bin` are byte-identical to `../../flash_dumps/CCPA_stripped/mtd0.bin`/`mtd1.bin` and were dropped here 2026-10-20; `SHA256SUMS` points there), `full_16MB_for_programmer.bin` (SPI image), the recovered stock zImage, `unit_info.txt` (OCOTP words; owner decision to keep), and a rootfs inventory (names/sizes/md5 only) |
+| `backups/20261020_livi_pre-baseline/` | Same unit on LIVI, just before the 2026-10-20 write: `mtd2_dump1.bin` (the identical second read was dropped 2026-10-20), `mtd0_dump.bin`, `SHA256SUMS`, `README.txt` |
 
 Raw chip dumps of other units stay in `../../flash_dumps/`, which has its own naming convention.
 

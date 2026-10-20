@@ -101,9 +101,11 @@ the results of doing exactly that on a Realtek RTL8822CS unit on 2026-08-15.
 >
 > **Only the driver tarball for a unit's own chip ships in its rootfs** — there is no fallback
 > set. Delete or overwrite a variant's WLAN files and its radios are gone until it is
-> reflashed. `mtd0` (HAB-signed U-Boot) and `mtd1` (OTPMK-encrypted kernel) are also
-> production-keyed per unit and were verified *different* between two adapters of the same
-> firmware revision. *Corrected 2026-10-19:* the per-unit parts are smaller than that. In `mtd0`
+> reflashed. `mtd0` (HAB-signed U-Boot) and `mtd1` (kernel; only its first 192 KB are per-chip
+> DCP-encrypted with the OTPMK-derived key, the rest is plain zImage) also carry per-unit parts and
+> were verified *different* between two adapters of the same firmware revision. *Corrected 2026-10-19
+> (reworded in place 2026-10-20; this said "OTPMK-encrypted kernel", production-keyed per unit):* the
+> per-unit parts are small. In `mtd0`
 > they are the two encrypted environments at `0x2D000`/`0x30000`; everything below `0x2D000` (the U-Boot
 > image and its CSF) is the same on two units of one release, and changes only between releases.
 > In `mtd1` they are the DCP-encrypted first 192 KB and the UpgKey staging blocks; the zImage

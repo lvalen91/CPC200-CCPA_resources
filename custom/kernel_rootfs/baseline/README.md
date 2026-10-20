@@ -262,9 +262,12 @@ mtd-utils' `.asc` was verified and `MTD_UTILS_SHA256` pinned on 2026-10-20 (`com
 4. The new kernel boots into recovery (the old rootfs is not a baseline squashfs). There:
    `flash-rootfs <host>:5611 <sha256>` with `python3 -I common/tools/serve_once.py rootfs.img` on the
    host, then `reboot`.
-5. Back to stock (UNTESTED): from recovery, flashcp the unit's `mtd2.bin` (`../backups/<unit>/`) split into its first 0xc60000
-   B (rootfs), next 0x10000 (customer), last 0x10000 (bootstate) — `flash-rootfs` refuses JFFS2, so this
-   is manual — then `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image.
+5. Back to stock (UNTESTED): the steps (rootfs split and write first, kernel last, env erase, abort gate) are
+   owned by `../../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Getting back from LIVI;
+   this recovery uses the same map. Run from here instead of LIVI's rescue, two things differ: `flash-rootfs`
+   refuses JFFS2, so the stock `mtd2.bin` parts are written by hand with `flashcp`; the kernel step can be
+   `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image. The unit's files are in
+   `../backups/<unit>/` (for the IW416 unit, `mtd1.bin` is `../../../flash_dumps/CCPA_stripped/mtd1.bin`).
 
 ---
 
@@ -366,7 +369,8 @@ their header and applied cleanly to 7.2.10; the DTS compiled without dtc warning
   refuses an all-zero chip ID), the LEDs' and `reg_wlan`'s real pins, the vendor U-Boot path and its
   `heweiencrypt` staging. QEMU models an i.MX6UL, not the ULL.
 - `stage_kernel.py` against the IW416 unit's stock `mtd0.bin`/`mtd1.bin` (vendor map, fuse words from
-  that backup's `unit_info.txt`; `../backups/20261019_IW416_ocbm_baseline_pre-livi/`): update env decrypts (gzip and CRC OK), layout kernel_len 0x302fd8,
+  that backup's `unit_info.txt`; `../backups/20261019_IW416_ocbm_baseline_pre-livi/`, whose mtd0/mtd1 are
+  `../../../flash_dumps/CCPA_stripped/mtd0.bin`/`mtd1.bin` since 2026-10-20): update env decrypts (gzip and CRC OK), layout kernel_len 0x302fd8,
   staging at partition offset 0x302fd8, planned partition builds for both images with the first
   0x30000 B unchanged; an image 1 B over the cap is refused ("image is 3157977 bytes, this unit's
   U-Boot reads 3157976").

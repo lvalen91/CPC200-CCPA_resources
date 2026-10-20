@@ -5,7 +5,7 @@
 > #2 If you have the capability to use these dumps to rewrite the SPI, then I’ll assume you’re also capable of retrieving the necessary firmware blobs from the CFW-Recovery update image. And splicing/incorporating it into your own flash bin.
 
 > [!CAUTION]
-> Research shows possible uBoot+Kernel signing based on SoC fuses. While rootfs can be interchanged. The uBoot+Kernel most likely has to be from the original device. See U2air coververtion for further details
+> uBoot+Kernel carry per-unit parts tied to the SoC fuses; rootfs can be interchanged. U-Boot is HAB-signed (shared SRK) with two per-unit encrypted environments; only the first 192 KB of the kernel are per-chip DCP-encrypted, the rest is plain zImage. A full foreign image does not boot, so keep the original device's uBoot+Kernel (or re-stage a kernel for the unit, `../documentation/05_Security_Analysis/kernel_encryption.md`). See U2air conversion for further details. *[Corrected 2026-10-20: this said "possible uBoot+Kernel signing based on SoC fuses"; the kernel is not signed or verified.]*
 
 Reader: XGecu Pro T48
 OS: Fedora
@@ -45,4 +45,4 @@ Firmware Key: AutoPlay9uPT4n17
 > Dumped with `minipro -p 'XT25F128F@SOP8' -r flash_dump.bin` (XGecu T48, macOS), verified by two
 > byte-identical reads.
 
-> **Kernel/rootfs test-unit backups are kept separately.** The IW416 bench unit's MTD backups from the 2026-10-19/20 kernel-replacement runs are not in this folder. Its vendor-map mtd0/1/2, the SPI image and the LIVI-state dumps are in [`../custom/kernel_rootfs/backups/`](../custom/kernel_rootfs/backups/), each with its own `README.txt` and `SHA256SUMS`. The naming convention here does not apply to them.
+> **Kernel/rootfs test-unit backups are kept separately.** The IW416 bench unit is the unit of [`CCPA_stripped/`](CCPA_stripped/): its 2026-10-19 vendor-map `mtd0.bin`/`mtd1.bin` backups are the same bytes as `CCPA_stripped/mtd0.bin`/`mtd1.bin` (sha256 `e62f62a9…`/`738af784…`), so they are kept only there. Its later `mtd2.bin`, the SPI image and the LIVI-state dumps are in [`../custom/kernel_rootfs/backups/`](../custom/kernel_rootfs/backups/), each with its own `README.txt` and `SHA256SUMS`. *[Corrected 2026-10-20: this said none of that unit's backups are in this folder.]* The naming convention here does not apply to them.

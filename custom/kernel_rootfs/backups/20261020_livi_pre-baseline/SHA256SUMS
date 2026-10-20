@@ -1,3 +1,3 @@
 c58710c59ab9cf03d6bfab77faa3838351b6d40d68c896ab71bc7c77c3fbf713  mtd2_dump1.bin
-c58710c59ab9cf03d6bfab77faa3838351b6d40d68c896ab71bc7c77c3fbf713  mtd2_dump2.bin
 c60054cafb6083761c64bceb96095d6731b86db57983558b8db9810d66807bca  mtd0_dump.bin
+# mtd2_dump2.bin (second read pass of /dev/mtd2) matched mtd2_dump1.bin, c58710c5...; dropped from the repo 2026-10-20 as identical.

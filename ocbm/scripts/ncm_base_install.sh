@@ -35,7 +35,8 @@
 # UART pads (armed at step 3) and the SPI programmer with the step-2 image.
 #
 # ============================== WHAT IS NEVER TOUCHED ==================================
-# * mtd0 (HAB-signed U-Boot) / mtd1 (OTPMK-encrypted kernel) — read for backup, never written.
+# * mtd0 (HAB-signed U-Boot) / mtd1 (kernel: first 192 KB per-chip DCP-encrypted, rest plain
+#   zImage; replaceable via U-Boot staging, but not by this tool) — read for backup, never written.
 # * /script/ko.tar.gz — gadget modules built against THIS unit's kernel. Overwriting them
 #   with another unit's copy loses the gadget, and with it NCM, and with it the box. It is
 #   never REPLACED. Since 2026-10-19 strip FILTERS the unit's own file in place: HeWei's

@@ -5,3 +5,9 @@ full_16MB_for_programmer.bin = mtd0||mtd1||mtd2 = the whole chip, write at offse
 unit_info.txt holds this unit's OCOTP CFG0/CFG1/MAC0/MAC1 (identity; they key this unit's kernel). Keep local, never publish.
 [2026-10-20, repo copy: placed in this repo with the rest of the backup by owner decision; the original rule above is
  kept as written. These four words are the UpgKey of this unit's kernel staging (custom/kernel_rootfs/baseline/README.md §2.1).]
+[2026-10-20, repo copy: mtd0.bin and mtd1.bin were removed from this folder. They are byte-identical (sha256 and cmp) to
+ ../../../../flash_dumps/CCPA_stripped/mtd0.bin  e62f62a9ef8f6f62d247902f64487c5436f1cc5c53418014867fe7fe1cec41f9
+ ../../../../flash_dumps/CCPA_stripped/mtd1.bin  738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128
+ Same unit: identical per-chip DCP kernel head and DCP env block, IW416 (CCPA_stripped/manifest.txt sdio=0x9159).
+ Use those two files wherever "this backup's mtd0.bin/mtd1.bin" is meant; SHA256SUMS points there and `shasum -a 256 -c`
+ run in this folder checks them. full_16MB_for_programmer.bin = those two || mtd2.bin, re-verified (4abc6de1...).]

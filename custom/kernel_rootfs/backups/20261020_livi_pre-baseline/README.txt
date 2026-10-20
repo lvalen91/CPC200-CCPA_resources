@@ -11,12 +11,13 @@ Method: on the unit `setsid sh -c 'dd if=/dev/mtdN bs=64k | nc 10.10.10.100 <por
 
 Files (sha256 in SHA256SUMS, re-verified after the copy into this repo):
   mtd2_dump1.bin  3,407,872 B  kernel partition (LIVI kernel, DCP head written by U-Boot), read 1
-  mtd2_dump2.bin  3,407,872 B  same partition, read 2; byte-identical to read 1 (c58710c5...)
-                  The unit's own `sha256sum /dev/mtd2` printed the same hash before the dumps.
-  mtd0_dump.bin     196,608 B  LIVI 'uboot' partition = flash 0x0-0x2FFFF; sha256 equals the first 0x30000 B of
-                  ../20261019_IW416_ocbm_baseline_pre-livi/mtd0.bin (c60054ca...): U-Boot + update block unchanged since 2026-10-19.
+                  Read 2 (mtd2_dump2.bin) matched read 1 byte for byte (sha256 c58710c5...) and was dropped from this
+                  repo copy on 2026-10-20 as identical. The unit's own `sha256sum /dev/mtd2` printed the same hash before the dumps.
+  mtd0_dump.bin     196,608 B  LIVI 'uboot' partition = flash 0x0-0x2FFFF; sha256 equals the first 0x30000 B of the
+                  2026-10-19 stock mtd0.bin (../../../../flash_dumps/CCPA_stripped/mtd0.bin, the same bytes as that backup's;
+                  c60054ca..., re-verified 2026-10-20): U-Boot + update block unchanged since 2026-10-19.
 
-Measured from these files (2026-10-20, offline): against the stock ../20261019_.../mtd1.bin the kernel partition differs in
+Measured from these files (2026-10-20, offline): against the stock mtd1.bin (../../../../flash_dumps/CCPA_stripped/mtd1.bin) the kernel partition differs in
   head [0,0x30000) 195,801 B | body [0x30000,0x302fd8) 2,949,833 B | staging [0x302fd8,0x332fd8) 195,828 B | tail 0 B.
   The body/staging counts equal the 2026-10-19 LIVI plan (../../hardware_tests/2026-10-19_round_trip/livi_9.5.0_iw416_dryrun_report.txt),
   whose head count was 0: the head was rewritten after the write, i.e. by U-Boot's heweiencrypt conversion.

@@ -1,7 +1,8 @@
 Round-trip test: stock kernel through the vendor U-Boot's own conversion (prepared 2026-10-19; RUN 2026-10-19, PASS, see RESULT below)
 [Corrected 2026-10-20 in this repo copy: the header still read "NOT yet run" although both runs below are recorded; the RESULT/LIVI FLASH
  sections agree with the operator notes taken during the runs. In this repo: dryrun.py and flash_erase are in ../../tools/, the backup ('../' below) is
- ../../backups/20261019_IW416_ocbm_baseline_pre-livi/. The owner-local original is unchanged.]
+ ../../backups/20261019_IW416_ocbm_baseline_pre-livi/. The owner-local original is unchanged. Since 2026-10-20 the backup's mtd0.bin and
+ mtd1.bin ('../mtd1.bin' below) are only in ../../../../flash_dumps/CCPA_stripped/, byte-identical (sha256 e62f62a9... / 738af784...).]
 Files: dryrun.py + dryrun_report.txt (offline plan), flash_erase (stock 25,628 B dynamic, sha256 437e1b7f...), ../ backup (full_16MB_for_programmer.bin = SPI restore image).
 Basis: LIVI imx6ul-uboot/boot.rs flow, read from source, not executed. Unit: IW416 OCBM baseline, soc i.MX6ULL, glibc 2.20 present.
 

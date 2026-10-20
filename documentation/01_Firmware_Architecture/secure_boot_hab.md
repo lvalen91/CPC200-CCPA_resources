@@ -138,9 +138,9 @@ The U-Boot executable code is shipped generically and is identical across device
 
 ---
 
-## Kernel Encryption — Per-Chip OTPMK Binding
+## Kernel Encryption — Per-Chip DCP Head (192 KB) and UpgKey Staging
 
-The kernel (mtd1, 3328 KB) is **encrypted with a per-chip key derived from the OTPMK fuses** and is decrypted by U-Boot at boot time. Because the OTPMK is unique per silicon die, an encrypted kernel only decrypts on its own chip.
+Only the first 192 KB of the kernel (mtd1, 3328 KB), its first three 64 KB blocks, are **encrypted with the DCP's per-chip key derived from the OTPMK fuses**, and U-Boot decrypts just those blocks at boot. The rest of the partition up to `kernel_len` is plain zImage. Because the OTPMK is unique per silicon die, that head only decrypts on its own chip; the same head is also stored as three staging blocks under the per-unit UpgKey, which software can compute. **[Corrected 2026-10-20 in place, from the 2026-10-19 finding in `05_Security_Analysis/kernel_encryption.md`]** This section was titled "Per-Chip OTPMK Binding" and said the whole kernel is encrypted with the per-chip key, so that an encrypted kernel only decrypts on its own chip.
 
 > **[Corrected 2026-10-19]** Only the first 3 × 64 KB of the zImage are DCP (per-chip) encrypted. The body is plaintext and identical across units. Three staging blocks hold the same head under the per-unit UpgKey, which software can compute [VERIFIED, E1].
 > - A kernel can therefore be moved to another unit: write the body, encrypt the head into staging with the **target's** UpgKey, erase the target's env block, and U-Boot rebuilds the DCP head. This method is VERIFIED on one unit with LIVI's kernel; a cross-unit transplant is INFERRED.
@@ -152,7 +152,7 @@ This is the true barrier to whole-flash transplants between devices, confirmed b
 
 | Approach | Result |
 |----------|--------|
-| Full SPI dump from device A → device B | **Fails** — device B cannot decrypt device A's kernel |
+| Full SPI dump from device A → device B | **Fails** — device B cannot decrypt device A's 192 KB DCP head or A's env block (corrected 2026-10-20; said "A's kernel") |
 | Hybrid (device B's own boot region + device A's rootfs) → device B | **Succeeds** — own kernel decrypts, foreign rootfs mounts |
 
 Since HAB passes on any HeWei unit (shared SRK), the failure mode of a full-flash transplant is the **kernel decryption stage**, not HAB. **[Added 2026-10-19]** With a foreign full image both per-unit parts are wrong for device B: the DCP-encrypted env block, and the update environment it would fall back to, which is under A's UpgKey. Neither yields a valid environment on B. U-Boot's `Can't start, Bad Keys.` string probably marks this case [INFERRED; not traced].
@@ -222,5 +222,5 @@ i.MX6UL Boot ROM (HAB Closed)
 
 - HAB anchor (SRK hash): universal across all HeWei devices.
 - U-Boot code: generic/shared. **[Corrected 2026-10-19]** It said "per-device only in the CSF cert region and a small identity block". Per-device are only the two encrypted environments (`0x2D000`, `0x30000`); the `0x87C`–`0x916` block is per-release, and the CSF is generic.
-- Kernel: per-chip encrypted (OTPMK) — the binding that prevents cross-device kernel transplant. **[Corrected 2026-10-19]** Only the 192 KB head is per-chip. Re-keying the staging blocks for the target's UpgKey removes the barrier.
+- Kernel: only the 192 KB head (first three 64 KB blocks) is per-chip DCP-encrypted (OTPMK-derived key); the rest is plain zImage. Re-keying the staging blocks for the target's UpgKey and erasing its env block removes the barrier to a cross-device kernel transplant [method VERIFIED on one unit, cross-unit INFERRED]. **[Corrected 2026-10-19; reworded in place 2026-10-20]** This bullet said the kernel is per-chip encrypted (OTPMK) and that this prevents a cross-device kernel transplant.
 - Rootfs: portable.

@@ -17,11 +17,15 @@ Device: A15W "carlink", NXP i.MX6UL, kernel 3.14.52, sw 2025.10.15.1127, serial 
 - SHA256SUMS
 
 ## Notes
-- mtd0 (uboot) and mtd1 (kernel) are **bit-identical** to prior backups (HAB-signed U-Boot +
-  OTPMK-encrypted kernel are immutable and untouched) — verified by sha256.
-  *Corrected 2026-10-19:* "untouched" holds, "immutable" does not. Both partitions are writable,
-  and a kernel can be replaced through U-Boot's staging path. Only the first 192 KB of the kernel
-  are OTPMK/DCP-encrypted. See `documentation/05_Security_Analysis/kernel_encryption.md`.
+- mtd0 (uboot) and mtd1 (kernel) are **bit-identical** to prior backups (HAB-signed U-Boot and
+  kernel untouched by this pass) — verified by sha256. Both partitions are writable, and a kernel
+  can be replaced through U-Boot's staging path; only the first 192 KB (three 64 KB blocks) of the
+  kernel are per-chip DCP-encrypted (OTPMK-derived key), the rest is plain zImage. See
+  `documentation/05_Security_Analysis/kernel_encryption.md`. *Corrected 2026-10-19, reworded in
+  place 2026-10-20:* this said "OTPMK-encrypted kernel" and "immutable".
+- Same unit as the IW416 bench adapter: this folder's `mtd0.bin`/`mtd1.bin` are the copies of
+  `custom/kernel_rootfs/backups/20261019_IW416_ocbm_baseline_pre-livi/` (that folder's own copies were
+  removed 2026-10-20 as byte-identical; its `SHA256SUMS` points here).
 - mtd2 (rootfs) is the vanilla owned base (this pass's endpoint).
 - What changed from stock: removed check_mfg_mode/check_log_size/init_bluetooth_wifi/
   close_bluetooth_wifi/start_iap2_ncm + riddle.conf; slimmed attach_bluetooth (IW416-only) and

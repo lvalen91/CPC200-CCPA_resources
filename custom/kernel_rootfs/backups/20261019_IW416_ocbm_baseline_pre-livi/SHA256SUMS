@@ -1,5 +1,6 @@
-e62f62a9ef8f6f62d247902f64487c5436f1cc5c53418014867fe7fe1cec41f9  mtd0.bin
-738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128  mtd1.bin
+e62f62a9ef8f6f62d247902f64487c5436f1cc5c53418014867fe7fe1cec41f9  ../../../../flash_dumps/CCPA_stripped/mtd0.bin
+738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128  ../../../../flash_dumps/CCPA_stripped/mtd1.bin
 0f89763501372d43c1d649a23fbd286fb7eb9b2496f4e06ead51b65599732d98  mtd2.bin
 4abc6de17b9896e784025953e551461be7083232ce9a44f95064c02f56bb0ade  full_16MB_for_programmer.bin
 35014617e11d455e95507d255fe2116c86651ab202189c1451bade2cd1e98428  stock_zImage_recovered_3.14.52_build12.bin
+# mtd0.bin and mtd1.bin of this backup are byte-identical to flash_dumps/CCPA_stripped/ (same unit); the copies here were dropped 2026-10-20.

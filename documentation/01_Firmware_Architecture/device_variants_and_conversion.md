@@ -245,10 +245,11 @@ between sibling devices:
 | mtd1 (kernel, 3,328 KB) | **Not as is** | Only the first 3 × 64 KB are per-chip (DCP); the body is plaintext. Re-keying the staging blocks for the target's UpgKey and erasing its env block makes it portable [Corrected 2026-10-19; method VERIFIED on one unit, cross-unit INFERRED; `../05_Security_Analysis/kernel_encryption.md`] |
 | mtd2 (rootfs, 12,800 KB) | **Yes** | Plain JFFS2 — no signing, no encryption |
 
-Empirical results: a **full** foreign SPI image (A15W → 2air) **fails to boot** — the foreign
-kernel cannot be decrypted by the target's OTPMK. A **hybrid** (target's own boot region +
+Empirical results: a **full** foreign SPI image (A15W → 2air) **fails to boot** — the target's
+OTPMK-derived DCP key cannot decrypt the foreign kernel's 192 KB head (the rest of the kernel is
+plain zImage), nor the foreign env block or UpgKey update environment [INFERRED from the format]. A **hybrid** (target's own boot region +
 foreign rootfs) **boots fully with SSH**. The root cause of full-flash failure is therefore the
-per-chip kernel encryption, not HAB (the SRK table is shared family-wide). **[Added 2026-10-19]** More precisely: the target cannot decrypt the foreign DCP head, nor the foreign env block or UpgKey update environment [INFERRED from the format].
+per-unit encrypted kernel head and environments, not HAB (the SRK table is shared family-wide). **[Corrected 2026-10-20 in place, from the 2026-10-19 finding in `../05_Security_Analysis/kernel_encryption.md`]** This said the foreign kernel as a whole cannot be decrypted by the target's OTPMK.
 
 > JFFS2 note: the rootfs uses Carlinkit's custom compression type `0x16`
 > (`JFFS2_COMPR_CARLINKIT_ZLIB`); standard JFFS2 extractors need patching to read it.
