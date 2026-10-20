@@ -1,0 +1,85 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# wifi-scan [-i IF] [-a]: the networks around, one line each, strongest first (iw scan, trimmed):
+#   SIGNAL dBm   FREQ MHz   BSSID   SECURITY   SSID
+# SECURITY: open, WEP, WPA-PSK, WPA2-PSK, WPA2/WPA3 (joinable with WPA2-PSK), WPA3-SAE (NOT joinable:
+# this build has no SAE), 802.1X (NOT joinable: no enterprise). "<hidden>" = the AP sends no SSID.
+#   -a   the full iw output instead
+# The radios are OFF at boot: run `radio up` first; without a wireless interface this says so. A
+# scan needs the interface administratively up (radio up does that; it is brought up here if not).
+# While wpa_supplicant (wifi-connect) runs, the kernel may refuse a new scan (busy): the results of the
+# last scan are shown then (iw scan dump).
+# Test hooks (host self-test only): RADIO_SYS, RADIO_LIB.
+. "${RADIO_LIB:-/lib/baseline}/radio-lib.sh"
+say() { echo "wifi-scan: $*"; }
+IF=
+RAW=
+while [ $# -gt 0 ]; do
+    case $1 in
+        -i) [ $# -ge 2 ] || { echo "usage: wifi-scan [-i IF] [-a]" >&2; exit 2; }; IF=$2; shift 2 ;;
+        -a) RAW=1; shift ;;
+        *) echo "usage: wifi-scan [-i IF] [-a]" >&2; exit 2 ;;
+    esac
+done
+command -v iw > /dev/null 2>&1 || { say "no iw in this image"; exit 1; }
+if [ -z "$IF" ]; then
+    for i in $(wifs); do IF=$i; break; done
+    [ -n "$IF" ] || { say "no wireless interface; $(radio_off_hint)"; exit 1; }
+elif [ ! -e "$SYS/class/net/$IF/phy80211" ]; then
+    say "$IF is not a wireless interface (or does not exist); $(radio_off_hint)"
+    exit 1
+fi
+case $(ifstate "$IF") in
+    "administratively down"*)
+        say "$IF is administratively down, bringing it up"
+        ip link set dev "$IF" up || { say "$IF could not be set up (dmesg)"; exit 1; }
+        ;;
+esac
+OUT=$(iw dev "$IF" scan 2>&1)
+rc=$?
+if [ "$rc" != 0 ]; then
+    case $OUT in
+        *busy* | *"(-16)"*)
+            say "$IF: the kernel refused a new scan (busy, wpa_supplicant scanning?): the last results"
+            OUT=$(iw dev "$IF" scan dump 2>&1) || { say "iw scan dump failed: $OUT"; exit 1; } ;;
+        *) say "iw scan on $IF failed: $OUT"; exit 1 ;;
+    esac
+fi
+if [ -n "$RAW" ]; then
+    printf '%s\n' "$OUT"
+    exit 0
+fi
+TAB=$(printf '\t')
+printf '%s\n' "$OUT" | awk '
+    function flush() {
+        if (bss == "") return
+        if (rsn) {
+            if (eap && !psk && !sae) sec = "802.1X"
+            else if (sae && psk) sec = "WPA2/WPA3"
+            else if (sae) sec = "WPA3-SAE"
+            else sec = "WPA2-PSK"
+        } else if (wpa) sec = (eap && !psk) ? "802.1X" : "WPA-PSK"
+        else if (priv) sec = "WEP"
+        else sec = "open"
+        if (ssid == "") ssid = "<hidden>"
+        printf "%s\t%s\t%s\t%s\t%s\n", sig, freq, bss, sec, ssid
+        bss = ""
+    }
+    /^BSS / { flush(); bss = substr($2, 1, 17); sig = "?"; freq = "?"; ssid = ""; rsn = wpa = priv = psk = sae = eap = 0; ie = ""; next }
+    /^\tfreq: / { freq = $2; sub(/\..*/, "", freq); next }
+    /^\tsignal: / { sig = $2; sub(/\..*/, "", sig); next }
+    /^\tSSID: / { ssid = substr($0, 8); next }
+    /^\tSSID:$/ { ssid = ""; next }
+    /^\tcapability: / { if ($0 ~ / Privacy/) priv = 1; next }
+    /^\tRSN:/ { rsn = 1; ie = "rsn" }
+    /^\tWPA:/ { wpa = 1; ie = "wpa" }
+    /^\t[^\t]/ && !/^\t(RSN|WPA):/ { ie = "" }
+    /Authentication suites:/ && ie != "" {
+        if ($0 ~ /SAE/) sae = 1
+        if ($0 ~ /PSK/) psk = 1
+        if ($0 ~ /IEEE 802\.1X/) eap = 1
+    }
+    END { flush() }' | sort -t "$TAB" -k1,1nr | awk -F '\t' '
+    BEGIN { printf "%-7s %-6s %-17s %-10s %s\n", "dBm", "MHz", "BSSID", "SECURITY", "SSID" }
+    { printf "%-7s %-6s %-17s %-10s %s\n", $1, $2, $3, $4, $5; n++ }
+    END { if (!n) print "(no networks found)" }'

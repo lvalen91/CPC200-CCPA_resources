@@ -98,13 +98,16 @@ RE_Documention/
 │   ├── secure_boot_hab.md              # HAB chain, what the CSF covers, per-unit envs
 │   ├── kernel_compilation.md           # Building/writing a kernel through U-Boot staging; back from LIVI
 │   ├── hardware_revisions.md           # A15W revisions: Rev A (WR2C, RTL8822CS) / Rev B (WN16, IW416)
+│   ├── wifi_iw416_capabilities.md      # IW416 Wi-Fi radio: PHY capabilities, SoftAP (hostapd) support matrix, measured link behaviour
+│   ├── usb_zlp_bug.md                  # USB Zero Length Packet bug (AA + CarPlay): confirmed, fix identified, untested
 │   ├── device_variants_and_conversion.md # 2air vs A15W variants and conversion
 │   ├── configuration.md                # riddleBoxCfg reference + Box Code Taxonomy
 │   ├── version_comparison.md           # Firmware version differences (2022-2025)
 │   ├── web_interface.md                # Web UI API and settings (2025.10 firmware release; the live unit's build datestamp 2025.09.26 belongs to this 2025.10 release line)
 │   ├── web_settings_reference.md       # Web settings quick reference
 │   ├── c2air_v821_platform.md          # C2Air — Allwinner V821 / RISC-V. SEPARATE PLATFORM, not an A15W (dump-derived)
-│   └── c2air_v821_runtime_and_access.md # C2Air — LIVE analysis: root access (SSH/USB-serial), FEL trials, UART bug, USB/ADB/NCM, secure boot, MFi
+│   ├── c2air_v821_runtime_and_access.md # C2Air — LIVE analysis: root access (SSH/USB-serial), FEL trials, UART bug, USB/ADB/NCM, secure boot, MFi
+│   └── c2air_v821_custom_build.md      # C2Air — building a barebones custom firmware image
 ├── 02_Protocol_Reference/
 │   ├── usb_protocol.md                 # USB message types and payloads
 │   ├── device_identification.md        # phoneType, BoxSettings, SessionToken analysis

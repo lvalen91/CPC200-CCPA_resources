@@ -10,6 +10,8 @@
 # steps (default: fetch userspace kernel rootfs)
 #   fetch      pinned tarballs (common/versions.env) into $TOP/src, each sha256-checked
 #   userspace  musl, BusyBox full + recovery, dropbear, sftp-server, flash_erase, hciup [, exfatprogs]
+#              [, RADIO_TOOLS: libnl, iw, wpa_supplicant/wpa_cli/wpa_passphrase, ncurses, readline, BlueZ
+#              btmgmt/hciconfig/hcitool]
 #   kernel     linux + board patches + DTS + recovery initramfs: ONE zImage per kernel config, and one
 #              image per radio DT = that zImage + its appended DTB ->
 #              $TOP/out/<variant>/ccpa-baseline-<radio>.zimg (radio: none iw416 rtl8822cs rtl8822bs)
@@ -26,6 +28,8 @@
 #   USB_HOST=0        usbotg1 as host for the rootfs; storage stack as rootfs modules (when RECOVERY_USB=0)
 #   USB_VFAT_BUILTIN=0 storage stack + vfat built into the kernel instead
 #   RADIO_MODULES=1   Wi-Fi/BT drivers as rootfs modules (never loaded at boot)  RADIO_FW=1  their firmware
+#   RADIO_TOOLS=1     iw, wpa_supplicant + wpa_cli, btmgmt, hciconfig, hcitool and the wifi-connect /
+#                     wifi-scan / bt-scan helpers in the rootfs (never started at boot; 0 with RADIO_MODULES=0)
 #   RADIO_DT=all      all|none|iw416|rtl8822cs|rtl8822bs: which per-radio images the kernel step writes
 #                     (the Bluetooth serdev node in the appended DTB; the zImage is the same for all)
 #   MTD_UTILS=1       static flash_erase in the rootfs (needs MTD_UTILS_SHA256 pinned first)
@@ -46,7 +50,7 @@ for a in "$@"; do
         --dry-run) DRY=1 ;;
         -h | --help) sed -n '2,/^set -eu/p' "$0" | sed '$d'; exit 0 ;;
         BOARD=* | TOP=* | JOBS=* | CROSS_COMPILE=* | RECOVERY_USB=* | RECOVERY_EXFAT=* | RECOVERY_SSH=* | \
-        USB_HOST=* | USB_VFAT_BUILTIN=* | RADIO_MODULES=* | RADIO_FW=* | RADIO_DT=* | MTD_UTILS=* | \
+        USB_HOST=* | USB_VFAT_BUILTIN=* | RADIO_MODULES=* | RADIO_FW=* | RADIO_TOOLS=* | RADIO_DT=* | MTD_UTILS=* | \
         EXFATPROGS=* | ROOT_PASSWORD_HASH=* | AUTHORIZED_KEYS=* | ALLOW_NO_SSH_KEYS=* | SOURCE_DATE_EPOCH=*)
             eval "${a%%=*}=\${a#*=}"
             export "${a%%=*}" ;;
@@ -63,7 +67,7 @@ done
 DEV_PASSWORD_HASH='$6$ccpabaseline$aftqJ6/WGLuW3tRlRn8/0qxWZXbBFGlwicphA3fJELY5ZlqkodQoLWpT3Zi5e/I6A77DL5fZVht5ysnYkCgXR/'
 : "${BOARD:=arm-imx6ul}" "${TOP:=/tmp/ccpa-baseline-build}"
 : "${RECOVERY_USB:=1}" "${RECOVERY_EXFAT:=1}" "${RECOVERY_SSH:=1}" "${USB_HOST:=0}" "${USB_VFAT_BUILTIN:=0}"
-: "${RADIO_MODULES:=1}" "${RADIO_FW:=1}" "${RADIO_DT:=all}" "${MTD_UTILS:=1}" "${EXFATPROGS:=0}"
+: "${RADIO_MODULES:=1}" "${RADIO_FW:=1}" "${RADIO_TOOLS:=1}" "${RADIO_DT:=all}" "${MTD_UTILS:=1}" "${EXFATPROGS:=0}"
 : "${AUTHORIZED_KEYS:=}" "${ALLOW_NO_SSH_KEYS:=0}" "${ROOT_PASSWORD_HASH:=$DEV_PASSWORD_HASH}"
 JOBS=${JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)}
 
@@ -74,11 +78,13 @@ die() { printf '[%s-build] ERROR: %s\n' "$BOARD" "$*" >&2; exit 1; }
 x() { if [ "$DRY" = 1 ]; then printf '+ %s\n' "$*"; else "$@"; fi; }
 xsh() { if [ "$DRY" = 1 ]; then printf '+ sh -c %s\n' "$1"; else sh -c "$1"; fi; }
 
-for v in RECOVERY_USB RECOVERY_EXFAT RECOVERY_SSH USB_HOST USB_VFAT_BUILTIN RADIO_MODULES RADIO_FW MTD_UTILS \
-         EXFATPROGS ALLOW_NO_SSH_KEYS; do
+for v in RECOVERY_USB RECOVERY_EXFAT RECOVERY_SSH USB_HOST USB_VFAT_BUILTIN RADIO_MODULES RADIO_FW RADIO_TOOLS \
+         MTD_UTILS EXFATPROGS ALLOW_NO_SSH_KEYS; do
     eval "val=\$$v"
     case $val in 0 | 1) ;; *) die "$v must be 0 or 1, not '$val'" ;; esac
 done
+# the radio tools drive the radio modules; without the modules there is nothing for them to talk to
+[ "$RADIO_MODULES" = 1 ] || RADIO_TOOLS=0
 case $RADIO_DT in
     all) RADIOS="none iw416 rtl8822cs rtl8822bs" ;;
     none | iw416 | rtl8822cs | rtl8822bs) RADIOS=$RADIO_DT ;;
@@ -103,9 +109,15 @@ if [ "$DRY" != 1 ]; then
              bison perl file awk sed grep mksquashfs depmod; do
         command -v "$t" > /dev/null 2>&1 || die "missing build tool: $t"
     done
-    # mtd-utils' configure stops without pkg-config even with every optional library switched off
-    if [ "$MTD_UTILS" = 1 ] || [ "$EXFATPROGS" = 1 ]; then
-        command -v pkg-config > /dev/null 2>&1 || die "missing build tool: pkg-config (mtd-utils/exfatprogs configure)"
+    # mtd-utils' configure stops without pkg-config even with every optional library switched off; iw
+    # finds libnl only through pkg-config
+    if [ "$MTD_UTILS" = 1 ] || [ "$EXFATPROGS" = 1 ] || [ "$RADIO_TOOLS" = 1 ]; then
+        command -v pkg-config > /dev/null 2>&1 || die "missing build tool: pkg-config (mtd-utils/exfatprogs configure, iw)"
+    fi
+    # ncurses' built-in terminal entries are generated with the build host's tic/infocmp
+    if [ "$RADIO_TOOLS" = 1 ]; then
+        command -v tic > /dev/null 2>&1 && command -v infocmp > /dev/null 2>&1 \
+            || die "missing build tool: tic/infocmp (Debian ncurses-bin) for ncurses --with-fallbacks"
     fi
 fi
 
@@ -118,6 +130,10 @@ export KBUILD_BUILD_USER=baseline KBUILD_BUILD_HOST=ccpa LOCALVERSION=
 [ -n "${SOURCE_DATE_EPOCH:-}" ] && export KBUILD_BUILD_TIMESTAMP="@$SOURCE_DATE_EPOCH"
 
 # Applets the recovery scripts call; the recovery BusyBox must provide each (checked on its busybox.links).
+# RADIO_TOOLS=1: the binaries the rootfs step copies from $UOUT (paths relative to it and to the rootfs).
+RADIO_TOOL_BINS="usr/sbin/iw usr/sbin/wpa_supplicant usr/sbin/wpa_cli usr/sbin/wpa_passphrase usr/bin/btmgmt
+usr/bin/hciconfig usr/bin/hcitool"
+
 RECOVERY_NEEDS="sh cat dd echo printf test hexdump ifconfig kill ln ls mkdir mount umount mv chmod nc ps rm rmdir
 setsid cttyhack sha256sum sleep stty switch_root sync telnetd udhcpd wc flashcp flash_eraseall reboot dmesg rx
 readlink tar"
@@ -181,6 +197,21 @@ step_fetch() {
     fetch_pinned openssh "$OPENSSH_URL" "$OPENSSH_SHA256" "openssh-$OPENSSH_VER.tar.gz"
     [ "$MTD_UTILS" = 1 ] && fetch_pinned mtd-utils "$MTD_UTILS_URL" "$MTD_UTILS_SHA256" "mtd-utils-$MTD_UTILS_VER.tar.bz2"
     [ "$EXFATPROGS" = 1 ] && fetch_pinned exfatprogs "$EXFATPROGS_URL" "$EXFATPROGS_SHA256" "exfatprogs-$EXFATPROGS_VER.tar.gz"
+    if [ "$RADIO_TOOLS" = 1 ]; then
+        fetch_pinned libnl "$LIBNL_URL" "$LIBNL_SHA256" "libnl-$LIBNL_VER.tar.gz"
+        fetch_pinned iw "$IW_URL" "$IW_SHA256" "iw-$IW_VER.tar.xz"
+        fetch_pinned wpa_supplicant "$WPA_SUPPLICANT_URL" "$WPA_SUPPLICANT_SHA256" "wpa_supplicant-$WPA_SUPPLICANT_VER.tar.gz"
+        fetch_pinned bluez "$BLUEZ_URL" "$BLUEZ_SHA256" "bluez-$BLUEZ_VER.tar.xz"
+        fetch_pinned ncurses "$NCURSES_URL" "$NCURSES_SHA256" "ncurses-$NCURSES_VER.tar.gz"
+        fetch_pinned readline "$READLINE_URL" "$READLINE_SHA256" "readline-$READLINE_VER.tar.gz"
+        # shellcheck disable=SC2086
+        set -- $READLINE_PATCHES
+        while [ $# -ge 2 ]; do
+            f=$(readline_patch_file "$1")
+            fetch_pinned "readline patch $1" "$READLINE_PATCH_URL/${f##*/}" "$2" "$f"
+            shift 2
+        done
+    fi
     fw_entries | while read -r path sha tag; do
         fetch_pinned "firmware $path" "$LINUX_FIRMWARE_URL/$path${tag:+?h=$tag}" "$sha" "firmware/$path"
     done
@@ -415,6 +446,14 @@ step_userspace() {
     build_sftp_server
     [ "$MTD_UTILS" = 1 ] && build_mtd_utils
     [ "$RADIO_MODULES" = 1 ] && build_hciup
+    if [ "$RADIO_TOOLS" = 1 ]; then
+        build_libnl
+        build_iw
+        build_wpa_supplicant
+        build_ncurses
+        build_readline
+        build_bluez_tools
+    fi
     [ "$EXFATPROGS" = 1 ] && build_exfatprogs
     return 0
 }
@@ -433,6 +472,11 @@ step_rootfs() {
         [ -x "$UOUT/bin/busybox" ] || die "no userspace at $UOUT, run the userspace step"
         [ -d "$OUTV/modules/lib/modules/$KVER" ] || die "no modules for variant $V, run the kernel step with the same variables"
         [ "$RADIO_MODULES" != 1 ] || [ -x "$UOUT/usr/sbin/hciup" ] || die "no hciup at $UOUT/usr/sbin, run the userspace step"
+        if [ "$RADIO_TOOLS" = 1 ]; then
+            for b in $RADIO_TOOL_BINS; do
+                [ -x "$UOUT/$b" ] || die "RADIO_TOOLS=1 needs $UOUT/$b, run the userspace step"
+            done
+        fi
         if [ -n "$AUTHORIZED_KEYS" ]; then
             [ -r "$AUTHORIZED_KEYS" ] || die "cannot read AUTHORIZED_KEYS=$AUTHORIZED_KEYS"
             grep -q 'PRIVATE KEY' "$AUTHORIZED_KEYS" && die "AUTHORIZED_KEYS is a PRIVATE key; give the .pub"
@@ -446,6 +490,8 @@ step_rootfs() {
     x mkdir -p "$W/bin" "$W/sbin" "$W/lib/baseline" "$W/lib/modules" "$W/usr/bin" "$W/usr/sbin" "$W/usr/libexec" \
         "$W/etc/init.d" "$W/etc/baseline" "$W/dev" "$W/proc" "$W/sys" "$W/tmp" "$W/run" "$W/root" "$W/mnt/usb" "$W/var"
     x ln -s /proc/mounts "$W/etc/mtab"
+    # written by the Wi-Fi DHCP client (wifi-connect, etc/baseline/udhcpc.sh), RAM only
+    x ln -s /run/resolv.conf "$W/etc/resolv.conf"
     x ln -s /run/etc/shadow "$W/etc/shadow"
     x ln -s /run "$W/var/run"
     x ln -s /run/log "$W/var/log"
@@ -463,12 +509,19 @@ step_rootfs() {
     x cp "$UOUT/usr/libexec/sftp-server" "$W/usr/libexec/sftp-server"
     [ "$MTD_UTILS" = 1 ] && x cp "$UOUT/usr/sbin/flash_erase" "$W/usr/sbin/flash_erase"
     [ "$RADIO_MODULES" = 1 ] && x cp "$UOUT/usr/sbin/hciup" "$W/usr/sbin/hciup"
+    if [ "$RADIO_TOOLS" = 1 ]; then
+        for b in $RADIO_TOOL_BINS; do x cp "$UOUT/$b" "$W/$b"; done
+    fi
     if [ "$EXFATPROGS" = 1 ]; then
         x cp "$UOUT/usr/sbin/mkfs.exfat" "$UOUT/usr/sbin/fsck.exfat" "$W/usr/sbin/"
     fi
     note "overlays: common/rootfs, $BOARD/rootfs, shared scripts, /etc/baseline (no .DS_Store / ._*)"
     x cp -R "$HERE/common/rootfs/." "$W/"
     [ -d "$HERE/$BOARD/rootfs" ] && x cp -R "$HERE/$BOARD/rootfs/." "$W/"
+    if [ "$RADIO_TOOLS" != 1 ]; then
+        # the helpers would only say that their tools are missing
+        x rm -f "$W/usr/sbin/wifi-connect" "$W/usr/sbin/wifi-scan" "$W/usr/sbin/bt-scan" "$W/etc/baseline/udhcpc.sh"
+    fi
     # macOS Finder/AppleDouble files in a tree edited on the Mac must never reach the image (B7).
     xsh "find '$W' \( -name .DS_Store -o -name '._*' \) -exec rm -f {} +"
     for f in net-up net-down ocbm-identity ocbm-banner persist ssh-up usb-mount; do
@@ -489,6 +542,7 @@ step_rootfs() {
     fi
     x chmod 0700 "$W/root"
     xsh "chmod 0755 '$W/init' '$W/etc/init.d/rcS' '$W'/usr/sbin/*"
+    [ "$RADIO_TOOLS" = 1 ] && x chmod 0755 "$W/etc/baseline/udhcpc.sh"
     note "kernel modules of variant $V (radio + storage; nothing loads them at boot)"
     xsh "cp -R '$OUTV/modules/lib/modules/.' '$W/lib/modules/' && rm -f '$W'/lib/modules/*/build '$W'/lib/modules/*/source"
     if [ "$RADIO_MODULES" = 1 ] && [ "$RADIO_FW" = 1 ]; then
@@ -519,6 +573,11 @@ step_rootfs() {
     [ $((size % 4096)) -eq 0 ] || die "rootfs is $size B, not a multiple of 4 KiB (flash-rootfs refuses that)"
     sha256sum "$IMGR" | sed "s|  .*|  rootfs.img|" > "$IMGR.sha256"
     log "rootfs $size B of $ROOTFS_PART_SIZE B ($((ROOTFS_PART_SIZE - size)) B free), sha256 $(cut -d' ' -f1 "$IMGR.sha256")"
+    if [ "$RADIO_TOOLS" = 1 ]; then
+        sizes=
+        for b in $RADIO_TOOL_BINS; do sizes="$sizes ${b##*/} $(($(wc -c < "$UOUT/$b")))"; done
+        log "radio tools (stripped, static, bytes):$sizes"
+    fi
     x rm -rf "$W"
 }
 

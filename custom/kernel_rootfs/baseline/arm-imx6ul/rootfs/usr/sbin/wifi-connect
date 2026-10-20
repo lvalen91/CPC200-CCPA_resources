@@ -1,0 +1,255 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# wifi-connect: join a Wi-Fi network as a station with wpa_supplicant (nl80211) + udhcpc, and print the
+# state. The radios are OFF at boot: run `radio up` first; without a wireless interface this says so.
+#
+#   wifi-connect [-i IF] [--no-dhcp] [--dry-run] [--] <ssid> [psk|-]
+#   wifi-connect --status [-i IF]
+#   wifi-connect --stop [-i IF]           stop wpa_supplicant + udhcpc (every interface without -i)
+#
+#   psk   8..63 printable ASCII characters (a passphrase) or 64 hex digits (the PSK itself); "-" reads
+#         the passphrase from stdin (keeps it out of the process list); none: an open network
+#   -i    the interface (default: the first managed-mode one among /sys/class/net/*/phy80211)
+#   --dry-run   check the arguments and the interface, print the configuration (PSK masked) and the
+#               commands; writes and starts nothing. Exit status: what the real run would do (0, or 1
+#               when it would refuse the interface)
+#   WIFI_TIMEOUT=<s>  association wait (default 30); wpa_supplicant keeps trying after it
+#
+# Security: WPA2-PSK / WPA-PSK (key_mgmt WPA-PSK, PMF optional: ieee80211w=1) or open. WPA3-only (SAE)
+# networks CANNOT be joined: this wpa_supplicant has no SAE (internal crypto, no elliptic curves; README
+# §2.5); a WPA2/WPA3 transition network is joined with WPA2-PSK. No enterprise (802.1X), no WPS.
+#
+# RAM only, never flash: /run/wifi/<if>.conf (0600; it holds the 256-bit PSK wpa_passphrase derives,
+# never the passphrase), the control socket in /run/wpa_supplicant (wpa_cli -p /run/wpa_supplicant),
+# /run/wpa_supplicant-<if>.pid, /run/udhcpc-<if>.pid, /run/log/wpa_supplicant-<if>.log, /run/resolv.conf
+# (/etc/resolv.conf links there). Nothing survives a reboot: run it again after each boot.
+#
+# Test hooks (host self-test only): RADIO_SYS, RADIO_RUN, RADIO_LIB, WIFI_DHCP_SCRIPT.
+. "${RADIO_LIB:-/lib/baseline}/radio-lib.sh"
+CTRL=$RUN/wpa_supplicant
+DHCP_SCRIPT=${WIFI_DHCP_SCRIPT:-/etc/baseline/udhcpc.sh}
+TIMEOUT=${WIFI_TIMEOUT:-30}
+say() { echo "wifi-connect: $*"; }
+usage() { sed -n '6,8p' "$0" | sed 's/^# *//' >&2; exit 2; }
+bad() { say "$*" >&2; exit 2; }
+
+pid_wpa() { echo "$RUN/wpa_supplicant-$1.pid"; }
+pid_dhcp() { echo "$RUN/udhcpc-$1.pid"; }
+
+# ours PIDFILE NAME: the pid in PIDFILE is a running NAME (not a reused pid)
+ours() {
+    [ -s "$1" ] || return 1
+    _p=$(cat "$1")
+    case $_p in '' | *[!0-9]*) return 1 ;; esac
+    tr '\0' ' ' < "/proc/$_p/cmdline" 2>/dev/null | grep -q "$2"
+}
+
+stop_if() {
+    for _pf in "$(pid_dhcp "$1")" "$(pid_wpa "$1")"; do
+        _nm=wpa_supplicant
+        case $_pf in */udhcpc-*) _nm=udhcpc ;; esac
+        if ours "$_pf" "$_nm"; then
+            _p=$(cat "$_pf")
+            kill "$_p" 2>/dev/null && say "$1: stopped $_nm (pid $_p)"
+            _n=0
+            while kill -0 "$_p" 2>/dev/null && [ "$_n" -lt 5 ]; do sleep 1; _n=$((_n + 1)); done
+        fi
+        rm -f "$_pf"
+    done
+    if [ -e "$SYS/class/net/$1" ]; then
+        ip -4 addr flush dev "$1" 2> /dev/null
+        ip route del default dev "$1" 2> /dev/null
+    fi
+    rm -f "$RUN/wifi/$1.conf" "$CTRL/$1"
+}
+
+# the first managed-mode wireless interface (iw), else the first wireless one
+pick_if() {
+    _first=
+    for _i in $(wifs); do
+        [ -n "$_first" ] || _first=$_i
+        iw dev "$_i" info 2>/dev/null | grep -q 'type managed' && { echo "$_i"; return 0; }
+    done
+    echo "$_first"
+}
+
+state() {
+    say "$1: $(ifstate "$1")"
+    if [ -e "$CTRL/$1" ]; then
+        wpa_cli -p "$CTRL" -i "$1" status 2>/dev/null \
+            | awk -F= '$1 ~ /^(wpa_state|ssid|bssid|freq|key_mgmt|pairwise_cipher|pmf)$/ {
+                           k = $1; sub(/^[^=]*=/, ""); print "wifi-connect:   " k ": " $0 }'
+    else
+        say "  wpa_supplicant: not running on $1"
+    fi
+    _a=$(ip -4 addr show dev "$1" 2>/dev/null | sed -n 's/^ *inet \([0-9./]*\).*/\1/p' | tr '\n' ' ')
+    say "  IPv4: ${_a:-none}"
+    _r=$(ip route show dev "$1" 2>/dev/null | grep '^default' | head -n 1)
+    [ -n "$_r" ] && say "  route: $_r"
+    [ -s "$RUN/resolv.conf" ] && say "  DNS: $(sed -n 's/^nameserver //p' "$RUN/resolv.conf" | tr '\n' ' ')"
+    return 0
+}
+
+conf_text() { # conf_text MASK: the wpa_supplicant configuration (MASK=1: the PSK not shown)
+    echo "# wifi-connect: RAM only (/run), rewritten on every run; the PSK is derived, the passphrase is not stored"
+    echo "ctrl_interface=DIR=$CTRL GROUP=0"
+    echo "update_config=0"
+    echo "network={"
+    echo "	ssid=$SSID_HEX"
+    echo "	scan_ssid=1"
+    echo "	key_mgmt=$KEY_MGMT"
+    if [ -n "$PSK_HEX" ]; then
+        if [ "$1" = 1 ]; then echo "	psk=<64 hex digits, not shown>"; else echo "	psk=$PSK_HEX"; fi
+        echo "	ieee80211w=1"
+    fi
+    echo "}"
+}
+
+IF=
+DHCP=1
+DRY=
+MODE=connect
+while [ $# -gt 0 ]; do
+    case $1 in
+        -i) [ $# -ge 2 ] || usage; IF=$2; shift 2 ;;
+        --no-dhcp) DHCP=; shift ;;
+        -n | --dry-run) DRY=1; shift ;;
+        --stop) MODE=stop; shift ;;
+        --status) MODE=status; shift ;;
+        -h | --help) sed -n '2,/^# Test hooks/p' "$0" | sed '$d; s/^# \{0,1\}//'; exit 0 ;;
+        --) shift; break ;;
+        -?*) bad "unknown option $1 (--help)" ;;
+        *) break ;;
+    esac
+done
+
+case $MODE in
+    stop)
+        if [ -n "$IF" ]; then stop_if "$IF"; else
+            for _f in "$RUN"/wpa_supplicant-*.pid "$RUN"/udhcpc-*.pid; do
+                [ -e "$_f" ] || continue
+                _i=${_f##*/}
+                _i=${_i#wpa_supplicant-}
+                _i=${_i#udhcpc-}
+                stop_if "${_i%.pid}"
+            done
+        fi
+        exit 0
+        ;;
+    status)
+        [ -n "$IF" ] || IF=$(pick_if)
+        [ -n "$IF" ] || { say "no wireless interface; $(radio_off_hint)"; exit 1; }
+        state "$IF"
+        exit 0
+        ;;
+esac
+
+[ $# -ge 1 ] && [ $# -le 2 ] || usage
+SSID=$1
+PSK=
+HAVE_PSK=
+if [ $# -eq 2 ]; then
+    HAVE_PSK=1
+    PSK=$2
+    if [ "$PSK" = - ]; then
+        IFS= read -r PSK || bad "no passphrase on stdin"
+    fi
+fi
+_n=$(($(printf %s "$SSID" | wc -c)))
+[ "$_n" -ge 1 ] && [ "$_n" -le 32 ] || bad "an SSID has 1..32 bytes, this one $_n"
+SSID_HEX=$(printf %s "$SSID" | od -An -v -tx1 | tr -d ' \n')
+KEY_MGMT=NONE
+PSK_HEX=
+if [ -n "$HAVE_PSK" ]; then
+    _n=$(($(printf %s "$PSK" | wc -c)))
+    if [ "$_n" -eq 64 ] && [ -z "$(printf %s "$PSK" | tr -d '0-9a-fA-F')" ]; then
+        PSK_HEX=$(printf %s "$PSK" | tr 'A-F' 'a-f')
+        KIND="PSK given as 64 hex digits"
+    elif [ "$_n" -ge 8 ] && [ "$_n" -le 63 ] && [ -z "$(printf %s "$PSK" | LC_ALL=C tr -d ' -~')" ]; then
+        KIND="passphrase ($_n characters), PSK derived with wpa_passphrase"
+        command -v wpa_passphrase > /dev/null 2>&1 || { say "no wpa_passphrase in this image" >&2; exit 1; }
+        # the passphrase on stdin, never on a command line
+        PSK_HEX=$(printf '%s\n' "$PSK" | wpa_passphrase "$SSID" 2>/dev/null | sed -n 's/^[[:space:]]*psk=\([0-9a-f]\{64\}\)$/\1/p')
+        [ "${#PSK_HEX}" -eq 64 ] || { say "wpa_passphrase did not derive a PSK" >&2; exit 1; }
+    else
+        bad "a passphrase has 8..63 printable ASCII characters (or give the 64-hex-digit PSK); this one has $_n bytes"
+    fi
+    PSK=
+    # plain WPA-PSK only: the SHA-256 variant is left out until a radio's firmware is seen doing it
+    KEY_MGMT="WPA-PSK"
+else
+    KIND="open network (no psk given)"
+fi
+
+# The interface. A real run refuses a missing or non-wireless one; a dry run notes it and goes on.
+RC=0
+refuse() {
+    if [ -n "$DRY" ]; then say "NOTE: $*; a real run stops here"; RC=1; else say "$*" >&2; exit 1; fi
+}
+if [ -z "$IF" ]; then
+    IF=$(pick_if)
+    [ -n "$IF" ] || { refuse "no wireless interface; $(radio_off_hint)"; IF='<none>'; }
+elif [ ! -e "$SYS/class/net/$IF" ]; then
+    refuse "no interface $IF; $(radio_off_hint)"
+elif [ ! -e "$SYS/class/net/$IF/phy80211" ]; then
+    refuse "$IF is not a wireless interface (no phy80211)"
+fi
+for _t in wpa_supplicant wpa_cli; do
+    command -v "$_t" > /dev/null 2>&1 || refuse "no $_t in this image"
+done
+[ -z "$DHCP" ] || command -v udhcpc > /dev/null 2>&1 || refuse "no udhcpc in this image"
+
+CONF=$RUN/wifi/$IF.conf
+LOG=$RUN/log/wpa_supplicant-$IF.log
+WPA_CMD="wpa_supplicant -B -i $IF -D nl80211 -c $CONF -P $(pid_wpa "$IF") -f $LOG"
+DHCP_CMD="udhcpc -i $IF -s $DHCP_SCRIPT -p $(pid_dhcp "$IF") -t 5 -T 3 -A 10 -b -R"
+
+if [ -n "$DRY" ]; then
+    say "dry run: SSID $SSID (hex $SSID_HEX), $KIND, interface $IF"
+    say "would stop a previous wpa_supplicant/udhcpc on $IF, then write $CONF (0600):"
+    conf_text 1 | sed 's/^/    /'
+    say "would run: ip link set dev $IF up"
+    say "would run: $WPA_CMD"
+    say "would wait up to $TIMEOUT s for wpa_state=COMPLETED (wpa_cli -p $CTRL -i $IF status)"
+    if [ -n "$DHCP" ]; then say "would run: $DHCP_CMD"; else say "no DHCP (--no-dhcp)"; fi
+    say "dry run: nothing written, nothing started"
+    exit "$RC"
+fi
+
+stop_if "$IF" > /dev/null
+umask 077
+mkdir -p "$RUN/wifi" "$CTRL" "$RUN/log" || exit 1
+conf_text 0 > "$CONF.tmp" && mv "$CONF.tmp" "$CONF" || { say "cannot write $CONF" >&2; exit 1; }
+umask 022
+say "$IF: SSID $SSID, $KIND; configuration $CONF (RAM)"
+ip link set dev "$IF" up || { say "$IF could not be set administratively up (dmesg)" >&2; exit 1; }
+: > "$LOG"
+# shellcheck disable=SC2086
+$WPA_CMD || { say "wpa_supplicant did not start ($LOG)" >&2; tail -n 5 "$LOG" >&2; exit 1; }
+
+_n=0
+st=
+while [ "$_n" -lt "$TIMEOUT" ]; do
+    st=$(wpa_cli -p "$CTRL" -i "$IF" status 2>/dev/null | sed -n 's/^wpa_state=//p')
+    [ "$st" = COMPLETED ] && break
+    sleep 1
+    _n=$((_n + 1))
+done
+if [ "$st" != COMPLETED ]; then
+    say "$IF: not associated after $TIMEOUT s (wpa_state ${st:-unknown}); wpa_supplicant keeps trying (--stop ends it)"
+    grep -q 'reason=WRONG_KEY' "$LOG" 2>/dev/null && say "  the log says WRONG_KEY: wrong passphrase?"
+    grep -q 'CTRL-EVENT-NETWORK-NOT-FOUND' "$LOG" 2>/dev/null && say "  the network was not found in the scans (wifi-scan lists what is seen)"
+    grep -q 'CTRL-EVENT-ASSOC-REJECT' "$LOG" 2>/dev/null && say "  the AP rejected the association (WPA3-only? not supported by this build)"
+    say "  log: $LOG"
+    state "$IF"
+    exit 1
+fi
+say "$IF: associated after $_n s"
+if [ -n "$DHCP" ]; then
+    # shellcheck disable=SC2086
+    $DHCP_CMD > /dev/null 2>&1 || say "udhcpc failed to start"
+    [ -n "$(ip -4 addr show dev "$IF" 2>/dev/null | grep ' inet ')" ] \
+        || say "$IF: no DHCP lease yet (udhcpc keeps trying in the background)"
+fi
+state "$IF"
+exit 0

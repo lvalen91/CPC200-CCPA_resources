@@ -23,20 +23,29 @@ Unit: the IW416 bench adapter (`../backups/20261019_IW416_ocbm_baseline_pre-livi
 Status by step: IW416 power switch (`reg_wlan`), SDIO detection, driver load (`mwifiex_sdio`, `btnxpuart`), firmware
 start, `hci0` UP — **VERIFIED on hardware**. Everything else about the radios — **UNVERIFIED**.
 
-## Found (OPEN, for the next rebuild)
+## Found (all four addressed in revision 3; status updated 2026-10-20)
 
 1. **`Unknown symbol` lines in `dmesg`.** Many "Unknown symbol" errors appear during `radio up`: `mwifiex_sdio` and
    `btnxpuart` are attempted before their dependencies are in, and the load then succeeds on retry. The end state is
    correct (interfaces, `hci0`). Cosmetic. The exact cause in the load path is INFERRED from the log order (the script
-   uses `modprobe`, `radio:96,123,162`), not traced.
+   uses `modprobe`, `radio:96,123,162`), not traced. **[2026-10-20: FIXED in revision 3 and VERIFIED on this unit.]**
+   Cause traced to BusyBox MODPROBE_SMALL, which insmods a module before its dependencies; revision 3 loads each module
+   after its `modules.dep` dependencies with `insmod` (B10). On the revision-3 rootfs `radio up` gave 0 `Unknown symbol`
+   lines (`2026-10-20_baseline_rev3_rootfs_radio_iw416.md`).
 2. **Wording.** `radio up` prints `Wi-Fi: mlan0 up` after `ip link set dev mlan0 up` succeeds (`radio:151`), while
    `radio status` prints the interface's `operstate` (`radio:86`), which is `down` without a carrier. Both are true
-   (admin-up vs. no link); the messages should say which one they mean.
+   (admin-up vs. no link); the messages should say which one they mean. **[2026-10-20: FIXED in revision 3 (B11) and
+   VERIFIED on this unit:** `radio up` now prints "mlan0 administratively up, no carrier (operstate down)", the same
+   wording as `radio status` (`2026-10-20_baseline_rev3_rootfs_radio_iw416.md`).]
 3. **Tooling gap.** The baseline has no `iw`, `wpa_supplicant`, `hostapd`, `hcitool` or `bluetoothctl` (BusyBox has
    none of them; `hciup` only switches HCI up/down). Association, scanning, an AP, pairing and BT traffic cannot be
-   tested on this image. Whether to add them is an owner decision, **pending**.
+   tested on this image. Whether to add them is an owner decision, **pending**. **[2026-10-20: owner decision taken;
+   revision 3 adds `iw`, `wpa_supplicant`/`wpa_cli`, `btmgmt`, `hciconfig`, `hcitool` and the `wifi-connect`,
+   `wifi-scan`, `bt-scan` helpers. On the unit: Wi-Fi scan and Bluetooth discovery (after `btmgmt le on`) VERIFIED;
+   association, pairing and AP (no `hostapd`) still untested.]**
 4. (Already recorded) `mfi-probe` fails on `flock -w`; the fix in ccpa_custom `2796253` needs a rootfs rebuild and
-   `flash-rootfs` (`2026-10-20_baseline_rev2_kernel_rootfs.md`).
+   `flash-rootfs` (`2026-10-20_baseline_rev2_kernel_rootfs.md`). **[2026-10-20: in the revision-3 image (B13) and
+   VERIFIED on this unit: DeviceVersion 0x03, certificate length 945 B.]**
 
 ## Not tested
 

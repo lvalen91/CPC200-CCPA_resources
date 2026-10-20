@@ -1068,7 +1068,7 @@
    "local_id": 32,
    "statement": "The USB protocol uses magic 0x55AA55AA, a 16-byte header size, and a maximum payload of 1MB.",
    "topic": "usb-protocol-framing",
-   "source_lines": "153",
+   "source_lines": "156",
    "confidence": "high",
    "signals": null,
    "quote": "| 0x55AA55AA | 16 bytes (USB transport layer) | 1MB |"
@@ -1079,7 +1079,7 @@
    "local_id": 33,
    "statement": "Message type 1 (0x01) is Open: session init with a 28-byte 7×uint32-LE payload [width,height,fps,format,packetMax,boxVersion,phoneMode]; handler ProceessCmdOpen.",
    "topic": "usb-msgtype-open",
-   "source_lines": "161",
+   "source_lines": "164",
    "confidence": "high",
    "signals": null,
    "quote": "Session init — 28-byte 7×uint32-LE payload `[width,height,fps,format,packetMax,boxVersion,phoneMode]`; handler `ProceessCmdOpen`"
@@ -1090,7 +1090,7 @@
    "local_id": 34,
    "statement": "Message type 6 (0x06) is VideoData: H.264 main video frames.",
    "topic": "usb-msgtype-video",
-   "source_lines": "162",
+   "source_lines": "165",
    "confidence": "high",
    "signals": null,
    "quote": "| 6 | 0x06 | VideoData | H.264 main video frames |"
@@ -1101,7 +1101,7 @@
    "local_id": 35,
    "statement": "Message type 7 (0x07) is AudioData: PCM audio or commands (1-byte cmd).",
    "topic": "usb-msgtype-audio",
-   "source_lines": "163",
+   "source_lines": "166",
    "confidence": "high",
    "signals": null,
    "quote": "| 7 | 0x07 | AudioData | PCM audio or commands (1-byte cmd) |"
@@ -1112,7 +1112,7 @@
    "local_id": 36,
    "statement": "Message type 8 (0x08) is Command: control commands, bidirectional — host→adapter (e.g. 12 keyFrame, 508 RequestNaviScreenFocus / 509 ReleaseNaviScreenFocus = start/stop the 0x2C nav-screen video stream) AND adapter→host (e.g. 18/19 GNSS start/stop, 506/507 audio nav focus), incl. on wired CarPlay.",
    "topic": "usb-msgtype-command",
-   "source_lines": "164",
+   "source_lines": "167",
    "confidence": "high",
    "signals": null,
    "quote": "508 RequestNaviScreenFocus / 509 ReleaseNaviScreenFocus = start/stop the 0x2C nav-screen video stream"
@@ -1123,7 +1123,7 @@
    "local_id": 37,
    "statement": "Message type 23 (0x17) is MultiTouch: touch input host→adapter with 16-byte payload [float x(0..1), float y(0..1), uint32 action(0=up,1=down,2=move), uint32 fingerId].",
    "topic": "usb-msgtype-touch",
-   "source_lines": "165",
+   "source_lines": "168",
    "confidence": "high",
    "signals": null,
    "quote": "Touch input host→adapter — 16-byte `[float x(0..1), float y(0..1), uint32 action(0=up,1=down,2=move), uint32 fingerId]`"
@@ -1134,7 +1134,7 @@
    "local_id": 38,
    "statement": "Message type 25 (0x19) is BoxSettings: JSON config parsed by ARMadb-driver FUN_00016c20, with a 29-entry map at 0x93f90.",
    "topic": "usb-msgtype-boxsettings",
-   "source_lines": "166",
+   "source_lines": "169",
    "confidence": "high",
    "signals": null,
    "quote": "JSON config — parsed by ARMadb-driver `FUN_00016c20`, 29-entry map at `0x93f90`"
@@ -1145,7 +1145,7 @@
    "local_id": 39,
    "statement": "Message type 41 (0x29) is GnssData: GPS/GNSS to phone (NMEA).",
    "topic": "usb-msgtype-gnss",
-   "source_lines": "167",
+   "source_lines": "170",
    "confidence": "high",
    "signals": null,
    "quote": "| 41 | 0x29 | GnssData | GPS/GNSS to phone (NMEA) |"
@@ -1156,7 +1156,7 @@
    "local_id": 40,
    "statement": "Message type 42 (0x2A) is MetaData: plaintext JSON telemetry adapter→host, with a leading uint32 subtype and null-terminated JSON; subtype 1=Media (MediaSongPlayTime, MediaPlayStatus), subtype 200=Navi turn-by-turn (NaviStatus, NaviTimeToDestination, NaviDestinationName, NaviRemainDistance, NaviRoadName).",
    "topic": "usb-msgtype-metadata",
-   "source_lines": "168",
+   "source_lines": "171",
    "confidence": "high",
    "signals": null,
    "quote": "Plaintext JSON telemetry adapter→host — leading uint32 subtype + null-terminated JSON. Subtype 1=Media (`MediaSongPlayTime`,`MediaPlayStatus`), 200=Navi turn-by-turn"
@@ -1167,7 +1167,7 @@
    "local_id": 41,
    "statement": "Message type 44 (0x2C) is NaviVideoData: secondary navigation / instrument-cluster H.264 stream (CarPlay, iOS 13+), using the same 36-byte header as 0x06.",
    "topic": "usb-msgtype-navivideo",
-   "source_lines": "169",
+   "source_lines": "172",
    "confidence": "high",
    "signals": null,
    "quote": "Secondary navigation / instrument-cluster H.264 stream (CarPlay, iOS 13+). Same 36-byte header as 0x06"
@@ -1178,7 +1178,7 @@
    "local_id": 42,
    "statement": "Message type 153 (0x99) is SendFile: flat-file plus HU_* struct upload, staging at /tmp/uploadFileTmp, runs as root.",
    "topic": "usb-msgtype-sendfile",
-   "source_lines": "170",
+   "source_lines": "173",
    "confidence": "high",
    "signals": null,
    "quote": "Flat-file + `HU_*` struct upload (staging `/tmp/uploadFileTmp`, runs as root)"
@@ -1189,7 +1189,7 @@
    "local_id": 43,
    "statement": "Message type 170 (0xAA) is HeartBeat: keep-alive at 2s interval, host→adapter, with 0-byte payload.",
    "topic": "usb-msgtype-heartbeat",
-   "source_lines": "171",
+   "source_lines": "174",
    "confidence": "high",
    "signals": null,
    "quote": "Keep-alive (2s interval), host→adapter, 0-byte payload"
@@ -1200,7 +1200,7 @@
    "local_id": 44,
    "statement": "The 0x17, 0x2A, and 0x2C message-type rows were added 2026-06-14 from macOS-host captures; they were live in every session but missing from the master table.",
    "topic": "doc-provenance",
-   "source_lines": "173",
+   "source_lines": "176",
    "confidence": "high",
    "signals": [
     "dated finding",
@@ -1214,7 +1214,7 @@
    "local_id": 45,
    "statement": "Doc provenance note: entries span both the carlink_macOS (macOS host) and carlink_native (Android host) apps plus multiple adapter firmware revisions; some quirks/comments may be host- or firmware-specific and may no longer apply.",
    "topic": "doc-provenance",
-   "source_lines": "173",
+   "source_lines": "176",
    "confidence": "medium",
    "signals": [
     "staleness note",
@@ -1228,7 +1228,7 @@
    "local_id": 46,
    "statement": "decode_type 2 is 44.1kHz Stereo and is dual-purpose: Commands (13 bytes) OR 44.1kHz audio (non-default, only when mediaSound=0); status VERIFIED.",
    "topic": "audio-decodetype-2",
-   "source_lines": "179",
+   "source_lines": "182",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1241,7 +1241,7 @@
    "local_id": 47,
    "statement": "decode_type 3 is 8kHz Mono for phone call (narrowband), active for Android Auto phone calls (8kHz narrowband via HFP/SCO), not used by CarPlay (which uses 16kHz).",
    "topic": "audio-decodetype-3",
-   "source_lines": "180",
+   "source_lines": "183",
    "confidence": "high",
    "signals": null,
    "quote": "Active for Android Auto phone calls (8kHz narrowband via HFP/SCO). Not used by CarPlay (uses 16kHz)."
@@ -1252,7 +1252,7 @@
    "local_id": 48,
    "statement": "decode_type 4 is 48kHz Stereo, the standard media audio default for both CarPlay and Android Auto; status VERIFIED.",
    "topic": "audio-decodetype-4",
-   "source_lines": "181",
+   "source_lines": "184",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1265,7 +1265,7 @@
    "local_id": 49,
    "statement": "decode_type 5 is 16kHz Mono for voice (Siri, phone calls); status VERIFIED.",
    "topic": "audio-decodetype-5",
-   "source_lines": "182",
+   "source_lines": "185",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1278,7 +1278,7 @@
    "local_id": 50,
    "statement": "The adapter is transparent and passes through whatever sample rate the phone negotiates; CarPlay and AA both default to 48kHz (decodeType=4), and 44.1kHz (decodeType=2) only appears when explicitly configured via mediaSound=0.",
    "topic": "audio-passthrough",
-   "source_lines": "185",
+   "source_lines": "188",
    "confidence": "high",
    "signals": null,
    "quote": "The adapter is transparent — it passes through whatever sample rate the phone negotiates"
@@ -1289,7 +1289,7 @@
    "local_id": 51,
    "statement": "decode_type=2 behavior depends on payload size.",
    "topic": "audio-decodetype-2",
-   "source_lines": "186",
+   "source_lines": "189",
    "confidence": "high",
    "signals": null,
    "quote": "decode_type=2 behavior depends on payload size"
@@ -1300,7 +1300,7 @@
    "local_id": 52,
    "statement": "The CallQuality Web UI setting has a firmware bug and does not affect the sample rate.",
    "topic": "audio-callquality-bug",
-   "source_lines": "188",
+   "source_lines": "191",
    "confidence": "high",
    "signals": [
     "firmware bug"
@@ -1313,7 +1313,7 @@
    "local_id": 53,
    "statement": "audio_type 1 is Main channel, Playback direction.",
    "topic": "audio-type-1",
-   "source_lines": "192",
+   "source_lines": "195",
    "confidence": "high",
    "signals": null,
    "quote": "| 1 | Main | Playback |"
@@ -1324,7 +1324,7 @@
    "local_id": 54,
    "statement": "audio_type 2 is Navigation channel, Playback direction (ducking).",
    "topic": "audio-type-2",
-   "source_lines": "193",
+   "source_lines": "196",
    "confidence": "high",
    "signals": null,
    "quote": "| 2 | Navigation | Playback (ducking) |"
@@ -1335,7 +1335,7 @@
    "local_id": 55,
    "statement": "audio_type 3 is Microphone channel, Capture direction.",
    "topic": "audio-type-3",
-   "source_lines": "194",
+   "source_lines": "197",
    "confidence": "high",
    "signals": null,
    "quote": "| 3 | Microphone | Capture |"
@@ -1346,7 +1346,7 @@
    "local_id": 56,
    "statement": "Heartbeat must start BEFORE sending initialization messages.",
    "topic": "heartbeat-timing",
-   "source_lines": "202",
+   "source_lines": "205",
    "confidence": "high",
    "signals": [
     "CRITICAL"
@@ -1359,7 +1359,7 @@
    "local_id": 57,
    "statement": "The initialization sequence is: USB Reset, 3-second wait, Open USB connection, START HEARTBEAT IMMEDIATELY, Send initialization messages, Start reading loop.",
    "topic": "initialization-sequence",
-   "source_lines": "205",
+   "source_lines": "208",
    "confidence": "high",
    "signals": null,
    "quote": "1. USB Reset\n2. 3-second wait\n3. Open USB connection\n4. START HEARTBEAT IMMEDIATELY  ← Critical\n5. Send initialization messages\n6. Start reading loop"
@@ -1370,7 +1370,7 @@
    "local_id": 58,
    "statement": "Failure to start heartbeat before initialization causes cold start failures, taking about 11.7 seconds to disconnect.",
    "topic": "heartbeat-timing",
-   "source_lines": "213",
+   "source_lines": "216",
    "confidence": "high",
    "signals": null,
    "quote": "Failure to do this causes cold start failures (~11.7 seconds to disconnect)."
@@ -1381,7 +1381,7 @@
    "local_id": 59,
    "statement": "There are 15 verified audio commands in the range 0x01-0x10.",
    "topic": "audio-commands",
-   "source_lines": "217",
+   "source_lines": "220",
    "confidence": "high",
    "signals": [
     "verified"
@@ -1394,7 +1394,7 @@
    "local_id": 60,
    "statement": "No SIRI_STOP command exists; sessions end via OUTPUT_STOP.",
    "topic": "audio-commands",
-   "source_lines": "218",
+   "source_lines": "221",
    "confidence": "high",
    "signals": null,
    "quote": "**No SIRI_STOP exists** - sessions end via OUTPUT_STOP"
@@ -1405,7 +1405,7 @@
    "local_id": 61,
    "statement": "NAVI_STOP (0x08) activates Siri mode (a misleading name).",
    "topic": "audio-commands",
-   "source_lines": "219",
+   "source_lines": "222",
    "confidence": "high",
    "signals": null,
    "quote": "**NAVI_STOP (0x08)** activates Siri mode (misleading name)"
@@ -1416,7 +1416,7 @@
    "local_id": 62,
    "statement": "NAVI_COMPLETE (0x10) signals navigation prompt finished.",
    "topic": "audio-commands",
-   "source_lines": "220",
+   "source_lines": "223",
    "confidence": "high",
    "signals": null,
    "quote": "**NAVI_COMPLETE (0x10)** signals navigation prompt finished"
@@ -1427,7 +1427,7 @@
    "local_id": 63,
    "statement": "To request an IDR keyframe, send the Frame command (0x0C); the adapter responds within 100-200ms with SPS + PPS + IDR frame.",
    "topic": "keyframe-recovery",
-   "source_lines": "224",
+   "source_lines": "227",
    "confidence": "high",
    "signals": null,
    "quote": "Send Frame command (0x0C) to request IDR. Adapter responds within 100-200ms with SPS + PPS + IDR frame."
@@ -1438,7 +1438,7 @@
    "local_id": 64,
    "statement": "Video session start: 100% begin with SPS+PPS+IDR, across 10/10 sessions.",
    "topic": "video-stats",
-   "source_lines": "230",
+   "source_lines": "233",
    "confidence": "high",
    "signals": null,
    "quote": "| Session start | 100% begin with SPS+PPS+IDR | 10/10 sessions |"
@@ -1449,7 +1449,7 @@
    "local_id": 65,
    "statement": "SPS/PPS bundling: always with IDR, never standalone, across 538+ IDRs.",
    "topic": "video-stats",
-   "source_lines": "231",
+   "source_lines": "234",
    "confidence": "high",
    "signals": null,
    "quote": "| SPS/PPS bundling | Always with IDR, never standalone | 538+ IDRs |"
@@ -1460,7 +1460,7 @@
    "local_id": 66,
    "statement": "IDR interval: median 2000ms (range 83-2117ms), from 538 intervals.",
    "topic": "video-stats",
-   "source_lines": "232",
+   "source_lines": "235",
    "confidence": "high",
    "signals": null,
    "quote": "| IDR interval | Median 2000ms (range 83-2117ms) | 538 intervals |"
@@ -1471,7 +1471,7 @@
    "local_id": 67,
    "statement": "Jitter standard deviation is 25.6ms (85% within ±40ms), from 215K frames.",
    "topic": "video-stats",
-   "source_lines": "233",
+   "source_lines": "236",
    "confidence": "high",
    "signals": null,
    "quote": "| Jitter std dev | 25.6ms (85% within ±40ms) | 215K frames |"
@@ -1482,7 +1482,7 @@
    "local_id": 68,
    "statement": "Frame sizes: IDR averages 49KB, P-frames average 23KB, from 215K frames.",
    "topic": "video-stats",
-   "source_lines": "234",
+   "source_lines": "237",
    "confidence": "high",
    "signals": null,
    "quote": "| Frame sizes | IDR: 49KB avg, P: 23KB avg | 215K frames |"
@@ -1493,7 +1493,7 @@
    "local_id": 69,
    "statement": "Verification status: USB Protocol is VERIFIED with evidence from 25+ capture sessions.",
    "topic": "verification-status",
-   "source_lines": "257",
+   "source_lines": "260",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1506,7 +1506,7 @@
    "local_id": 70,
    "statement": "Verification status: Audio Commands is VERIFIED with evidence from 21 controlled sessions.",
    "topic": "verification-status",
-   "source_lines": "258",
+   "source_lines": "261",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1519,7 +1519,7 @@
    "local_id": 71,
    "statement": "Verification status: Video Protocol is VERIFIED with evidence from frame timing analysis.",
    "topic": "verification-status",
-   "source_lines": "259",
+   "source_lines": "262",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1532,7 +1532,7 @@
    "local_id": 72,
    "statement": "Verification status: Initialization is VERIFIED with evidence from cold start testing.",
    "topic": "verification-status",
-   "source_lines": "260",
+   "source_lines": "263",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1545,7 +1545,7 @@
    "local_id": 73,
    "statement": "Verification status: GPS/GNSS Pipeline is VERIFIED with evidence from binary analysis plus live config testing.",
    "topic": "verification-status",
-   "source_lines": "261",
+   "source_lines": "264",
    "confidence": "high",
    "signals": [
     "VERIFIED"
@@ -1558,7 +1558,7 @@
    "local_id": 74,
    "statement": "Verification status: Crypto Stack is DOCUMENTED with evidence from binary analysis.",
    "topic": "verification-status",
-   "source_lines": "262",
+   "source_lines": "265",
    "confidence": "high",
    "signals": [
     "DOCUMENTED"
@@ -1571,7 +1571,7 @@
    "local_id": 75,
    "statement": "config_key_analysis.md analyzes 106 config keys classified as 85 ALIVE / 12 DEAD / 9 PASS-THROUGH.",
    "topic": "config-keys",
-   "source_lines": "142",
+   "source_lines": "145",
    "confidence": "high",
    "signals": null,
    "quote": "config_key_analysis.md      # 106 config keys deep analysis (85 ALIVE / 12 DEAD / 9 PASS-THROUGH)"
@@ -1582,7 +1582,7 @@
    "local_id": 76,
    "statement": "iap2_message_catalog.md documents the iAP2 0x5201/0x5202 RouteGuidance field map based on Apple R14G17 SDK plus RE.",
    "topic": "iap2-catalog",
-   "source_lines": "115",
+   "source_lines": "118",
    "confidence": "high",
    "signals": null,
    "quote": "iAP2 0x5201/0x5202 RouteGuidance field map (Apple R14G17 SDK + RE)"
@@ -1593,7 +1593,7 @@
    "local_id": 77,
    "statement": "carkit_ios26_master.md documents the iOS 26.5 CarPlay/CarKit master capability surface with 60+ feature flags, gating model, and patching recipes, 3-agent verified.",
    "topic": "carkit-ios26",
-   "source_lines": "117",
+   "source_lines": "120",
    "confidence": "high",
    "signals": [
     "3-agent verified"
@@ -1606,7 +1606,7 @@
    "local_id": 78,
    "statement": "command_ids.md documents the Command ID reference for 0x08 payloads.",
    "topic": "command-ids",
-   "source_lines": "118",
+   "source_lines": "121",
    "confidence": "high",
    "signals": null,
    "quote": "Command ID reference (0x08 payloads)"
@@ -1617,7 +1617,7 @@
    "local_id": 79,
    "statement": "iap2_sdk_delta_r14g17_to_ios26.md is a hybrid changelog from R14G17 (2017) to iOS 26.5 covering post-2017 fields plus capability negotiation.",
    "topic": "iap2-sdk-delta",
-   "source_lines": "116",
+   "source_lines": "119",
    "confidence": "high",
    "signals": null,
    "quote": "Hybrid changelog R14G17 (2017) → iOS 26.5 — covers post-2017 fields + capability negotiation"
@@ -1628,7 +1628,7 @@
    "local_id": 80,
    "statement": "External reference: ludwig-v/wireless-carplay-dongle-reverse-engineering GitHub repository.",
    "topic": "external-ref",
-   "source_lines": "284",
+   "source_lines": "287",
    "confidence": "high",
    "signals": null,
    "quote": "[ludwig-v/wireless-carplay-dongle-reverse-engineering](https://github.com/ludwig-v/wireless-carplay-dongle-reverse-engineering)"
@@ -1639,7 +1639,7 @@
    "local_id": 81,
    "statement": "Change log 2026-06-13: Android Auto ViewArea/SafeArea binary-confirmed via radare2 — ARMAndroidAuto's embedded VideoConfigData.proto descriptor (aasdk openauto-v2 SDK) defines VideoConfig with only video_resolution, video_fps, margin_width, margin_height, density, additional_depth, real_density — no ui_config, no content_insets, no Insets.",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": [
     "binary-confirmed",
@@ -1653,7 +1653,7 @@
    "local_id": 82,
    "statement": "Android Auto can emit only a symmetric letterbox margin; a content-inset SafeArea is structurally impossible.",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": null,
    "quote": "So AA can emit only a symmetric letterbox margin; a content-inset SafeArea is *structurally impossible*."
@@ -1664,7 +1664,7 @@
    "local_id": 83,
    "statement": "The AA view rect is sized from androidAutoSizeW/H keys, not HU_VIEWAREA_INFO (whose only ARMadb-driver xref is ProceessCmdOpen, the CarPlay/Open handler).",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": null,
    "quote": "AA view rect is sized from `androidAutoSizeW/H` keys, **not** `HU_VIEWAREA_INFO` (whose only `ARMadb-driver` xref is `ProceessCmdOpen`, the CarPlay/Open handler)"
@@ -1675,7 +1675,7 @@
    "local_id": 84,
    "statement": "Bare HU_SAFEAREA_INFO is read only by AppleCarPlay, meaning main-screen SafeArea is CarPlay-only; the Carlinkit dongle does not give Android Auto view-area/safe-area via HU_* files.",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": null,
    "quote": "Bare `HU_SAFEAREA_INFO` is read only by `AppleCarPlay` ⇒ **main-screen SafeArea is CarPlay-only**; the Carlinkit dongle does **not** give Android Auto view-area/safe-area via `HU_*` files"
@@ -1686,7 +1686,7 @@
    "local_id": 85,
    "statement": "Cluster HU_NAVISCREEN_* is a separate shared path; a genuine AA SafeArea needs a host speaking AAP directly (e.g. LIVI's own stack), not the dongle.",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": null,
    "quote": "Cluster `HU_NAVISCREEN_*` is a separate shared path. A genuine AA SafeArea needs a host speaking AAP directly (e.g. LIVI's own stack), not the dongle."
@@ -1697,7 +1697,7 @@
    "local_id": 86,
    "statement": "The 2026-06-13 finding supersedes an earlier draft that claimed ARMAndroidAuto maps HU_SAFEAREA_INFO to content_insets; it updated configuration.md, ARMAndroidAuto.md, and host_app_guide.md.",
    "topic": "aa-viewarea",
-   "source_lines": "294",
+   "source_lines": "297",
    "confidence": "high",
    "signals": [
     "supersedes earlier draft"
@@ -1710,7 +1710,7 @@
    "local_id": 87,
    "statement": "Change log 2026-05-21: Live wireless CarPlay pairing capture (MFi_research/capture/carplay-20260521-101016) confirmed the RTSP control port is 5000, not 7000.",
    "topic": "carplay-rtsp",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": [
     "live capture",
@@ -1724,7 +1724,7 @@
    "local_id": 88,
    "statement": "The CarPlay pairing capture showed HomeKit /pair-setup ×3 plus /pair-verify ×2, with no FairPlay.",
    "topic": "carplay-homekit",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": null,
    "quote": "HomeKit `/pair-setup`×3 + `/pair-verify`×2; no FairPlay"
@@ -1735,7 +1735,7 @@
    "local_id": 89,
    "statement": "A real MFi coprocessor on I2C-1 at address 0x11 was exercised twice per pairing.",
    "topic": "carplay-mfi",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": [
     "live capture"
@@ -1748,7 +1748,7 @@
    "local_id": 90,
    "statement": "HU_* struct layouts were verified on-device during the 2026-05-21 capture.",
    "topic": "carplay-hu-structs",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": [
     "verified on-device"
@@ -1761,7 +1761,7 @@
    "local_id": 91,
    "statement": "The iAP2 0x1D01 component table was captured during the 2026-05-21 pairing capture.",
    "topic": "iap2-component-table",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": null,
    "quote": "iAP2 `0x1D01` component table captured"
@@ -1772,7 +1772,7 @@
    "local_id": 92,
    "statement": "The DuckPosition HU_VIEWAREA_INFO field order was corrected; a new doc carplay_handshake.md was created.",
    "topic": "carplay-viewarea",
-   "source_lines": "295",
+   "source_lines": "298",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1785,7 +1785,7 @@
    "local_id": 93,
    "statement": "Change log 2026-03-14: comprehensive verification pass where 50+ agents cross-checked all docs against firmware binary, APK decompilation, and carlink_native source, fixing about 40 errors.",
    "topic": "verification-pass",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "verification pass"
@@ -1798,7 +1798,7 @@
    "local_id": 94,
    "statement": "decode_type=3 was corrected from 'vestigial' to 'active for AA phone calls' across 4 files.",
    "topic": "audio-decodetype-3",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1811,7 +1811,7 @@
    "local_id": 95,
    "statement": "wireless_carplay.md encryption key/algorithm was corrected to AES-128-CBC with key SkBRDy3gmrw1ieH0.",
    "topic": "crypto-wireless-carplay",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1824,7 +1824,7 @@
    "local_id": 96,
    "statement": "inbound_session_sequence.md type IDs were rewritten (10+ wrong IDs corrected).",
    "topic": "session-sequence",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1837,7 +1837,7 @@
    "local_id": 97,
    "statement": "host_app_guide.md touch format and VID/PID were updated in the 2026-03-14 pass.",
    "topic": "host-app-guide",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "updated"
@@ -1850,7 +1850,7 @@
    "local_id": 98,
    "statement": "firmware_update.md status codes were updated to 2025.10.",
    "topic": "firmware-update",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "high",
    "signals": [
     "updated"
@@ -1863,7 +1863,7 @@
    "local_id": 99,
    "statement": "In the 2026-03-14 pass, video_protocol.md had a manufacturer frame-drop reference added and a mic delay note was added to host_app_guide.md.",
    "topic": "video-protocol",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "medium",
    "signals": [
     "added"
@@ -1876,7 +1876,7 @@
    "local_id": 100,
    "statement": "In the 2026-03-14 pass, key_binaries.md binary sizes were corrected and config_key_analysis.md classification fixes were made.",
    "topic": "binary-analysis",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "medium",
    "signals": [
     "corrected"
@@ -1889,7 +1889,7 @@
    "local_id": 101,
    "statement": "In the 2026-03-14 pass, Box Code Taxonomy and SoftwareVersion format were added to configuration.md, and MultiTouch/StModeChange/Camera structs and UseBTPhone were added to usb_protocol.md.",
    "topic": "configuration-docs",
-   "source_lines": "296",
+   "source_lines": "299",
    "confidence": "medium",
    "signals": [
     "added"
@@ -1902,7 +1902,7 @@
    "local_id": 102,
    "statement": "Change log 2026-02-18: g_bSupportViewarea is NOT set by AdvancedFeatures — it is set from HU_VIEWAREA_INFO file content (r2 init at ~0x16ca2).",
    "topic": "viewarea-flag",
-   "source_lines": "297",
+   "source_lines": "300",
    "confidence": "high",
    "signals": [
     "verified",
@@ -1917,7 +1917,7 @@
    "local_id": 103,
    "statement": "Writing HU_VIEWAREA_INFO (24B) plus HU_SAFEAREA_INFO (20B) to /etc/RiddleBoxData/ plus reboot enables main screen SafeArea.",
    "topic": "viewarea-config",
-   "source_lines": "297",
+   "source_lines": "300",
    "confidence": "high",
    "signals": null,
    "quote": "Writing `HU_VIEWAREA_INFO` (24B) + `HU_SAFEAREA_INFO` (20B) to `/etc/RiddleBoxData/` + reboot enables main screen SafeArea"
@@ -1928,7 +1928,7 @@
    "local_id": 104,
    "statement": "Live test: 100px inset on 2400×960, CarPlay correctly inset interactive UI while wallpaper rendered full-screen (drawUIOutsideSafeArea=true).",
    "topic": "viewarea-test",
-   "source_lines": "297",
+   "source_lines": "300",
    "confidence": "high",
    "signals": [
     "live test"
@@ -1941,7 +1941,7 @@
    "local_id": 105,
    "statement": "AdvancedFeatures was corrected back to Boolean (0-1, max enforced by riddleBoxCfg), with only bit 0 tested in firmware (tst.w sb, 1).",
    "topic": "advancedfeatures",
-   "source_lines": "297",
+   "source_lines": "300",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1954,7 +1954,7 @@
    "local_id": 106,
    "statement": "Change log 2026-02-18 riddleBoxCfg feature gate analysis: HudGPSSwitch factory default corrected to 0 (--info shows current value, not factory).",
    "topic": "hudgpsswitch",
-   "source_lines": "298",
+   "source_lines": "301",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -1967,7 +1967,7 @@
    "local_id": 107,
    "statement": "A performance warning was added for AdvancedFeatures (second H.264 stream).",
    "topic": "advancedfeatures",
-   "source_lines": "298",
+   "source_lines": "301",
    "confidence": "high",
    "signals": null,
    "quote": "added performance warning for AdvancedFeatures (second H.264 stream)"
@@ -1978,7 +1978,7 @@
    "local_id": 108,
    "statement": "9 MiddleMan IPC interfaces were documented: CarPlay, AA, HiCar, ICCOA, DVR, AndroidMirror, iOS, NoAirPlay.",
    "topic": "middleman-ipc",
-   "source_lines": "298",
+   "source_lines": "301",
    "confidence": "high",
    "signals": null,
    "quote": "documented 9 MiddleMan IPC interfaces (CarPlay, AA, HiCar, ICCOA, DVR, AndroidMirror, iOS, NoAirPlay)"
@@ -1989,7 +1989,7 @@
    "local_id": 109,
    "statement": "15 adapter filesystem config paths were documented and 7 AppleCarPlay runtime global flags were added.",
    "topic": "config-paths",
-   "source_lines": "298",
+   "source_lines": "301",
    "confidence": "high",
    "signals": null,
    "quote": "documented 15 adapter filesystem config paths; added 7 AppleCarPlay runtime global flags"
@@ -2000,7 +2000,7 @@
    "local_id": 110,
    "statement": "Change log 2026-02-18 binary strings: PBAP support confirmed (PCE+PSE roles in bluetoothDaemon SDP).",
    "topic": "bluetooth-pbap",
-   "source_lines": "299",
+   "source_lines": "302",
    "confidence": "high",
    "signals": [
     "confirmed"
@@ -2013,7 +2013,7 @@
    "local_id": 111,
    "statement": "hfpd provenance identified as nohands HFP 1.6 (net.sf.nohands.hfpd).",
    "topic": "bluetooth-hfp",
-   "source_lines": "299",
+   "source_lines": "302",
    "confidence": "high",
    "signals": null,
    "quote": "hfpd provenance identified (nohands HFP 1.6, `net.sf.nohands.hfpd`)"
@@ -2024,7 +2024,7 @@
    "local_id": 112,
    "statement": "AirPlay-layer features documented: 4 focus domains, app launch commands (Maps/Music/NowPlaying/Phone), haptic feedback, fake iPhone mode, limitedUI.",
    "topic": "airplay-features",
-   "source_lines": "299",
+   "source_lines": "302",
    "confidence": "high",
    "signals": null,
    "quote": "AirPlay-layer features documented (4 focus domains, app launch commands: Maps/Music/NowPlaying/Phone, haptic feedback, fake iPhone mode, limitedUI)"
@@ -2035,7 +2035,7 @@
    "local_id": 113,
    "statement": "6 internal audio channel states discovered: Media/Navi/PhoneCall/Siri/Alert/InputConfig.",
    "topic": "audio-channel-states",
-   "source_lines": "299",
+   "source_lines": "302",
    "confidence": "high",
    "signals": null,
    "quote": "6 internal audio channel states discovered (Media/Navi/PhoneCall/Siri/Alert/InputConfig)"
@@ -2046,7 +2046,7 @@
    "local_id": 114,
    "statement": "Media metadata format clarified as iAP2Type_PlistBinary, not parsed JSON.",
    "topic": "media-metadata",
-   "source_lines": "299",
+   "source_lines": "302",
    "confidence": "high",
    "signals": [
     "clarified"
@@ -2059,7 +2059,7 @@
    "local_id": 115,
    "statement": "Change log 2026-02-17 iPhone GPS fusion: iPhone-side GPS pipeline is accessoryd → locationd → CL-fusion, using a best-accuracy-wins model.",
    "topic": "iphone-gps",
-   "source_lines": "300",
+   "source_lines": "303",
    "confidence": "high",
    "signals": [
     "live testing"
@@ -2072,7 +2072,7 @@
    "local_id": 116,
    "statement": "iPhone GPS interpretation includes numHypothesis/isPassthrough; debugging is via idevicesyslog.",
    "topic": "iphone-gps",
-   "source_lines": "300",
+   "source_lines": "303",
    "confidence": "high",
    "signals": null,
    "quote": "`numHypothesis`/`isPassthrough` interpretation, practical scenarios for vehicle GPS priority, debugging via `idevicesyslog`"
@@ -2083,7 +2083,7 @@
    "local_id": 117,
    "statement": "DashboardInfo/GNSSCapability relationship was corrected in configuration.md.",
    "topic": "dashboardinfo",
-   "source_lines": "300",
+   "source_lines": "303",
    "confidence": "high",
    "signals": [
     "corrected"
@@ -2096,7 +2096,7 @@
    "local_id": 118,
    "statement": "Change log 2026-02-18 deep r2 (5 binaries): complete iAP2 engine field catalogs for 9 engines — CallState 14+6, Communication 11, MediaPlayer 27+17, RouteGuidance/NaviJSON, Power 8, VehicelStat 3, WiFiConfig 4.",
    "topic": "iap2-engines",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "9 engines with all fields: CallState 14+6, Communication 11, MediaPlayer 27+17, RouteGuidance/NaviJSON, Power 8, VehicelStat 3, WiFiConfig 4"
@@ -2107,7 +2107,7 @@
    "local_id": 119,
    "statement": "A 60+ iAP2 message dispatch table was documented along with HUD broadcast aliases (MediaSongName→mediaItemTitle etc.).",
    "topic": "iap2-dispatch",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "60+ iAP2 message dispatch table, HUD broadcast aliases (MediaSongName→mediaItemTitle etc.)"
@@ -2118,7 +2118,7 @@
    "local_id": 120,
    "statement": "A dual data path architecture exists (AirPlay parallel to iAP2).",
    "topic": "data-path-architecture",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "dual data path architecture (AirPlay ‖ iAP2 parallel)"
@@ -2129,7 +2129,7 @@
    "local_id": 121,
    "statement": "The CarPlay mode state machine has 5 channels: screen/mainAudio/speech/phoneCall/turnByTurn.",
    "topic": "carplay-state-machine",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "CarPlay mode state machine (5 channels: screen/mainAudio/speech/phoneCall/turnByTurn)"
@@ -2140,7 +2140,7 @@
    "local_id": 122,
    "statement": "The complete audio codec table is PCM/ALAC/AAC-LC/AAC-ELD.",
    "topic": "audio-codecs",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "complete audio codec table (PCM/ALAC/AAC-LC/AAC-ELD)"
@@ -2151,7 +2151,7 @@
    "local_id": 123,
    "statement": "13 supported link types were documented along with a core library stack of 7 DMSDP libraries with roles.",
    "topic": "dmsdp-libraries",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "13 supported link types, core library stack (7 DMSDP libraries with roles)"
@@ -2162,7 +2162,7 @@
    "local_id": 124,
    "statement": "ARMAndroidAuto uses a custom LZMA packer with magic 0x55225522.",
    "topic": "aa-lzma",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": null,
    "quote": "ARMAndroidAuto custom LZMA packer (magic 0x55225522)"
@@ -2173,7 +2173,7 @@
    "local_id": 125,
    "statement": "Encryption key derivation labels and libboxtrans/libmanagement key exports were documented in the 2026-02-18 deep r2 (5 binaries) analysis.",
    "topic": "crypto-key-derivation",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "medium",
    "signals": null,
    "quote": "libboxtrans/libmanagement key exports"
@@ -2184,7 +2184,7 @@
    "local_id": 126,
    "statement": "Change log 2026-02-18 deep r2 (GPS): CiAP2LocationEngine has a full object layout of 0x1F4+ bytes with flags at 0x1F0-0x1F3.",
    "topic": "gps-location-engine",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": null,
    "quote": "CiAP2LocationEngine full object layout (0x1F4+ bytes, flags 0x1F0-0x1F3)"
@@ -2195,7 +2195,7 @@
    "local_id": 127,
    "statement": "GNSSCapability bitmask: bit 0=GPGGA, bit 1=GPRMC, bit 3=PASCD.",
    "topic": "gnss-capability",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": null,
    "quote": "GNSSCapability bitmask (bit 0=GPGGA, 1=GPRMC, 3=PASCD)"
@@ -2206,7 +2206,7 @@
    "local_id": 128,
    "statement": "DashboardInfo correction: bit 1 = vehicleStatus, NOT location.",
    "topic": "dashboardinfo",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": [
     "correction"
@@ -2219,7 +2219,7 @@
    "local_id": 129,
    "statement": "ARMadb-driver type 0x29 handler does strstr plus file write to HU_GPS_DATA and forwards as 0x22.",
    "topic": "gnss-handler",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": null,
    "quote": "ARMadb-driver type 0x29 handler (strstr+file write to HU_GPS_DATA, forward as 0x22)"
@@ -2230,7 +2230,7 @@
    "local_id": 130,
    "statement": "VirtualBoxGPS NMEA parser parses GPGGA/GPRMC/PASCD and generates $GPVAI/$RMTINFO, with a speed thread.",
    "topic": "virtualboxgps",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": null,
    "quote": "VirtualBoxGPS NMEA parser (GPGGA/GPRMC/PASCD parsing, $GPVAI/$RMTINFO generation, speed thread)"
@@ -2241,7 +2241,7 @@
    "local_id": 131,
    "statement": "libdmsdpdvgps.so is ENCRYPTED.",
    "topic": "gps-library",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": [
     "encrypted"
@@ -2254,7 +2254,7 @@
    "local_id": 132,
    "statement": "The complete iAP2 identification component table has 26 components, with 7 AskStartItems sub-types.",
    "topic": "iap2-identification",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": null,
    "quote": "complete iAP2 identification component table (26 components), 7 AskStartItems sub-types"
@@ -2265,7 +2265,7 @@
    "local_id": 133,
    "statement": "r2 PLT mislabel fix: 0x14e3c is strstr, not dbus_bus_add_match.",
    "topic": "r2-plt-fix",
-   "source_lines": "302",
+   "source_lines": "305",
    "confidence": "high",
    "signals": [
     "fix"
@@ -2278,7 +2278,7 @@
    "local_id": 134,
    "statement": "Change log 2026-02-17 GPS/GNSS forwarding: GnssData (0x29) payload format has dual delivery paths — USB direct plus /tmp/gnss_info.",
    "topic": "gnss-forwarding",
-   "source_lines": "303",
+   "source_lines": "306",
    "confidence": "high",
    "signals": null,
    "quote": "GnssData (0x29) payload format with dual delivery paths (USB direct + /tmp/gnss_info)"
@@ -2289,7 +2289,7 @@
    "local_id": 135,
    "statement": "Per-binary GPS pipeline roles: ARMadb-driver → ARMiPhoneIAP2 CiAP2LocationEngine → iPhone.",
    "topic": "gps-pipeline",
-   "source_lines": "303",
+   "source_lines": "306",
    "confidence": "high",
    "signals": null,
    "quote": "per-binary GPS pipeline roles (ARMadb-driver → ARMiPhoneIAP2 CiAP2LocationEngine → iPhone)"
@@ -2300,7 +2300,7 @@
    "local_id": 136,
    "statement": "iAP2 Location Registration Flow disassembly and GNSSCapability=0 blocking discovery were documented.",
    "topic": "gnss-capability",
-   "source_lines": "303",
+   "source_lines": "306",
    "confidence": "high",
    "signals": null,
    "quote": "iAP2 Location Registration Flow disassembly, GNSSCapability=0 blocking discovery"
@@ -2311,7 +2311,7 @@
    "local_id": 137,
    "statement": "Change log 2026-01-20: device_identification.md verified phoneType 3=CarPlay both USB/Wireless, 5=AndroidAuto USB, with the wifi field determining transport.",
    "topic": "phonetype",
-   "source_lines": "304",
+   "source_lines": "307",
    "confidence": "high",
    "signals": [
     "verified"
@@ -2324,7 +2324,7 @@
    "local_id": 138,
    "statement": "cpuTemp was verified to be the adapter temperature.",
    "topic": "cputemp",
-   "source_lines": "304",
+   "source_lines": "307",
    "confidence": "high",
    "signals": [
     "verified"
@@ -2337,7 +2337,7 @@
    "local_id": 139,
    "statement": "SessionToken (0xA3) decryption was verified using the USB key with AES-128-CBC.",
    "topic": "sessiontoken",
-   "source_lines": "304",
+   "source_lines": "307",
    "confidence": "high",
    "signals": [
     "verified"
@@ -2350,7 +2350,7 @@
    "local_id": 140,
    "statement": "A CallQuality→VoiceQuality firmware bug was documented.",
    "topic": "audio-callquality-bug",
-   "source_lines": "304",
+   "source_lines": "307",
    "confidence": "high",
    "signals": [
     "firmware bug"
@@ -2363,7 +2363,7 @@
    "local_id": 141,
    "statement": "web_interface.md documents the 2025.10 firmware Boa web server, server.cgi API (MD5 signed), Vue.js frontend, and all configurable settings via HTTP.",
    "topic": "web-interface",
-   "source_lines": "304",
+   "source_lines": "307",
    "confidence": "high",
    "signals": null,
    "quote": "documenting 2025.10 firmware Boa web server, server.cgi API (MD5 signed), Vue.js frontend, all configurable settings via HTTP"
@@ -2374,7 +2374,7 @@
    "local_id": 142,
    "statement": "Change log 2026-01-18: added cpc200_ccpa_firmware_binaries source covering boot scripts, timeout constants, and a custom init hook.",
    "topic": "firmware-binaries-source",
-   "source_lines": "305",
+   "source_lines": "308",
    "confidence": "high",
    "signals": null,
    "quote": "Added cpc200_ccpa_firmware_binaries source: boot scripts, timeout constants, custom init hook"
@@ -2385,7 +2385,7 @@
    "local_id": 143,
    "statement": "Change log 2026-01-16: initial consolidation from 4 source directories.",
    "topic": "meta",
-   "source_lines": "306",
+   "source_lines": "309",
    "confidence": "high",
    "signals": null,
    "quote": "Initial consolidation from 4 source directories"
@@ -2396,7 +2396,7 @@
    "local_id": 144,
    "statement": "A CiAP2LocationEngine GPS gating mechanism (3-stage) and GNSSCapability bitmask were documented.",
    "topic": "gps-gating",
-   "source_lines": "301",
+   "source_lines": "304",
    "confidence": "high",
    "signals": [
     "3-stage"
@@ -2409,7 +2409,7 @@
    "local_id": 145,
    "statement": "audio_formats.md documents firmware audio format analysis for decodeType 1-7.",
    "topic": "audio-formats-doc",
-   "source_lines": "122",
+   "source_lines": "125",
    "confidence": "high",
    "signals": null,
    "quote": "audio_formats.md                # Firmware audio format analysis (decodeType 1-7)"

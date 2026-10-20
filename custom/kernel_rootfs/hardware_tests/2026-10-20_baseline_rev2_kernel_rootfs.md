@@ -3,7 +3,8 @@
 **Outcome:** the baseline **revision 2** (ccpa_custom `5e90368`) kernel, its recovery and its squashfs rootfs were
 written over revision 1 from revision 1's own recovery, and both came up: the revision-2 recovery, then the rootfs.
 Everything below was observed on the real unit. One bug found (`mfi-probe`, below); fixed in ccpa_custom `2796253`,
-not yet rebuilt or flashed. The radio test is recorded in `2026-10-20_baseline_rev2_radio_iw416.md`.
+not yet rebuilt or flashed. The radio test is recorded in `2026-10-20_baseline_rev2_radio_iw416.md`. (Later the same
+day the revision-3 rootfs replaced this one, with the fix in it and verified: `2026-10-20_baseline_rev3_rootfs_radio_iw416.md`.)
 
 Unit: the IW416 bench adapter of `../backups/20261019_IW416_ocbm_baseline_pre-livi/`, running baseline revision 1
 since `2026-10-20_baseline_kernel_write.md`. Map: the LIVI map (mtd0 uboot, mtd1 env, mtd2 kernel, mtd3 rootfs,
@@ -27,23 +28,27 @@ mtd4 customer, mtd5 bootstate). Times are not recorded.
 | host: `scp -O rootfs.img root@192.168.50.2:/tmp/` | OK; 2,560,000 B, sha256 `c424cd3c7be6febcebec449f3c5407a16cb21db058a201cee16f35d2e25c2f59`, checked on the unit |
 | unit: `flash-rootfs` | `mtd3` written and verified, bootstate cleared |
 | reboot | **rootfs booted**; rcS finished: NCM 192.168.50.2, ssh/scp/sftp, `mdev -d`, udhcpd, bootstate cleared |
-| persist | `persist load` found no baseline archive in `mtd4` (its prior contents are unknown: `mtd4` was never dumped), so the default password from the build's `ROOT_PASSWORD_HASH` applied; `ssh-up` then made a host key and saved the archive to `mtd4` (`../baseline/common/shared/ssh-up:61`), overwriting whatever was there. The first-boot save was not read back. *(Corrected 2026-10-20: this row said "`mtd4` empty", then that LIVI's customer data was overwritten.)* |
+| persist | `persist load` found no baseline archive in `mtd4` (its prior contents are unknown: `mtd4` was never dumped), so the default password from the build's `ROOT_PASSWORD_HASH` applied; `ssh-up` then made a host key and saved the archive to `mtd4` (`../baseline/common/shared/ssh-up:61`), overwriting whatever was there. The first-boot save was not read back here; it was on the later revision-3 boot (`persist: loaded from mtd4`, `2026-10-20_baseline_rev3_rootfs_radio_iw416.md`). *(Corrected 2026-10-20: this row said "`mtd4` empty", then that LIVI's customer data was overwritten.)* |
 | checks | `sftp` ls OK; BusyBox v1.38.0, 410 applets; MemAvailable ~114 MB; `/dev/i2c-0`, `/dev/i2c-1`; LEDs `blue` and `red` present; `radio status` reports the radios off |
 
 ## Found
 
 - `mfi-probe`: `flock: unrecognized option: w`. BusyBox 1.38.0 `flock` takes `-s -x -u -n` and `-c`, no `-w`, so the
   probe fails before any I2C read. Fixed in ccpa_custom `2796253` (poll `flock -n`, 50 x 200 ms, same message on
-  timeout). Needs a rootfs rebuild and `flash-rootfs`; **not yet rebuilt or flashed**. An audit of every on-unit script
+  timeout). Needs a rootfs rebuild and `flash-rootfs`; **not yet rebuilt or flashed** [2026-10-20: rebuilt in revision 3
+  (B13), flashed, and VERIFIED: DeviceVersion 0x03, certificate length 945 B, `2026-10-20_baseline_rev3_rootfs_radio_iw416.md`]. An audit of every on-unit script
   of the baseline against the full and recovery BusyBox configs found no other unsupported applet option.
 
 ## NOT yet tested
 
 USB stick mount (and `mdev` auto-mount, `usb-update`), key-only SSH login and a saved key or host key read back
 across a reboot, LED behaviours (`led ...`), `mfi-probe` after the fix, the MACs. (`radio up`/`radio down` have
-since run: `2026-10-20_baseline_rev2_radio_iw416.md`.)
+since run: `2026-10-20_baseline_rev2_radio_iw416.md`; `mfi-probe` after the fix and the archive read-back since ran on
+revision 3: `2026-10-20_baseline_rev3_rootfs_radio_iw416.md`.)
 
 ## State of the unit after this run
+
+(Superseded 2026-10-20: the rootfs is now revision 3, kernel and recovery unchanged, `2026-10-20_baseline_rev3_rootfs_radio_iw416.md`.)
 
 Baseline revision 2 kernel + recovery (`mtd2`; its head converted by U-Boot, so `mtd2` no longer equals `f9651725…`
 [INFERRED from the revision-1 result above]) and revision 2 rootfs (first 2,560,000 B of `mtd3` = `c424cd3c…`). `mtd4` (customer)

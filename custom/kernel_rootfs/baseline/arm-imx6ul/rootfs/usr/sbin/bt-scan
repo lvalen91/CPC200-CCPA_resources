@@ -1,0 +1,129 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# bt-scan [-i hciN] [-t SECONDS] [-l|-b] [-r]: Bluetooth devices around, without bluetoothd or D-Bus.
+#   btmgmt find (kernel management socket; BR/EDR and LE interleaved, -l LE only, -b BR/EDR only),
+#   bounded by -t SECONDS (default 15), one line per device:  ADDRESS  TYPE  RSSI  NAME
+#   Without btmgmt: hcitool scan (BR/EDR inquiry) or, with -l, hcitool lescan, under the same bound.
+#   -r   the tool's own output instead
+# The radios are OFF at boot: run `radio up` first (on a kernel image with the chip's Bluetooth DT node);
+# without an HCI device this says so. The controller must be UP (radio up / hciup run HCIDEVUP).
+# LE (B18, 2026-10-20, IW416 unit): after `radio up` the controller's settings are "powered br/edr", LE
+#   off, and the kernel REJECTS the interleaved and the LE-only find (status 0x0b). Unless -b, bt-scan
+#   reads the settings (btmgmt info) and, when LE is off, enables it (btmgmt le on; it stays on until
+#   `radio down`). A controller without LE, or an LE that does not come on, scans BR/EDR only (-l: exit 1).
+#   An interleaved find that is still refused (0x0b Rejected, 0x0c Not Supported) is retried BR/EDR only.
+#   Every run says which mode ran. Exit 1 when discovery did not start.
+# Test hooks (host self-test only): RADIO_SYS, RADIO_LIB.
+. "${RADIO_LIB:-/lib/baseline}/radio-lib.sh"
+say() { echo "bt-scan: $*"; }
+usage() { echo "usage: bt-scan [-i hciN] [-t SECONDS] [-l|-b] [-r]" >&2; exit 2; }
+HCI=
+T=15
+TYPE=
+RAW=
+while [ $# -gt 0 ]; do
+    case $1 in
+        -i) [ $# -ge 2 ] || usage; HCI=$2; shift 2 ;;
+        -t) [ $# -ge 2 ] || usage; T=$2; shift 2 ;;
+        -l) TYPE=-l; shift ;;
+        -b) TYPE=-b; shift ;;
+        -r) RAW=1; shift ;;
+        *) usage ;;
+    esac
+done
+case $T in '' | *[!0-9]*) usage ;; esac
+[ "$T" -ge 1 ] && [ "$T" -le 300 ] || { say "-t takes 1..300 seconds"; exit 2; }
+if [ -z "$HCI" ]; then
+    for h in $(hcis); do HCI=$h; break; done
+    [ -n "$HCI" ] || { say "no Bluetooth controller (no hciN); $(radio_off_hint)"; exit 1; }
+elif [ ! -e "$SYS/class/bluetooth/$HCI" ]; then
+    say "no $HCI; $(radio_off_hint)"
+    exit 1
+fi
+case $HCI in hci[0-9]*) IDX=${HCI#hci} ;; *) say "-i takes hciN"; exit 2 ;; esac
+if command -v hciup > /dev/null 2>&1; then
+    case $(hciup -i "$HCI" 2>&1) in
+        *" UP"*) ;;
+        *) say "$HCI is down: 'radio up' (or 'hciup $HCI') brings it up"; exit 1 ;;
+    esac
+fi
+if command -v btmgmt > /dev/null 2>&1; then
+    mode() { case $1 in -l) echo "LE only" ;; -b) echo "BR/EDR only" ;; *) echo "BR/EDR and LE" ;; esac; }
+    # info: btmgmt info into INFO; settings current|supported: its settings tokens ("" when unknown)
+    info() { INFO=$(timeout 5 btmgmt --index "$IDX" info 2>/dev/null); }
+    settings() { printf '%s\n' "$INFO" | sed -n "s/^[[:space:]]*$1 settings: *//p" | sed 's/ *$//' | head -n 1; }
+    has_le() { case " $1 " in *" le "*) return 0 ;; esac; return 1; }
+    if [ "$TYPE" != -b ]; then
+        info
+        CUR=$(settings current)
+        SUP=$(settings supported)
+        if [ -n "$CUR" ] && has_le "$CUR"; then
+            :
+        elif [ -n "$SUP" ] && ! has_le "$SUP"; then
+            [ "$TYPE" = -l ] && { say "$HCI has no LE (supported: $SUP): no LE scan; -b scans BR/EDR"; exit 1; }
+            say "$HCI has no LE (supported: $SUP): BR/EDR only"
+            TYPE=-b
+        else
+            LEOUT=$(timeout 5 btmgmt --index "$IDX" le on 2>&1)
+            info
+            NOW=$(settings current)
+            if [ -n "$NOW" ] && has_le "$NOW"; then
+                say "$HCI: LE was off (settings: ${CUR:-unknown}); enabled it (btmgmt le on, on until 'radio down')"
+            elif [ -n "$NOW$CUR" ]; then
+                say "$HCI: LE is off and 'btmgmt le on' did not enable it ($(printf '%s\n' "$LEOUT" | head -n 1))"
+                [ "$TYPE" = -l ] && { say "no LE scan; -b scans BR/EDR"; exit 1; }
+                say "$HCI: BR/EDR only"
+                TYPE=-b
+            else
+                say "$HCI: settings unknown (btmgmt info gave none); tried 'btmgmt le on': $(printf '%s\n' "$LEOUT" | head -n 1)"
+            fi
+        fi
+    fi
+    # find TYPE: btmgmt find in that mode into OUT. btmgmt ends by itself when discovery stops (~10 s);
+    # --timeout and timeout bound it either way
+    find_in() {
+        say "$HCI: btmgmt find${1:+ $1} ($(mode "$1")), at most $T s"
+        OUT=$(timeout "$((T + 2))" btmgmt --index "$IDX" --timeout "$T" find $1 2>&1)
+    }
+    refused() { printf '%s\n' "$OUT" | sed -n 's/.*Unable to start discovery\. *\(status 0x0[bc].*\)/\1/p' | head -n 1; }
+    find_in "$TYPE"
+    WHY=$(refused)
+    if [ -n "$WHY" ] && [ -z "$TYPE" ]; then
+        say "$HCI: $(mode "") discovery refused ($WHY); retrying BR/EDR only"
+        [ -n "$RAW" ] && printf '%s\n' "$OUT"
+        TYPE=-b
+        find_in -b
+    fi
+    case $OUT in *"Unable to start discovery"*) RC=1 ;; *) RC=0 ;; esac
+    if [ -n "$RAW" ]; then printf '%s\n' "$OUT"; exit "$RC"; fi
+    printf '%s\n' "$OUT" | awk '
+        / dev_found: / {
+            for (i = 1; i <= NF; i++) {
+                if ($i == "dev_found:") a = $(i + 1)
+                if ($i == "type") { t = $(i + 1); if ($(i + 2) == "Random" || $(i + 2) == "Public") t = t "-" $(i + 2) }
+                if ($i == "rssi") r = $(i + 1)
+            }
+            if (!(a in seen)) { order[++n] = a; seen[a] = 1 }
+            ty[a] = t; rs[a] = r
+            if (match($0, / name /)) nm[a] = substr($0, RSTART + 6)
+            last = a; next
+        }
+        /^name / && last != "" { nm[last] = substr($0, 6); next }
+        /Unable|Failed|failed|Invalid|not supported|rejected/ { print "bt-scan: btmgmt: " $0 }
+        END {
+            printf "%-17s %-11s %-5s %s\n", "ADDRESS", "TYPE", "RSSI", "NAME"
+            for (i = 1; i <= n; i++) { a = order[i]; printf "%-17s %-11s %-5s %s\n", a, ty[a], rs[a], (a in nm) ? nm[a] : "" }
+            if (!n) print "(no devices found)"
+        }'
+    [ "$RC" = 0 ] || say "$HCI: discovery did not start ($(mode "$TYPE"))"
+    exit "$RC"
+fi
+command -v hcitool > /dev/null 2>&1 || { say "neither btmgmt nor hcitool in this image"; exit 1; }
+if [ "$TYPE" = -l ]; then
+    say "$HCI: hcitool lescan, $T s"
+    timeout "$T" hcitool -i "$HCI" lescan --duplicates 2>&1 | awk 'NR == 1 || !seen[$1]++'
+else
+    say "$HCI: hcitool scan (BR/EDR inquiry), at most $T s"
+    timeout "$T" hcitool -i "$HCI" scan 2>&1
+fi
+exit 0

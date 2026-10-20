@@ -180,6 +180,126 @@ build_hciup() {
     assert_static "$UOUT/usr/sbin/hciup"
 }
 
+# ----------------------------------------------------------------- radio tools (RADIO_TOOLS=1)
+# Libraries only these tools use go to their own prefix, never into the musl sysroot.
+RADIO_SYSROOT=${UBUILD:-}/radio-sysroot
+
+build_libnl() {
+    _s=$UBUILD/libnl-$LIBNL_VER
+    note "libnl $LIBNL_VER, static libraries only (libnl-3 + libnl-genl-3 for iw and wpa_supplicant) -> $RADIO_SYSROOT"
+    untar "$SRC/libnl-$LIBNL_VER.tar.gz" "$_s"
+    set -- --host="$MUSL_TARGET" --prefix="$RADIO_SYSROOT" --disable-shared --enable-static --enable-cli=no --disable-debug
+    cfg_require "$_s/configure" "$@"
+    xsh "cd '$_s' && ./configure $* CC='$TARGET_CC' > '$UBUILD/libnl.log' 2>&1 &&
+         make -j$JOBS >> '$UBUILD/libnl.log' 2>&1 && make install >> '$UBUILD/libnl.log' 2>&1"
+}
+
+build_iw() {
+    _s=$UBUILD/iw-$IW_VER
+    note "iw $IW_VER, static (libnl $LIBNL_VER) -> $UOUT/usr/sbin/iw"
+    untar "$SRC/iw-$IW_VER.tar.xz" "$_s"
+    # iw's Makefile asks pkg-config for libnl in $(shell ...): environment, not make variables. CFLAGS and
+    # LDFLAGS through the environment too, so its own CFLAGS += lines still apply.
+    xsh "cd '$_s' && PKG_CONFIG_LIBDIR='$RADIO_SYSROOT/lib/pkgconfig' PKG_CONFIG_PATH= CFLAGS='-Os' LDFLAGS=-static \
+         make -j$JOBS CC='$TARGET_CC' > '$UBUILD/iw.log' 2>&1"
+    x mkdir -p "$UOUT/usr/sbin"
+    x "${CROSS_COMPILE}strip" -o "$UOUT/usr/sbin/iw" "$_s/iw"
+    assert_static "$UOUT/usr/sbin/iw"
+}
+
+# wpa_supplicant + wpa_cli + wpa_passphrase: station only, WPA2-PSK, internal crypto, nl80211, the UNIX
+# control socket; common/wpa_supplicant/wpa_supplicant.config says what is in and why WPA3 is not.
+build_wpa_supplicant() {
+    _s=$UBUILD/wpa_supplicant-$WPA_SUPPLICANT_VER
+    note "wpa_supplicant $WPA_SUPPLICANT_VER (wpa_supplicant wpa_cli wpa_passphrase), static, nl80211, internal crypto"
+    untar "$SRC/wpa_supplicant-$WPA_SUPPLICANT_VER.tar.gz" "$_s"
+    x cp "$HERE/common/wpa_supplicant/wpa_supplicant.config" "$_s/wpa_supplicant/.config"
+    xsh "printf '%s\\n' 'LIBS += -L$RADIO_SYSROOT/lib' >> '$_s/wpa_supplicant/.config'"
+    # CFLAGS/LDFLAGS/EXTRALIBS from the environment: on the make command line they would replace the
+    # Makefile's own CFLAGS += -DCONFIG_... lines. EXTRALIBS repeats -lnl-3 after -lnl-genl-3 (static
+    # link order; the Makefile lists -lnl-3 first).
+    xsh "cd '$_s/wpa_supplicant' && CFLAGS='-MMD -Os -Wall' LDFLAGS=-static EXTRALIBS='-lnl-3' \
+         make -j$JOBS CC='$TARGET_CC' LIBNL_INC='$RADIO_SYSROOT/include/libnl3' V=1 \
+         wpa_supplicant wpa_cli wpa_passphrase > '$UBUILD/wpa_supplicant.log' 2>&1"
+    x mkdir -p "$UOUT/usr/sbin"
+    for _b in wpa_supplicant wpa_cli wpa_passphrase; do
+        x "${CROSS_COMPILE}strip" -o "$UOUT/usr/sbin/$_b" "$_s/wpa_supplicant/$_b"
+    done
+    assert_static "$UOUT/usr/sbin/wpa_supplicant" "$UOUT/usr/sbin/wpa_cli" "$UOUT/usr/sbin/wpa_passphrase"
+    # The configuration that was built (no SAE, no D-Bus) is part of the record.
+    xsh "grep -q -- '-DCONFIG_DRIVER_NL80211' '$UBUILD/wpa_supplicant.log' && ! grep -q -- '-DCONFIG_CTRL_IFACE_DBUS' '$UBUILD/wpa_supplicant.log'" \
+        || die "wpa_supplicant was not built as configured (nl80211 on, D-Bus off): $UBUILD/wpa_supplicant.log"
+}
+
+# ncurses: only libtinfo (termcap/terminfo functions readline needs), no terminfo database on the unit:
+# the entries for linux, vt100, xterm, xterm-256color and screen are compiled in (--with-fallbacks; the
+# build host's tic/infocmp generate them). Any other TERM gets readline's dumb-terminal behaviour.
+build_ncurses() {
+    _s=$UBUILD/ncurses-$NCURSES_VER
+    note "ncurses $NCURSES_VER libtinfo, static, built-in terminal entries (for readline -> btmgmt) -> $RADIO_SYSROOT"
+    untar "$SRC/ncurses-$NCURSES_VER.tar.gz" "$_s"
+    set -- --host="$MUSL_TARGET" --prefix="$RADIO_SYSROOT" --with-build-cc=gcc --without-shared --with-normal \
+        --with-termlib --disable-widec --without-cxx --without-cxx-binding --without-ada --without-progs \
+        --without-tests --without-manpages --disable-database --with-fallbacks=linux,vt100,xterm,xterm-256color,screen
+    cfg_require "$_s/configure" "$@"
+    xsh "cd '$_s' && ./configure $* CC='$TARGET_CC' > '$UBUILD/ncurses.log' 2>&1 &&
+         make -j$JOBS libs >> '$UBUILD/ncurses.log' 2>&1 && make install.libs >> '$UBUILD/ncurses.log' 2>&1"
+}
+
+# readline_patch_file NNN: where fetch puts upstream patch NNN, relative to $SRC (readline-8.3-patches/readline83-NNN).
+readline_patch_file() {
+    echo "readline-$READLINE_VER-patches/readline$(echo "$READLINE_VER" | tr -d .)-$1"
+}
+
+build_readline() {
+    _s=$UBUILD/readline-$READLINE_VER
+    note "readline $READLINE_VER + upstream patches, static (for btmgmt's shell) -> $RADIO_SYSROOT"
+    untar "$SRC/readline-$READLINE_VER.tar.gz" "$_s"
+    # shellcheck disable=SC2086
+    set -- $READLINE_PATCHES
+    while [ $# -ge 2 ]; do
+        xsh "cd '$_s' && patch -p0 -s < '$SRC/$(readline_patch_file "$1")'" || die "readline patch $1 does not apply"
+        shift 2
+    done
+    set -- --host="$MUSL_TARGET" --prefix="$RADIO_SYSROOT" --disable-shared --enable-static
+    cfg_require "$_s/configure" "$@"
+    xsh "cd '$_s' && ./configure $* CC='$TARGET_CC' > '$UBUILD/readline.log' 2>&1 &&
+         make -j$JOBS static >> '$UBUILD/readline.log' 2>&1 && make install-static >> '$UBUILD/readline.log' 2>&1"
+}
+
+# BlueZ: ONLY btmgmt (kernel management socket), hciconfig and hcitool (deprecated, raw HCI): no
+# bluetoothd, no D-Bus, no GLib on the unit. configure requires GLib and D-Bus unconditionally
+# (PKG_CHECK_MODULES in configure.ac), although these three tools use neither: the *_CFLAGS/*_LIBS
+# variables satisfy the check, and their values are sentinels, so a GLib or D-Bus header or library
+# reaching a build fails it instead of being linked. btmgmt's Makefile rule links BlueZ's GLib mainloop
+# (src/libshared-glib.la); it is linked here against BlueZ's own non-GLib mainloop (src/libshared-mainloop.la,
+# the one btmon and btattach use) instead. No source file is changed.
+build_bluez_tools() {
+    _s=$UBUILD/bluez-$BLUEZ_VER
+    note "BlueZ $BLUEZ_VER btmgmt + hciconfig + hcitool, static, without GLib/D-Bus/bluetoothd -> $UOUT/usr/bin"
+    untar "$SRC/bluez-$BLUEZ_VER.tar.xz" "$_s"
+    set -- --host="$MUSL_TARGET" --prefix=/usr --disable-shared --enable-static --enable-deprecated \
+        --disable-obex --disable-udev --disable-cups --disable-systemd --disable-manpages --disable-datafiles \
+        --disable-monitor --with-dbusconfdir=/nonexistent --with-dbussystembusdir=/nonexistent \
+        --with-dbussessionbusdir=/nonexistent
+    cfg_require "$_s/configure" "$@"
+    _ml='lib/libbluetooth-internal.la src/libshared-mainloop.la'
+    xsh "cd '$_s' && GLIB_CFLAGS='-DBASELINE_NO_GLIB' GLIB_LIBS='-lbaseline-no-glib' \
+         DBUS_CFLAGS='-DBASELINE_NO_DBUS' DBUS_LIBS='-lbaseline-no-dbus' \
+         ./configure $* CC='$TARGET_CC' CPPFLAGS='-I$RADIO_SYSROOT/include' LDFLAGS='-L$RADIO_SYSROOT/lib' \
+         > '$UBUILD/bluez.log' 2>&1 &&
+         make -j$JOBS LDFLAGS='-L$RADIO_SYSROOT/lib -all-static' \
+             tools_btmgmt_LDADD='$_ml -lreadline -ltinfo' tools_btmgmt_DEPENDENCIES='$_ml' \
+             tools/btmgmt tools/hciconfig tools/hcitool >> '$UBUILD/bluez.log' 2>&1"
+    xsh "! grep -E -- '-lbaseline-no-(glib|dbus)|glib\\.h|dbus/dbus\\.h' '$UBUILD/bluez.log'" \
+        || die "a BlueZ tool reached for GLib or D-Bus: $UBUILD/bluez.log"
+    x mkdir -p "$UOUT/usr/bin"
+    for _b in btmgmt hciconfig hcitool; do
+        x "${CROSS_COMPILE}strip" -o "$UOUT/usr/bin/$_b" "$_s/tools/$_b"
+    done
+    assert_static "$UOUT/usr/bin/btmgmt" "$UOUT/usr/bin/hciconfig" "$UOUT/usr/bin/hcitool"
+}
+
 build_mtd_utils() {
     _s=$UBUILD/mtd-utils-$MTD_UTILS_VER
     note "mtd-utils $MTD_UTILS_VER flash_erase only, static (BusyBox has flash_eraseall, not flash_erase)"

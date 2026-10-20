@@ -1,0 +1,59 @@
+# 2026-10-20 — baseline revision 3 rootfs on the IW416 unit: install, boot, radio tools, MFi read
+
+**Outcome:** the baseline **revision 3** rootfs (ccpa_custom `5cb9008`) was written over revision 2 from the
+recovery and booted; the revision-2 kernel stayed (revision 3 is rootfs-only: kernel config unchanged, all 41 modules
+byte-identical, `../baseline/README.md` §7.0). On it, `radio up` loaded the IW416 drivers with no `Unknown symbol`
+noise, `wifi-scan` listed networks on both bands, Bluetooth discovery worked once LE was switched on, and `mfi-probe`
+read the MFi chip. Observed on the unit, 2026-10-20. One finding: `bt-scan`'s default find is rejected because the
+controller comes up with LE off (fixed in the tree afterwards, B18, not in an image).
+
+Unit: the IW416 bench adapter (`../backups/20261019_IW416_ocbm_baseline_pre-livi/`). Kernel: revision 2's `-iw416`
+image (`2d43437ba38ad19bc94313cf576e2b95b91bbb91e28094498cdaa99c2c345c17`, unchanged). Rootfs written:
+`rootfs.img` 3,506,176 B, sha256 `98fa6312a53d9f19f4a3282a93bddee5e01e2b0971d75bbc9da361b35a9273d7`. The previous
+state of the unit is in `2026-10-20_baseline_rev2_kernel_rootfs.md` and `2026-10-20_baseline_rev2_radio_iw416.md`.
+Scripts: `../baseline/arm-imx6ul/rootfs/usr/sbin/` (`radio`, `wifi-scan`, `bt-scan`, `mfi-probe`). No network name,
+BSSID or Bluetooth address is recorded here.
+
+## Install (`../baseline/README.md` §5 step 6)
+
+| Step | Result |
+|---|---|
+| From the running revision-2 rootfs: `reboot-recovery` | recovery up in **~30 s**; `/etc/baseline/recovery` present (exists only in recovery), `/proc/cmdline` with `panic=10` |
+| `scp -O rootfs.img` into recovery's `/tmp` | sha256 checked on the unit: the value above |
+| `flash-rootfs /tmp/rootfs.img <sha256>` under `setsid` | rc=0, "wrote and verified mtd3"; bootstate cleared |
+| `reboot` | **revision-3 rootfs booted** |
+
+## Observed on the revision-3 rootfs
+
+| Item | Result |
+|---|---|
+| rcS persist | `persist: loaded from mtd4`: the archive revision 2's first boot saved to the customer MTD survived a reboot (save and load **VERIFIED**; whether the host key in it was reused was not checked separately); `persist: root password = build default` |
+| rcS rest | NCM and SSH up; bootstate cleared |
+| New tools present | `iw`, `wpa_supplicant`, `wpa_cli`, `btmgmt`, `hciconfig`, `hcitool`, `wifi-connect`, `wifi-scan`, `bt-scan`, `mfi-probe`, `radio` |
+| `radio up` | **0** `Unknown symbol` lines in `dmesg` (B10, dependency-ordered `insmod`); Wi-Fi line "mlan0 administratively up, no carrier (operstate down)" (B11 wording); `hci0` UP |
+| `wifi-scan` | many networks listed, on 2.4 GHz and 5 GHz |
+| `mfi-probe` | the MFi chip at 0x11 on `/dev/i2c-1`: DeviceVersion (reg 0x00) = 0x03, certificate length (reg 0x30) = 945 B. The revision-2 failure (`flock: unrecognized option: w`) is gone (B13, `flock -n` poll) |
+| `bt-scan` (revision-3 script) | `btmgmt find` → `Unable to start discovery. status 0x0b (Rejected)`. The controller's settings after `radio up`: `powered br/edr` only, LE not enabled |
+| `btmgmt le on`, then `btmgmt find` | LE devices found |
+| `btmgmt find -b` (BR/EDR only) | discovery started and stopped cleanly; no devices in 14 s |
+| `radio down` | back to `lo` and `usb0` only; `reg_wlan` disabled |
+
+Status by step: rootfs-only install from recovery, `reboot-recovery` from the rootfs, persist archive save and load
+across reboots, dependency-ordered module loads (B10), the interface wording (B11), Wi-Fi scan, Bluetooth discovery
+**after `btmgmt le on`**, MFi chip read (DeviceVersion, certificate length), `radio down` — **VERIFIED on hardware**.
+
+## Found
+
+1. **`bt-scan`'s default find is rejected.** `radio up` leaves the controller "powered br/edr" (LE off), and the
+   kernel refuses an interleaved (BR/EDR + LE) find then: status 0x0b. Fixed in ccpa_custom after revision 3 (B18,
+   `../baseline/README.md` §7.0 and §2.5): unless `-b`, `bt-scan` reads `btmgmt info`, runs `btmgmt le on` when LE is
+   off (BR/EDR only when the controller has no LE or LE does not come on; `-l` then exits 1), retries a refused
+   interleaved find with `-b`, and names the mode that ran. Host self-test only; **needs a rootfs rebuild and
+   `flash-rootfs`**. Until then on the unit: `btmgmt le on` before `bt-scan`, or `bt-scan -b`.
+
+## Not tested
+
+Wi-Fi association (`wifi-connect`) and DHCP over Wi-Fi; Bluetooth pairing or traffic; AP mode
+(`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks (no `/dev/sd*`: no stick plugged); LED behaviours; key-only SSH
+login; host-key reuse from the persist archive; the 1 s UART-Enter window into recovery; B18's `bt-scan` on the unit;
+RTL8822CS/BS (no such unit).

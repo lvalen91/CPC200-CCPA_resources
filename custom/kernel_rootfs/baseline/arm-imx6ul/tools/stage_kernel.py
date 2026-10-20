@@ -46,6 +46,7 @@ KERNEL = 0x40000
 HEAD = 3 * ERASE
 ENV_SIZE = 0x10000
 ENV_VARS_END = 0x800
+ENV_CRC2_AT = ENV_SIZE - 4  # second CRC32 of the update env, over env[0:0xFFFC]
 ZIMAGE_MAGIC = 0x016F2818
 FDT_MAGIC = 0xD00DFEED
 LOAD = 0x80800000
@@ -267,6 +268,12 @@ def read_env(block, key):
         raise StageError("update environment is %#x bytes, not %#x" % (len(env), ENV_SIZE))
     if zlib.crc32(env[4:ENV_VARS_END]) != struct.unpack("<I", env[:4])[0]:
         raise StageError("update environment fails its CRC")
+    # The second CRC32 (little-endian, at 0xFFFC) covers env[0:0xFFFC]: the first CRC, the variables AND
+    # the vendor FDT at 0x800 that norboot hands every kernel (kernel_encryption.md; it matched on the
+    # three units' dumps read so far). Hard check since revision 3 (B12).
+    if zlib.crc32(env[:ENV_CRC2_AT]) != struct.unpack("<I", env[ENV_CRC2_AT:])[0]:
+        raise StageError("update environment fails its second CRC (over env[0:%#x], stored at %#x)"
+                         % (ENV_CRC2_AT, ENV_CRC2_AT))
     return env
 
 
@@ -390,7 +397,7 @@ def plan(mtd0, cur, z, fuses, out=sys.stdout):
         raise StageError("kernel dump is %#x bytes, not %#x" % (len(cur), KERNEL_PART))
     key = UpgKey(*fuses)
     env = read_env(mtd0[UPDATE_BLOCK:UPDATE_BLOCK + ERASE], key)
-    p("update env: decrypted with this unit's key, gzip OK, CRC OK (%d variables)" % len(env_vars(env)))
+    p("update env: decrypted with this unit's key, gzip OK, both CRCs OK (%d variables)" % len(env_vars(env)))
     lay = layout(env, len(cur))
     so = lay["staging"] - KERNEL
     p("layout: kernel_len=%#x staging=%#x (partition offset %#x) convert pairs=%s"
@@ -548,7 +555,9 @@ def self_test():
         text = "\0".join(vars_).encode()
         env[4:4 + len(text)] = text
         env[0x800:0x804] = struct.pack(">I", 0xD00DFEED)
+        env[0x804:ENV_CRC2_AT] = b"\xff" * (ENV_CRC2_AT - 0x804)
         env[:4] = struct.pack("<I", zlib.crc32(bytes(env[4:ENV_VARS_END])))
+        env[ENV_CRC2_AT:] = struct.pack("<I", zlib.crc32(bytes(env[:ENV_CRC2_AT])))
         return bytes(env)
 
     def update_block(env, k_):
@@ -587,6 +596,20 @@ def self_test():
     bad = bytearray(venv)
     bad[0x10] ^= 1
     check("corrupted env fails its CRC", raises(lambda: read_env(update_block(bytes(bad), key), key)))
+    # B12: a byte outside the first CRC's range (the FDT area) or a wrong stored second CRC is refused,
+    # with the first CRC still right
+    for at, what in ((0x9000, "FDT area"), (ENV_CRC2_AT, "stored second CRC"), (0x800, "FDT magic")):
+        bad2 = bytearray(venv)
+        bad2[at] ^= 0x40
+        check("env with a bad byte in the %s fails the second CRC (first CRC intact)" % what,
+              zlib.crc32(bytes(bad2[4:ENV_VARS_END])) == struct.unpack("<I", bytes(bad2[:4]))[0]
+              and raises(lambda: read_env(update_block(bytes(bad2), key), key)))
+    try:
+        read_env(update_block(bytes(bad2), key), key)
+        msg2 = ""
+    except StageError as e:
+        msg2 = str(e)
+    check("the refusal names the second CRC", "second CRC" in msg2)
     other = UpgKey(FUSES[0], FUSES[1], FUSES[2], 2)
     check("wrong key is refused", raises(lambda: read_env(update_block(venv, key), other)))
     lay = layout(venv, KERNEL_PART)
