@@ -5,7 +5,7 @@ recovery and booted; the revision-2 kernel stayed (revision 3 is rootfs-only: ke
 byte-identical, `../baseline/README.md` §7.0). On it, `radio up` loaded the IW416 drivers with no `Unknown symbol`
 noise, `wifi-scan` listed networks on both bands, Bluetooth discovery worked once LE was switched on, and `mfi-probe`
 read the MFi chip. Observed on the unit, 2026-10-20. One finding: `bt-scan`'s default find is rejected because the
-controller comes up with LE off (fixed in the tree afterwards, B18, not in an image).
+controller comes up with LE off (fixed in the tree afterwards, B18; superseded by revision 4, which carries the fix and is verified, see "Revision 4 follow-up").
 
 Unit: the IW416 bench adapter (`../backups/20261019_IW416_ocbm_baseline_pre-livi/`). Kernel: revision 2's `-iw416`
 image (`2d43437ba38ad19bc94313cf576e2b95b91bbb91e28094498cdaa99c2c345c17`, unchanged). Rootfs written:
@@ -48,12 +48,25 @@ across reboots, dependency-ordered module loads (B10), the interface wording (B1
    kernel refuses an interleaved (BR/EDR + LE) find then: status 0x0b. Fixed in ccpa_custom after revision 3 (B18,
    `../baseline/README.md` §7.0 and §2.5): unless `-b`, `bt-scan` reads `btmgmt info`, runs `btmgmt le on` when LE is
    off (BR/EDR only when the controller has no LE or LE does not come on; `-l` then exits 1), retries a refused
-   interleaved find with `-b`, and names the mode that ran. Host self-test only; **needs a rootfs rebuild and
-   `flash-rootfs`**. Until then on the unit: `btmgmt le on` before `bt-scan`, or `bt-scan -b`.
+   interleaved find with `-b`, and names the mode that ran. Host self-test only at the time; **superseded by revision 4** (rebuilt, flashed, verified on the unit: "Revision 4 follow-up"). The workaround while on revision 3 was `btmgmt le on` before `bt-scan`, or `bt-scan -b`.
 
 ## Not tested
 
 Wi-Fi association (`wifi-connect`) and DHCP over Wi-Fi; Bluetooth pairing or traffic; AP mode
 (`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks (no `/dev/sd*`: no stick plugged); LED behaviours; key-only SSH
-login; host-key reuse from the persist archive; the 1 s UART-Enter window into recovery; B18's `bt-scan` on the unit;
+login; host-key reuse from the persist archive; the 1 s UART-Enter window into recovery; (B18's `bt-scan`: superseded by revision 4, tested below);
 RTL8822CS/BS (no such unit).
+
+## Revision 4 follow-up (2026-10-20)
+
+Rootfs-only rebuild of the revision-3 sources at ccpa_custom `9dc14d8` (includes the B18 `bt-scan` fix): `rootfs.img`
+3,506,176 B (same size, 9,469,952 B free), sha256 `cbfd4d3943a1352ff2ef279f4800ed5efb2def933a2d1f884f425fd4705e513d`;
+the image's `usr/sbin/bt-scan` equals the tree file. Kernel not rebuilt or reflashed (kernel partition unchanged). This
+is the unit's current rootfs; the revision-3 sha above is its predecessor. Flashed from recovery (`reboot-recovery`,
+`scp -O` to `/tmp`, `flash-rootfs`: wrote and verified mtd3, bootstate cleared, rc=0), reboot: the unit came back on
+NCM with the new `/etc/baseline-release`.
+
+`radio up`, then `bt-scan`: "LE was off (settings: powered br/edr); enabled it (`btmgmt le on`, on until `radio
+down`)", then "`btmgmt find` (BR/EDR and LE), at most 15 s", then a device table with many LE devices (none recorded
+here). **B18 VERIFIED on hardware.** `radio down` clean; 0 `Unknown symbol` dmesg lines. Revision 3 to revision 4
+differs only by the `bt-scan` change (and the rootfs build stamp). Still untested: see "Not tested" above, minus B18.

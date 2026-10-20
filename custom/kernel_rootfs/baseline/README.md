@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `9dc14d8` (2026-10-20, revision 3 + the B18 `bt-scan` fix, not yet in an image; README with the revision-3 hardware result), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `754c876` (2026-10-20, revision 4 = revision 3 + the B18 `bt-scan` fix, in the image on the unit; README with the revision-3 and revision-4 hardware results; sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -43,19 +43,21 @@ daemon, no web UI. Built on the LIVI Link recipe
   `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`).
   (Updated 2026-10-20: this line said "Not flashed; nothing of revision 3 has run on hardware", and before
   revision 3 that the two fixes were in the tree only, not rebuilt.)
-- **This tree after revision 3** (not in an image): `bt-scan` turns LE on before `btmgmt find` and retries a
-  refused find BR/EDR-only (B18, §7.0). Needs a rootfs rebuild and `flash-rootfs`; the revision-3 image on the
-  unit has the old `bt-scan`, whose default find is refused there (`btmgmt le on` first works around it).
+- **Revision 4 (2026-10-20, §7.0a)**: a rootfs-only rebuild of the revision-3 sources at ccpa_custom `9dc14d8`;
+  the only change is `bt-scan` (B18: `btmgmt le on` before `btmgmt find`, BR/EDR-only retry of a refused find).
+  Kernel not rebuilt or reflashed. **Runs on the IW416 unit since 2026-10-20** (rootfs sha256 `cbfd4d39…513d`);
+  B18 VERIFIED on hardware. (Updated 2026-10-20: this bullet said the fix was "not in an image".)
 - **Radios on hardware (2026-10-20, IW416 only)**: revision 2: `radio up` powered `reg_wlan`, found SDIO
   0x02df:0x9159, loaded `mwifiex_sdio` (`phy0`, `mlan0` admin-up) and `btnxpuart` (`hci0` UP); `radio down`
   returned to radios off (§7.4). Revision 3 (§7.5): the same with **0 `Unknown symbol` lines** (B10) and the
   B11 wording; **`wifi-scan` VERIFIED** (2.4 and 5 GHz networks listed); **Bluetooth discovery VERIFIED after
   `btmgmt le on`** (LE devices found; the controller comes up "powered br/edr", LE off, and the default
   `btmgmt find` is rejected, status 0x0b: B18); **`mfi-probe` VERIFIED** (DeviceVersion 0x03, certificate
-  length 945 B on `/dev/i2c-1` at 0x11).
+  length 945 B on `/dev/i2c-1` at 0x11). Revision 4 (§7.0a): `bt-scan` with the B18 fix VERIFIED (LE enabled by
+  the script, devices found).
 - **UNVERIFIED on hardware**: Wi-Fi association (`wifi-connect`, WPA2-PSK and open) and DHCP over Wi-Fi;
   any Bluetooth pairing or traffic; AP mode (`MWIFIEX_DRIVER_MODE`; no `hostapd`); WPA3 (not built, §2.5);
-  `hcitool scan`; B18's `bt-scan` (not in an image); RTL8822CS/BS (no such unit); USB sticks (mount, mdev
+  `hcitool scan`; RTL8822CS/BS (no such unit); USB sticks (mount, mdev
   auto-mount, `usb-update`) and the USB host port; LED behaviours; key-only SSH login and a host key reused
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
@@ -395,7 +397,7 @@ there is no wireless interface or HCI device.
   joinable here), SSID (`<hidden>`); `scan dump` (the last results) when the kernel is busy; `-a` raw.
 - `bt-scan [-i hciN] [-t S] [-l|-b] [-r]`: `btmgmt --index N --timeout S find` under `timeout`, one line per
   device (address, type, RSSI, name); `hcitool scan` / `lescan` when there is no btmgmt; a DOWN controller
-  is refused with the `radio up` hint. **LE (B18, after revision 3, not in an image):** on the IW416 unit the
+  is refused with the `radio up` hint. **LE (B18, in revision 4, hardware-verified §7.0a):** on the IW416 unit the
   controller comes up from `radio up` with settings "powered br/edr" (LE off), and the kernel rejects the
   default (interleaved) find: `Unable to start discovery. status 0x0b (Rejected)`; after `btmgmt le on` the
   same find found LE devices, and `find -b` ran cleanly (2026-10-20, revision-3 image, §7.5). So unless `-b`,
@@ -612,6 +614,21 @@ libblkid the recipe does not build (§7).
 
 ## 7. OPEN ITEMS / MEASUREMENTS / VERIFICATION
 
+### 7.0a Revision 4 (2026-10-20): rootfs-only rebuild with the B18 `bt-scan` fix, flashed and verified
+
+Rev 4 = rev 3 sources at ccpa_custom `9dc14d8`; the only difference is `bt-scan` (and the rootfs build stamp).
+Built in the `ccpa-build` VM Debian chroot, `build.sh rootfs` only (`TOP=/work/build3`); the kernel was not
+rebuilt or reflashed (the kernel partition keeps revision 2's image). `rootfs.img` 3,506,176 B (same size as
+revision 3; 9,469,952 B free), sha256 `cbfd4d3943a1352ff2ef279f4800ed5efb2def933a2d1f884f425fd4705e513d`; the image's
+`usr/sbin/bt-scan` equals the tree file. Copy: `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev4/default/rootfs.img`.
+Flashed on the IW416 unit from recovery (`reboot-recovery`, `scp -O` to `/tmp`, `flash-rootfs`: wrote and
+verified mtd3, bootstate cleared, rc=0; reboot): the unit returned at its NCM address with the new
+`/etc/baseline-release`. Hardware: `radio up` then `bt-scan` reported that LE was off (settings "powered
+br/edr") and enabled it (`btmgmt le on`, on until `radio down`), then ran `btmgmt find` (BR/EDR and LE, at most
+15 s) and printed a device table (many LE devices; none recorded here): **B18 VERIFIED on hardware**.
+`radio down` clean, 0 `Unknown symbol` dmesg lines. Record: CPC200-CCPA_resources
+`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md` ("Revision 4 follow-up").
+
 ### 7.0 Revision 3 (2026-10-20): measured, tested, changed
 
 Built from a clean `$TOP` (`/work/build3` in the Debian chroot of the `ccpa-build` VM; the older pinned
@@ -699,12 +716,12 @@ CHANGES in revision 3:
 | B14 | `radio`'s `driver_mode` on `mwifiex` was in the tree only | in the image | image content; selftest |
 | B15-B17 | no Wi-Fi/BT tools | iw, wpa_supplicant/wpa_cli/wpa_passphrase, btmgmt, hciconfig, hcitool; `wifi-connect`, `wifi-scan`, `bt-scan`; `/etc/resolv.conf` → `/run/resolv.conf` | selftest section 8, ARM chroot, QEMU |
 
-AFTER revision 3 (in the tree, NOT in an image: needs a rootfs rebuild and `flash-rootfs`; the revision-3 image
-on the unit keeps the old `bt-scan`):
+AFTER revision 3 (in the revision-4 image, flashed on the unit 2026-10-20, §7.0a; the revision-3 image had the old
+`bt-scan`):
 
 | ID | Was | Now | Regression check |
 |---|---|---|---|
-| B18 | `bt-scan` ran `btmgmt find` as asked; on the IW416 unit (2026-10-20, §7.5) the controller is "powered br/edr" after `radio up` and the default find was rejected (`status 0x0b (Rejected)`) | unless `-b`: `btmgmt info`, then `btmgmt le on` when LE is off (unsupported or failed: BR/EDR only, `-l` exit 1); a refused interleaved find (0x0b/0x0c) is retried `-b`; each find names its mode; exit 1 when discovery did not start | selftest B17/B18 (stateful btmgmt stub following the kernel's rule: LE off enabled, LE already on, 0x0b retry, `-l` refused, no LE, `-b`): Debian chroot 123 checks PASS (helpers under dash), Alpine VM 79 PASS (BusyBox ash); shellcheck 0 errors, 87 warnings (unchanged); `dash -n` |
+| B18 | `bt-scan` ran `btmgmt find` as asked; on the IW416 unit (2026-10-20, §7.5) the controller is "powered br/edr" after `radio up` and the default find was rejected (`status 0x0b (Rejected)`) | unless `-b`: `btmgmt info`, then `btmgmt le on` when LE is off (unsupported or failed: BR/EDR only, `-l` exit 1); a refused interleaved find (0x0b/0x0c) is retried `-b`; each find names its mode; exit 1 when discovery did not start | selftest B17/B18 (stateful btmgmt stub following the kernel's rule: LE off enabled, LE already on, 0x0b retry, `-l` refused, no LE, `-b`): Debian chroot 123 checks PASS (helpers under dash), Alpine VM 79 PASS (BusyBox ash); shellcheck 0 errors, 87 warnings (unchanged); `dash -n`; **VERIFIED on hardware** 2026-10-20 (revision 4, §7.0a) |
 
 MEASURED 2026-10-20, revision 2 (clean build from an empty `$TOP` except the pinned tarballs, linux
 7.2.10 + patches 0001-0004, gcc 14.2.0 `arm-linux-gnueabihf-`, `RADIO_MODULES=1 RADIO_FW=1`:
@@ -861,8 +878,8 @@ proven there is in §7.4, revision 3 in §7.5; the rest stays here; revision 3 u
 - revision 3 on the IW416 unit (flashed 2026-10-20, §7.5). DONE there: `radio up` with 0 `Unknown symbol`
   lines (B10), the B11 wording, `wifi-scan`, Bluetooth discovery after `btmgmt le on`, `mfi-probe`, `radio
   down`. Still OPEN: `wifi-connect <ssid> <psk>` against a WPA2-PSK network (and an open one), the DHCP lease,
-  default route and DNS, `wifi-connect --stop`, `radio down` after it; `hcitool scan`; B18's `bt-scan` (needs
-  a rootfs rebuild and `flash-rootfs`: the revision-3 image's `bt-scan` gets the rejected default find);
+  default route and DNS, `wifi-connect --stop`, `radio down` after it; `hcitool scan`; (B18's `bt-scan`:
+  closed 2026-10-20, revision 4, §7.0a);
 - (Closed 2026-10-20, §7.5: `mfi-probe` on the revision-3 image read DeviceVersion 0x03 and certificate
   length 945 B; the revision-2 `flock -w` failure is gone with B13.)
 - revision 2 parts not yet exercised: the MACs, key-only SSH login and a host key reused across a reboot
@@ -940,10 +957,10 @@ kernel stays revision 2's `-iw416` (`2d43437b…`, §7.0):
 - `bt-scan` (the revision-3 script): `btmgmt find` gave `Unable to start discovery. status 0x0b (Rejected)`:
   the controller's settings after `radio up` are "powered br/edr", LE not enabled. `btmgmt le on`, then
   `btmgmt find`: LE devices found; `btmgmt find -b`: discovery started and stopped cleanly, no devices in
-  14 s. Bluetooth discovery VERIFIED after `btmgmt le on`; `bt-scan` fixed in the tree (B18, §7.0);
+  14 s. Bluetooth discovery VERIFIED after `btmgmt le on`; `bt-scan` fixed in revision 4 (B18, §7.0, §7.0a);
 - `radio down`: back to `lo` and `usb0` only, `reg_wlan` disabled.
 NOT yet tested: Wi-Fi association and DHCP, Bluetooth pairing, AP mode, USB sticks (no `/dev/sd*`, no stick
-plugged), LED behaviours, key-only SSH, the 1 s UART-Enter window, B18's `bt-scan`.
+plugged), LED behaviours, key-only SSH, the 1 s UART-Enter window. (B18's `bt-scan`: tested in revision 4, §7.0a.)
 
 VERIFIED by the 2026-10-20 builds and tests:
 - every Kconfig symbol of all fragments against 7.2.10 for the variants built (strict check passed, `RD_*`
