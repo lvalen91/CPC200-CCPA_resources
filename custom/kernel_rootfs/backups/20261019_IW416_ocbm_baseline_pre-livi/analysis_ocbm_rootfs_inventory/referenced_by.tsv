@@ -1,0 +1,628 @@
+path	bucket	referenced_by(file:line or binary(strings)) [name-match, over-inclusive]	reachable_from_inittab_rcS
+/$	UNKNOWN	UNREFERENCED	no
+/:	UNKNOWN	UNREFERENCED	no
+/?	UNKNOWN	UNREFERENCED	no
+/[	UNKNOWN	UNREFERENCED	no
+/b	UNKNOWN	UNREFERENCED	no
+/d	UNKNOWN	UNREFERENCED	no
+/g/etc/icon_256x256.pn	HEWEI-RESIDUE	UNREFERENCED	no
+/l	UNKNOWN	UNREFERENCED	no
+/t	UNKNOWN	UNREFERENCED	no
+/]#	UNKNOWN	UNREFERENCED	no
+/::	UNKNOWN	UNREFERENCED	no
+/h:	UNKNOWN	UNREFERENCED	no
+/j?	UNKNOWN	UNREFERENCED	no
+/nd	UNKNOWN	UNREFERENCED	no
+/Cj!	UNKNOWN	UNREFERENCED	no
+/~]#	UNKNOWN	UNREFERENCED	no
+/h::	UNKNOWN	UNREFERENCED	no
+/sh:	UNKNOWN	UNREFERENCED	no
+/lib/libresolv-2.20.so	KEEP-BASE	/lib/libnss_dns-2.20.so(strings); /usr/libexec/sftp-server(strings)	yes
+/lib/libatomic.so.1.1.0	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libc.so.6	KEEP-BASE	UNREFERENCED	no
+/lib/librt.so	UNKNOWN	UNREFERENCED	no
+/lib/librt.so.1	KEEP-BASE	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.inputmap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/source	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.softdep	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.seriomap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.alias	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.ofmap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.alias.bin	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.symbols	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.order	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.dep.bb	KEEP-BASE	/bin/busybox(strings)	yes
+/lib/modules/3.14.52+g94d07bb/modules.dep.bin	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.symbols.bin	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.dep	KEEP-BASE	/bin/busybox(strings)	yes
+/lib/modules/3.14.52+g94d07bb/modules.builtin	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/build	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.ieee1394map	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.usbmap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.pcimap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.ccwmap	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.builtin.bin	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.devname	UNKNOWN	UNREFERENCED	no
+/lib/modules/3.14.52+g94d07bb/modules.isapnpmap	UNKNOWN	UNREFERENCED	no
+/lib/libnss_dns.so	UNKNOWN	UNREFERENCED	no
+/lib/libnss_dns.so.2	UNKNOWN	UNREFERENCED	no
+/lib/libpthread.so.0	KEEP-BASE	UNREFERENCED	no
+/lib/firmware/nxp/txpower_iw416.bin	KEEP-RADIO	/lib/firmware/nxp/wifi_mod_para.conf:13; /lib/firmware/nxp/wifi_mod_para_p2psta.conf:13	yes
+/lib/firmware/nxp/sdioiw416_wlan_v0.bin	KEEP-RADIO	/lib/firmware/nxp/wifi_mod_para.conf:2; /lib/firmware/nxp/wifi_mod_para_p2psta.conf:2	yes
+/lib/firmware/nxp/iw416_ko.tar.gz	KEEP-RADIO	/script/attach_bluetooth.sh:10; /script/wlan_on.sh:7; /script/bt_on.sh:7	yes
+/lib/firmware/nxp/wifi_mod_para.conf	KEEP-RADIO	/script/wlan_on.sh:20	yes
+/lib/firmware/nxp/wifi_mod_para_p2psta.conf	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/firmware/nxp/WlanCalData_ext.conf	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/firmware/nxp/uartiw416_bt_v0.bin	KEEP-RADIO	/script/attach_bluetooth.sh:45	yes
+/lib/libstdc++.so.6	KEEP-BASE	UNREFERENCED	no
+/lib/libm.so.6	KEEP-BASE	UNREFERENCED	no
+/lib/libnss_compat-2.20.so	UNKNOWN	UNREFERENCED	no
+/lib/libm-2.20.so	KEEP-BASE	/lib/libstdc++.so.6.0.20(strings); /usr/lib/libdbus-1.so.3.2.0(strings); /usr/lib/libxml2.so.2.9.2(strings); /usr/lib/libnl-genl-3.so.200(strings)	yes
+/lib/libz.so	UNKNOWN	UNREFERENCED	no
+/lib/libnss_nis.so	UNKNOWN	UNREFERENCED	no
+/lib/libnss_nis.so.2	UNKNOWN	UNREFERENCED	no
+/lib/libutil-2.20.so	KEEP-BASE	/usr/libexec/sftp-server(strings)	yes
+/lib/libz.so.1	KEEP-BASE	UNREFERENCED	no
+/lib/libnss_dns-2.20.so	UNKNOWN	UNREFERENCED	no
+/lib/librt-2.20.so	KEEP-BASE	/usr/sbin/fw_loader_linux(strings)	yes
+/lib/libnss_files-2.20.so	KEEP-BASE	/lib/libc-2.20.so(strings); /lib/libnss_nis-2.20.so(strings)	yes
+/lib/libcrypt.so.1	KEEP-BASE	UNREFERENCED	no
+/lib/libcrypt-2.20.so	KEEP-BASE	/usr/libexec/sftp-server(strings)	yes
+/lib/ld-2.20.so	KEEP-BASE	/lib/libresolv-2.20.so(strings); /lib/libnss_compat-2.20.so(strings); /lib/libm-2.20.so(strings); /lib/libutil-2.20.so(strings)	yes
+/lib/libdl-2.20.so	KEEP-BASE	/lib/ld-2.20.so(strings); /usr/lib/libdbus-1.so.3.2.0(strings); /usr/lib/libxml2.so.2.9.2(strings); /usr/lib/libnl-genl-3.so.200(strings)	yes
+/lib/libgcc_s.so.1	KEEP-BASE	/lib/librt-2.20.so(strings); /lib/libpthread-2.20.so(strings); /lib/libstdc++.so.6.0.20(strings); /lib/libc-2.20.so(strings)	yes
+/lib/libcrypt.so	KEEP-BASE	UNREFERENCED	no
+/lib/libssp.so	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libssp.so.0	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libatomic.so	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libatomic.so.1	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libssp.so.0.0.0	HEWEI-RESIDUE	UNREFERENCED	no
+/lib/libpthread-2.20.so	KEEP-BASE	/lib/libatomic.so.1.1.0(strings); /lib/librt-2.20.so(strings); /lib/ld-2.20.so(strings); /usr/lib/libxml2.so.2.9.2(strings)	yes
+/lib/libdl.so	UNKNOWN	UNREFERENCED	no
+/lib/libdl.so.2	KEEP-BASE	UNREFERENCED	no
+/lib/libutil.so.1	KEEP-BASE	UNREFERENCED	no
+/lib/libstdc++.so.6.0.20	KEEP-BASE	/usr/sbin/set_wifi_mac(strings)	yes
+/lib/libnss_files.so.2	KEEP-BASE	UNREFERENCED	no
+/lib/libnss_compat.so	UNKNOWN	UNREFERENCED	no
+/lib/libnss_compat.so.2	UNKNOWN	UNREFERENCED	no
+/lib/libutil.so	KEEP-BASE	UNREFERENCED	no
+/lib/libnss_files.so	KEEP-BASE	UNREFERENCED	no
+/lib/ld-linux.so.3	KEEP-BASE	UNREFERENCED	no
+/lib/libc-2.20.so	KEEP-BASE	/lib/libresolv-2.20.so(strings); /lib/libatomic.so.1.1.0(strings); /lib/libnss_compat-2.20.so(strings); /lib/libm-2.20.so(strings)	yes
+/lib/libz.so.1.2.11	KEEP-BASE	/usr/libexec/sftp-server(strings)	yes
+/lib/libnss_nis-2.20.so	UNKNOWN	UNREFERENCED	no
+/lib/libnsl-2.20.so	UNKNOWN	/lib/libnss_compat-2.20.so(strings); /lib/libnss_nis-2.20.so(strings)	no
+/lib/libm.so	KEEP-BASE	UNREFERENCED	no
+/lib/libresolv.so	UNKNOWN	UNREFERENCED	no
+/lib/libresolv.so.2	KEEP-BASE	UNREFERENCED	no
+/lib/libnsl.so	UNKNOWN	UNREFERENCED	no
+/lib/libnsl.so.1	UNKNOWN	UNREFERENCED	no
+/etc/overcommit	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/passwd	KEEP-BASE	/lib/libnss_compat-2.20.so(strings); /lib/libnss_files-2.20.so(strings); /lib/libc-2.20.so(strings); /lib/libnss_nis-2.20.so(strings)	yes
+/etc/dbus-1/session.conf	UNKNOWN	UNREFERENCED	no
+/etc/dbus-1/system.conf	UNKNOWN	/etc/dbus-1/system.d/hfpd.conf:8; /etc/dbus-1/system.d/bluetooth.conf:8	no
+/etc/dbus-1/system.d/hfpd.conf	UNKNOWN	UNREFERENCED	no
+/etc/dbus-1/system.d/bluetooth.conf	UNKNOWN	UNREFERENCED	no
+/etc/passwd-	UNKNOWN	UNREFERENCED	no
+/etc/init.d/rcS	KEEP-OCBM	/etc/inittab:2; /etc/profile:5; /bin/busybox(strings); /script/run_supervisor.sh:12	yes
+/etc/init.d/._rcS	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/init.d/._S01_ensure_access	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/init.d/._webcmd	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/hosts	KEEP-BASE	/lib/libresolv-2.20.so(strings); /lib/libnss_files-2.20.so(strings); /lib/libc-2.20.so(strings); /lib/libnss_nis-2.20.so(strings)	yes
+/etc/inittab	KEEP-OCBM	/bin/busybox(strings); /script/run_ocbmd.sh:2; /script/session_supervisor.sh:334; /script/run_supervisor.sh:2	yes
+/etc/group	KEEP-BASE	/lib/libresolv-2.20.so(strings); /lib/libnss_compat-2.20.so(strings); /lib/libnss_files-2.20.so(strings); /lib/libc-2.20.so(strings)	yes
+/etc/mdev/udisk_remove.sh	KEEP-BASE	/etc/mdev.conf:40	yes
+/etc/mdev/udisk_insert.sh	KEEP-BASE	/etc/mdev/udisk_hotplug.sh:3; /etc/mdev.conf:39; /script/mount_usb.sh:8	yes
+/etc/mdev/udisk_hotplug.sh	KEEP-BASE	/etc/mdev.conf:38	yes
+/etc/software_version	KEEP-BASE	/etc/init.d/rcS:19	yes
+/etc/bluetooth_name	KEEP-RADIO	/script/radio_hal.sh:256; /script/bt_on.sh:18	yes
+/etc/wifi_name	KEEP-RADIO	/script/radio_ap_up.sh:106; /script/wlan_on.sh:28	yes
+/etc/bluetooth/eir_info	UNKNOWN	UNREFERENCED	no
+/etc/bluetooth/mybluetooth.tar.gz	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/bluetooth/hcid.conf	KEEP-RADIO	/script/bt_on.sh:19	yes
+/etc/bluetooth/rfcomm.conf	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/factory_name	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/device_serial	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/box_version	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/mdev.conf	KEEP-BASE	/bin/busybox(strings)	yes
+/etc/hostname	KEEP-BASE	/lib/libc-2.20.so(strings); /etc/init.d/rcS:18; /etc/profile:14; /etc/udhcpd.conf:85	yes
+/etc/fstab	KEEP-BASE	/lib/librt-2.20.so(strings); /lib/libpthread-2.20.so(strings); /lib/libc-2.20.so(strings); /bin/busybox(strings)	yes
+/etc/p2p_supplicant.conf	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/shadow	KEEP-BASE	/lib/libnss_compat-2.20.so(strings); /lib/libnss_files-2.20.so(strings); /lib/libc-2.20.so(strings); /lib/libnss_nis-2.20.so(strings)	yes
+/etc/shadow-	UNKNOWN	UNREFERENCED	no
+/etc/assets	UNKNOWN	UNREFERENCED	no
+/etc/.custom_bluetooth_name	KEEP-RADIO	UNREFERENCED	no
+/etc/box_product_type	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/dropbear/dropbear_ecdsa_host_key	KEEP-BASE	/usr/sbin/dropbear(strings)	yes
+/etc/dropbear/dropbear_rsa_host_key	KEEP-BASE	/usr/sbin/dropbear(strings)	yes
+/etc/dropbear/dropbear_ed25519_host_key	KEEP-BASE	/usr/sbin/dropbear(strings)	yes
+/etc/dropbear/dropbear_dss_host_key	UNKNOWN	UNREFERENCED	no
+/etc/profile	KEEP-BASE	/g/etc/icon_256x256.pn(strings); /lib/ld-2.20.so(strings); /etc/init.d/rcS:3; /bin/busybox(strings)	yes
+/etc/hfpd.conf	UNKNOWN	UNREFERENCED	no
+/etc/carplay_peers.bin	KEEP-OCBM	/usr/sbin/carplayd(strings); /usr/sbin/ocbmd(strings); /script/peer_store.sh:3; /script/session_supervisor.sh:643	yes
+/etc/log_file	UNKNOWN	UNREFERENCED	no
+/etc/resolv.conf	KEEP-BASE	/lib/libnss_files-2.20.so(strings); /lib/libc-2.20.so(strings); /bin/busybox(strings); /usr/share/udhcpc/default.script:4	yes
+/etc/serial_number	KEEP-RADIO	/usr/sbin/btd(strings); /usr/sbin/iap2d(strings); /usr/sbin/ocbmd(strings); /script/radio_ap_up.sh:100	yes
+/etc/box_name	KEEP-RADIO	/script/radio_hal.sh:219	yes
+/etc/.delete	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/manufacture_date	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/.manufacture_date_sign	HEWEI-RESIDUE	UNREFERENCED	no
+/etc/hostapd.conf	KEEP-RADIO	/usr/sbin/btd(strings); /script/start_bluetooth_wifi.sh:3; /script/session_supervisor.sh:823; /script/radio_ap_up.sh:13	yes
+/etc/udhcpd.conf	KEEP-RADIO	/bin/busybox(strings); /script/start_bluetooth_wifi.sh:29; /script/radio_ap_up.sh:181; /script/radio_hal.sh:465	yes
+/etc/hostapd.conf.stock	KEEP-RADIO	/script/session_supervisor.sh:826	yes
+/etc/carplay/bt_link_keys	KEEP-OCBM	/usr/sbin/btd(strings); /usr/sbin/ocbmd(strings)	yes
+/etc/wpa_supplicant.conf	HEWEI-RESIDUE	UNREFERENCED	no
+/rol	UNKNOWN	UNREFERENCED	no
+/bin/dd	KEEP-BASE	UNREFERENCED	no
+/bin/ed	KEEP-BASE	UNREFERENCED	no
+/bin/df	KEEP-BASE	UNREFERENCED	no
+/bin/sh	KEEP-BASE	UNREFERENCED	no
+/bin/vi	KEEP-BASE	UNREFERENCED	no
+/bin/rm	KEEP-BASE	UNREFERENCED	no
+/bin/ln	KEEP-BASE	UNREFERENCED	no
+/bin/cp	KEEP-BASE	UNREFERENCED	no
+/bin/ls	KEEP-BASE	UNREFERENCED	no
+/bin/ps	KEEP-BASE	UNREFERENCED	no
+/bin/mt	KEEP-BASE	UNREFERENCED	no
+/bin/su	KEEP-BASE	UNREFERENCED	no
+/bin/mv	KEEP-BASE	UNREFERENCED	no
+/bin/sh:	UNKNOWN	UNREFERENCED	no
+/bin/sr:	UNKNOWN	UNREFERENCED	no
+/bin/sed	KEEP-BASE	UNREFERENCED	no
+/bin/pwd	KEEP-BASE	UNREFERENCED	no
+/bin/ash	KEEP-BASE	UNREFERENCED	no
+/bin/msh	KEEP-BASE	UNREFERENCED	no
+/bin/rpm	KEEP-BASE	UNREFERENCED	no
+/bin/tar	KEEP-BASE	UNREFERENCED	no
+/bin/cat	KEEP-BASE	UNREFERENCED	no
+/bin/rev	KEEP-BASE	UNREFERENCED	no
+/bin/chgrp	KEEP-BASE	UNREFERENCED	no
+/bin/sh::	UNKNOWN	UNREFERENCED	no
+/bin/dmesg	KEEP-BASE	UNREFERENCED	no
+/bin/false	KEEP-BASE	UNREFERENCED	no
+/bin/conspy	KEEP-BASE	UNREFERENCED	no
+/bin/netstat	KEEP-BASE	UNREFERENCED	no
+/bin/zcat	KEEP-BASE	UNREFERENCED	no
+/bin/stat	KEEP-BASE	UNREFERENCED	no
+/bin/chattr	KEEP-BASE	UNREFERENCED	no
+/bin/lsattr	KEEP-BASE	UNREFERENCED	no
+/bin/iostat	KEEP-BASE	UNREFERENCED	no
+/bin/mpstat	KEEP-BASE	UNREFERENCED	no
+/bin/reformime	KEEP-BASE	UNREFERENCED	no
+/bin/printenv	KEEP-BASE	UNREFERENCED	no
+/bin/umount	KEEP-BASE	UNREFERENCED	no
+/bin/linux32	KEEP-BASE	UNREFERENCED	no
+/bin/linux64	KEEP-BASE	UNREFERENCED	no
+/bin/catv	KEEP-BASE	UNREFERENCED	no
+/bin/pipe_progress	KEEP-BASE	UNREFERENCED	no
+/bin/chown	KEEP-BASE	UNREFERENCED	no
+/bin/cttyhack	KEEP-BASE	UNREFERENCED	no
+/bin/dnsdomainname	KEEP-BASE	UNREFERENCED	no
+/bin/stty	KEEP-BASE	UNREFERENCED	no
+/bin/busybox	KEEP-BASE	/etc/init.d/rcS:9; /script/uart_console.sh:3; /script/session_supervisor.sh:1049; /script/run_supervisor.sh:4	yes
+/bin/gunzip	KEEP-BASE	UNREFERENCED	no
+/bin/hostname	KEEP-BASE	UNREFERENCED	no
+/bin/ipcalc	KEEP-BASE	UNREFERENCED	no
+/bin/setarch	KEEP-BASE	UNREFERENCED	no
+/bin/fatattr	KEEP-BASE	UNREFERENCED	no
+/bin/st@~]#	UNKNOWN	UNREFERENCED	no
+/bin/run-parts	KEEP-BASE	UNREFERENCED	no
+/bin/sync	KEEP-BASE	UNREFERENCED	no
+/bin/watch	KEEP-BASE	UNREFERENCED	no
+/bin/touch	KEEP-BASE	UNREFERENCED	no
+/bin/dumpkmap	KEEP-BASE	UNREFERENCED	no
+/bin/sroot@~]#	UNKNOWN	UNREFERENCED	no
+/bin/nice	KEEP-BASE	UNREFERENCED	no
+/bin/sleep	KEEP-BASE	UNREFERENCED	no
+/bin/usleep	KEEP-BASE	UNREFERENCED	no
+/bin/egrep	KEEP-BASE	UNREFERENCED	no
+/bin/fgrep	KEEP-BASE	UNREFERENCED	no
+/bin/more	KEEP-BASE	UNREFERENCED	no
+/bin/base64	KEEP-BASE	UNREFERENCED	no
+/bin/date	KEEP-BASE	UNREFERENCED	no
+/bin/mktemp	KEEP-BASE	UNREFERENCED	no
+/bin/true	KEEP-BASE	UNREFERENCED	no
+/bin/ping	KEEP-BASE	UNREFERENCED	no
+/bin/ping6	KEEP-BASE	UNREFERENCED	no
+/bin/scriptreplay	KEEP-BASE	UNREFERENCED	no
+/bin/makemime	KEEP-BASE	UNREFERENCED	no
+/bin/mountpoint	KEEP-BASE	UNREFERENCED	no
+/bin/bash	KEEP-BASE	UNREFERENCED	no
+/bin/hush	KEEP-BASE	UNREFERENCED	no
+/bin/mkdir	KEEP-BASE	UNREFERENCED	no
+/bin/rmdir	KEEP-BASE	UNREFERENCED	no
+/bin/login	KEEP-BASE	UNREFERENCED	no
+/bin/ionice	KEEP-BASE	UNREFERENCED	no
+/bin/kbd_mode	KEEP-BASE	UNREFERENCED	no
+/bin/uncompress	KEEP-BASE	UNREFERENCED	no
+/bin/kill	KEEP-BASE	UNREFERENCED	no
+/bin/fdflush	KEEP-BASE	UNREFERENCED	no
+/bin/uname	KEEP-BASE	UNREFERENCED	no
+/bin/mount	KEEP-BASE	UNREFERENCED	no
+/bin/fsync	KEEP-BASE	UNREFERENCED	no
+/bin/pidof	KEEP-BASE	UNREFERENCED	no
+/bin/echo	KEEP-BASE	UNREFERENCED	no
+/bin/cpio	KEEP-BASE	UNREFERENCED	no
+/bin/chmod	KEEP-BASE	UNREFERENCED	no
+/bin/mknod	KEEP-BASE	UNREFERENCED	no
+/bin/getopt	KEEP-BASE	UNREFERENCED	no
+/bin/grep	KEEP-BASE	UNREFERENCED	no
+/bin/gzip	KEEP-BASE	UNREFERENCED	no
+/bin/lzop	KEEP-BASE	UNREFERENCED	no
+/bin/setserial	KEEP-BASE	UNREFERENCED	no
+/ion	UNKNOWN	UNREFERENCED	no
+/var/lib/dhcp6s_duid	HEWEI-RESIDUE	UNREFERENCED	no
+/var/lib/lockdown/common.cert	HEWEI-RESIDUE	UNREFERENCED	no
+/var/lib/lockdown/root_key.pem	HEWEI-RESIDUE	UNREFERENCED	no
+/var/lib/udhcpd.leases	UNKNOWN	/etc/udhcpd.conf:37; /bin/busybox(strings); /script/start_bluetooth_wifi.sh:30; /script/radio_ap_up.sh:184	yes
+/var/log/box_last_reboot.log	UNKNOWN	/script/after_shutdown.sh:30	yes
+/var/log/box_update.log	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libdbus-1.so	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libdbus-1.so.3	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libxml2.so.2	UNKNOWN	UNREFERENCED	no
+/usr/lib/libdbus-1.so.3.2.0	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libz.so	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libbluetooth.so.2.11.2	KEEP-RADIO	/usr/sbin/hcitool(strings)	yes
+/usr/lib/libz.so.1	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libxml2.so.2.9.2	UNKNOWN	/usr/lib/libdbus-1.so.3.2.0(strings)	no
+/usr/lib/libnl-genl-3.so.200	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libbluetooth.so.2	KEEP-RADIO	UNREFERENCED	no
+/usr/lib/libbluetooth.so	KEEP-RADIO	UNREFERENCED	no
+/usr/lib/libxml2.so	UNKNOWN	UNREFERENCED	no
+/usr/lib/libnl-3.so.200	HEWEI-RESIDUE	/usr/lib/libnl-genl-3.so.200(strings)	no
+/usr/lib/.delete	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/lib/libz.so.1.2.11	HEWEI-RESIDUE	/usr/libexec/sftp-server(strings)	yes
+/usr/bin/[	KEEP-BASE	UNREFERENCED	no
+/usr/bin/[[	KEEP-BASE	UNREFERENCED	no
+/usr/bin/dc	KEEP-BASE	UNREFERENCED	no
+/usr/bin/nc	KEEP-BASE	UNREFERENCED	no
+/usr/bin/wc	KEEP-BASE	UNREFERENCED	no
+/usr/bin/hd	KEEP-BASE	UNREFERENCED	no
+/usr/bin/id	KEEP-BASE	UNREFERENCED	no
+/usr/bin/od	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ar	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tr	KEEP-BASE	UNREFERENCED	no
+/usr/bin/du	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sv	KEEP-BASE	UNREFERENCED	no
+/usr/bin/rx	KEEP-BASE	UNREFERENCED	no
+/usr/bin/xz	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tac	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tee	KEEP-BASE	UNREFERENCED	no
+/usr/bin/awk	KEEP-BASE	UNREFERENCED	no
+/usr/bin/cal	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/man	KEEP-BASE	UNREFERENCED	no
+/usr/bin/who	KEEP-BASE	UNREFERENCED	no
+/usr/bin/cmp	KEEP-BASE	UNREFERENCED	no
+/usr/bin/top	KEEP-BASE	UNREFERENCED	no
+/usr/bin/seq	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lpq	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lpr	KEEP-BASE	UNREFERENCED	no
+/usr/bin/yes	KEEP-BASE	UNREFERENCED	no
+/usr/bin/cut	KEEP-BASE	UNREFERENCED	no
+/usr/bin/env	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tty	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sha512sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ipcrm	KEEP-BASE	UNREFERENCED	no
+/usr/bin/users	KEEP-BASE	UNREFERENCED	no
+/usr/bin/expr	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pstree	KEEP-BASE	UNREFERENCED	no
+/usr/bin/microcom	KEEP-BASE	UNREFERENCED	no
+/usr/bin/md5sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/fgconsole	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ipcs	KEEP-BASE	UNREFERENCED	no
+/usr/bin/runsv	KEEP-BASE	UNREFERENCED	no
+/usr/bin/chpst	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tcpsvd	KEEP-BASE	UNREFERENCED	no
+/usr/bin/udpsvd	KEEP-BASE	UNREFERENCED	no
+/usr/bin/less	KEEP-BASE	UNREFERENCED	no
+/usr/bin/passwd	KEEP-BASE	UNREFERENCED	no
+/usr/bin/setsid	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lsusb	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ttysize	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sha256sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/wget	KEEP-BASE	UNREFERENCED	no
+/usr/bin/nmeter	KEEP-BASE	UNREFERENCED	no
+/usr/bin/chrt	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sort	KEEP-BASE	UNREFERENCED	no
+/usr/bin/last	KEEP-BASE	UNREFERENCED	no
+/usr/bin/test	KEEP-BASE	UNREFERENCED	no
+/usr/bin/hostid	KEEP-BASE	UNREFERENCED	no
+/usr/bin/chvt	KEEP-BASE	UNREFERENCED	no
+/usr/bin/install	KEEP-BASE	UNREFERENCED	no
+/usr/bin/nohup	KEEP-BASE	UNREFERENCED	no
+/usr/bin/groups	KEEP-BASE	UNREFERENCED	no
+/usr/bin/cksum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unix2dos	KEEP-BASE	UNREFERENCED	no
+/usr/bin/dos2unix	KEEP-BASE	UNREFERENCED	no
+/usr/bin/showkey	KEEP-BASE	UNREFERENCED	no
+/usr/bin/nslookup	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pwdx	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unlzma	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unlzop	KEEP-BASE	UNREFERENCED	no
+/usr/bin/bunzip2	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unxz	KEEP-BASE	UNREFERENCED	no
+/usr/bin/mkpasswd	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pscan	KEEP-BASE	UNREFERENCED	no
+/usr/bin/bzcat	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lzcat	KEEP-BASE	UNREFERENCED	no
+/usr/bin/xzcat	KEEP-BASE	UNREFERENCED	no
+/usr/bin/clear	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lzma	KEEP-BASE	UNREFERENCED	no
+/usr/bin/whoami	KEEP-BASE	UNREFERENCED	no
+/usr/bin/expand	KEEP-BASE	UNREFERENCED	no
+/usr/bin/deallocvt	KEEP-BASE	UNREFERENCED	no
+/usr/bin/eject	KEEP-BASE	UNREFERENCED	no
+/usr/bin/uuencode	KEEP-BASE	UNREFERENCED	no
+/usr/bin/which	KEEP-BASE	UNREFERENCED	no
+/usr/bin/flock	KEEP-BASE	UNREFERENCED	no
+/usr/bin/vlock	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lspci	KEEP-BASE	UNREFERENCED	no
+/usr/bin/patch	KEEP-BASE	UNREFERENCED	no
+/usr/bin/head	KEEP-BASE	UNREFERENCED	no
+/usr/bin/fold	KEEP-BASE	UNREFERENCED	no
+/usr/bin/find	KEEP-BASE	UNREFERENCED	no
+/usr/bin/envdir	KEEP-BASE	UNREFERENCED	no
+/usr/bin/hexdump	KEEP-BASE	UNREFERENCED	no
+/usr/bin/softlimit	KEEP-BASE	UNREFERENCED	no
+/usr/bin/readlink	KEEP-BASE	UNREFERENCED	no
+/usr/bin/runsvdir	KEEP-BASE	UNREFERENCED	no
+/usr/bin/free	KEEP-BASE	UNREFERENCED	no
+/usr/bin/time	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pgrep	KEEP-BASE	UNREFERENCED	no
+/usr/bin/reset	KEEP-BASE	UNREFERENCED	no
+/usr/bin/fuser	KEEP-BASE	UNREFERENCED	no
+/usr/bin/timeout	KEEP-BASE	UNREFERENCED	no
+/usr/bin/traceroute	KEEP-BASE	UNREFERENCED	no
+/usr/bin/traceroute6	KEEP-BASE	UNREFERENCED	no
+/usr/bin/iap_role_switch	KEEP-OCBM	/script/projection_up.sh:28	yes
+/usr/bin/diff	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lsof	KEEP-BASE	UNREFERENCED	no
+/usr/bin/shuf	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unexpand	KEEP-BASE	UNREFERENCED	no
+/usr/bin/dumpleases	KEEP-BASE	UNREFERENCED	no
+/usr/bin/logger	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ftpget	KEEP-BASE	UNREFERENCED	no
+/usr/bin/xargs	KEEP-BASE	UNREFERENCED	no
+/usr/bin/mesg	KEEP-BASE	UNREFERENCED	no
+/usr/bin/uudecode	KEEP-BASE	UNREFERENCED	no
+/usr/bin/basename	KEEP-BASE	UNREFERENCED	no
+/usr/bin/mkfifo	KEEP-BASE	UNREFERENCED	no
+/usr/bin/split	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unlink	KEEP-BASE	UNREFERENCED	no
+/usr/bin/renice	KEEP-BASE	UNREFERENCED	no
+/usr/bin/whois	KEEP-BASE	UNREFERENCED	no
+/usr/bin/script	KEEP-BASE	UNREFERENCED	no
+/usr/bin/resize	KEEP-BASE	UNREFERENCED	no
+/usr/bin/uptime	KEEP-BASE	UNREFERENCED	no
+/usr/bin/unzip	KEEP-BASE	UNREFERENCED	no
+/usr/bin/strings	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sha1sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/sha3sum	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tail	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pkill	KEEP-BASE	UNREFERENCED	no
+/usr/bin/wall	KEEP-BASE	UNREFERENCED	no
+/usr/bin/killall	KEEP-BASE	UNREFERENCED	no
+/usr/bin/iap_trigger	UNKNOWN	UNREFERENCED	no
+/usr/bin/comm	KEEP-BASE	UNREFERENCED	no
+/usr/bin/smemcap	KEEP-BASE	UNREFERENCED	no
+/usr/bin/setuidgid	KEEP-BASE	UNREFERENCED	no
+/usr/bin/envuidgid	KEEP-BASE	UNREFERENCED	no
+/usr/bin/rpm2cpio	KEEP-BASE	UNREFERENCED	no
+/usr/bin/openvt	KEEP-BASE	UNREFERENCED	no
+/usr/bin/printf	KEEP-BASE	UNREFERENCED	no
+/usr/bin/telnet	KEEP-BASE	UNREFERENCED	no
+/usr/bin/logname	KEEP-BASE	UNREFERENCED	no
+/usr/bin/volname	KEEP-BASE	UNREFERENCED	no
+/usr/bin/crontab	KEEP-BASE	UNREFERENCED	no
+/usr/bin/dirname	KEEP-BASE	UNREFERENCED	no
+/usr/bin/setkeycodes	KEEP-BASE	UNREFERENCED	no
+/usr/bin/pmap	KEEP-BASE	UNREFERENCED	no
+/usr/bin/beep	KEEP-BASE	UNREFERENCED	no
+/usr/bin/bzip2	KEEP-BASE	UNREFERENCED	no
+/usr/bin/ftpput	KEEP-BASE	UNREFERENCED	no
+/usr/bin/tftp	KEEP-BASE	UNREFERENCED	no
+/usr/bin/lzopcat	KEEP-BASE	UNREFERENCED	no
+/usr/bin/cryptpw	KEEP-BASE	UNREFERENCED	no
+/usr/bin/realpath	KEEP-BASE	UNREFERENCED	no
+/usr/bin/uniq	KEEP-BASE	UNREFERENCED	no
+/usr/share/udhcpc/default.script	KEEP-BASE	/bin/busybox(strings)	yes
+/usr/libexec/sftp-server	KEEP-BASE	/usr/sbin/dropbear(strings)	yes
+/usr/sbin/lpd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/btd	KEEP-OCBM	/usr/sbin/carplayd(strings); /usr/sbin/ocbmd(strings); /script/session_supervisor.sh:67; /script/radio_detect.sh:170	yes
+/usr/sbin/ubirmvol	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ubirsvol	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/powertop	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/rdate	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/chat	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/brctl	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/hcitool	KEEP-RADIO	/script/radio_detect.sh:181; /script/attach_bluetooth.sh:51; /script/bt_on.sh:41	yes
+/usr/sbin/hostapd	KEEP-RADIO	/etc/profile:5; /usr/sbin/btd(strings); /script/start_bluetooth_wifi.sh:2; /script/session_supervisor.sh:770	yes
+/usr/sbin/dbus-daemon	UNKNOWN	UNREFERENCED	no
+/usr/sbin/carplayd	KEEP-OCBM	/usr/sbin/btd(strings); /usr/sbin/ocbmd(strings); /script/peer_store.sh:5; /script/session_supervisor.sh:7	yes
+/usr/sbin/adduser	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/deluser	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/popmaildir	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/hciconfig	KEEP-RADIO	/usr/sbin/btd(strings); /script/session_supervisor.sh:776; /script/bt_off.sh:7; /script/radio_detect.sh:220	yes
+/usr/sbin/rdev	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/add-shell	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/killall5	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/readahead	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/rtcwake	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/setlogcons	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ubidetach	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ubiattach	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/hciattach	KEEP-RADIO	/usr/sbin/btd(strings); /script/session_supervisor.sh:1040; /script/bt_off.sh:3; /script/radio_detect.sh:79	yes
+/usr/sbin/bluetoothDaemon	KEEP-RADIO	/script/bt_off.sh:3; /script/attach_bluetooth.sh:4; /script/radio_hal.sh:249; /script/bt_on.sh:4	yes
+/usr/sbin/fdformat	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/chpasswd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/readprofile	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/fw_loader_linux	KEEP-RADIO	/script/radio_detect.sh:83; /script/attach_bluetooth.sh:45	yes
+/usr/sbin/ubimkvol	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/udhcpd	KEEP-RADIO	/etc/udhcpd.conf:1; /bin/busybox(strings); /script/start_bluetooth_wifi.sh:29; /script/radio_ap_up.sh:4	yes
+/usr/sbin/ether-wake	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/hcid	KEEP-RADIO	/script/bt_off.sh:3; /script/bt_on.sh:4	yes
+/usr/sbin/hfpd	KEEP-RADIO	/etc/dbus-1/system.d/hfpd.conf:16; /script/bt_off.sh:3; /script/bt_on.sh:4	yes
+/usr/sbin/ftpd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ntpd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/dnsd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/remove-shell	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/fbset	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/sendmail	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/dropbear	KEEP-BASE	/etc/init.d/rcS:8; /etc/profile:7	yes
+/usr/sbin/setfont	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/set_wifi_mac	KEEP-RADIO	/script/attach_bluetooth.sh:49; /script/radio_ap_up.sh:29; /script/wlan_on.sh:10; /script/radio_hal.sh:228	yes
+/usr/sbin/addgroup	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/delgroup	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/aa-bridge	KEEP-OCBM	/usr/sbin/ocbmd(strings); /script/session_supervisor.sh:126	yes
+/usr/sbin/arping	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/nanddump	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/iap2d	KEEP-OCBM	/usr/sbin/ocbmd(strings); /script/session_supervisor.sh:9; /script/phone_reset.sh:6; /script/carplay-status.sh:19	yes
+/usr/sbin/.delete	HEWEI-RESIDUE	UNREFERENCED	no
+/usr/sbin/ifplugd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ocbmd	KEEP-OCBM	/etc/inittab:7; /usr/sbin/btd(strings); /usr/sbin/carplayd(strings); /usr/sbin/iap2d(strings)	yes
+/usr/sbin/loadfont	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/nandwrite	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/crond	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/telnetd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/svlogd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/chroot	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/nbd-client	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/tftpd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/httpd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/fakeidentd	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/ubiupdatevol	KEEP-BASE	UNREFERENCED	no
+/usr/sbin/dhcprelay	KEEP-BASE	UNREFERENCED	no
+/not	UNKNOWN	UNREFERENCED	no
+/binr:	UNKNOWN	UNREFERENCED	no
+/[ror:	UNKNOWN	UNREFERENCED	no
+/Library/Keychains/default.keychain	HEWEI-RESIDUE	UNREFERENCED	no
+/W?Hh?????J???????????????????	UNKNOWN	UNREFERENCED	no
+/ror:	UNKNOWN	UNREFERENCED	no
+/ant:	UNKNOWN	UNREFERENCED	no
+/boot@~]#	UNKNOWN	UNREFERENCED	no
+/root@~]#	UNKNOWN	UNREFERENCED	no
+/pected	UNKNOWN	UNREFERENCED	no
+/root/.ash_history	UNKNOWN	UNREFERENCED	no
+/root/.ssh/authorized_keys	KEEP-BASE	/usr/sbin/dropbear(strings)	yes
+/control	UNKNOWN	UNREFERENCED	no
+/linuxrc	KEEP-BASE	UNREFERENCED	no
+/[expected	UNKNOWN	UNREFERENCED	no
+/.ash_history	UNKNOWN	UNREFERENCED	no
+/ntax	UNKNOWN	UNREFERENCED	no
+/@~]#	UNKNOWN	UNREFERENCED	no
+/oot@~]#	UNKNOWN	UNREFERENCED	no
+/t@~]#	UNKNOWN	UNREFERENCED	no
+/Permission	UNKNOWN	UNREFERENCED	no
+/ot@~]#	UNKNOWN	UNREFERENCED	no
+/biected	UNKNOWN	UNREFERENCED	no
+/nied	UNKNOWN	UNREFERENCED	no
+/rned	UNKNOWN	UNREFERENCED	no
+/enied	UNKNOWN	UNREFERENCED	no
+/script/run_ocbmd.sh	KEEP-OCBM	/etc/inittab:10; /script/session_supervisor.sh:575	yes
+/script/peer_store.sh	KEEP-OCBM	/script/session_supervisor.sh:635	yes
+/script/uart_console.sh	KEEP-OCBM	UNREFERENCED	no
+/script/start_bluetooth_wifi.sh	KEEP-OCBM	/script/radio_ap_up.sh:8; /script/wlan_on.sh:30; /script/custom_init.sh:54; /script/radio_hal.sh:48	yes
+/script/session_supervisor.sh	KEEP-OCBM	/script/run_supervisor.sh:2; /script/carplay-status.sh:13; /script/ocbm_boot.sh:58; /script/radio_hal.sh:17	yes
+/script/phone_reset.sh	KEEP-OCBM	/script/session_supervisor.sh:278	yes
+/script/run_supervisor.sh	KEEP-OCBM	/etc/inittab:11	yes
+/script/carplay-status.sh	KEEP-OCBM	UNREFERENCED	no
+/script/bt_off.sh	KEEP-OCBM	/script/session_supervisor.sh:1066; /script/radio_hal.sh:709; /script/bt_on.sh:38	yes
+/script/radio_detect.sh	KEEP-OCBM	/usr/sbin/btd(strings); /script/radio_hal.sh:41	yes
+/script/attach_bluetooth.sh	KEEP-OCBM	/script/radio_detect.sh:96; /script/radio_hal.sh:23; /script/bt_on.sh:28	yes
+/script/radio_ap_up.sh	KEEP-OCBM	/script/session_supervisor.sh:619; /script/radio_hal.sh:411	yes
+/script/ko.tar.gz	KEEP-OCBM	/script/ocbm_boot.sh:31; /script/custom_init.sh:17; /script/copy_to_tmp.sh:23	yes
+/script/ocbm_failover	KEEP-OCBM	UNREFERENCED	no
+/script/ocbm_boot.sh	KEEP-OCBM	/etc/inittab:8; /script/run_ocbmd.sh:5; /script/session_supervisor.sh:3; /script/run_supervisor.sh:5	yes
+/script/ncm_only	KEEP-OCBM	UNREFERENCED	no
+/script/ocbm_failover.log	KEEP-OCBM	/script/ocbm_boot.sh:119	yes
+/script/wlan_off.sh	KEEP-OCBM	/script/session_supervisor.sh:1259; /script/radio_hal.sh:454	yes
+/script/init_gpio.sh	KEEP-OCBM	/script/start_main_service.sh:23	yes
+/script/early_console.sh	KEEP-OCBM	/etc/inittab:1	yes
+/script/wlan_on.sh	KEEP-OCBM	/script/start_bluetooth_wifi.sh:4; /script/session_supervisor.sh:809; /script/radio_detect.sh:94; /script/attach_bluetooth.sh:11	yes
+/script/sync_box_time.sh	KEEP-OCBM	UNREFERENCED	no
+/script/custom_init.sh	KEEP-OCBM	/script/start_main_service.sh:4	yes
+/script/radio_hal.sh	KEEP-OCBM	/usr/sbin/btd(strings); /script/session_supervisor.sh:35; /script/radio_detect.sh:27; /script/radio_ap_up.sh:22	yes
+/script/copy_to_tmp.sh	KEEP-OCBM	/script/custom_init.sh:16; /script/start_main_service.sh:26	yes
+/script/mount_usb.sh	KEEP-OCBM	/script/start_main_service.sh:36	yes
+/script/start_ncm.sh	KEEP-OCBM	/script/start_main_service.sh:32	yes
+/script/after_shutdown.sh	KEEP-OCBM	/etc/inittab:16	yes
+/script/bt_on.sh	KEEP-OCBM	/script/session_supervisor.sh:808; /script/radio_detect.sh:94; /script/radio_hal.sh:245	yes
+/script/projection_up.sh	KEEP-OCBM	/script/session_supervisor.sh:7; /script/phone_reset.sh:9	yes
+/script/start_main_service.sh	KEEP-OCBM	/etc/init.d/rcS:21; /script/run_supervisor.sh:12; /script/ocbm_boot.sh:4; /script/custom_init.sh:3	yes
+/Killed	UNKNOWN	UNREFERENCED	no
+/trol	UNKNOWN	UNREFERENCED	no
+/sbin/ip	KEEP-BASE	UNREFERENCED	no
+/sbin/arp	KEEP-BASE	UNREFERENCED	no
+/sbin/logread	KEEP-BASE	UNREFERENCED	no
+/sbin/fstrim	KEEP-BASE	UNREFERENCED	no
+/sbin/fdisk	KEEP-BASE	UNREFERENCED	no
+/sbin/adjtimex	KEEP-BASE	UNREFERENCED	no
+/sbin/ifenslave	KEEP-BASE	UNREFERENCED	no
+/sbin/init	KEEP-BASE	UNREFERENCED	no
+/sbin/halt	KEEP-BASE	UNREFERENCED	no
+/sbin/getty	KEEP-BASE	UNREFERENCED	no
+/sbin/route	KEEP-BASE	UNREFERENCED	no
+/sbin/watchdog	KEEP-BASE	UNREFERENCED	no
+/sbin/runlevel	KEEP-BASE	UNREFERENCED	no
+/sbin/modprobe	KEEP-BASE	UNREFERENCED	no
+/sbin/iprule	KEEP-BASE	UNREFERENCED	no
+/sbin/makedevs	KEEP-BASE	UNREFERENCED	no
+/sbin/mdev	KEEP-BASE	UNREFERENCED	no
+/sbin/pivot_root	KEEP-BASE	UNREFERENCED	no
+/sbin/mkswap	KEEP-BASE	UNREFERENCED	no
+/sbin/fbsplash	KEEP-BASE	UNREFERENCED	no
+/sbin/setconsole	KEEP-BASE	UNREFERENCED	no
+/sbin/mkfs.minix	KEEP-BASE	UNREFERENCED	no
+/sbin/hdparm	KEEP-BASE	UNREFERENCED	no
+/sbin/slattach	KEEP-BASE	UNREFERENCED	no
+/sbin/udhcpc	KEEP-BASE	UNREFERENCED	no
+/sbin/tunctl	KEEP-BASE	UNREFERENCED	no
+/sbin/sysctl	KEEP-BASE	UNREFERENCED	no
+/sbin/ipaddr	KEEP-BASE	UNREFERENCED	no
+/sbin/findfs	KEEP-BASE	UNREFERENCED	no
+/sbin/nameif	KEEP-BASE	UNREFERENCED	no
+/sbin/losetup	KEEP-BASE	UNREFERENCED	no
+/sbin/mkfs.ext2	KEEP-BASE	UNREFERENCED	no
+/sbin/freeramdisk	KEEP-BASE	UNREFERENCED	no
+/sbin/blockdev	KEEP-BASE	UNREFERENCED	no
+/sbin/klogd	KEEP-BASE	UNREFERENCED	no
+/sbin/start-stop-daemon	KEEP-BASE	UNREFERENCED	no
+/sbin/raidautorun	KEEP-BASE	UNREFERENCED	no
+/sbin/poweroff	KEEP-BASE	UNREFERENCED	no
+/sbin/blkid	KEEP-BASE	UNREFERENCED	no
+/sbin/iplink	KEEP-BASE	UNREFERENCED	no
+/sbin/acpid	KEEP-BASE	UNREFERENCED	no
+/sbin/modinfo	KEEP-BASE	UNREFERENCED	no
+/sbin/loadkmap	KEEP-BASE	UNREFERENCED	no
+/sbin/mke2fs	KEEP-BASE	UNREFERENCED	no
+/sbin/fsck	KEEP-BASE	UNREFERENCED	no
+/sbin/hwclock	KEEP-BASE	UNREFERENCED	no
+/sbin/syslogd	KEEP-BASE	UNREFERENCED	no
+/sbin/depmod	KEEP-BASE	UNREFERENCED	no
+/sbin/insmod	KEEP-BASE	UNREFERENCED	no
+/sbin/devmem	KEEP-BASE	UNREFERENCED	no
+/sbin/switch_root	KEEP-BASE	UNREFERENCED	no
+/sbin/fsck.minix	KEEP-BASE	UNREFERENCED	no
+/sbin/bootchartd	KEEP-BASE	UNREFERENCED	no
+/sbin/ifconfig	KEEP-BASE	UNREFERENCED	no
+/sbin/vconfig	KEEP-BASE	UNREFERENCED	no
+/sbin/reboot	KEEP-BASE	UNREFERENCED	no
+/sbin/ifdown	KEEP-BASE	UNREFERENCED	no
+/sbin/rmmod	KEEP-BASE	UNREFERENCED	no
+/sbin/lsmod	KEEP-BASE	UNREFERENCED	no
+/sbin/mkdosfs	KEEP-BASE	UNREFERENCED	no
+/sbin/sulogin	KEEP-BASE	UNREFERENCED	no
+/sbin/iproute	KEEP-BASE	UNREFERENCED	no
+/sbin/mkfs.vfat	KEEP-BASE	UNREFERENCED	no
+/sbin/swapon	KEEP-BASE	UNREFERENCED	no
+/sbin/zcip	KEEP-BASE	UNREFERENCED	no
+/sbin/swapoff	KEEP-BASE	UNREFERENCED	no
+/sbin/ifup	KEEP-BASE	UNREFERENCED	no
+/sbin/iptunnel	KEEP-BASE	UNREFERENCED	no
+/binn	UNKNOWN	UNREFERENCED	no
+/sion	UNKNOWN	UNREFERENCED	no
+/turned	UNKNOWN	UNREFERENCED	no
+/found	UNKNOWN	UNREFERENCED	no
+/ntrol	UNKNOWN	UNREFERENCED	no
+/error:	UNKNOWN	UNREFERENCED	no

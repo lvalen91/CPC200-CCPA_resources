@@ -1,0 +1,3 @@
+// SPDX-License-Identifier: GPL-2.0
+/* Default: no radio is named in the DT. uart3 stays a plain tty (/dev/ttymxc2), usdhc1 is described
+ * but its driver is a rootfs module that nothing loads at boot. */

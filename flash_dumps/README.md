@@ -44,3 +44,5 @@ Firmware Key: AutoPlay9uPT4n17
 >
 > Dumped with `minipro -p 'XT25F128F@SOP8' -r flash_dump.bin` (XGecu T48, macOS), verified by two
 > byte-identical reads.
+
+> **Kernel/rootfs test-unit backups are kept separately.** The IW416 bench unit's MTD backups from the 2026-10-19/20 kernel-replacement runs are not in this folder. Its vendor-map mtd0/1/2, the SPI image and the LIVI-state dumps are in [`../custom/kernel_rootfs/backups/`](../custom/kernel_rootfs/backups/), each with its own `README.txt` and `SHA256SUMS`. The naming convention here does not apply to them.

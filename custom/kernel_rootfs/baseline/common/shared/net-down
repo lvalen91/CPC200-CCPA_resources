@@ -1,0 +1,19 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/initramfs/net-down (GPL-3.0-or-later).
+# net-down: take the baseline USB gadget down again. Shells already running keep running.
+G=/sys/kernel/config/usb_gadget/baseline
+IF=
+[ -r "$G/functions/ncm.usb0/ifname" ] && read -r IF < "$G/functions/ncm.usb0/ifname"
+if [ -d "$G" ]; then
+    echo "" > "$G/UDC" 2>/dev/null
+    rm -f "$G/configs/c.1/ncm.usb0" "$G/configs/c.1/acm.GS0"
+    rmdir "$G/configs/c.1/strings/0x409" "$G/configs/c.1" "$G/functions/ncm.usb0" "$G/functions/acm.GS0" \
+          "$G/strings/0x409" "$G" 2>/dev/null
+fi
+[ -r /run/udhcpd-ncm.pid ] && kill "$(cat /run/udhcpd-ncm.pid)" 2>/dev/null
+rm -f /run/udhcpd-ncm.pid
+[ -r /run/acm-shell.pid ] && kill "$(cat /run/acm-shell.pid)" 2>/dev/null
+rm -f /run/acm-shell.pid
+[ -n "$IF" ] && ifconfig "$IF" down 2>/dev/null
+exit 0

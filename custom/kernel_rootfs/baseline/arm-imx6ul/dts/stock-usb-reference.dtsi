@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * REFERENCE ONLY, NOT INCLUDED BY ANY BUILD, UNTESTED on mainline.
+ *
+ * The two USB controllers as the STOCK vendor DTB describes them, restated in mainline imx6ull.dtsi
+ * labels. Source: the FDT the vendor U-Boot hands the 3.14 kernel, at offset 0x800 of the decrypted
+ * update env (mtd0+0x20000; norboot "cp 0x80800800 0x83000000 0xf800"), 33,027 B, decompiled with
+ * dtc. Extract it from a unit's own mtd0 dump with the read_env() of tools/stage_kernel.py; the stock
+ * DTB itself is not copied into this repo.
+ *
+ * Stock: both "fsl,imx6ul-usb", "fsl,imx27-usb", status okay, dr_mode "otg", disable-over-current,
+ * no vbus-supply, no pinctrl-0; PHYs usbphy@020c9000 / @020ca000 ("fsl,imx6ul-usbphy",
+ * phy-3p0-supply = the anatop 3p0 regulator); usbmisc index 0 / 1. /regulators holds only "can-3v3"
+ * (on the 74hc595 gpio_spi expander) and "wlreg_on" (GPIO1_IO05, enable-active-low, for bcmdhd):
+ * no VBUS regulator, no USB pinctrl group, OTG1_ID not muxed. The QSPI flash node is
+ * "micronix,mx25l12805d" without partitions (those came from the mtdparts= the vendor bootargs pass).
+ *
+ * Mainline differences that matter: mainline imx6ul.dtsi already carries the PHY, usbmisc and anatop
+ * links, so only the board properties remain. "otg" on usbotg1 would make it a SECOND UDC next to
+ * usbotg2 whenever the kernel has CHIPIDEA_UDC (and needs the ID pin, which the stock DT does not mux);
+ * the baseline therefore uses "host" there (imx6ull-ccpa-usbhost.dtsi) and LIVI's "peripheral" on usbotg2.
+ */
+&usbotg1 {
+	dr_mode = "otg";
+	disable-over-current;
+	status = "okay";
+};
+
+&usbotg2 {
+	dr_mode = "otg";
+	disable-over-current;
+	status = "okay";
+};

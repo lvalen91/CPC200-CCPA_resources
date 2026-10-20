@@ -1,0 +1,7 @@
+#!/bin/busybox sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# reboot for the recovery initramfs. busybox `reboot` without -f signals PID 1, and PID 1 here is the
+# init script, which ignores it, so a plain `reboot` would silently do nothing. Shipped as a file in
+# the cpio so `busybox --install -s` (which never replaces an existing file) leaves it in place.
+sync
+exec /bin/busybox reboot -f

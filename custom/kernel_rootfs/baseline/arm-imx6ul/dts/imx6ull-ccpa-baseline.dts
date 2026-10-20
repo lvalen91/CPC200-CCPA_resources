@@ -1,0 +1,251 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Derived from LIVI scripts/livi-link/arm/imx6ul/imx6ull.dts (https://github.com/f-io/LIVI; the LIVI
+ * project is GPL-3.0-or-later, this file's upstream SPDX tag is GPL-2.0 and is kept as is).
+ * LIVI: "Pin settings are the ones the vendor kernel runs with, read off a running board."
+ *
+ * Changes against LIVI, all for "no radio active at boot, nothing chip-specific":
+ *  - GPIO1_IO05 (the radio module's power switch, reg_wlan) is muxed by the regulator node itself, not
+ *    by the usdhc1 group: the MMC host is a module that is never loaded at boot, so a pin in its group
+ *    would never be muxed and the regulator could not switch the module off. regulator-fixed requests
+ *    its GPIO in the "off" state at probe (GPIOD_OUT_LOW, fixed.c in 7.2.10), so the module is held
+ *    unpowered from that probe on; before it the pin keeps the boot loader's state.
+ *    (Polarity: regulator on = GPIO driven low. LIVI's working mwifiex and the stock DTB's "wlreg_on"
+ *    regulator, GPIO1_IO05 enable-active-low, agree.)
+ *  - no radio is named here; a radio .dtsi (BT serdev node) is selected at build time, default none.
+ *  - blue LED on the heartbeat trigger (kernel alive), red on until the rootfs is up.
+ *  - bootargs gain panic=10: a kernel panic during a rootfs boot reboots, and the bootstate mark
+ *    then keeps that next boot in recovery instead of hanging until a power cycle.
+ *  - usbotg1 (the female host port) stays disabled unless the build includes imx6ull-ccpa-usbhost.dtsi
+ *    (USB_HOST=1 or RECOVERY_USB=1).
+ *
+ * The appended DTB is what this kernel uses (ARM_APPENDED_DTB; ARM_ATAG_DTB_COMPAT must stay off): the
+ * vendor U-Boot passes its own FDT (norboot: "cp 0x80800800 0x83000000 0xf800 ... bootz 0x80800000 -
+ * 0x83000000") with its own bootargs (console=ttyLogFile0 root=/dev/mtdblock2 ... mtdparts=...), which
+ * would otherwise replace the partition map and the console below.
+ */
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include "imx6ull.dtsi"
+
+/ {
+	model = "CPC200-CCPA vanilla baseline (i.MX6ULL)";
+	compatible = "fsl,imx6ull";
+
+	chosen {
+		stdout-path = &uart1;
+		bootargs = "console=ttymxc0,115200 rdinit=/init panic=10";
+	};
+
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x80000000 0x08000000>;
+	};
+
+	/* Power switch of the Wi-Fi/BT module (LIVI: "Enables the Wi-Fi/BT module (PDn)"). */
+	reg_wlan: regulator-wlan {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_wlan_pwr>;
+		regulator-name = "wlan";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpio1 5 GPIO_ACTIVE_LOW>;
+		startup-delay-us = <100000>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_leds>;
+
+		led-red {
+			label = "red";
+			gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+			default-state = "on";
+		};
+
+		led-blue {
+			label = "blue";
+			gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "heartbeat";
+		};
+	};
+};
+
+&iomuxc {
+	pinctrl_uart1: uart1grp {
+		fsl,pins = <
+			MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX	0x1b0b1
+			MX6UL_PAD_UART1_RX_DATA__UART1_DCE_RX	0x1b0b1
+		>;
+	};
+
+	/* Both EVK buses (LIVI). The MFi coprocessor answers at 0x11 on i2c2 = /dev/i2c-1. */
+	pinctrl_i2c1: i2c1grp {
+		fsl,pins = <
+			MX6UL_PAD_UART4_TX_DATA__I2C1_SCL	0x4001b8b0
+			MX6UL_PAD_UART4_RX_DATA__I2C1_SDA	0x4001b8b0
+		>;
+	};
+
+	pinctrl_i2c2: i2c2grp {
+		fsl,pins = <
+			MX6UL_PAD_UART5_TX_DATA__I2C2_SCL	0x4001b8b0
+			MX6UL_PAD_UART5_RX_DATA__I2C2_SDA	0x4001b8b0
+		>;
+	};
+
+	/* The radio module's Bluetooth UART (no device node unless a radio .dtsi adds one). */
+	pinctrl_uart3: uart3grp {
+		fsl,pins = <
+			MX6UL_PAD_UART3_TX_DATA__UART3_DCE_TX	0x1b0b1
+			MX6UL_PAD_UART3_RX_DATA__UART3_DCE_RX	0x1b0b1
+			MX6UL_PAD_UART3_RTS_B__UART3_DCE_RTS	0x1b0b1
+			MX6UL_PAD_UART3_CTS_B__UART3_DCE_CTS	0x1b0b1
+		>;
+	};
+
+	pinctrl_qspi: qspigrp {
+		fsl,pins = <
+			MX6UL_PAD_NAND_WP_B__QSPI_A_SCLK	0x70a1
+			MX6UL_PAD_NAND_READY_B__QSPI_A_DATA00	0x70a1
+			MX6UL_PAD_NAND_CE0_B__QSPI_A_DATA01	0x70a1
+			MX6UL_PAD_NAND_CE1_B__QSPI_A_DATA02	0x70a1
+			MX6UL_PAD_NAND_CLE__QSPI_A_DATA03	0x70a1
+			MX6UL_PAD_NAND_DQS__QSPI_A_SS0_B	0x70a1
+		>;
+	};
+
+	pinctrl_usdhc1: usdhc1grp {
+		fsl,pins = <
+			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x17059
+			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x10071
+			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x17059
+			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x17059
+			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x17059
+			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x17059
+		>;
+	};
+
+	/* Moved out of usdhc1grp (LIVI) so it is muxed when reg_wlan probes. Pad value is LIVI's. */
+	pinctrl_wlan_pwr: wlanpwrgrp {
+		fsl,pins = <
+			MX6UL_PAD_GPIO1_IO05__GPIO1_IO05	0x17059
+		>;
+	};
+
+	pinctrl_leds: ledsgrp {
+		fsl,pins = <
+			MX6UL_PAD_GPIO1_IO02__GPIO1_IO02	0x17059
+			MX6UL_PAD_GPIO1_IO09__GPIO1_IO09	0x17059
+		>;
+	};
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart1>;
+	status = "okay";
+};
+
+&i2c1 {
+	clock-frequency = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c1>;
+	status = "okay";
+};
+
+&i2c2 {
+	clock-frequency = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c2>;
+	status = "okay";
+};
+
+&uart3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart3>;
+	uart-has-rtscts;
+	status = "okay";
+};
+
+/* The port the host sees (LIVI). */
+&usbotg2 {
+	dr_mode = "peripheral";
+	disable-over-current;
+	status = "okay";
+};
+
+/* SDIO to the radio module; sdhci-esdhc-imx is a rootfs module, never loaded at boot. */
+&usdhc1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usdhc1>;
+	bus-width = <4>;
+	no-1-8-v;
+	non-removable;
+	keep-power-in-suspend;
+	vmmc-supply = <&reg_wlan>;
+	status = "okay";
+};
+
+&qspi {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_qspi>;
+	status = "okay";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <29000000>;
+		spi-rx-bus-width = <1>;
+		spi-tx-bus-width = <1>;
+
+		/* LIVI's map, unchanged: hardware-proven 2026-10-19, and LIVI's provisioner keys on it. */
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* U-Boot, its signature and the encrypted update env (+0x20000). Never written. */
+			partition@0 {
+				label = "uboot";
+				reg = <0x0 0x30000>;
+				read-only;
+			};
+
+			/* Erasing it makes U-Boot convert the staged kernel head on the next boot (flash-kernel). */
+			partition@30000 {
+				label = "env";
+				reg = <0x30000 0x10000>;
+			};
+
+			/* Read by U-Boot: 0x302fd8 bytes from here; staged head at +0x302fd8. */
+			partition@40000 {
+				label = "kernel";
+				reg = <0x40000 0x340000>;
+			};
+
+			partition@380000 {
+				label = "rootfs";
+				reg = <0x380000 0xc60000>;
+			};
+
+			/* The baseline's persist archive (SSH host key, added keys); LIVI's livid settings. */
+			partition@fe0000 {
+				label = "customer";
+				reg = <0xfe0000 0x10000>;
+			};
+
+			/* Marks a rootfs boot whose ways in are not up yet (recovery init, rcS). */
+			partition@ff0000 {
+				label = "bootstate";
+				reg = <0xff0000 0x10000>;
+			};
+		};
+	};
+};
+
+/* Generated by build.sh: the radio .dtsi (default none) and, for USB host builds, usbhost.dtsi. */
+#include "imx6ull-ccpa-variant.dtsi"

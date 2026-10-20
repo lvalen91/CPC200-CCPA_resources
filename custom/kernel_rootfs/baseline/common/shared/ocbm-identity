@@ -1,0 +1,70 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ocbm-identity: this unit's USB identity, derived from the chip's unique ID only.
+#
+#   chip ID   = the OCBM_CHIPID_LEN (8) raw bytes at OCBM_CHIPID_OFFSET of OCBM_NVMEM
+#               (i.MX6ULL: OCOTP CFG0||CFG1, nvmem bytes 4..11, two little-endian words)
+#   h         = sha256 of those raw bytes
+#   iSerial   = "OCBM-" + h[0:12]
+#   dev_addr  = h[0:12]  as a MAC, unicast + locally administered (NCM device side)
+#   host_addr = h[12:24] as a MAC, unicast + locally administered (NCM host side, stable lease)
+#
+# Writes $OCBM_RUN/{serial,dev_addr,host_addr} (0444) and $OCBM_RUN/chip-id (0400, the raw ID as
+# %08x%08x of CFG0,CFG1). The raw ID stays local: it is printed in the UART/NCM shell banner and
+# after an SSH login, never put in a USB descriptor, mDNS or any network service. On this SoC the
+# raw ID hex IS the first half of the kernel-staging UpgKey text (key = hex(CFG0,CFG1)), so treat
+# chip-id like a secret: do not paste it into logs, issues or commits.
+#
+# The MAC fuses (MAC0/MAC1) are never used here. Exit 1, writing nothing, if the ID is unreadable.
+[ -r /etc/baseline/board.env ] && . /etc/baseline/board.env
+: "${OCBM_NVMEM:=/sys/bus/nvmem/devices/imx-ocotp0/nvmem}"
+: "${OCBM_CHIPID_OFFSET:=4}"
+: "${OCBM_CHIPID_LEN:=8}"
+: "${OCBM_RUN:=/run/ocbm}"
+
+die() { echo "ocbm-identity: $*" >&2; exit 1; }
+[ -r "$OCBM_NVMEM" ] || die "no $OCBM_NVMEM (NVMEM_IMX_OCOTP not probed?)"
+
+words=$((OCBM_CHIPID_LEN / 4))
+raw=$(hexdump -v -s "$OCBM_CHIPID_OFFSET" -n "$OCBM_CHIPID_LEN" -e "$words/4 \"%08x\"" "$OCBM_NVMEM" 2>/dev/null)
+[ "${#raw}" -eq $((OCBM_CHIPID_LEN * 2)) ] || die "short read of the chip ID"
+case $raw in
+    *[!0-9a-f]*) die "chip ID is not hex" ;;
+esac
+# An unprogrammed or unreadable OCOTP reads all zeros; every unit would get the same identity.
+case $raw in
+    *[!0]*) ;;
+    *) die "chip ID reads all zeros" ;;
+esac
+
+# shellcheck disable=SC2046
+set -- $(dd if="$OCBM_NVMEM" bs=1 skip="$OCBM_CHIPID_OFFSET" count="$OCBM_CHIPID_LEN" 2>/dev/null | sha256sum)
+h=$1
+[ "${#h}" -eq 64 ] || die "sha256sum failed"
+
+first12() { printf '%s' "${1%"${1#????????????}"}"; }
+mac() {
+    x=$1
+    b0=${x%??????????}
+    r=${x#??}
+    out=$(printf '%02x' $(( (0x$b0 & 0xfc) | 0x02 )))
+    while [ -n "$r" ]; do
+        out="$out:${r%"${r#??}"}"
+        r=${r#??}
+    done
+    printf '%s' "$out"
+}
+
+h0=$(first12 "$h")
+h1=$(first12 "${h#????????????}")
+
+umask 022
+mkdir -p "$OCBM_RUN" || die "cannot create $OCBM_RUN"
+printf 'OCBM-%s\n' "$h0" > "$OCBM_RUN/serial.new" && mv "$OCBM_RUN/serial.new" "$OCBM_RUN/serial"
+mac "$h0" > "$OCBM_RUN/dev_addr.new" && echo >> "$OCBM_RUN/dev_addr.new" && mv "$OCBM_RUN/dev_addr.new" "$OCBM_RUN/dev_addr"
+mac "$h1" > "$OCBM_RUN/host_addr.new" && echo >> "$OCBM_RUN/host_addr.new" && mv "$OCBM_RUN/host_addr.new" "$OCBM_RUN/host_addr"
+chmod 0444 "$OCBM_RUN/serial" "$OCBM_RUN/dev_addr" "$OCBM_RUN/host_addr"
+umask 077
+printf '%s\n' "$raw" > "$OCBM_RUN/chip-id.new" && mv "$OCBM_RUN/chip-id.new" "$OCBM_RUN/chip-id"
+chmod 0400 "$OCBM_RUN/chip-id"
+exit 0

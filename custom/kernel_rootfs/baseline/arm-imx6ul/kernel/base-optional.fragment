@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Merged after base.fragment; build.sh only WARNS if one of these does not survive (symbols whose
+# name or existence in 7.2.10 is not verified). UNMEASURED size effect.
+# Initrd decompressors: the initramfs is built in and uncompressed (the kernel image is XZ as a
+# whole), so none is needed. LIVI kept the defaults; this is a size change against LIVI.
+# CONFIG_RD_GZIP is not set
+# CONFIG_RD_BZIP2 is not set
+# CONFIG_RD_LZMA is not set
+# CONFIG_RD_XZ is not set
+# CONFIG_RD_LZO is not set
+# CONFIG_RD_LZ4 is not set
+# CONFIG_RD_ZSTD is not set
+# The legacy /sys/class/gpio export interface, if 7.2 splits it out of GPIO_SYSFS.
+CONFIG_GPIO_SYSFS_LEGACY=y

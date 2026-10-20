@@ -1,0 +1,53 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Flow derived from LIVI write_rootfs() (native/livi-link/crates/livi-link-provision/src/dongle/arm/
+# imx6ul/boot.rs, GPL-3.0-or-later): size and 4 KiB checks, flashcp, read back with dd | sha256sum,
+# clear bootstate. Changes: runs on the unit (recovery) instead of from the host, refuses without the
+# caller's sha256, sets the bootstate mark for the duration of the write, --if-changed for usb-update.
+#
+#   flash-rootfs [--if-changed] <image|host:port> <sha256>
+#   (--if-changed: exit 3, touching nothing, if the partition already holds the image)
+#
+# Writes a baseline rootfs squashfs to the 'rootfs' MTD. Never reboots. An interrupted write is
+# repairable: the kernel and this recovery are on another partition, and the bootstate mark set
+# before the write keeps the next boot in recovery until a verified write clears it.
+ME=flash-rootfs
+LOG=/run/flash-rootfs.log
+. /lib/baseline/mtd.sh
+. /lib/baseline/flash-lib.sh
+
+if_changed=
+[ "$1" = --if-changed ] && { if_changed=1; shift; }
+[ $# -eq 2 ] || { echo "usage: $ME [--if-changed] <image|host:port> <sha256>" >&2; exit 2; }
+valid_sha "$2" || die "the second argument must be the image's sha256 (64 lowercase hex)"
+WANT=$2
+
+N=$(mtd_num rootfs) || die "no 'rootfs' MTD partition"
+mounted "/dev/mtdblock$N" && die "/dev/mtdblock$N is mounted; flash it from recovery"
+PART=$(mtd_attr "$N" size)
+
+IMG=$(fetch "$1" /tmp/rootfs.img) || die "cannot read $1 (a file, or host:port of a one-shot server)"
+SIZE=$(fsize "$IMG")
+[ "$SIZE" -gt 0 ] && [ "$SIZE" -le "$PART" ] || die "image is $SIZE B, the partition $PART B"
+[ $((SIZE % 4096)) -eq 0 ] || die "image is $SIZE B, not a whole number of 4 KiB blocks"
+[ "$(hexdump -n 4 -e '4/1 "%02x"' "$IMG")" = 68737173 ] || die "image does not start with the squashfs magic hsqs"
+GOT=$(sha_file "$IMG")
+[ "$GOT" = "$WANT" ] || die "image sha256 is $GOT, not $WANT; nothing written"
+
+NOW=$(dd if="/dev/mtd$N" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
+if [ "$NOW" = "$WANT" ]; then
+    say "mtd$N already holds this image"
+    [ -n "$if_changed" ] && exit 3
+else
+    S=$(mtd_num bootstate) && { bootstate_set "$S" || say "could not set the bootstate mark"; }
+    say "writing $SIZE B to mtd$N (log $LOG); an interruption here is repairable from recovery"
+    flashcp -v "$IMG" "/dev/mtd$N" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG); retry flash-rootfs"
+    sync
+    NOW=$(dd if="/dev/mtd$N" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
+    [ "$NOW" = "$WANT" ] || die "mtd$N does not read back as written ($NOW); retry flash-rootfs"
+    say "wrote and verified mtd$N"
+fi
+S=$(mtd_num bootstate) && bootstate_clear "$S" && say "bootstate cleared"
+[ "$IMG" = /tmp/rootfs.img ] && rm -f /tmp/rootfs.img
+say "done; 'reboot' boots the new rootfs"
+exit 0

@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# USB_HOST=1: the female port (usbotg1) as a host port for the ROOTFS (usb-mount). The host side of
+# chipidea is part of the built-in ci_hdrc driver, so USB core + EHCI + CHIPIDEA_HOST are built in;
+# the storage stack is modules in the rootfs. Pair with dts/imx6ull-ccpa-usbhost.dtsi (build.sh does).
+# Size effect UNMEASURED (build.sh measure).
+CONFIG_USB=y
+CONFIG_USB_CHIPIDEA_HOST=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_EHCI_ROOT_HUB_TT=y
+CONFIG_USB_EHCI_HCD_PLATFORM=y
+CONFIG_SCSI=m
+CONFIG_BLK_DEV_SD=m
+CONFIG_USB_STORAGE=m
+CONFIG_PARTITION_ADVANCED=y
+CONFIG_MSDOS_PARTITION=y
+CONFIG_EFI_PARTITION=y
+CONFIG_FAT_FS=m
+CONFIG_VFAT_FS=m
+CONFIG_EXFAT_FS=m
+# NLS core itself is built in on every build: USB_GADGET=y selects NLS (drivers/usb/gadget/Kconfig;
+# CONFIG_NLS=m here failed the strict check on 7.2.10, 2026-10-20). The codepages stay modules.
+CONFIG_NLS_CODEPAGE_437=m
+CONFIG_NLS_ISO8859_1=m
+CONFIG_NLS_UTF8=m
+CONFIG_FAT_DEFAULT_CODEPAGE=437
+CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"

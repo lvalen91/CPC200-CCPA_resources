@@ -1,0 +1,78 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# usb-update: the optional last step of the recovery init, in RECOVERY_USB=1 builds only. Bounded and
+# quiet: it logs to /run/usb-update.log, never writes to the console unless it is about to write flash,
+# and never touches the UART or NCM shells. On a USB stick (vfat; exFAT only if built in) it looks for
+#
+#   ccpa-baseline/rootfs.img        + ccpa-baseline/rootfs.img.sha256       (sha256sum format)
+#   ccpa-baseline/kernel-part.img   + ccpa-baseline/kernel-part.img.sha256  (stage_kernel.py output,
+#                                                                            staged for THIS unit)
+#
+# and runs the same helpers as a shell would, with --if-changed: an image already on flash is left
+# alone, so a stick left plugged in cannot cause a flash/reboot loop. rootfs first; the kernel only if
+# the rootfs step did not fail. It reboots only if it wrote something.
+LOG=/run/usb-update.log
+exec >> "$LOG" 2>&1 < /dev/null
+trap '' HUP PIPE
+con() { echo "usb-update: $*" > /dev/console; echo "usb-update: $*"; }
+echo "usb-update: start $(cat /proc/uptime)"
+
+n=0
+dev=
+while [ "$n" -lt "${USB_UPDATE_WAIT:-20}" ]; do
+    for d in /dev/sd[a-z][0-9] /dev/sd[a-z][0-9][0-9] /dev/sd[a-z]; do
+        [ -b "$d" ] && { dev=1; break; }
+    done
+    [ -n "$dev" ] && break
+    n=$((n + 1))
+    sleep 1
+done
+[ -n "$dev" ] || { echo "usb-update: no USB block device after ${USB_UPDATE_WAIT:-20} s"; exit 0; }
+sleep 2   # let the partition table be read
+
+mkdir -p /mnt/usb
+B=
+for d in /dev/sd[a-z][0-9] /dev/sd[a-z][0-9][0-9] /dev/sd[a-z]; do
+    [ -b "$d" ] || continue
+    mount -t vfat -o ro "$d" /mnt/usb 2>/dev/null || mount -t exfat -o ro "$d" /mnt/usb 2>/dev/null || continue
+    if [ -d /mnt/usb/ccpa-baseline ]; then
+        B=/mnt/usb/ccpa-baseline
+        echo "usb-update: bundle on $d"
+        break
+    fi
+    umount /mnt/usb
+done
+[ -n "$B" ] || { echo "usb-update: no ccpa-baseline/ directory on any USB filesystem"; exit 0; }
+
+hash_of() { [ -r "$1" ] && read -r _h _rest < "$1" && echo "$_h"; }
+wrote=
+
+if [ -f "$B/rootfs.img" ]; then
+    h=$(hash_of "$B/rootfs.img.sha256") || { echo "usb-update: rootfs.img without rootfs.img.sha256, skipped"; umount /mnt/usb; exit 0; }
+    flash-rootfs --if-changed "$B/rootfs.img" "$h"
+    case $? in
+        0) wrote=1; con "rootfs written from USB" ;;
+        3) echo "usb-update: rootfs already on flash" ;;
+        *) con "rootfs from USB failed, see /run/flash-rootfs.log; kernel step skipped"; umount /mnt/usb; exit 0 ;;
+    esac
+fi
+
+if [ -f "$B/kernel-part.img" ]; then
+    h=$(hash_of "$B/kernel-part.img.sha256") || { echo "usb-update: kernel-part.img without .sha256, skipped"; umount /mnt/usb; exit 0; }
+    NO_REBOOT=1 flash-kernel --if-changed "$B/kernel-part.img" "$h"
+    case $? in
+        0) wrote=1; con "kernel written from USB" ;;
+        3) echo "usb-update: kernel already on flash" ;;
+        *) con "kernel from USB failed, see /run/flash-kernel.log. DO NOT POWER OFF until it is fixed"; umount /mnt/usb; exit 0 ;;
+    esac
+fi
+
+umount /mnt/usb
+if [ -n "$wrote" ]; then
+    con "rebooting in 5 s"
+    sync
+    sleep 5
+    exec /bin/busybox reboot -f
+fi
+echo "usb-update: nothing to do"
+exit 0

@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * The female USB port (usbotg1, 2184000.usb) as a host port. Included ONLY by USB_HOST=1 /
+ * RECOVERY_USB=1 builds (build.sh writes the include into imx6ull-ccpa-variant.dtsi).
+ *
+ * VERIFIED, the vendor boot log AND the stock DTB agree:
+ *  - stock DTB (the FDT U-Boot passes: offset 0x800 of the decrypted update env in mtd0+0x20000,
+ *    33,027 B; norboot copies it from 0x80800800): usb@02184000 and usb@02184200 are
+ *    "fsl,imx6ul-usb", status okay, dr_mode = "otg", disable-over-current, NO vbus-supply, NO pinctrl-0;
+ *    /regulators has no USB VBUS regulator, and the OTG1_ID pad is not muxed.
+ *  - vendor boot log (saved stock dmesg, var/log/box_last_reboot.log lines 276-285, 299-359):
+ *    "2184000.usb supply vbus not found, using dummy regulator" (same for 2184200.usb); ci_hdrc.0 ran the
+ *    OTG state machine, "fsm->id = 0" at 0.29 s -> a_host at 3.11 s, a USB stick enumerated at 3.34 s
+ *    (sda1, vfat, /mnt/UPAN). The ID pin reads 0 (host) at boot.
+ * Hence dr_mode "host" (no ID pin needed, and host-only creates no second UDC), NO vbus-supply,
+ * disable-over-current: all as the vendor. Never "otg"/"peripheral" here while the kernel has a UDC
+ * driver: a second UDC would appear, and the NCM gadget must stay on usbotg2 (net-up selects the UDC
+ * by NCM_UDC_MATCH in board.env, so it would not silently move, but nothing needs it).
+ * UNVERIFIED: whether the GPIOs init_gpio.sh calls "quick charge" (sysfs gpio6/gpio7 on the vendor
+ * 3.14 kernel, i.e. GPIO1_IO06/IO07 if bank 1 started at 0 there) gate VBUS; the port's current limit;
+ * mainline chipidea host behaviour on this board. Wired-CarPlay role swapping (dr_mode "otg" plus the
+ * vendor's a_suspend_req_inf use) is out of the baseline; mainline chipidea would need USB_OTG_FSM /
+ * role-switch support for it.
+ */
+&usbotg1 {
+	dr_mode = "host";
+	disable-over-current;
+	status = "okay";
+};

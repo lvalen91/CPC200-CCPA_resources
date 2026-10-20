@@ -1,0 +1,9 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# reboot-recovery: set the bootstate mark and reboot, so the next boot stays in the recovery
+# initramfs (UART + NCM telnet shells, flash helpers) without needing the UART Enter window.
+. /lib/baseline/mtd.sh
+N=$(mtd_num bootstate) || { echo "reboot-recovery: no 'bootstate' MTD" >&2; exit 1; }
+bootstate_set "$N" || { echo "reboot-recovery: could not write the mark" >&2; exit 1; }
+sync
+reboot

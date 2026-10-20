@@ -1,0 +1,39 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# persist load|save|add-key FILE|list: a tar archive of /run/persist on the 'customer' MTD (64 KiB),
+# the only thing the baseline writes to flash at runtime besides the bootstate mark. Holds the SSH
+# host key and runtime-added authorized keys; no unit identity (the chip ID is re-derived each boot).
+# The 'customer' partition is the one LIVI's livid keeps its settings in: a LIVI archive there does
+# not parse as tar, `load` reports it, and the first `save` replaces it.
+# A power loss during `save` loses the archive (the host key is regenerated, the fingerprint changes).
+. /lib/baseline/mtd.sh
+P=/run/persist
+N=$(mtd_num customer) || { echo "persist: no 'customer' MTD" >&2; exit 1; }
+D=/dev/mtd$N
+umask 077
+mkdir -p "$P"
+case $1 in
+    load)
+        if tar -xf "$D" -C "$P" 2>/dev/null; then
+            echo "persist: loaded from mtd$N"
+        else
+            echo "persist: mtd$N holds no persist archive (erased, or another system's data)"
+        fi
+        ;;
+    save)
+        tar -cf /run/persist.tar -C "$P" . || exit 1
+        size=$(($(wc -c < /run/persist.tar)))
+        part=$(mtd_attr "$N" size)
+        [ "$size" -le "$part" ] || { echo "persist: archive is $size B, mtd$N $part B" >&2; rm -f /run/persist.tar; exit 1; }
+        flashcp /run/persist.tar "$D" || { echo "persist: flashcp failed" >&2; rm -f /run/persist.tar; exit 1; }
+        rm -f /run/persist.tar
+        echo "persist: saved to mtd$N ($size B)"
+        ;;
+    add-key)
+        [ -r "$2" ] || { echo "usage: persist add-key FILE (an OpenSSH public key line)" >&2; exit 2; }
+        cat "$2" >> "$P/authorized_keys" && chmod 0600 "$P/authorized_keys" && "$0" save \
+            && cat "$2" >> /run/ssh/authorized_keys && echo "persist: key added (active now)"
+        ;;
+    list) ls -la "$P" ;;
+    *) echo "usage: persist load|save|add-key FILE|list" >&2; exit 2 ;;
+esac

@@ -1,0 +1,628 @@
+path	type	size	bucket	evidence
+/$	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923203); not vendor; no ref
+/.ash_history	regular file	2810	UNKNOWN	shell history artifact on /
+/:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791404632); not vendor; no ref
+/::	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444614); not vendor; no ref
+/?	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923203); not vendor; no ref
+/@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444587); not vendor; no ref
+/Cj!	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923203); not vendor; no ref
+/Killed	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791379227); not vendor; no ref
+/Library/Keychains/default.keychain	regular file	870	HEWEI-RESIDUE	stock Apple keychain; no reference
+/Permission	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923215); not vendor; no ref
+/W?Hh?????J???????????????????	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923209); not vendor; no ref
+/[	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791346732); not vendor; no ref
+/[expected	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442402); not vendor; no ref
+/[ror:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444617); not vendor; no ref
+/]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445669); not vendor; no ref
+/ant:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791404646); not vendor; no ref
+/b	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791446112); not vendor; no ref
+/biected	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791343122); not vendor; no ref
+/bin/ash	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/base64	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/bash	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/busybox	regular file	1001020	KEEP-BASE	rcS:9 telnetd; all applet symlinks; PID1 init (/linuxrc, /sbin/init)
+/bin/cat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/catv	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/chattr	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/chgrp	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/chmod	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/chown	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/conspy	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/cp	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/cpio	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/cttyhack	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/date	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/dd	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/df	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/dmesg	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/dnsdomainname	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/dumpkmap	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/echo	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ed	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/egrep	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/false	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/fatattr	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/fdflush	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/fgrep	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/fsync	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/getopt	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/grep	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/gunzip	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/gzip	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/hostname	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/hush	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ionice	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/iostat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ipcalc	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/kbd_mode	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/kill	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/linux32	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/linux64	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ln	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/login	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ls	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/lsattr	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/lzop	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/makemime	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mkdir	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mknod	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mktemp	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/more	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mount	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mountpoint	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mpstat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/msh	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mt	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/mv	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/netstat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/nice	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/pidof	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ping	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ping6	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/pipe_progress	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/printenv	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/ps	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/pwd	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/reformime	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/rev	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/rm	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/rmdir	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/rpm	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/run-parts	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/scriptreplay	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/sed	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/setarch	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/setserial	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/sh	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/sh:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791448109); not vendor; no ref
+/bin/sh::	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923209); not vendor; no ref
+/bin/sleep	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/sr:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442713); not vendor; no ref
+/bin/sroot@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442713); not vendor; no ref
+/bin/st@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442730); not vendor; no ref
+/bin/stat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/stty	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/su	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/sync	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/tar	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/touch	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/true	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/umount	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/uname	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/uncompress	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/usleep	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/vi	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/watch	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/bin/zcat	symbolic link	7	KEEP-BASE	busybox applet symlink -> busybox
+/binn	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791346729); not vendor; no ref
+/binr:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444613); not vendor; no ref
+/boot@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791346720); not vendor; no ref
+/control	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444563); not vendor; no ref
+/d	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791446110); not vendor; no ref
+/enied	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923203); not vendor; no ref
+/error:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442713); not vendor; no ref
+/etc/.custom_bluetooth_name	regular file	10	KEEP-RADIO	bt_on.sh:17 flag read by bluetoothDaemon
+/etc/.delete	regular file	11	HEWEI-RESIDUE	stock OTA deletion list (mirror.bgd)
+/etc/.manufacture_date_sign	regular file	32	HEWEI-RESIDUE	vendor signature of manufacture date; unreferenced
+/etc/assets	symbolic link	6	UNKNOWN	symlink -> ../tmp (dangling at flash level; stock). unreferenced in scripts
+/etc/bluetooth/eir_info	regular file	92	UNKNOWN	no script/binary string reference; stock bluetoothDaemon may read it
+/etc/bluetooth/hcid.conf	regular file	1310	KEEP-RADIO	bt_on.sh:19
+/etc/bluetooth/mybluetooth.tar.gz	regular file	614	HEWEI-RESIDUE	stock BT pairing restore blob (holds a paired device link key); unreferenced
+/etc/bluetooth/rfcomm.conf	regular file	297	HEWEI-RESIDUE	no rfcomm binary; unreferenced
+/etc/bluetooth_name	regular file	10	KEEP-RADIO	bt_on.sh:18; radio_hal.sh:256
+/etc/box_name	regular file	7	KEEP-RADIO	radio_hal.sh:219
+/etc/box_product_type	regular file	4	HEWEI-RESIDUE	vendor metadata (A15W); unreferenced
+/etc/box_version	regular file	4	HEWEI-RESIDUE	vendor metadata; unreferenced
+/etc/carplay/bt_link_keys	regular file	25	KEEP-OCBM	ocbmd strings (OCBM state; BT link keys)
+/etc/carplay_peers.bin	regular file	69	KEEP-OCBM	ocbmd strings + peer_store.sh:3 (OCBM state; holds paired-phone data)
+/etc/dbus-1/session.conf	regular file	1016	UNKNOWN	dbus-daemon strings (unpacked) -- ONLY reachable via dbus-daemon, whose launcher is unproven
+/etc/dbus-1/system.conf	regular file	2270	UNKNOWN	dbus-daemon strings (unpacked) -- ONLY reachable via dbus-daemon, whose launcher is unproven
+/etc/dbus-1/system.d/bluetooth.conf	regular file	1131	UNKNOWN	included by dbus system.conf policy dir; for hcid -- ONLY reachable via dbus-daemon, whose launcher is unproven
+/etc/dbus-1/system.d/hfpd.conf	regular file	981	UNKNOWN	included by dbus system.conf policy dir; for hfpd -- ONLY reachable via dbus-daemon, whose launcher is unproven
+/etc/device_serial	regular file	32	HEWEI-RESIDUE	vendor metadata; unreferenced
+/etc/dropbear/dropbear_dss_host_key	regular file	458	UNKNOWN	dropbear strings name only ecdsa/ed25519/rsa keys; DSS key unreferenced (unit identity)
+/etc/dropbear/dropbear_ecdsa_host_key	regular file	141	KEEP-BASE	dropbear strings (unit identity)
+/etc/dropbear/dropbear_ed25519_host_key	regular file	83	KEEP-BASE	dropbear strings (unit identity)
+/etc/dropbear/dropbear_rsa_host_key	regular file	805	KEEP-BASE	dropbear strings (unit identity)
+/etc/factory_name	regular file	9	HEWEI-RESIDUE	vendor factory metadata (GuanSheng); unreferenced
+/etc/fstab	regular file	304	KEEP-BASE	rcS:7 mount -a
+/etc/group	regular file	26	KEEP-BASE	busybox/dropbear
+/etc/hfpd.conf	regular file	70	UNKNOWN	hfpd binary has no /etc/hfpd.conf string (static, may be built-in path); stock config for hfpd
+/etc/hostapd.conf	regular file	542	KEEP-RADIO	wlan_on.sh:27 sed; btd+ocbmd strings; radio_ap_up.sh:76
+/etc/hostapd.conf.stock	regular file	538	KEEP-RADIO	session_supervisor.sh:826 (stock default; contains a default PSK - scrub before baseline)
+/etc/hostname	regular file	13	KEEP-BASE	rcS:18
+/etc/hosts	regular file	23	KEEP-BASE	ocbmd/dropbear strings (libc)
+/etc/init.d/._S01_ensure_access	regular file	176	HEWEI-RESIDUE	AppleDouble debris; names deleted stock script
+/etc/init.d/._rcS	regular file	176	HEWEI-RESIDUE	macOS AppleDouble debris from stock image
+/etc/init.d/._webcmd	regular file	176	HEWEI-RESIDUE	AppleDouble debris; names deleted stock script
+/etc/init.d/rcS	regular file	1284	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/etc/inittab	regular file	898	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/etc/log_file	regular empty file	0	UNKNOWN	empty stock file; unreferenced
+/etc/manufacture_date	regular file	8	HEWEI-RESIDUE	vendor metadata; unreferenced
+/etc/mdev.conf	regular file	1076	KEEP-BASE	busybox mdev; rcS:13-14
+/etc/mdev/udisk_hotplug.sh	regular file	825	KEEP-BASE	mdev.conf:38 ACTIVE rule; HeWei stock code (header); overlay /etc/mdev/usb_mount.sh NOT installed on this unit
+/etc/mdev/udisk_insert.sh	regular file	583	KEEP-BASE	mdev.conf:39 ACTIVE rule; HeWei stock code
+/etc/mdev/udisk_remove.sh	regular file	594	KEEP-BASE	mdev.conf:40 ACTIVE rule; HeWei stock code
+/etc/overcommit	regular file	2	HEWEI-RESIDUE	unreferenced (rcS:35 writes /proc/sys/vm/overcommit_memory directly)
+/etc/p2p_supplicant.conf	regular file	354	HEWEI-RESIDUE	no wpa_supplicant/p2p binary on unit
+/etc/passwd	regular file	30	KEEP-BASE	busybox login/dropbear
+/etc/passwd-	regular file	30	UNKNOWN	backup copy created by busybox passwd tool, md5 == passwd
+/etc/profile	regular file	1071	KEEP-BASE	rcS:3
+/etc/resolv.conf	regular file	24	KEEP-BASE	ocbmd strings; libc
+/etc/serial_number	regular file	20	KEEP-RADIO	wlan_on.sh:12; ocbmd strings
+/etc/shadow	regular file	38	KEEP-BASE	busybox/dropbear
+/etc/shadow-	regular file	38	UNKNOWN	backup copy created by busybox passwd tool, differs from shadow
+/etc/software_version	regular file	15	KEEP-BASE	rcS:19
+/etc/udhcpd.conf	regular file	4226	KEEP-RADIO	radio_ap_up.sh:181-183 (HeWei header)
+/etc/wifi_name	regular file	10	KEEP-RADIO	wlan_on.sh:28 writes; radio_ap_up.sh:106
+/etc/wpa_supplicant.conf	regular file	81	HEWEI-RESIDUE	no wpa_supplicant binary on unit
+/found	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923209); not vendor; no ref
+/g/etc/icon_256x256.pn	regular file	34179	HEWEI-RESIDUE	stray truncated-name copy of stock icon (ncm_base ETC_A icon_256x256.png); no reference
+/h:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445677); not vendor; no ref
+/h::	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445669); not vendor; no ref
+/ion	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444571); not vendor; no ref
+/j?	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923203); not vendor; no ref
+/l	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444570); not vendor; no ref
+/lib/firmware/nxp/WlanCalData_ext.conf	regular file	870	HEWEI-RESIDUE	IW416 cal data; wifi_mod_para.conf has cal_data_cfg=none; unreferenced. NOTE: is_radio() protected
+/lib/firmware/nxp/iw416_ko.tar.gz	regular file	618821	KEEP-RADIO	wlan_on.sh:7; bt_on.sh:7; attach_bluetooth.sh:26 (mlan.ko moal.ko hci_uart.ko); radio_detect.sh:72 KO_TARBALL
+/lib/firmware/nxp/sdioiw416_wlan_v0.bin	regular file	425896	KEEP-RADIO	wifi_mod_para.conf fw_name= (loaded by moal.ko)
+/lib/firmware/nxp/txpower_iw416.bin	regular file	5011	KEEP-RADIO	wifi_mod_para.conf txpwrlimit_cfg=
+/lib/firmware/nxp/uartiw416_bt_v0.bin	regular file	160900	KEEP-RADIO	attach_bluetooth.sh:45 fw_loader_linux arg
+/lib/firmware/nxp/wifi_mod_para.conf	regular file	245	KEEP-RADIO	wlan_on.sh:20 mod_para=
+/lib/firmware/nxp/wifi_mod_para_p2psta.conf	regular file	338	HEWEI-RESIDUE	IW416 alt mod_para (drv_mode=5); no script/binary names it. NOTE: /lib/firmware is protected by ncm_base_install is_radio()
+/lib/ld-2.20.so	regular file	134380	KEEP-BASE	dynamic loader (ld-linux.so.3) for sftp-server, hcitool, fw_loader_linux, set_wifi_mac
+/lib/ld-linux.so.3	symbolic link	10	KEEP-BASE	soname/dev symlink -> ld-2.20.so (KEEP-BASE)
+/lib/libatomic.so	symbolic link	18	HEWEI-RESIDUE	soname/dev symlink -> libatomic.so.1.1.0 (HEWEI-RESIDUE)
+/lib/libatomic.so.1	symbolic link	18	HEWEI-RESIDUE	soname/dev symlink -> libatomic.so.1.1.0 (HEWEI-RESIDUE)
+/lib/libatomic.so.1.1.0	regular file	18352	HEWEI-RESIDUE	no NEEDED consumer among all ELF on unit (only symlinks libatomic.so/.so.1) [unused lib, not strictly HeWei]
+/lib/libc-2.20.so	regular file	1251160	KEEP-BASE	NEEDED by sftp-server, hcitool, fw_loader_linux, set_wifi_mac, dbus-daemon
+/lib/libc.so.6	symbolic link	12	KEEP-BASE	soname/dev symlink -> libc-2.20.so (KEEP-BASE)
+/lib/libcrypt-2.20.so	regular file	30232	KEEP-BASE	NEEDED by sftp-server
+/lib/libcrypt.so	symbolic link	13	KEEP-BASE	soname/dev symlink -> libcrypt.so.1 (KEEP-BASE)
+/lib/libcrypt.so.1	symbolic link	16	KEEP-BASE	soname/dev symlink -> libcrypt-2.20.so (KEEP-BASE)
+/lib/libdl-2.20.so	regular file	9752	KEEP-BASE	NEEDED by sftp-server, dbus-daemon
+/lib/libdl.so	symbolic link	10	KEEP-BASE	soname/dev symlink -> libdl.so.2 (KEEP-BASE)
+/lib/libdl.so.2	symbolic link	13	KEEP-BASE	soname/dev symlink -> libdl-2.20.so (KEEP-BASE)
+/lib/libgcc_s.so.1	regular file	125536	KEEP-BASE	NEEDED by set_wifi_mac, libstdc++
+/lib/libm-2.20.so	regular file	665120	KEEP-BASE	NEEDED by set_wifi_mac, libstdc++, dbus-daemon
+/lib/libm.so	symbolic link	9	KEEP-BASE	soname/dev symlink -> libm.so.6 (KEEP-BASE)
+/lib/libm.so.6	symbolic link	12	KEEP-BASE	soname/dev symlink -> libm-2.20.so (KEEP-BASE)
+/lib/libnsl-2.20.so	regular file	71560	UNKNOWN	no NEEDED consumer, but glibc NSS defaults (no /etc/nsswitch.conf: passwd=compat, hosts=dns) can dlopen it from dynamic glibc programs (sftp-server getpwuid); nsl needed by compat/nis
+/lib/libnsl.so	symbolic link	11	UNKNOWN	soname/dev symlink -> libnsl.so.1 (UNKNOWN)
+/lib/libnsl.so.1	symbolic link	14	UNKNOWN	soname/dev symlink -> libnsl-2.20.so (UNKNOWN)
+/lib/libnss_compat-2.20.so	regular file	26408	UNKNOWN	no NEEDED consumer, but glibc NSS defaults (no /etc/nsswitch.conf: passwd=compat, hosts=dns) can dlopen it from dynamic glibc programs (sftp-server getpwuid); nsl needed by compat/nis
+/lib/libnss_compat.so	symbolic link	18	UNKNOWN	soname/dev symlink -> libnss_compat.so.2 (UNKNOWN)
+/lib/libnss_compat.so.2	symbolic link	21	UNKNOWN	soname/dev symlink -> libnss_compat-2.20.so (UNKNOWN)
+/lib/libnss_dns-2.20.so	regular file	17976	UNKNOWN	no NEEDED consumer, but glibc NSS defaults (no /etc/nsswitch.conf: passwd=compat, hosts=dns) can dlopen it from dynamic glibc programs (sftp-server getpwuid); nsl needed by compat/nis
+/lib/libnss_dns.so	symbolic link	15	UNKNOWN	soname/dev symlink -> libnss_dns.so.2 (UNKNOWN)
+/lib/libnss_dns.so.2	symbolic link	18	UNKNOWN	soname/dev symlink -> libnss_dns-2.20.so (UNKNOWN)
+/lib/libnss_files-2.20.so	regular file	42640	KEEP-BASE	glibc NSS dlopen by sftp-server (getpwuid); also NEEDED by libnss_nis
+/lib/libnss_files.so	symbolic link	17	KEEP-BASE	soname/dev symlink -> libnss_files.so.2 (KEEP-BASE)
+/lib/libnss_files.so.2	symbolic link	20	KEEP-BASE	soname/dev symlink -> libnss_files-2.20.so (KEEP-BASE)
+/lib/libnss_nis-2.20.so	regular file	42640	UNKNOWN	no NEEDED consumer, but glibc NSS defaults (no /etc/nsswitch.conf: passwd=compat, hosts=dns) can dlopen it from dynamic glibc programs (sftp-server getpwuid); nsl needed by compat/nis
+/lib/libnss_nis.so	symbolic link	15	UNKNOWN	soname/dev symlink -> libnss_nis.so.2 (UNKNOWN)
+/lib/libnss_nis.so.2	symbolic link	18	UNKNOWN	soname/dev symlink -> libnss_nis-2.20.so (UNKNOWN)
+/lib/libpthread-2.20.so	regular file	92608	KEEP-BASE	NEEDED by fw_loader_linux (+librt)
+/lib/libpthread.so.0	symbolic link	18	KEEP-BASE	soname/dev symlink -> libpthread-2.20.so (KEEP-BASE)
+/lib/libresolv-2.20.so	regular file	75568	KEEP-BASE	NEEDED by sftp-server
+/lib/libresolv.so	symbolic link	14	KEEP-BASE	soname/dev symlink -> libresolv.so.2 (KEEP-BASE)
+/lib/libresolv.so.2	symbolic link	17	KEEP-BASE	soname/dev symlink -> libresolv-2.20.so (KEEP-BASE)
+/lib/librt-2.20.so	regular file	26600	KEEP-BASE	NEEDED by fw_loader_linux
+/lib/librt.so	symbolic link	10	KEEP-BASE	soname/dev symlink -> librt.so.1 (KEEP-BASE)
+/lib/librt.so.1	symbolic link	13	KEEP-BASE	soname/dev symlink -> librt-2.20.so (KEEP-BASE)
+/lib/libssp.so	symbolic link	15	HEWEI-RESIDUE	soname/dev symlink -> libssp.so.0.0.0 (HEWEI-RESIDUE)
+/lib/libssp.so.0	symbolic link	15	HEWEI-RESIDUE	soname/dev symlink -> libssp.so.0.0.0 (HEWEI-RESIDUE)
+/lib/libssp.so.0.0.0	regular file	6032	HEWEI-RESIDUE	no NEEDED consumer on unit [unused lib, not strictly HeWei]
+/lib/libstdc++.so.6	symbolic link	19	KEEP-BASE	soname/dev symlink -> libstdc++.so.6.0.20 (KEEP-BASE)
+/lib/libstdc++.so.6.0.20	regular file	801032	KEEP-BASE	NEEDED by set_wifi_mac only
+/lib/libutil-2.20.so	regular file	9788	KEEP-BASE	NEEDED by sftp-server
+/lib/libutil.so	symbolic link	12	KEEP-BASE	soname/dev symlink -> libutil.so.1 (KEEP-BASE)
+/lib/libutil.so.1	symbolic link	15	KEEP-BASE	soname/dev symlink -> libutil-2.20.so (KEEP-BASE)
+/lib/libz.so	symbolic link	9	KEEP-BASE	soname/dev symlink -> libz.so.1 (KEEP-BASE)
+/lib/libz.so.1	symbolic link	14	KEEP-BASE	soname/dev symlink -> libz.so.1.2.11 (KEEP-BASE)
+/lib/libz.so.1.2.11	regular file	73736	KEEP-BASE	NEEDED (libz.so) by sftp-server
+/lib/modules/3.14.52+g94d07bb/build	symbolic link	44	UNKNOWN	symlink -> /home/sk/workspace/imx-3.10.53/kernel-source
+/lib/modules/3.14.52+g94d07bb/modules.alias	regular file	162	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.alias.bin	regular file	245	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.builtin	regular file	20583	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.builtin.bin	regular file	23326	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.ccwmap	regular file	69	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.dep	regular file	908	KEEP-BASE	busybox modprobe/depmod name in strings
+/lib/modules/3.14.52+g94d07bb/modules.dep.bb	regular file	2252	KEEP-BASE	busybox modprobe name in strings
+/lib/modules/3.14.52+g94d07bb/modules.dep.bin	regular file	1450	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.devname	regular file	52	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.ieee1394map	regular file	73	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.inputmap	regular file	141	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.isapnpmap	regular file	81	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.ofmap	regular file	74	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.order	regular file	351	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.pcimap	regular file	99	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.seriomap	regular file	43	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.softdep	regular file	131	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.symbols	regular file	2842	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.symbols.bin	regular file	3138	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/modules.usbmap	regular file	189	UNKNOWN	kernel modules.* metadata; /lib/modules/3.14.52+g94d07bb/kernel has NO .ko files; name not in busybox strings
+/lib/modules/3.14.52+g94d07bb/source	symbolic link	44	UNKNOWN	symlink -> /home/sk/workspace/imx-3.10.53/kernel-source
+/linuxrc	symbolic link	11	KEEP-BASE	busybox applet symlink -> bin/busybox
+/nd	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791340246); not vendor; no ref
+/nied	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442735); not vendor; no ref
+/not	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445671); not vendor; no ref
+/ntax	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442715); not vendor; no ref
+/ntrol	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791446106); not vendor; no ref
+/oot@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445678); not vendor; no ref
+/ot@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791445679); not vendor; no ref
+/pected	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791340369); not vendor; no ref
+/rned	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444563); not vendor; no ref
+/rol	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791340245); not vendor; no ref
+/root/.ash_history	regular file	4549	UNKNOWN	shell history, runtime artifact (contains riddle strings from earlier commands)
+/root/.ssh/authorized_keys	regular file	208	KEEP-BASE	dropbear (access key)
+/root@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923257); not vendor; no ref
+/ror:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791442713); not vendor; no ref
+/sbin/acpid	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/adjtimex	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/arp	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/blkid	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/blockdev	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/bootchartd	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/depmod	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/devmem	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/fbsplash	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/fdisk	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/findfs	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/freeramdisk	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/fsck	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/fsck.minix	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/fstrim	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/getty	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/halt	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/hdparm	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/hwclock	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ifconfig	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ifdown	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ifenslave	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ifup	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/init	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/insmod	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ip	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/ipaddr	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/iplink	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/iproute	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/iprule	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/iptunnel	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/klogd	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/loadkmap	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/logread	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/losetup	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/lsmod	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/makedevs	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mdev	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mkdosfs	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mke2fs	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mkfs.ext2	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mkfs.minix	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mkfs.vfat	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/mkswap	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/modinfo	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/modprobe	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/nameif	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/pivot_root	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/poweroff	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/raidautorun	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/reboot	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/rmmod	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/route	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/runlevel	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/setconsole	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/slattach	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/start-stop-daemon	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/sulogin	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/swapoff	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/swapon	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/switch_root	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/sysctl	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/syslogd	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/tunctl	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/udhcpc	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/vconfig	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/watchdog	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/sbin/zcip	symbolic link	14	KEEP-BASE	busybox applet symlink -> ../bin/busybox
+/script/after_shutdown.sh	regular file	934	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/attach_bluetooth.sh	regular file	6218	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/bt_off.sh	regular file	634	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/bt_on.sh	regular file	3364	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/carplay-status.sh	regular file	1325	KEEP-OCBM	tools/ file referenced by session_supervisor.sh/install_fhs.sh (not in ocbm_install manifest); md5 MATCH
+/script/copy_to_tmp.sh	regular file	1296	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/custom_init.sh	regular file	3389	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/early_console.sh	regular file	505	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/init_gpio.sh	regular file	1100	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/ko.tar.gz	regular file	51417	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/mount_usb.sh	regular file	1207	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/ncm_only	regular empty file	0	KEEP-OCBM	OCBM mode/state flag or log (ocbm_boot.sh, ocbm_install.sh:453,481)
+/script/ocbm_boot.sh	regular file	9145	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/ocbm_failover	regular empty file	0	KEEP-OCBM	OCBM mode/state flag or log (ocbm_boot.sh, ocbm_install.sh:453,481)
+/script/ocbm_failover.log	regular file	2825	KEEP-OCBM	OCBM mode/state flag or log (ocbm_boot.sh, ocbm_install.sh:453,481)
+/script/peer_store.sh	regular file	2462	KEEP-OCBM	tools/ file referenced by session_supervisor.sh/install_fhs.sh (not in ocbm_install manifest); md5 MATCH
+/script/phone_reset.sh	regular file	2229	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/script/projection_up.sh	regular file	4025	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/script/radio_ap_up.sh	regular file	14421	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/radio_detect.sh	regular file	16103	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/radio_hal.sh	regular file	43253	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/run_ocbmd.sh	regular file	757	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/script/run_supervisor.sh	regular file	1158	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/script/session_supervisor.sh	regular file	93663	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 DIFF vs repo build
+/script/start_bluetooth_wifi.sh	regular file	2167	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/script/start_main_service.sh	regular file	3452	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/start_ncm.sh	regular file	672	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/sync_box_time.sh	regular file	1605	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/uart_console.sh	regular file	356	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/wlan_off.sh	regular file	1030	KEEP-OCBM	ccpa/rootfs overlay path; md5 MATCH
+/script/wlan_on.sh	regular file	1614	KEEP-OCBM	ccpa/rootfs overlay path; md5 DIFF vs repo overlay
+/sh:	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444792); not vendor; no ref
+/sion	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923209); not vendor; no ref
+/t	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791340238); not vendor; no ref
+/t@~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791446109); not vendor; no ref
+/trol	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791444614); not vendor; no ref
+/turned	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1577923209); not vendor; no ref
+/usr/bin/[	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/[[	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ar	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/awk	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/basename	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/beep	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/bunzip2	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/bzcat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/bzip2	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/cal	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/chpst	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/chrt	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/chvt	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/cksum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/clear	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/cmp	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/comm	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/crontab	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/cryptpw	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/cut	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/dc	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/deallocvt	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/diff	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/dirname	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/dos2unix	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/du	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/dumpleases	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/eject	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/env	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/envdir	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/envuidgid	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/expand	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/expr	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/fgconsole	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/find	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/flock	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/fold	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/free	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ftpget	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ftpput	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/fuser	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/groups	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/hd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/head	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/hexdump	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/hostid	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/iap_role_switch	regular file	20504	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/usr/bin/iap_trigger	regular file	20504	UNKNOWN	20504 B static ARM, same size as iap_role_switch but different md5; zero references in scripts/OCBM binaries/repo (only docs/ops/captures log)
+/usr/bin/id	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/install	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ipcrm	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ipcs	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/killall	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/last	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/less	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/logger	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/logname	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lpq	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lpr	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lsof	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lspci	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lsusb	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lzcat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lzma	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/lzopcat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/man	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/md5sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/mesg	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/microcom	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/mkfifo	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/mkpasswd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/nc	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/nmeter	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/nohup	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/nslookup	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/od	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/openvt	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/passwd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/patch	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pgrep	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pkill	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pmap	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/printf	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pscan	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pstree	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/pwdx	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/readlink	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/realpath	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/renice	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/reset	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/resize	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/rpm2cpio	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/runsv	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/runsvdir	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/rx	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/script	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/seq	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/setkeycodes	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/setsid	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/setuidgid	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sha1sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sha256sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sha3sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sha512sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/showkey	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/shuf	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/smemcap	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/softlimit	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sort	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/split	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/strings	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sum	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/sv	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tac	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tail	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tcpsvd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tee	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/telnet	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/test	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tftp	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/time	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/timeout	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/top	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tr	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/traceroute	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/traceroute6	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/tty	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/ttysize	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/udpsvd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unexpand	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/uniq	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unix2dos	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unlink	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unlzma	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unlzop	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unxz	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/unzip	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/uptime	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/users	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/uudecode	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/uuencode	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/vlock	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/volname	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/wall	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/wc	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/wget	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/which	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/who	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/whoami	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/whois	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/xargs	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/xz	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/xzcat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/bin/yes	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/lib/.delete	regular file	58	HEWEI-RESIDUE	stock OTA deletion list
+/usr/lib/libbluetooth.so	symbolic link	22	KEEP-RADIO	soname/dev symlink -> libbluetooth.so.2.11.2 (KEEP-RADIO)
+/usr/lib/libbluetooth.so.2	symbolic link	22	KEEP-RADIO	soname/dev symlink -> libbluetooth.so.2.11.2 (KEEP-RADIO)
+/usr/lib/libbluetooth.so.2.11.2	regular file	58352	KEEP-RADIO	NEEDED by /usr/sbin/hcitool (libbluetooth.so.2)
+/usr/lib/libdbus-1.so	symbolic link	18	HEWEI-RESIDUE	soname/dev symlink -> libdbus-1.so.3.2.0 (HEWEI-RESIDUE)
+/usr/lib/libdbus-1.so.3	symbolic link	18	HEWEI-RESIDUE	soname/dev symlink -> libdbus-1.so.3.2.0 (HEWEI-RESIDUE)
+/usr/lib/libdbus-1.so.3.2.0	regular file	100208	HEWEI-RESIDUE	no NEEDED consumer: hcid/hfpd/bluetoothDaemon are static; dbus-daemon NEEDED list lacks libdbus (UPX-unpacked check); UPX-packed itself [unused lib, not strictly HeWei]
+/usr/lib/libnl-3.so.200	regular file	72948	HEWEI-RESIDUE	no NEEDED consumer (hostapd static); only libnl-genl needs it; built under /home/skyx64 (vendor) [unused lib, not strictly HeWei]
+/usr/lib/libnl-genl-3.so.200	regular file	23568	HEWEI-RESIDUE	no NEEDED consumer on unit [unused lib, not strictly HeWei]
+/usr/lib/libxml2.so	symbolic link	16	UNKNOWN	soname/dev symlink -> libxml2.so.2.9.2 (UNKNOWN)
+/usr/lib/libxml2.so.2	symbolic link	16	UNKNOWN	soname/dev symlink -> libxml2.so.2.9.2 (UNKNOWN)
+/usr/lib/libxml2.so.2.9.2	regular file	614264	UNKNOWN	NEEDED by dbus-daemon (UPX-unpacked copy) and libdbus-1 -- ONLY reachable via dbus-daemon, whose launcher is unproven
+/usr/lib/libz.so	symbolic link	23	HEWEI-RESIDUE	soname/dev symlink -> /usr/lib/libz.so.1.2.11 (HEWEI-RESIDUE)
+/usr/lib/libz.so.1	symbolic link	23	HEWEI-RESIDUE	soname/dev symlink -> /usr/lib/libz.so.1.2.11 (HEWEI-RESIDUE)
+/usr/lib/libz.so.1.2.11	regular file	73736	HEWEI-RESIDUE	byte-identical duplicate of /lib/libz.so.1.2.11 (same md5); loader searches /lib first (LD_LIBRARY_PATH=/lib:/usr/lib in /etc/profile:5) [unused lib, not strictly HeWei]
+/usr/libexec/sftp-server	regular file	91764	KEEP-BASE	dropbear subsystem; ocbm_install.sh:195 (scp relies on it)
+/usr/sbin/.delete	regular file	12	HEWEI-RESIDUE	stock OTA deletion list (adb, carlife)
+/usr/sbin/aa-bridge	regular file	365736	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/usr/sbin/add-shell	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/addgroup	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/adduser	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/arping	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/bluetoothDaemon	regular file	173032	KEEP-RADIO	bt_on.sh:24; attach_bluetooth.sh:4; btd strings
+/usr/sbin/brctl	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/btd	regular file	599768	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/usr/sbin/carplayd	regular file	1902160	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 DIFF vs repo build
+/usr/sbin/chat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/chpasswd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/chroot	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/crond	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/dbus-daemon	regular file	119016	UNKNOWN	UPX-packed; NEEDED libxml2.so.2/libc/libdl/libm; no launcher in any /script, rcS, inittab or OCBM binary strings; stock boot log shows it PPID 1 (box_last_reboot.log:91); maybe spawned by bluetoothDaemon (unproven)
+/usr/sbin/delgroup	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/deluser	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/dhcprelay	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/dnsd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/dropbear	regular file	436856	KEEP-BASE	rcS:8
+/usr/sbin/ether-wake	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/fakeidentd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/fbset	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/fdformat	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ftpd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/fw_loader_linux	regular file	22380	KEEP-RADIO	attach_bluetooth.sh:45; radio_detect.sh:83 (IW416 BT FW loader)
+/usr/sbin/hciattach	regular file	16056	KEEP-RADIO	attach_bluetooth.sh:46; radio_detect.sh:79 BT_ATTACH
+/usr/sbin/hciconfig	regular file	33484	KEEP-RADIO	attach_bluetooth.sh:47; btd strings
+/usr/sbin/hcid	regular file	105976	KEEP-RADIO	bt_off.sh:8 killall name; bluez stack spawned via bluetoothDaemon chain (spawn UNPROVEN, see notes)
+/usr/sbin/hcitool	regular file	48504	KEEP-RADIO	attach_bluetooth.sh:51; radio_detect.sh:181
+/usr/sbin/hfpd	regular file	126248	KEEP-RADIO	bt_off.sh:8; bt_on.sh:4 comment
+/usr/sbin/hostapd	regular file	284560	KEEP-RADIO	bt_on/wlan_on/session_supervisor; stock hostapd (same size as RTL stock dump) /etc/profile PATH
+/usr/sbin/httpd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/iap2d	regular file	539840	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 DIFF vs repo build
+/usr/sbin/ifplugd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/killall5	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/loadfont	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/lpd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/nanddump	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/nandwrite	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/nbd-client	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ntpd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ocbmd	regular file	432056	KEEP-OCBM	ocbm_install.sh manifest (:150-178); md5 MATCH
+/usr/sbin/popmaildir	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/powertop	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/rdate	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/rdev	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/readahead	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/readprofile	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/remove-shell	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/rtcwake	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/sendmail	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/set_wifi_mac	regular file	6256	KEEP-RADIO	radio_hal.sh:228; wlan_on.sh/bt_on.sh/attach_bluetooth.sh
+/usr/sbin/setfont	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/setlogcons	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/svlogd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/telnetd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/tftpd	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubiattach	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubidetach	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubimkvol	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubirmvol	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubirsvol	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/ubiupdatevol	symbolic link	17	KEEP-BASE	busybox applet symlink -> ../../bin/busybox
+/usr/sbin/udhcpd	regular file	15000	KEEP-RADIO	radio_ap_up.sh (SoftAP DHCP); separate 15KB binary, not busybox
+/usr/share/udhcpc/default.script	regular file	1285	KEEP-BASE	busybox udhcpc script path (strings); no udhcpc call found in scripts
+/var/lib/dhcp6s_duid	regular file	16	HEWEI-RESIDUE	stock dhcp6s DUID; no reference
+/var/lib/lockdown/common.cert	regular file	7612	HEWEI-RESIDUE	stock Apple lockdown pairing cert (usbmuxd era); no reference
+/var/lib/lockdown/root_key.pem	regular file	1675	HEWEI-RESIDUE	stock Apple lockdown root key; no reference
+/var/lib/udhcpd.leases	regular file	24	UNKNOWN	UNCLASSIFIED regular file
+/var/log/box_last_reboot.log	regular file	104225	UNKNOWN	stock-era ps dump (A15W/riddle strings) but written by after_shutdown.sh:30 (shutdown hook) -> regenerated, not stock data
+/var/log/box_update.log	regular file	85176	HEWEI-RESIDUE	HeWei OTA update log (HeWei/AutoBox/riddle strings); no writer on unit
+/~]#	regular empty file	0	UNKNOWN	JUNK: empty file in / created by a stray shell redirect (mtime 1791446097); not vendor; no ref

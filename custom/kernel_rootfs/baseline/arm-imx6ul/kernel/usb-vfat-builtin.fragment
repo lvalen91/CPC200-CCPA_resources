@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# USB_VFAT_BUILTIN=1 (and always with RECOVERY_USB=1): the storage stack and vfat built into the kernel
+# instead of modules. Keep only if the image stays under 0x302fd8 (build.sh measure).
+CONFIG_SCSI=y
+CONFIG_BLK_DEV_SD=y
+CONFIG_USB_STORAGE=y
+CONFIG_FAT_FS=y
+CONFIG_VFAT_FS=y
+CONFIG_NLS=y
+CONFIG_NLS_CODEPAGE_437=y
+CONFIG_NLS_ISO8859_1=y
+CONFIG_NLS_UTF8=y

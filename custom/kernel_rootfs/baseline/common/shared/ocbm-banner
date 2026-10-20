@@ -1,0 +1,29 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ocbm-banner [STATE]: the banner local shells show (the UART shell, the recovery telnetd's issue
+# file, and /etc/profile after an SSH login). It includes the RAW chip ID, so it must never be wired
+# to anything a peer sees before authenticating (dropbear -b, a web page, mDNS): on this SoC the raw
+# ID hex is the first half of the kernel-staging key.
+[ -r /etc/baseline/board.env ] && . /etc/baseline/board.env
+[ -r /etc/baseline/ncm.conf ] && . /etc/baseline/ncm.conf
+R=${OCBM_RUN:-/run/ocbm}
+v() { [ -r "$1" ] && cat "$1" || echo "(unknown)"; }
+echo
+echo "${BOARD_NAME:-baseline} $(v /etc/baseline-release)${1:+ - $1}"
+echo "  iSerial  $(v "$R/serial")"
+echo "  chip ID  $(v "$R/chip-id")   (raw OCOTP CFG0,CFG1: local only, half of the kernel-staging key)"
+echo "  NCM      device ${NCM_DEV_IP:-?}, host ${NCM_HOST_IP:-?} (DHCP)"
+if [ -e /etc/baseline/recovery ]; then
+    cat <<'EOT'
+  recovery tools:
+    flash-rootfs <img|host:port> <sha256>            write + verify the rootfs squashfs, clear bootstate
+    flash-kernel [--restore] <img|host:port> <sha256> write + verify the HOST-STAGED kernel partition
+                                                      image (stage_kernel.py), erase env, reboot
+    net-up [ncm|acm] / net-down      USB gadget, one function at a time
+    rx FILE                          receive a file over the UART (xmodem)
+    reboot                           = sync + reboot -f (PID 1 here is a script, not init)
+  host:port pulls with nc from a one-shot server (baseline/common/tools/serve_once.py).
+  Long writes over telnet: the helpers ignore SIGHUP and log to /run/flash-*.log.
+EOT
+fi
+echo

@@ -1,0 +1,102 @@
+#!/bin/busybox sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/initramfs/init (https://github.com/f-io/LIVI,
+# GPL-3.0-or-later). Changes against LIVI: no bridge, no Wi-Fi AP, no second telnetd; telnetd is bound
+# to the NCM address only; the rootfs is taken over only if it carries /etc/baseline-release; the
+# rootfs sets its own gadget up (no LINK_ONLY hand-over); /run is a tmpfs moved into the rootfs; PID 1
+# never execs the UART shell (an `exit` there would kill init and panic the kernel), it respawns it;
+# an optional, last, quiet USB update step (RECOVERY_USB=1 builds only).
+#
+# PID 1 of the recovery initramfs built into the kernel image. Order:
+#   1. pseudo filesystems, chip identity (/run/ocbm)
+#   2. take over the squashfs on the 'rootfs' MTD if it is a baseline rootfs, the 'bootstate' marker
+#      is clear and nobody presses Enter on the UART within 1 s; else stay here:
+#   3. UART shell (respawned) + NCM: 192.168.50.2, DHCP for the host, telnetd on 192.168.50.2:23
+#      (unauthenticated, rescue only), then [RECOVERY_USB=1] usb-update in the background.
+/bin/busybox --install -s
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+mkdir -p /dev/pts /run /tmp /mnt/root /var
+mount -t devpts devpts /dev/pts
+mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
+mount -t configfs configfs /sys/kernel/config
+[ -e /var/run ] || ln -s /run /var/run
+# No modules in here: the kernel must not exec a modprobe helper that does not exist.
+[ -w /proc/sys/kernel/modprobe ] && echo > /proc/sys/kernel/modprobe
+
+. /etc/baseline/board.env
+. /etc/baseline/ncm.conf
+. /lib/baseline/mtd.sh
+con() { echo "$*" > /dev/console; }
+REL=$(cat /etc/baseline-release 2>/dev/null)
+con "$BOARD_NAME recovery initramfs $REL"
+ocbm-identity 2> /dev/console || con "recovery: no chip identity, the USB serial falls back to a placeholder"
+
+ROOT_N=$(mtd_num rootfs)
+STATE_N=$(mtd_num bootstate)
+why=
+if [ -z "$ROOT_N" ]; then
+    why="no 'rootfs' MTD partition"
+elif ! mount -t squashfs -o ro "/dev/mtdblock$ROOT_N" /mnt/root 2>/dev/null; then
+    why="'rootfs' (mtd$ROOT_N) holds no squashfs"
+elif [ ! -f /mnt/root/etc/baseline-release ] || [ ! -x /mnt/root/init ] || [ ! -x /mnt/root/sbin/init ]; then
+    # A stock or LIVI rootfs also has an /init; its userspace must not run on this kernel.
+    umount /mnt/root
+    why="the squashfs on mtd$ROOT_N is not a baseline rootfs"
+elif [ -n "$STATE_N" ] && [ "$(bootstate_read "$STATE_N")" = "$BOOT_MARK_HEX" ]; then
+    umount /mnt/root
+    why="the last rootfs boot did not clear bootstate (flash_eraseall -q /dev/mtd$STATE_N, then reboot, to try it again)"
+else
+    # Whatever reached the UART before the question is no answer to it (LIVI: a UART that hears its
+    # own output has the boot loader's lines waiting there).
+    stty -F /dev/console -icanon min 0 time 0 && cat /dev/console > /dev/null
+    stty -F /dev/console icanon
+    con "rootfs $(cat /mnt/root/etc/baseline-release) on mtd$ROOT_N, switching in 1 s, Enter on the UART for recovery"
+    if read -t 1 _ < /dev/console; then
+        umount /mnt/root
+        why="Enter on the UART"
+    else
+        if [ -n "$STATE_N" ]; then
+            bootstate_set "$STATE_N" || con "recovery: could not write the bootstate mark, no boot-loop guard for this boot"
+        else
+            con "recovery: no 'bootstate' MTD, no boot-loop guard for this boot"
+        fi
+        mount -o move /dev /mnt/root/dev
+        mount -o move /run /mnt/root/run
+        # If this exec fails PID 1 dies, the kernel panics (panic=10 in bootargs) and reboots, and the
+        # bootstate mark just written keeps the next boot here.
+        exec switch_root /mnt/root /init
+    fi
+fi
+
+con "recovery: $why"
+[ -e /sys/class/leds/red/trigger ] && echo timer > /sys/class/leds/red/trigger
+ifconfig lo 127.0.0.1 up
+umask 077
+# ocbm-identity creates /run/ocbm only when it succeeds; the banner (and telnetd -f) need it anyway.
+mkdir -p /run/ocbm
+ocbm-banner "recovery: $why" > /run/ocbm/banner 2>/dev/null
+umask 022
+
+# NCM shell: link, address, DHCP, then telnetd bound to the NCM address only. Background, so a slow
+# or missing UDC never delays the UART shell.
+(
+    if IF=$(net-up ncm 2> /dev/console); then
+        if telnetd -b "$NCM_DEV_IP:23" -l /bin/sh -f /run/ocbm/banner; then
+            con "recovery: NCM shell on $IF: telnet $NCM_DEV_IP (unauthenticated, rescue only)"
+        else
+            con "recovery: telnetd failed"
+        fi
+    fi
+) &
+
+# Last, quiet, bounded; logs to /run/usb-update.log only.
+[ -e /etc/baseline/recovery-usb ] && ( usb-update > /dev/null 2>&1 & )
+
+cat /run/ocbm/banner > /dev/console 2>/dev/null
+# PID 1 stays this script: the UART shell is respawned, never exec'd.
+while :; do
+    setsid cttyhack sh
+    sleep 1
+done

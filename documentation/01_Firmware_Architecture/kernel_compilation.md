@@ -2,7 +2,7 @@
 
 **Purpose:** Feasibility analysis and build guide for compiling a custom/updated Linux kernel for the CPC200-CCPA (i.MX6ULL)
 **Date:** 2026-06-30; **corrected 2026-10-19** (real on-flash format; staging-block write path; Path 3 proven on hardware)
-**Status:** Feasibility confirmed. **A replacement kernel has been booted on hardware** (LIVI 9.5.0, mainline Linux 7.2.10, 2026-10-19). The `keystream.bin` recipe that used to be here was never real and is removed. Evidence E1/E2/E3 and labels as defined in `05_Security_Analysis/kernel_encryption.md`.
+**Status:** Feasibility confirmed. **A replacement kernel has been booted on hardware** (LIVI 9.5.0, mainline Linux 7.2.10, 2026-10-19). The `keystream.bin` recipe that used to be here was never real and is removed. Evidence E1/E2/E3 and labels as defined in `05_Security_Analysis/kernel_encryption.md`. **[Added 2026-10-20]** All kernel/rootfs replacement work is in `custom/kernel_rootfs/`: the E1 backup, the run logs (`hardware_tests/`), the tools, the LIVI analysis (`livi/README.md`) and the vanilla baseline recipe (`baseline/`). The baseline has been built and booted in QEMU only. Its first hardware write, on 2026-10-20, is OPEN.
 
 ---
 
@@ -69,7 +69,7 @@ A power cut between the start of step 4 and the end of step 5 leaves the old hea
 
 ### Getting back from LIVI to the stock kernel [UNTESTED]
 
-Nothing in this section has been run. `RUNBOOK.txt` records the rollback through LIVI's rescue system as not yet tested; the alternative is writing the full 16 MB backup with a SPI programmer. It only works with the **same unit's** backup, because the DCP head in `mtd1.bin` is per chip.
+Nothing in this section has been run. `RUNBOOK.txt` (`custom/kernel_rootfs/hardware_tests/2026-10-19_round_trip/`) records the rollback through LIVI's rescue system as not yet tested; the alternative is writing the full 16 MB backup with a SPI programmer. It only works with the **same unit's** backup, because the DCP head in `mtd1.bin` is per chip.
 
 LIVI's MTD map (E3 `scripts/livi-link/arm/imx6ul/imx6ull.dts`; the same map was seen live on 2026-10-19):
 
@@ -83,7 +83,7 @@ LIVI's MTD map (E3 `scripts/livi-link/arm/imx6ul/imx6ull.dts`; the same map was 
 | `/dev/mtd5` | `bootstate` | `0xFF0000`–`0xFFFFFF` | mtd2, last `0x10000` B |
 
 1. Work from LIVI's rescue initramfs, not from LIVI Link running on its mounted squashfs. LIVI's own provisioning refuses to write the rootfs partition unless it runs in rescue (E3 `boot.rs`).
-2. Check that `/proc/mtd` shows exactly the map above and that the backup `mtd1.bin`/`mtd2.bin` match their recorded sha256. Same preconditions as above: wall power, programmer or an explicit decision, `setsid` for every write. Fetch files by pulling them from the host; pushing with `nc` truncated three times on 2026-10-19 (`RUNBOOK.txt`).
+2. Check that `/proc/mtd` shows exactly the map above and that the backup `mtd1.bin`/`mtd2.bin` match their recorded sha256. **[Added 2026-10-20]** On the IW416 bench unit, first read `/tmp/fc.log` and `sha256sum /dev/mtd2`. A baseline kernel write to that partition was issued on 2026-10-20 and its outcome is OPEN (`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_kernel_write.md`). The LIVI-state partition is `custom/kernel_rootfs/backups/20261020_livi_pre-baseline/mtd2_dump1.bin` (`c58710c5…`). Same preconditions as above: wall power, programmer or an explicit decision, `setsid` for every write. Fetch files by pulling them from the host; pushing with `nc` truncated three times on 2026-10-19 (`RUNBOOK.txt`).
 3. Rootfs first. Split the backup `mtd2.bin` into `0xc60000` + `0x10000` + `0x10000` bytes (`dd bs=65536`, counts 198, 1, 1) and write the parts with `flashcp -v` to `/dev/mtd3`, `/dev/mtd4`, `/dev/mtd5`; check each by sha256. LIVI's kernel, and the rescue initramfs inside it, is still on flash at this point, so this step can be repeated if it fails [INFERRED].
 4. Kernel last: `flashcp -v mtd1.bin /dev/mtd2`, then check `sha256sum /dev/mtd2` against the backup `mtd1.bin`.
 5. Erase the env partition (`flash_eraseall /dev/mtd1`), as the RUNBOOK restore note says, so U-Boot rebuilds it from the update environment.
@@ -177,6 +177,7 @@ Binary-only modules in rootfs that CANNOT be recompiled:
 - Its zImage is 3,124,994 B, 32,982 B under the stock `0x302fd8` limit.
 - It carries its own DTB appended to the zImage (`CONFIG_ARM_APPENDED_DTB`, E3 `build.sh`), so it does not depend on the stock DTB U-Boot passes.
 - Module vermagic only matters if the vendor `.ko` files are kept; LIVI replaces the whole userspace.
+- **[Added 2026-10-20]** A vanilla recipe on the same path is `custom/kernel_rootfs/baseline/`. It uses mainline 7.2.10 with LIVI's patches 0001-0004 and LIVI's MTD map, and adds a recovery initramfs in the kernel and a minimal squashfs. Default image 1,753,695 B, so 1,404,281 B spare under `0x302fd8`. It is MEASURED on the build host and QEMU only, not booted on the board. The 2026-10-20 hardware write is OPEN.
 
 NXP maintains `linux-imx` with LTS branches (`lf-6.1.y`, `lf-5.15.y`) supporting i.MX6ULL, and mainline supports the SoC directly. A newer kernel will boot if:
 1. A correct Device Tree Blob (DTB) exists for the CCPA board. Either append it to the zImage, or accept the stock one U-Boot passes at `0x83000000`: the NXP 14x14-EVK tree stored in the U-Boot environment, written for 3.14 bindings.

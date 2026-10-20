@@ -1,0 +1,6 @@
+layout: kernel_len=0x302fd8 staging=0x342fd8 (partition offset 0x302fd8) convert pairs=[('0x342fd8', '0x40000'), ('0x352fd8', '0x50000'), ('0x362fd8', '0x60000')]
+zImage: 3157976 bytes sha256 35014617e11d455e
+plan.unchanged (kernel partition already holds this): True
+mtd0 env block @0x30000: holds data (65280 non-FF bytes); U-Boot+update block (first 0x30000 bytes) is untouched by the flow
+sha256(current mtd1) = 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128
+sha256(planned mtd1) = 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128

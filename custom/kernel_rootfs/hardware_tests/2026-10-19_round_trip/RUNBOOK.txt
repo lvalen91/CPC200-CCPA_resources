@@ -1,0 +1,43 @@
+Round-trip test: stock kernel through the vendor U-Boot's own conversion (prepared 2026-10-19; RUN 2026-10-19, PASS, see RESULT below)
+[Corrected 2026-10-20 in this repo copy: the header still read "NOT yet run" although both runs below are recorded; the RESULT/LIVI FLASH
+ sections agree with the operator notes taken during the runs. In this repo: dryrun.py and flash_erase are in ../../tools/, the backup ('../' below) is
+ ../../backups/20261019_IW416_ocbm_baseline_pre-livi/. The owner-local original is unchanged.]
+Files: dryrun.py + dryrun_report.txt (offline plan), flash_erase (stock 25,628 B dynamic, sha256 437e1b7f...), ../ backup (full_16MB_for_programmer.bin = SPI restore image).
+Basis: LIVI imx6ul-uboot/boot.rs flow, read from source, not executed. Unit: IW416 OCBM baseline, soc i.MX6ULL, glibc 2.20 present.
+
+DRY RUN RESULT (done, offline): plan.unchanged = True; planned mtd1 sha256 == current mtd1 sha256 (738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128).
+=> NO kernel write is needed. The only flash write is erasing ONE 64 KB block of mtd0 (offset 0x30000 = 196608, the U-Boot env block).
+
+PRE-FLIGHT (read-only on unit)
+ 1. Wall power, nothing else on the supply. SPI programmer + clip ready, full_16MB_for_programmer.bin on the host.
+ 2. Re-pull mtd0 and mtd1 over ssh; sha256 must equal SHA256SUMS (mtd0 e62f62a9..., mtd1 738af784...). Any change since backup -> stop and re-backup.
+ 3. scp round_trip/flash_erase to unit:/tmp, chmod +x, run it with no args (usage text only). The OCBM unit has no flash_erase/flashcp.
+
+WRITE (single step; point of no return = the erase)
+ 4. /tmp/flash_erase /dev/mtd0 196608 1 && sync
+ 5. Re-pull mtd0: bytes [0x0,0x30000) must equal backup; [0x30000,0x40000) must be all 0xFF. If not -> do NOT reboot; restore with the programmer.
+ 6. reboot. Expect two resets (U-Boot converts the 3 staging blocks at flash 0x342fd8/0x352fd8/0x362fd8 -> 0x40000/0x50000/0x60000, then rewrites env). Wait up to ~90 s for 192.168.50.2.
+
+PASS CRITERIA (all must hold)
+ - unit returns on NCM and boots the normal OCBM userspace;
+ - mtd1 re-dump sha256 == 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128 (conversion is deterministic);
+ - mtd0[0:0x30000) unchanged; env block (0x30000..0x40000) no longer all 0xFF.
+FAIL -> SPI-restore full_16MB_for_programmer.bin (erase chip first).
+
+UNVERIFIED ASSUMPTIONS (state before running)
+ - that U-Boot with an erased env block falls back to the update-block env and runs heweiencrypt (taken from LIVI's flow/comments, not from U-Boot disassembly);
+ - that conversion is power-loss safe because the env is rewritten last (inferred, untested);
+ - that the stock flash_erase runs against this unit's glibc 2.20 and accepts byte offset 196608.
+
+RESULT (run 2026-10-19 ~16:52-16:55 local, owner accepted risk, no programmer on hand): PASS
+ - pre-flight: mtd0/mtd1 re-pulled, sha256 == backup. flash_erase 1.4.8 pushed to /tmp, ran (usage), accepts "<start offset> <block count>".
+ - write: `/tmp/flash_erase /dev/mtd0 196608 1` -> "Erasing 64 Kibyte @ 30000 ... 100%", rc=0. Re-pull: mtd0[0,0x30000) identical to backup, [0x30000,0x40000) all 0xFF. (Offset is in BYTES on 1.4.8.)
+ - reboot via `(sleep 1; sync; reboot; sleep 5; reboot -f)`; unit back on NCM within ~14 s of the command, normal OCBM userspace (ocbmd via run_ocbmd.sh, /script/ncm_only present), uptime ~36 s at first look.
+ - after: mtd1 sha256 == 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128 (identical to backup); mtd0[0,0x30000) identical; env block rewritten by U-Boot, 65280 non-FF bytes, byte-identical to the pre-erase env.
+LIMIT: this proves U-Boot rebuilds its env after the erase and the kernel is intact. It cannot distinguish "heweiencrypt re-converted the staging blocks (rewriting identical bytes)" from "U-Boot only rewrote the env", because the planned and current kernel are identical. Proving the conversion path needs a kernel that differs (e.g. LIVI's), so that is the next test. Boot took 2 observed resets? NOT measured (only up/down seen).
+
+LIVI FLASH (run 2026-10-19 16:59-17:05 local; owner accepted risk, no SPI programmer): SUCCESS, unit now runs LIVI Link 9.5.0 imx6ul_iw416
+ Stage 1 (kernel): pushed planned mtd1 (sha256 eee0c97009af1a11025c1b68181205074ff77db1bca407e223efb4a7ef8c1a4a, built by dryrun logic = LIVI kernel_partition) and stock flash_erase to /tmp; `flash_erase /dev/mtd1 0 0; cat img > /dev/mtd1; sync` took ~20 s; sha256sum /dev/mtd1 == planned. Then `flash_erase /dev/mtd0 196608 1` (env block), mtd0[0,0x30000) unchanged. Reboot -> unit up at 10.10.10.1 within 10 s: Linux 7.2.10 #1 (Sat Oct 17 02:36:22 UTC 2026), rescue initramfs, new MTD map from LIVI's DTB: uboot 0x30000, env 0x10000, kernel 0x340000, rootfs 0xc60000, customer 0x10000, bootstate 0x10000. Shell on :23 and :2323 (telnet IAC negotiation; use a client that answers IAC).
+ Stage 2 (rootfs): nc PUSH from the Mac truncated at ~146 KB three times (macOS nc -> busybox nc over the NCM link); PULL worked (Mac python server on 10.10.10.100:5611, dongle `nc 10.10.10.100 5611 > /tmp/rootfs.img`), sha256 f2328d518faf5023af9a634868b08572e510b23fbe36cbd9fcc8ce06858c34a5. First flashcp was killed mid-write when my telnet client closed the session (SIGHUP) - run long commands via `setsid sh -c '...' &` and poll a log. Second flashcp -v: rc=0, `dd if=/dev/mtd3 bs=4096 count=472 | sha256sum` == image. `flash_eraseall -q /dev/mtd5` (bootstate), reboot.
+ RESULT: kernel 7.2.10, rootfs squashfs (ro) 1920 KB 100% used, services livi-netd/httpd/ledd/mfid/wifid/btd/accessoryd + hostapd, telnetd :23, http://10.10.10.1/ -> 200 "LIVI Link", USB gadget 0525:a4a1 manufacturer LIVI product "LIVI Link" (NCM). :22 and :2323 closed. Mac got 10.10.10.100 by DHCP.
+ OCBM state: OCBM rootfs/kernel are gone from flash (first 1.9 MB of old JFFS2 overwritten; rest stale). Restore = write ../mtd1.bin to the kernel partition (/dev/mtd2 in the new map, same 0x340000 size, DCP-encrypted head is a valid boot image) and ../mtd2.bin across rootfs+customer+bootstate (/dev/mtd3..5, 0xc80000 total), then erase env block (/dev/mtd1) so U-Boot rebuilds it; or SPI-write ../full_16MB_for_programmer.bin. Rollback via rescue NOT yet tested.

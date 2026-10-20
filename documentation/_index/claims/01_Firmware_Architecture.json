@@ -4358,7 +4358,7 @@
       "local_id": 7,
       "statement": "The 3-partition layout is authoritative; the running kernel boots with root=/dev/mtdblock2 and there is no 4th MTD partition.",
       "topic": "flash_partitions",
-      "source_lines": "21",
+      "source_lines": "23",
       "confidence": "high",
       "signals": [],
       "quote": "There is no 4th MTD partition."
@@ -4369,7 +4369,7 @@
       "local_id": 8,
       "statement": "root=/dev/mtdblock3 comes from NXP 14x14-EVK template text inside the U-Boot image, not from the environment U-Boot runs, which sets root=/dev/mtdblock2.",
       "topic": "uboot_env",
-      "source_lines": "21",
+      "source_lines": "23",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4383,7 +4383,7 @@
       "local_id": 9,
       "statement": "The boot command line sets console=ttyLogFile0, root=/dev/mtdblock2, rootfstype=jffs2, mtdparts 21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs), rootwait quiet rw.",
       "topic": "boot_cmdline",
-      "source_lines": "26",
+      "source_lines": "28",
       "confidence": "high",
       "signals": [],
       "quote": "console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2"
@@ -4394,7 +4394,7 @@
       "local_id": 10,
       "statement": "The norargs env text ends in a space, but setenv rejoins its arguments, so bootargs has no trailing space: the captured cmdline is 137 characters plus a newline and dmesg's Kernel command line ends in rw.",
       "topic": "boot_cmdline",
-      "source_lines": "31",
+      "source_lines": "33",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4408,7 +4408,7 @@
       "local_id": 11,
       "statement": "All three MTD partitions carry flags 0xc00 (MTD_WRITEABLE | MTD_BIT_WRITEABLE).",
       "topic": "mtd_flags",
-      "source_lines": "39",
+      "source_lines": "41",
       "confidence": "high",
       "signals": [],
       "quote": "| mtd0 (uboot) | 0xc00 | MTD_WRITEABLE \\| MTD_BIT_WRITEABLE |"
@@ -4419,7 +4419,7 @@
       "local_id": 12,
       "statement": "All three partitions are Linux-writable from a running root shell, including U-Boot and the kernel.",
       "topic": "mtd_flags",
-      "source_lines": "43",
+      "source_lines": "45",
       "confidence": "high",
       "signals": [],
       "quote": "**All three partitions are Linux-writable from a running root shell — not just mtd2 (rootfs).**"
@@ -4430,7 +4430,7 @@
       "local_id": 13,
       "statement": "Writing an unsigned U-Boot or an undecryptable kernel leaves a unit that does not boot.",
       "topic": "brick_risk",
-      "source_lines": "45",
+      "source_lines": "47",
       "confidence": "high",
       "signals": [],
       "quote": "writing an unsigned U-Boot or an undecryptable kernel leaves a unit that does not boot"
@@ -4441,7 +4441,7 @@
       "local_id": 14,
       "statement": "A new kernel can be written through U-Boot's staging path (verified with LIVI's kernel); the risk is a power cut between the start of the mtd1 erase and the end of the env-block erase.",
       "topic": "kernel_write",
-      "source_lines": "48",
+      "source_lines": "50",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4455,7 +4455,7 @@
       "local_id": 15,
       "statement": "A non-booting unit is recoverable with a SPI-NOR programmer full-image write because the signed U-Boot is unchanged (inferred; never exercised).",
       "topic": "recovery",
-      "source_lines": "49",
+      "source_lines": "51",
       "confidence": "medium",
       "signals": [
         "2026-10-19",
@@ -4469,7 +4469,7 @@
       "local_id": 16,
       "statement": "Owner reports (unit, date and port not recorded) that no boot-ROM serial-download device appeared with the U-Boot block blank/erased on the tested USB port; the other port is unresolved.",
       "topic": "hab_serial_download",
-      "source_lines": "50",
+      "source_lines": "52",
       "confidence": "medium",
       "signals": [
         "2026-10-19",
@@ -4484,7 +4484,7 @@
       "local_id": 17,
       "statement": "The flash is driven by the fsl-quadspi controller at 0x21e0000.",
       "topic": "flash_hardware",
-      "source_lines": "55",
+      "source_lines": "57",
       "confidence": "high",
       "signals": [],
       "quote": "The flash is driven by the `fsl-quadspi` controller at `0x21e0000`"
@@ -4495,7 +4495,7 @@
       "local_id": 18,
       "statement": "The flash is SPI NOR with 1-byte write size and 64KB erase blocks, matching /proc/mtd erasesize.",
       "topic": "flash_hardware",
-      "source_lines": "61",
+      "source_lines": "63",
       "confidence": "high",
       "signals": [],
       "quote": "| Erase block size | 65,536 bytes (64KB) |"
@@ -4506,7 +4506,7 @@
       "local_id": 19,
       "statement": "U-Boot string at offset 0x1641e is UPGkey: %s.",
       "topic": "uboot_strings",
-      "source_lines": "73",
+      "source_lines": "75",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x1641e | `UPGkey: %s` | Upgrade key logging |"
@@ -4517,7 +4517,7 @@
       "local_id": 20,
       "statement": "U-Boot string at offset 0x1643b is do_decrypt_decompress ret=%d dstLen=%d.",
       "topic": "uboot_strings",
-      "source_lines": "74",
+      "source_lines": "76",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x1643b | `do_decrypt_decompress ret=%d dstLen=%d` | Decryption function |"
@@ -4528,7 +4528,7 @@
       "local_id": 21,
       "statement": "U-Boot string at offset 0x17483 is heweiencrypt.",
       "topic": "uboot_strings",
-      "source_lines": "75",
+      "source_lines": "77",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x17483 | `heweiencrypt` | HeWei encryption marker |"
@@ -4539,7 +4539,7 @@
       "local_id": 22,
       "statement": "U-Boot string at offset 0x16473 is Can't start, Bad Keys.",
       "topic": "uboot_strings",
-      "source_lines": "76",
+      "source_lines": "78",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x16473 | `Can't start, Bad Keys.` | Key validation error |"
@@ -4550,7 +4550,7 @@
       "local_id": 23,
       "statement": "U-Boot string %08x%08x%08x%08x at 0x1640d formats CFG0/CFG1/MAC0/MAC1 into the UpgKey text.",
       "topic": "uboot_strings",
-      "source_lines": "77",
+      "source_lines": "79",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4564,7 +4564,7 @@
       "local_id": 24,
       "statement": "U-Boot banner at 0x1b0f6 is U-Boot 2015.04 (Feb 02 2023 - 23:26:24).",
       "topic": "uboot_version",
-      "source_lines": "78",
+      "source_lines": "80",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4578,7 +4578,7 @@
       "local_id": 25,
       "statement": "mtd0 0x1000-0x20FFF is the HAB-authenticated U-Boot (IVT at 0x1000, U-Boot code); the CSF's Authenticate Data command has one block, start 0x877FF7D0, length 0x20000; byte-identical to the vendor 2025.10.15.1127 AutoBox.img.",
       "topic": "mtd0_map",
-      "source_lines": "85",
+      "source_lines": "87",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4592,7 +4592,7 @@
       "local_id": 26,
       "statement": "mtd0 0x22000-0x2CFFF is 0xFF.",
       "topic": "mtd0_map",
-      "source_lines": "87",
+      "source_lines": "89",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4606,7 +4606,7 @@
       "local_id": 27,
       "statement": "mtd0 0x2D000-0x2FFFF is the UpgKey-encrypted update environment payload, with its length word (0x3000) in the last 4 bytes of the 0x20000 block; per unit.",
       "topic": "mtd0_map",
-      "source_lines": "88",
+      "source_lines": "90",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4620,7 +4620,7 @@
       "local_id": 28,
       "statement": "mtd0 0x30000-0x3FFFF is the 64 KB live environment block, DCP-encrypted (key inferred); per unit.",
       "topic": "mtd0_map",
-      "source_lines": "89",
+      "source_lines": "91",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4635,7 +4635,7 @@
       "local_id": 29,
       "statement": "The update payload and env block are outside both the boot-ROM-loaded range (0x0-0x21FFF) and the authenticated range (0x1000-0x20FFF), so HAB does not cover the environment.",
       "topic": "hab_scope",
-      "source_lines": "91",
+      "source_lines": "93",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4649,7 +4649,7 @@
       "local_id": 30,
       "statement": "The 0x20000 erase block also holds the end of the authenticated U-Boot (0x20000-0x20FFF) and the CSF, so rewriting the update payload erases a block of the signed U-Boot.",
       "topic": "mtd0_map",
-      "source_lines": "93",
+      "source_lines": "95",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4663,7 +4663,7 @@
       "local_id": 31,
       "statement": "The previously documented bootdelay=0 / mtdblock3 / 0x100000 / 0x5F0000 environment is not what U-Boot runs.",
       "topic": "uboot_env",
-      "source_lines": "97",
+      "source_lines": "99",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4677,7 +4677,7 @@
       "local_id": 32,
       "statement": "U-Boot's built-in default environment at mtd0 0x1611d is only bootdelay=0, baudrate=115200, loadaddr=0x80800000.",
       "topic": "uboot_env",
-      "source_lines": "99",
+      "source_lines": "101",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4691,7 +4691,7 @@
       "local_id": 33,
       "statement": "NXP 14x14-EVK template text at mtd0 0xc14-0xfe3 holds the old norargs/norboot with mtdparts 1M(uboot),5056K(kernel),64K(dtb),10M(rootfs).",
       "topic": "uboot_env",
-      "source_lines": "100",
+      "source_lines": "102",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4705,7 +4705,7 @@
       "local_id": 34,
       "statement": "The 0x100000/0x4F0000/0x5F0000 values are the EVK template's partitioning, not this board's.",
       "topic": "uboot_env",
-      "source_lines": "100",
+      "source_lines": "102",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4719,7 +4719,7 @@
       "local_id": 35,
       "statement": "The running environment is per unit: DCP-encrypted in the env block and UpgKey-encrypted+gzipped in the update payload, the readable copy.",
       "topic": "uboot_env",
-      "source_lines": "102",
+      "source_lines": "104",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4733,7 +4733,7 @@
       "local_id": 36,
       "statement": "The live environment has bootcmd=run norboot.",
       "topic": "uboot_env",
-      "source_lines": "105",
+      "source_lines": "107",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4747,7 +4747,7 @@
       "local_id": 37,
       "statement": "The live environment has bootdelay=3.",
       "topic": "uboot_env",
-      "source_lines": "106",
+      "source_lines": "108",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4761,7 +4761,7 @@
       "local_id": 38,
       "statement": "The live U-Boot console variables are console=ttymxc0, baudrate=115200, stdin/stdout/stderr=serial.",
       "topic": "uboot_env",
-      "source_lines": "107",
+      "source_lines": "109",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4775,7 +4775,7 @@
       "local_id": 39,
       "statement": "The live norargs sets console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 with the 256k/3328K/12800K mtdparts.",
       "topic": "uboot_env",
-      "source_lines": "108",
+      "source_lines": "110",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4789,7 +4789,7 @@
       "local_id": 40,
       "statement": "The live norboot: cp 0x80800800 0x83000000 0xf800; sf read 0x80800000 0x40000 0x302fd8; mm w x3; bootz 0x80800000 - 0x83000000.",
       "topic": "uboot_env",
-      "source_lines": "109",
+      "source_lines": "111",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4803,7 +4803,7 @@
       "local_id": 41,
       "statement": "kernel_encryption.md is the single source for the full environment, mm subcommands, heweiencrypt, UpgKey and hardware tests.",
       "topic": "references",
-      "source_lines": "113",
+      "source_lines": "115",
       "confidence": "high",
       "signals": [],
       "quote": "That file is the single source for them."
@@ -4814,7 +4814,7 @@
       "local_id": 42,
       "statement": "Nothing prints on the TX1/RX1 UART pins during U-Boot or kernel boot (verified live 2026-07-08).",
       "topic": "uart_console",
-      "source_lines": "115",
+      "source_lines": "117",
       "confidence": "high",
       "signals": [
         "device-verified"
@@ -4827,7 +4827,7 @@
       "local_id": 43,
       "statement": "U-Boot is version 2015.04.",
       "topic": "uboot_version",
-      "source_lines": "115",
+      "source_lines": "117",
       "confidence": "high",
       "signals": [],
       "quote": "U-Boot itself is **2015.04**."
@@ -4838,7 +4838,7 @@
       "local_id": 44,
       "statement": "The only output on the physical pins is the post-boot inittab root shell at 9600 8N1.",
       "topic": "uart_console",
-      "source_lines": "115",
+      "source_lines": "117",
       "confidence": "high",
       "signals": [
         "device-verified"
@@ -4851,7 +4851,7 @@
       "local_id": 45,
       "statement": "ttyLogFile0 appears only in kernel bootargs; why U-Boot prints nothing on the pins is unresolved.",
       "topic": "uart_console",
-      "source_lines": "115",
+      "source_lines": "117",
       "confidence": "medium",
       "signals": [
         "Corrected 2026-10-19",
@@ -4865,7 +4865,7 @@
       "local_id": 46,
       "statement": "Boot step 1: the boot ROM loads mtd0 0x0-0x21FFF and HAB-authenticates 0x1000-0x20FFF (one CSF block).",
       "topic": "boot_process",
-      "source_lines": "121",
+      "source_lines": "123",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4879,7 +4879,7 @@
       "local_id": 47,
       "statement": "Boot step 2: U-Boot runs norboot; with an erased/invalid env block it uses the update environment and runs heweiencrypt first (inferred).",
       "topic": "boot_process",
-      "source_lines": "122",
+      "source_lines": "124",
       "confidence": "medium",
       "signals": [
         "2026-10-19",
@@ -4893,7 +4893,7 @@
       "local_id": 48,
       "statement": "Boot step 3: cp copies from env offset 0x800, where the DTB (first 0x8103 bytes) is stored, to 0x83000000 before the kernel load overwrites 0x80800000.",
       "topic": "boot_process",
-      "source_lines": "123",
+      "source_lines": "125",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4907,7 +4907,7 @@
       "local_id": 49,
       "statement": "Boot step 4: the kernel is read from the start of mtd1 (0x40000); there is no gap and no header.",
       "topic": "boot_process",
-      "source_lines": "124",
+      "source_lines": "126",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4921,7 +4921,7 @@
       "local_id": 50,
       "statement": "Boot step 5: mm w decrypts the first three 64 KB blocks in place; the rest is plaintext on flash.",
       "topic": "boot_process",
-      "source_lines": "125",
+      "source_lines": "127",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4935,7 +4935,7 @@
       "local_id": 51,
       "statement": "Boot step 6: bootz 0x80800000 - 0x83000000.",
       "topic": "boot_process",
-      "source_lines": "126",
+      "source_lines": "128",
       "confidence": "high",
       "signals": [],
       "quote": "6. `bootz 0x80800000 - 0x83000000`."
@@ -4946,7 +4946,7 @@
       "local_id": 52,
       "statement": "Flash 0x5F0000 is inside mtd2 and holds JFFS2 nodes, not a DTB.",
       "topic": "dtb_location",
-      "source_lines": "128",
+      "source_lines": "130",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4960,7 +4960,7 @@
       "local_id": 53,
       "statement": "The kernel (mtd1.bin) is 3,407,872 bytes at flash offset 0x40000.",
       "topic": "kernel",
-      "source_lines": "137",
+      "source_lines": "139",
       "confidence": "high",
       "signals": [],
       "quote": "| Size | 3,407,872 bytes (3.3MB) |"
@@ -4971,7 +4971,7 @@
       "local_id": 54,
       "statement": "The zImage length is 0x302fd8 (3,157,976 B) per norboot in the 2025.10.15.1127 build; it is build-specific (2025.02.25.1521 build #448 uses 0x303080).",
       "topic": "kernel",
-      "source_lines": "139",
+      "source_lines": "141",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -4985,7 +4985,7 @@
       "local_id": 55,
       "statement": "Only the zImage head is encrypted, not the whole kernel.",
       "topic": "kernel_encryption",
-      "source_lines": "141",
+      "source_lines": "143",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -4999,7 +4999,7 @@
       "local_id": 56,
       "statement": "mtd1 0x000000-0x02FFFF is the DCP-encrypted zImage head.",
       "topic": "kernel_layout",
-      "source_lines": "145",
+      "source_lines": "147",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -5013,7 +5013,7 @@
       "local_id": 57,
       "statement": "mtd1 0x030000-0x302FD7 is the plaintext zImage body.",
       "topic": "kernel_layout",
-      "source_lines": "146",
+      "source_lines": "148",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -5027,7 +5027,7 @@
       "local_id": 58,
       "statement": "mtd1 0x302FD8-0x332FD7 holds 3 x 64 KB staging blocks with the same head under the UpgKey.",
       "topic": "kernel_layout",
-      "source_lines": "147",
+      "source_lines": "149",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -5041,7 +5041,7 @@
       "local_id": 59,
       "statement": "mtd1 0x332FD8-0x33FFFF is 0xFF.",
       "topic": "kernel_layout",
-      "source_lines": "148",
+      "source_lines": "150",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -5055,7 +5055,7 @@
       "local_id": 60,
       "statement": "The .img update key is a different static key; kernel format docs are in 05_Security_Analysis/kernel_encryption.md.",
       "topic": "references",
-      "source_lines": "150",
+      "source_lines": "152",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19"
@@ -5068,7 +5068,7 @@
       "local_id": 61,
       "statement": "The running kernel is Linux version 3.14.52+g94d07bb, built by hcw@ubuntu with gcc 4.9.2.",
       "topic": "kernel_version",
-      "source_lines": "155",
+      "source_lines": "157",
       "confidence": "high",
       "signals": [],
       "quote": "Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC))"
@@ -5079,7 +5079,7 @@
       "local_id": 62,
       "statement": "The kernel build is #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025.",
       "topic": "kernel_version",
-      "source_lines": "156",
+      "source_lines": "158",
       "confidence": "high",
       "signals": [],
       "quote": "#12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025"
@@ -5090,7 +5090,7 @@
       "local_id": 63,
       "statement": "Physical memory range 0x80008000-0x8058b327 (~5.7MB) is kernel code.",
       "topic": "memory_map",
-      "source_lines": "167",
+      "source_lines": "169",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x80008000-0x8058b327 | ~5.7MB | Kernel code |"
@@ -5101,7 +5101,7 @@
       "local_id": 64,
       "statement": "Physical memory range 0x805c0000-0x806684c7 (~0.6MB) is kernel data.",
       "topic": "memory_map",
-      "source_lines": "168",
+      "source_lines": "170",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x805c0000-0x806684c7 | ~0.6MB | Kernel data |"
@@ -5112,7 +5112,7 @@
       "local_id": 65,
       "statement": "I/O region 0x02020000 is UART1/ttymxc0, console pads TX1/RX1 (9600 8N1).",
       "topic": "io_regions",
-      "source_lines": "174",
+      "source_lines": "176",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x02020000 | UART1 / `ttymxc0`"
@@ -5123,7 +5123,7 @@
       "local_id": 66,
       "statement": "I/O region 0x02184000 is USB OTG.",
       "topic": "io_regions",
-      "source_lines": "175",
+      "source_lines": "177",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x02184000 | USB OTG |"
@@ -5134,7 +5134,7 @@
       "local_id": 67,
       "statement": "I/O region 0x02190000 is MMC/SD (mmc0).",
       "topic": "io_regions",
-      "source_lines": "176",
+      "source_lines": "178",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x02190000 | MMC/SD (mmc0) |"
@@ -5145,7 +5145,7 @@
       "local_id": 68,
       "statement": "I/O region 0x021e0000 is QSPI Flash.",
       "topic": "io_regions",
-      "source_lines": "177",
+      "source_lines": "179",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x021e0000 | QSPI Flash |"
@@ -5156,7 +5156,7 @@
       "local_id": 69,
       "statement": "I/O region 0x02280000 is the DCP crypto engine.",
       "topic": "io_regions",
-      "source_lines": "178",
+      "source_lines": "180",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x02280000 | DCP (crypto engine) |"
@@ -5167,7 +5167,7 @@
       "local_id": 70,
       "statement": "The DCP crypto accelerator is at /sys/bus/platform/devices/2280000.crypto.",
       "topic": "crypto_hardware",
-      "source_lines": "188",
+      "source_lines": "190",
       "confidence": "high",
       "signals": [],
       "quote": "| /sys/bus/platform/devices/2280000.crypto | DCP crypto accelerator |"
@@ -5178,7 +5178,7 @@
       "local_id": 71,
       "statement": "The DCP driver is mxs-dcp at /sys/bus/platform/drivers/mxs-dcp.",
       "topic": "crypto_hardware",
-      "source_lines": "189",
+      "source_lines": "191",
       "confidence": "high",
       "signals": [],
       "quote": "| /sys/bus/platform/drivers/mxs-dcp | DCP driver |"
@@ -5189,7 +5189,7 @@
       "local_id": 72,
       "statement": "Listed crypto algorithms: stdrng, michael_mic, ecb(arc4), AES.",
       "topic": "crypto_algorithms",
-      "source_lines": "193",
+      "source_lines": "195",
       "confidence": "high",
       "signals": [],
       "quote": "- stdrng (kernel RNG)"
@@ -5200,7 +5200,7 @@
       "local_id": 73,
       "statement": "The 'AES via DCP hardware' attribution is unsupported; a 2026-10-19 uncaptured live check saw only software ciphers, no AF_ALG, no /dev/crypto, DCP IRQ 0.",
       "topic": "crypto_algorithms",
-      "source_lines": "198",
+      "source_lines": "200",
       "confidence": "medium",
       "signals": [
         "Corrected 2026-10-19",
@@ -5214,7 +5214,7 @@
       "local_id": 74,
       "statement": "48,959 kernel symbols were extracted from /proc/kallsyms.",
       "topic": "kernel_symbols",
-      "source_lines": "204",
+      "source_lines": "206",
       "confidence": "high",
       "signals": [],
       "quote": "**48,959 symbols extracted** from `/proc/kallsyms`"
@@ -5225,7 +5225,7 @@
       "local_id": 75,
       "statement": "Kernel symbol _stext (kernel start) is at 0x80008200.",
       "topic": "kernel_symbols",
-      "source_lines": "210",
+      "source_lines": "212",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x80008200 | `_stext` (kernel start) |"
@@ -5236,7 +5236,7 @@
       "local_id": 76,
       "statement": "Kernel symbol asm_do_IRQ is at 0x80008200.",
       "topic": "kernel_symbols",
-      "source_lines": "211",
+      "source_lines": "213",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x80008200 | `asm_do_IRQ` |"
@@ -5247,7 +5247,7 @@
       "local_id": 77,
       "statement": "Kernel symbol secondary_startup is at 0x80008500.",
       "topic": "kernel_symbols",
-      "source_lines": "212",
+      "source_lines": "214",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x80008500 | `secondary_startup` |"
@@ -5258,7 +5258,7 @@
       "local_id": 78,
       "statement": "Kernel symbol do_one_initcall is at 0x80008700.",
       "topic": "kernel_symbols",
-      "source_lines": "213",
+      "source_lines": "215",
       "confidence": "high",
       "signals": [],
       "quote": "| 0x80008700 | `do_one_initcall` |"
@@ -5269,7 +5269,7 @@
       "local_id": 79,
       "statement": "Flash dump files are stored at /mnt/UPAN/flash_dump/.",
       "topic": "flash_dump",
-      "source_lines": "220",
+      "source_lines": "222",
       "confidence": "high",
       "signals": [],
       "quote": "Dumped to `/mnt/UPAN/flash_dump/`:"
@@ -5280,7 +5280,7 @@
       "local_id": 80,
       "statement": "Flash dump file mtd0.bin is 256KB, containing the U-Boot bootloader.",
       "topic": "flash_dump",
-      "source_lines": "224",
+      "source_lines": "226",
       "confidence": "high",
       "signals": [],
       "quote": "| mtd0.bin | 256KB | U-Boot bootloader |"
@@ -5291,7 +5291,7 @@
       "local_id": 81,
       "statement": "Flash dump file mtd1.bin is 3.3MB, the kernel with its first 3 x 64 KB encrypted.",
       "topic": "flash_dump",
-      "source_lines": "225",
+      "source_lines": "227",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19"
@@ -5304,7 +5304,7 @@
       "local_id": 82,
       "statement": "Flash dump file mtd2.bin is 12.5MB, containing the JFFS2 rootfs.",
       "topic": "flash_dump",
-      "source_lines": "226",
+      "source_lines": "228",
       "confidence": "high",
       "signals": [],
       "quote": "| mtd2.bin | 12.5MB | JFFS2 rootfs |"
@@ -5315,7 +5315,7 @@
       "local_id": 83,
       "statement": "Flash dump file kallsyms_full.txt is ~2MB, containing kernel symbols.",
       "topic": "flash_dump",
-      "source_lines": "227",
+      "source_lines": "229",
       "confidence": "high",
       "signals": [],
       "quote": "| kallsyms_full.txt | ~2MB | Kernel symbols |"
@@ -5326,7 +5326,7 @@
       "local_id": 84,
       "statement": "Flash dump file cmdline.txt is 138B, containing the boot command line.",
       "topic": "flash_dump",
-      "source_lines": "228",
+      "source_lines": "230",
       "confidence": "high",
       "signals": [],
       "quote": "| cmdline.txt | 138B | Boot command line |"
@@ -5337,7 +5337,7 @@
       "local_id": 85,
       "statement": "Flash dump file cpuinfo.txt is 352B, containing CPU information.",
       "topic": "flash_dump",
-      "source_lines": "229",
+      "source_lines": "231",
       "confidence": "high",
       "signals": [],
       "quote": "| cpuinfo.txt | 352B | CPU information |"
@@ -5348,7 +5348,7 @@
       "local_id": 86,
       "statement": "Flash dump file modules.txt is 187B, containing loaded modules.",
       "topic": "flash_dump",
-      "source_lines": "230",
+      "source_lines": "232",
       "confidence": "high",
       "signals": [],
       "quote": "| modules.txt | 187B | Loaded modules |"
@@ -5359,7 +5359,7 @@
       "local_id": 87,
       "statement": "None of the historical kernel decryption options was needed; the plaintext comes from the staging blocks.",
       "topic": "decryption_strategy",
-      "source_lines": "236",
+      "source_lines": "238",
       "confidence": "high",
       "signals": [
         "Corrected 2026-10-19",
@@ -5373,7 +5373,7 @@
       "local_id": 88,
       "statement": "Historical Option 1 (U-Boot analysis): locate do_decrypt_decompress, extract key, replicate.",
       "topic": "decryption_strategy",
-      "source_lines": "238",
+      "source_lines": "240",
       "confidence": "medium",
       "signals": [
         "historical"
@@ -5386,7 +5386,7 @@
       "local_id": 89,
       "statement": "Historical Option 2 (runtime extraction) assumed /dev/mem was blocked by CONFIG_STRICT_DEVMEM, disproved 2026-06-30.",
       "topic": "decryption_strategy",
-      "source_lines": "244",
+      "source_lines": "246",
       "confidence": "medium",
       "signals": [
         "historical"
@@ -5399,7 +5399,7 @@
       "local_id": 90,
       "statement": "Historical Option 3 (JTAG): halt CPU and dump RAM; requires hardware access.",
       "topic": "decryption_strategy",
-      "source_lines": "248",
+      "source_lines": "250",
       "confidence": "medium",
       "signals": [
         "historical"
@@ -13842,7 +13842,7 @@
       "local_id": 91,
       "statement": "The vendor factory burn mode (check_mfg_mode.sh) erases the first U-Boot block with flash_erase /dev/mtd0 0 1 and reboots on mfgmode=2.",
       "topic": "factory-burn-mode",
-      "source_lines": "45",
+      "source_lines": "47",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -13856,7 +13856,7 @@
       "local_id": 92,
       "statement": "That the burn-mode U-Boot erase puts the boot ROM into serial-download mode (an escape hatch) is unconfirmed.",
       "topic": "factory-burn-mode",
-      "source_lines": "45",
+      "source_lines": "47",
       "confidence": "low",
       "signals": [
         "Corrected 2026-10-19",
@@ -13870,7 +13870,7 @@
       "local_id": 93,
       "statement": "About 20 s was measured for flash_erase + cat + sync of mtd1 alone; the full exposure window was not timed; datasheet estimate 22-54 s.",
       "topic": "kernel-write-risk",
-      "source_lines": "48",
+      "source_lines": "50",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -13884,7 +13884,7 @@
       "local_id": 94,
       "statement": "The 2026-10-19 RUNBOOK runs never erased U-Boot.",
       "topic": "hab-serial-download",
-      "source_lines": "50",
+      "source_lines": "52",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -13898,7 +13898,7 @@
       "local_id": 95,
       "statement": "mtd0 0x0-0xFFF is loaded by the boot ROM but not HAB-authenticated; it holds NXP EVK template text and per-release data at 0x87C-0x916.",
       "topic": "mtd0-map",
-      "source_lines": "84",
+      "source_lines": "86",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -13912,7 +13912,7 @@
       "local_id": 96,
       "statement": "mtd0 0x21000-0x21F37 is the CSF, then 0xFF to 0x21FFF; it is loaded (boot data ends at 0x21FFF) and its first Authenticate Data command covers the CSF itself.",
       "topic": "mtd0-map",
-      "source_lines": "86",
+      "source_lines": "88",
       "confidence": "high",
       "signals": [
         "2026-10-19",
@@ -13926,7 +13926,7 @@
       "local_id": 97,
       "statement": "The norboot cp count 0xf800 is in units, 0x3E000 bytes if cp uses its upstream default .l (inferred; help strings stripped).",
       "topic": "uboot-env",
-      "source_lines": "123",
+      "source_lines": "125",
       "confidence": "medium",
       "signals": [
         "2026-10-19",

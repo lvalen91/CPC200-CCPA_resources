@@ -1,0 +1,685 @@
+path	type	size	mode	owner	mtime	md5	symlink_target
+/	directory	0	755	root	0		
+/$	regular empty file	0	644	root	1577923203	d41d8cd98f00b204e9800998ecf8427e	
+/:	regular empty file	0	644	root	1791404632	d41d8cd98f00b204e9800998ecf8427e	
+/?	regular empty file	0	644	root	1577923203	d41d8cd98f00b204e9800998ecf8427e	
+/[	regular empty file	0	644	root	1791346732	d41d8cd98f00b204e9800998ecf8427e	
+/b	regular empty file	0	644	root	1791446112	d41d8cd98f00b204e9800998ecf8427e	
+/d	regular empty file	0	644	root	1791446110	d41d8cd98f00b204e9800998ecf8427e	
+/g	directory	0	755	root	1577923212		
+/g/etc	directory	0	755	root	1747643345		
+/g/etc/icon_256x256.pn	regular file	34179	644	root	1747643346	f50698488b8af327073d56050af123a0	
+/l	regular empty file	0	644	root	1791444570	d41d8cd98f00b204e9800998ecf8427e	
+/t	regular empty file	0	644	root	1791340238	d41d8cd98f00b204e9800998ecf8427e	
+/]#	regular empty file	0	644	root	1791445669	d41d8cd98f00b204e9800998ecf8427e	
+/::	regular empty file	0	644	root	1791444614	d41d8cd98f00b204e9800998ecf8427e	
+/h:	regular empty file	0	644	root	1791445677	d41d8cd98f00b204e9800998ecf8427e	
+/j?	regular empty file	0	644	root	1577923203	d41d8cd98f00b204e9800998ecf8427e	
+/nd	regular empty file	0	644	root	1791340246	d41d8cd98f00b204e9800998ecf8427e	
+/Cj!	regular empty file	0	644	root	1577923203	d41d8cd98f00b204e9800998ecf8427e	
+/~]#	regular empty file	0	644	root	1791446097	d41d8cd98f00b204e9800998ecf8427e	
+/h::	regular empty file	0	644	root	1791445669	d41d8cd98f00b204e9800998ecf8427e	
+/sh:	regular empty file	0	644	root	1791444792	d41d8cd98f00b204e9800998ecf8427e	
+/lib	directory	0	777	UNKNOWN	1577923222		
+/lib/libresolv-2.20.so	regular file	75568	755	UNKNOWN	1480478172	605f83bfdf233a6277088b4c3867496a	
+/lib/libatomic.so.1.1.0	regular file	18352	755	UNKNOWN	1480478172	731987c476e38ab2a81ffb6ff4791947	
+/lib/libc.so.6	symbolic link	12	777	UNKNOWN	1480478172		libc-2.20.so
+/lib/librt.so	symbolic link	10	777	UNKNOWN	1480478172		librt.so.1
+/lib/librt.so.1	symbolic link	13	777	UNKNOWN	1480478172		librt-2.20.so
+/lib/modules	directory	0	755	UNKNOWN	1480478172		
+/lib/modules/3.14.52+g94d07bb	directory	0	755	UNKNOWN	1480478172		
+/lib/modules/3.14.52+g94d07bb/modules.inputmap	regular file	141	644	UNKNOWN	1480478172	5e9d464ab886837a5a12f1d79a7d6d08	
+/lib/modules/3.14.52+g94d07bb/source	symbolic link	44	777	UNKNOWN	1480478172		/home/sk/workspace/imx-3.10.53/kernel-source
+/lib/modules/3.14.52+g94d07bb/modules.softdep	regular file	131	644	UNKNOWN	1480478172	3eeb44f44bffa4663e3fba7e74248af1	
+/lib/modules/3.14.52+g94d07bb/modules.seriomap	regular file	43	644	UNKNOWN	1480478172	21c1f2fd129ec73547fe19b802649f55	
+/lib/modules/3.14.52+g94d07bb/modules.alias	regular file	162	644	UNKNOWN	1480478172	30efef980e0d72d8cff14f8e4684f6bb	
+/lib/modules/3.14.52+g94d07bb/modules.ofmap	regular file	74	644	UNKNOWN	1480478172	4e8bbdcfa4388605b74ef0885037553e	
+/lib/modules/3.14.52+g94d07bb/modules.alias.bin	regular file	245	644	UNKNOWN	1480478172	9572992e7151f7cbc677c072dbc455b2	
+/lib/modules/3.14.52+g94d07bb/modules.symbols	regular file	2842	644	UNKNOWN	1480478172	488389ae70a05489e1192ca010fd2732	
+/lib/modules/3.14.52+g94d07bb/modules.order	regular file	351	644	UNKNOWN	1480478172	5209858155e6f4f0c8bf3cf6842b1cc3	
+/lib/modules/3.14.52+g94d07bb/modules.dep.bb	regular file	2252	644	UNKNOWN	1480478172	b507c45986f04e2bb114dd88fb020ab0	
+/lib/modules/3.14.52+g94d07bb/modules.dep.bin	regular file	1450	644	UNKNOWN	1480478172	073d6a817e58213314d772bfd44e05b1	
+/lib/modules/3.14.52+g94d07bb/modules.symbols.bin	regular file	3138	644	UNKNOWN	1480478172	6c03f01914292ce398b145fb9b2eab55	
+/lib/modules/3.14.52+g94d07bb/modules.dep	regular file	908	644	UNKNOWN	1480478172	4fda213bd7c90ff3fbeae9f4d63c0085	
+/lib/modules/3.14.52+g94d07bb/modules.builtin	regular file	20583	644	UNKNOWN	1480478172	d6685a8f090cd104d5a49617cb5a535d	
+/lib/modules/3.14.52+g94d07bb/build	symbolic link	44	777	UNKNOWN	1480478172		/home/sk/workspace/imx-3.10.53/kernel-source
+/lib/modules/3.14.52+g94d07bb/modules.ieee1394map	regular file	73	644	UNKNOWN	1480478172	fa7ac9453e8fbcb3097ce153ff4c306f	
+/lib/modules/3.14.52+g94d07bb/modules.usbmap	regular file	189	644	UNKNOWN	1480478172	a58f71e28d8b5ddb1f81a36c53c02106	
+/lib/modules/3.14.52+g94d07bb/modules.pcimap	regular file	99	644	UNKNOWN	1480478172	4b7565a57129899bc6adc1d6d5c83d17	
+/lib/modules/3.14.52+g94d07bb/modules.ccwmap	regular file	69	644	UNKNOWN	1480478172	ad9af0f8b64bdb2672da1e01075a5021	
+/lib/modules/3.14.52+g94d07bb/modules.builtin.bin	regular file	23326	644	UNKNOWN	1480478172	b80e53953fff305129263174ab56f1e6	
+/lib/modules/3.14.52+g94d07bb/modules.devname	regular file	52	644	UNKNOWN	1480478172	c98aaa62c6f18be3ac26c12ffc41aff2	
+/lib/modules/3.14.52+g94d07bb/kernel	directory	0	755	UNKNOWN	1480478172		
+/lib/modules/3.14.52+g94d07bb/kernel/fs	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/kernel/fs/configfs	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers	directory	0	755	UNKNOWN	1480478172		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers/usb	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers/usb/gadget	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers/media	directory	0	755	UNKNOWN	1480478172		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers/media/usb	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/kernel/drivers/media/usb/gspca	directory	0	755	UNKNOWN	1481099392		
+/lib/modules/3.14.52+g94d07bb/modules.isapnpmap	regular file	81	644	UNKNOWN	1480478172	37125c5f41df5e06e2831eaeb4985e61	
+/lib/libnss_dns.so	symbolic link	15	777	UNKNOWN	1480478172		libnss_dns.so.2
+/lib/libnss_dns.so.2	symbolic link	18	777	UNKNOWN	1480478172		libnss_dns-2.20.so
+/lib/libpthread.so.0	symbolic link	18	777	UNKNOWN	1480478172		libpthread-2.20.so
+/lib/firmware	directory	0	777	UNKNOWN	1577923205		
+/lib/firmware/nxp	directory	0	777	UNKNOWN	1577923213		
+/lib/firmware/nxp/txpower_iw416.bin	regular file	5011	777	UNKNOWN	1717379079	ad14b0f074bbe739ad8b819816cce41c	
+/lib/firmware/nxp/sdioiw416_wlan_v0.bin	regular file	425896	777	UNKNOWN	1717050330	7e965118f4f19b7a928f0b193e53acd1	
+/lib/firmware/nxp/iw416_ko.tar.gz	regular file	618821	777	UNKNOWN	1740999950	4c03637155291edf0857a3b8961e64b8	
+/lib/firmware/nxp/wifi_mod_para.conf	regular file	245	777	UNKNOWN	1729592027	a99a68e1ab4e84d6319b050530503fc7	
+/lib/firmware/nxp/wifi_mod_para_p2psta.conf	regular file	338	777	UNKNOWN	1729583602	eb90a8173d7dc01669efc158eaec0183	
+/lib/firmware/nxp/WlanCalData_ext.conf	regular file	870	777	UNKNOWN	1717379083	aac0f15522ef85c9943b777aea20e2a9	
+/lib/firmware/nxp/uartiw416_bt_v0.bin	regular file	160900	777	UNKNOWN	1736142991	4f3020d7a4355ce7c154b9c5515f43b1	
+/lib/libstdc++.so.6	symbolic link	19	777	UNKNOWN	1480478172		libstdc++.so.6.0.20
+/lib/libm.so.6	symbolic link	12	777	UNKNOWN	1480478172		libm-2.20.so
+/lib/libnss_compat-2.20.so	regular file	26408	755	UNKNOWN	1480478172	e5328a2eb7dcc1155bd5997ab530d18f	
+/lib/libm-2.20.so	regular file	665120	755	UNKNOWN	1480478172	a3508b282b851a95e7d1facc39a69fac	
+/lib/libz.so	symbolic link	9	777	root	1577923222		libz.so.1
+/lib/libnss_nis.so	symbolic link	15	777	UNKNOWN	1480478172		libnss_nis.so.2
+/lib/libnss_nis.so.2	symbolic link	18	777	UNKNOWN	1480478172		libnss_nis-2.20.so
+/lib/libutil-2.20.so	regular file	9788	755	UNKNOWN	1480478172	5421f07da7851d4d2ab50b1fa390197b	
+/lib/libz.so.1	symbolic link	14	777	root	1577923222		libz.so.1.2.11
+/lib/libnss_dns-2.20.so	regular file	17976	755	UNKNOWN	1480478172	74ee2263574292a5ac39d2c360c090c0	
+/lib/librt-2.20.so	regular file	26600	755	UNKNOWN	1480478172	58386999cde34980372aedc58ab6ae30	
+/lib/libnss_files-2.20.so	regular file	42640	755	UNKNOWN	1480478172	1997dd7d725dfc1acc2b45a23b0e08fd	
+/lib/libcrypt.so.1	symbolic link	16	777	UNKNOWN	1480478172		libcrypt-2.20.so
+/lib/libcrypt-2.20.so	regular file	30232	755	UNKNOWN	1480478172	f41f0a88093701ddb71859d36a6ef28d	
+/lib/ld-2.20.so	regular file	134380	755	UNKNOWN	1480478172	be4843b3577471850e0ec2fff7cf582f	
+/lib/libdl-2.20.so	regular file	9752	755	UNKNOWN	1480478172	fe0727feeaff43fa844227fb77a64887	
+/lib/libgcc_s.so.1	regular file	125536	644	UNKNOWN	1480478172	26ca31a36b54c5aec36f803b0f777d87	
+/lib/libcrypt.so	symbolic link	13	777	UNKNOWN	1480478172		libcrypt.so.1
+/lib/libssp.so	symbolic link	15	777	UNKNOWN	1480478172		libssp.so.0.0.0
+/lib/libssp.so.0	symbolic link	15	777	UNKNOWN	1480478172		libssp.so.0.0.0
+/lib/libatomic.so	symbolic link	18	777	UNKNOWN	1480478172		libatomic.so.1.1.0
+/lib/libatomic.so.1	symbolic link	18	777	UNKNOWN	1480478172		libatomic.so.1.1.0
+/lib/libssp.so.0.0.0	regular file	6032	755	UNKNOWN	1480478172	85203d3fd7fe36241bcc90b70427c0a8	
+/lib/libpthread-2.20.so	regular file	92608	755	UNKNOWN	1480478172	98059ef42dcee48cfdd2a6350d982585	
+/lib/libdl.so	symbolic link	10	777	UNKNOWN	1480478172		libdl.so.2
+/lib/libdl.so.2	symbolic link	13	777	UNKNOWN	1480478172		libdl-2.20.so
+/lib/libutil.so.1	symbolic link	15	777	UNKNOWN	1480478172		libutil-2.20.so
+/lib/libstdc++.so.6.0.20	regular file	801032	755	UNKNOWN	1480478172	9d4cd4e05b613bb5a11ea8e0f125ee75	
+/lib/libnss_files.so.2	symbolic link	20	777	UNKNOWN	1480478172		libnss_files-2.20.so
+/lib/libnss_compat.so	symbolic link	18	777	UNKNOWN	1480478172		libnss_compat.so.2
+/lib/libnss_compat.so.2	symbolic link	21	777	UNKNOWN	1480478172		libnss_compat-2.20.so
+/lib/libutil.so	symbolic link	12	777	UNKNOWN	1480478172		libutil.so.1
+/lib/libnss_files.so	symbolic link	17	777	UNKNOWN	1480478172		libnss_files.so.2
+/lib/ld-linux.so.3	symbolic link	10	777	UNKNOWN	1480478172		ld-2.20.so
+/lib/libc-2.20.so	regular file	1251160	755	UNKNOWN	1480478172	e1302dea91df4d25d33671249d36a9cc	
+/lib/libz.so.1.2.11	regular file	73736	755	root	1577923239	ff8bc9e700acd0d4cdeef5521b336737	
+/lib/libnss_nis-2.20.so	regular file	42640	755	UNKNOWN	1480478172	7d7ecf7c55d85c18d9d34e4999ddec03	
+/lib/libnsl-2.20.so	regular file	71560	755	UNKNOWN	1480478172	da045816d88a780e53929159df17ae12	
+/lib/libm.so	symbolic link	9	777	UNKNOWN	1480478172		libm.so.6
+/lib/libresolv.so	symbolic link	14	777	UNKNOWN	1480478172		libresolv.so.2
+/lib/libresolv.so.2	symbolic link	17	777	UNKNOWN	1480478172		libresolv-2.20.so
+/lib/libnsl.so	symbolic link	11	777	UNKNOWN	1480478172		libnsl.so.1
+/lib/libnsl.so.1	symbolic link	14	777	UNKNOWN	1480478172		libnsl-2.20.so
+/etc	directory	0	777	UNKNOWN	1792432175		
+/etc/overcommit	regular file	2	640	root	1577923320	b026324c6904b2a9cb4b88d6d61c81d1	
+/etc/passwd	regular file	30	644	UNKNOWN	1577923864	930991558ca0d49b4f098ff9f81033ca	
+/etc/dbus-1	directory	0	775	UNKNOWN	1688661404		
+/etc/dbus-1/session.conf	regular file	1016	775	UNKNOWN	1688661404	339ab5bfcba1569e3c4887869d818730	
+/etc/dbus-1/system.conf	regular file	2270	775	UNKNOWN	1688661404	87a8cf943fb0c85e6d0c03a93f8099ce	
+/etc/dbus-1/system.d	directory	0	775	UNKNOWN	1688635713		
+/etc/dbus-1/system.d/hfpd.conf	regular file	981	775	UNKNOWN	1688635713	1342f894b5816eb73a25095596a89607	
+/etc/dbus-1/system.d/bluetooth.conf	regular file	1131	775	UNKNOWN	1688661404	c5e0cfe9297afa4ce7c76fa2acc78cb6	
+/etc/passwd-	regular file	30	644	UNKNOWN	1775326369	930991558ca0d49b4f098ff9f81033ca	
+/etc/init.d	directory	0	775	UNKNOWN	1577937821		
+/etc/init.d/rcS	regular file	1284	755	root	1577937821	21cee24ec01a06516fe30d4b5fc96d86	
+/etc/init.d/._rcS	regular file	176	755	root	1577923226	b5da0990a04a7086221ebc526e9ee626	
+/etc/init.d/._S01_ensure_access	regular file	176	755	root	1577923226	e4c69c6e830e4f3d21000eb1a47b03ec	
+/etc/init.d/._webcmd	regular file	176	755	root	1577923226	ce0fcc64a1f8be58e4043685309a2b46	
+/etc/hosts	regular file	23	644	UNKNOWN	1480478172	30ff31b141ada732b9a3433efe7beb46	
+/etc/inittab	regular file	898	755	root	1577932704	39ed211ba607b261968aaaf93205815d	
+/etc/group	regular file	26	644	UNKNOWN	1480478172	31d7e91bf2ec1653c7e0621e1e491e26	
+/etc/mdev	directory	0	775	UNKNOWN	1577937821		
+/etc/mdev/udisk_remove.sh	regular file	594	775	UNKNOWN	1676430981	687d21759096e048fdbe315e2d030c22	
+/etc/mdev/udisk_insert.sh	regular file	583	755	root	1577937821	a6f4091535a0b79eee3aaf90573f942a	
+/etc/mdev/udisk_hotplug.sh	regular file	825	755	root	1577931845	58cb153994865aa1fe8884c7864c87a4	
+/etc/software_version	regular file	15	644	root	1577923223	eb595e4120c42cd10cf101bd182bd5f4	
+/etc/bluetooth_name	regular file	10	644	root	1792432177	73a4425c4c84239d66e20b93cc25888b	
+/etc/wifi_name	regular file	10	644	root	1792432175	73a4425c4c84239d66e20b93cc25888b	
+/etc/bluetooth	directory	0	775	UNKNOWN	1792432177		
+/etc/bluetooth/eir_info	regular file	92	755	root	1782245983	2a18ea5b99c0cc948042a8192a45da05	
+/etc/bluetooth/mybluetooth.tar.gz	regular file	614	644	root	1782254190	3ece7ed7bfbd671c3716a821fd112cf5	
+/etc/bluetooth/hcid.conf	regular file	1310	755	root	1792432177	0d7e863f794638bd155eff246904676e	
+/etc/bluetooth/rfcomm.conf	regular file	297	775	UNKNOWN	1688661131	0a87d3eddd29683c1456688907e67b4f	
+/etc/factory_name	regular file	9	664	UNKNOWN	1584514544	8bd6fc2e9aef6173dbf6dbd739feb7ae	
+/etc/device_serial	regular file	32	644	root	1577923323	90dc37a2bf0af027915a39417ded1724	
+/etc/box_version	regular file	4	644	root	1577923220	f2dd0dedb2c260419ece4a9e03b2e828	
+/etc/mdev.conf	regular file	1076	644	UNKNOWN	1555816438	02c50a333ed765fd467554e46d30a7bf	
+/etc/hostname	regular file	13	644	UNKNOWN	1555816438	d46ad40e60647c0be52de16e7a22b557	
+/etc/fstab	regular file	304	775	UNKNOWN	1698650997	d0577b5ac778f94c2f7a233bf2d7bc7c	
+/etc/p2p_supplicant.conf	regular file	354	777	UNKNOWN	1577932554	1ac63f0097cb2d386b83b5ec1e0e0309	
+/etc/shadow	regular file	38	600	root	1577923864	b06edca79c86d878809a8284477cfc0b	
+/etc/shadow-	regular file	38	600	root	1775326369	93c318447228c61027741b1959ae37dd	
+/etc/assets	symbolic link	6	777	UNKNOWN	1519970049		../tmp
+/etc/.custom_bluetooth_name	regular file	10	644	root	1792432177	73a4425c4c84239d66e20b93cc25888b	
+/etc/box_product_type	regular file	4	664	UNKNOWN	1741001955	04d190cb70f57219c7097eadf7a72b33	
+/etc/dropbear	directory	0	755	UNKNOWN	1764669532		
+/etc/dropbear/dropbear_ecdsa_host_key	regular file	141	600	root	1764669532	c50749bcf5c5b3420edf1a06efe4bd3c	
+/etc/dropbear/dropbear_rsa_host_key	regular file	805	644	UNKNOWN	1480478172	12a39b6c6cda37ab5d618f81218e9714	
+/etc/dropbear/dropbear_ed25519_host_key	regular file	83	600	root	1763752632	3d8fa9d5a37bfcc0bf9f345525c74feb	
+/etc/dropbear/dropbear_dss_host_key	regular file	458	644	UNKNOWN	1480478172	d489cefc7b34fb29e0ed5a42e615babf	
+/etc/profile	regular file	1071	644	root	1577932168	0967f1effe3ba2a16074d9d28dc8a54f	
+/etc/hfpd.conf	regular file	70	775	UNKNOWN	1688635762	2c93ceb65be87958b8e5cc77182568c9	
+/etc/carplay_peers.bin	regular file	69	644	root	1792430298	2b932e40f4403dd783b26a1835a5b950	
+/etc/hichain	directory	0	775	UNKNOWN	1690277436		
+/etc/log_file	regular empty file	0	775	UNKNOWN	1600270018	d41d8cd98f00b204e9800998ecf8427e	
+/etc/resolv.conf	regular file	24	644	UNKNOWN	1480478172	33c69d9d17302b64f59fcb5bad66dd1b	
+/etc/serial_number	regular file	20	644	root	1577923216	744d95d7d2fe97f51a9625e8b13f2b33	
+/etc/box_name	regular file	7	644	root	1577925401	67c7ab3ca0c934aafb8a0d1889b994a5	
+/etc/.delete	regular file	11	775	UNKNOWN	1637897713	f467e9b8760564713de7030c04883ded	
+/etc/manufacture_date	regular file	8	644	root	1577923216	1461d069b74be0809f7240c243cf056a	
+/etc/.manufacture_date_sign	regular file	32	644	root	1577923216	71ec738a35d007d6c74acd338dbe6d1f	
+/etc/hostapd.conf	regular file	542	644	root	1792432175	3a159bee69a26bfdae07139f02432cdb	
+/etc/udhcpd.conf	regular file	4226	755	root	1792432175	c45e11ac8cd462ab803000d4cd697594	
+/etc/hostapd.conf.stock	regular file	538	755	root	1785867985	9bee0e14bde272792b733f2cb99c4d7f	
+/etc/carplay	directory	0	755	root	1792432976		
+/etc/carplay/bt_link_keys	regular file	25	644	root	1792432976	cea91d47151e2f0e29b0461a613ec7ae	
+/etc/wpa_supplicant.conf	regular file	81	777	UNKNOWN	1698647443	76c20a7604449150748df22d0b6df6bd	
+/rol	regular empty file	0	644	root	1791340245	d41d8cd98f00b204e9800998ecf8427e	
+/bin	directory	0	755	UNKNOWN	1791444570		
+/bin/dd	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/ed	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/df	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/sh	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/vi	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/rm	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/ln	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/cp	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/ls	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/ps	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/mt	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/su	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/mv	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/sh:	regular empty file	0	644	root	1791448109	d41d8cd98f00b204e9800998ecf8427e	
+/bin/sr:	regular empty file	0	644	root	1791442713	d41d8cd98f00b204e9800998ecf8427e	
+/bin/sed	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/pwd	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/ash	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/msh	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/rpm	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/tar	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/cat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/rev	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/chgrp	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/sh::	regular empty file	0	644	root	1577923209	d41d8cd98f00b204e9800998ecf8427e	
+/bin/dmesg	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/false	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/conspy	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/netstat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/zcat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/stat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/chattr	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/lsattr	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/iostat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/mpstat	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/reformime	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/printenv	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/umount	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/linux32	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/linux64	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/catv	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/pipe_progress	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/chown	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/cttyhack	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/dnsdomainname	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/stty	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/busybox	regular file	1001020	755	root	1577934442	8179d85dabd1ce2f58107dfc5e0de0b4	
+/bin/gunzip	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/hostname	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/ipcalc	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/setarch	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/fatattr	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/st@~]#	regular empty file	0	644	root	1791442730	d41d8cd98f00b204e9800998ecf8427e	
+/bin/run-parts	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/sync	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/watch	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/touch	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/dumpkmap	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/sroot@~]#	regular empty file	0	644	root	1791442713	d41d8cd98f00b204e9800998ecf8427e	
+/bin/nice	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/sleep	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/usleep	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/egrep	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/fgrep	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/more	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/base64	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/date	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/mktemp	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/true	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/ping	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/ping6	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/scriptreplay	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/makemime	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/mountpoint	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/bash	symbolic link	7	777	UNKNOWN	1481879214		busybox
+/bin/hush	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/mkdir	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/rmdir	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/login	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/ionice	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/kbd_mode	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/uncompress	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/kill	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/fdflush	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/uname	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/mount	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/fsync	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/pidof	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/echo	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/cpio	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/chmod	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/mknod	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/getopt	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/grep	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/gzip	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/bin/lzop	symbolic link	7	777	UNKNOWN	1480478171		busybox
+/bin/setserial	symbolic link	7	777	UNKNOWN	1480478172		busybox
+/ion	regular empty file	0	644	root	1791444571	d41d8cd98f00b204e9800998ecf8427e	
+/tmp	directory	280	1777	root	1577926727		
+/var	directory	0	755	UNKNOWN	1480478174		
+/var/lib	directory	0	755	UNKNOWN	1792432982		
+/var/lib/dhcp6s_duid	regular file	16	644	UNKNOWN	1480478174	4db19d5d39dfbf44ebd75e8b13435ffe	
+/var/lib/lockdown	directory	0	755	UNKNOWN	1480478174		
+/var/lib/lockdown/common.cert	regular file	7612	644	UNKNOWN	1480478174	4a0cf1252cf434e662c127ce89e29b92	
+/var/lib/lockdown/root_key.pem	regular file	1675	644	UNKNOWN	1480478174	5cd7e3ec2f686aab303144dd590d4305	
+/var/lib/udhcpd.leases	regular file	24	644	root	1792432982	fad524fdb75939ea26828f501a9f27e2	
+/var/log	directory	0	755	UNKNOWN	1577923264		
+/var/log/box_last_reboot.log	regular file	104225	640	root	1781497144	40cb1e4825dc7528510ee8ef8cd3e806	
+/var/log/box_update.log	regular file	85176	666	root	1577923228	69acff285c7d26d6eeceeff2e42b9569	
+/var/run	directory	60	1777	root	162		
+/var/tmp	directory	0	755	UNKNOWN	1480478174		
+/var/lock	directory	0	755	UNKNOWN	1480478174		
+/usr	directory	0	777	UNKNOWN	1061		
+/usr/lib	directory	0	777	UNKNOWN	1577923222		
+/usr/lib/libdbus-1.so	symbolic link	18	777	UNKNOWN	1551847813		libdbus-1.so.3.2.0
+/usr/lib/libdbus-1.so.3	symbolic link	18	777	UNKNOWN	1551847813		libdbus-1.so.3.2.0
+/usr/lib/libxml2.so.2	symbolic link	16	777	UNKNOWN	1480478173		libxml2.so.2.9.2
+/usr/lib/libdbus-1.so.3.2.0	regular file	100208	666	UNKNOWN	1584514544	259ec706af3eebcbf8fe051106090e22	
+/usr/lib/libz.so	symbolic link	23	777	root	1577923761		/usr/lib/libz.so.1.2.11
+/usr/lib/libbluetooth.so.2.11.2	regular file	58352	755	UNKNOWN	1555816438	4936d53420abcfd6f1d752a974874827	
+/usr/lib/libz.so.1	symbolic link	23	777	root	1577923761		/usr/lib/libz.so.1.2.11
+/usr/lib/libxml2.so.2.9.2	regular file	614264	666	UNKNOWN	1584514544	306b0465cd6523299b163cf36c9bd0ff	
+/usr/lib/libnl-genl-3.so.200	regular file	23568	775	UNKNOWN	1608813822	8213ad0a8c6943eab412f75bbceb7e4b	
+/usr/lib/libbluetooth.so.2	symbolic link	22	777	UNKNOWN	1555816438		libbluetooth.so.2.11.2
+/usr/lib/libbluetooth.so	symbolic link	22	777	UNKNOWN	1555816438		libbluetooth.so.2.11.2
+/usr/lib/libxml2.so	symbolic link	16	777	UNKNOWN	1480478173		libxml2.so.2.9.2
+/usr/lib/libnl-3.so.200	regular file	72948	775	UNKNOWN	1608813822	8ce7ddcd18e18abbe87ee888dc2c9284	
+/usr/lib/.delete	regular file	58	775	UNKNOWN	1637896801	19d00b30d2f69172c9562b54453181cd	
+/usr/lib/libz.so.1.2.11	regular file	73736	644	root	1577923760	ff8bc9e700acd0d4cdeef5521b336737	
+/usr/bin	directory	0	755	UNKNOWN	1577929930		
+/usr/bin/[	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/[[	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/dc	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/nc	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/wc	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/hd	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/id	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/od	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ar	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tr	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/du	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sv	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/rx	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/xz	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tac	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tee	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/awk	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/cal	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/man	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/who	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/cmp	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/top	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/seq	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lpq	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lpr	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/yes	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/cut	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/env	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tty	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sha512sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ipcrm	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/users	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/expr	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pstree	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/microcom	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/md5sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/fgconsole	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ipcs	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/runsv	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/chpst	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tcpsvd	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/udpsvd	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/less	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/passwd	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/setsid	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lsusb	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ttysize	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sha256sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/wget	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/nmeter	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/chrt	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sort	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/last	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/test	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/hostid	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/chvt	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/install	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/nohup	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/groups	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/cksum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unix2dos	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/dos2unix	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/showkey	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/nslookup	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pwdx	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unlzma	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unlzop	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/bunzip2	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unxz	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/mkpasswd	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pscan	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/bzcat	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lzcat	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/xzcat	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/clear	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lzma	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/whoami	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/expand	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/deallocvt	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/eject	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/uuencode	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/which	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/flock	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/vlock	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lspci	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/patch	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/head	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/fold	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/find	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/envdir	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/hexdump	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/softlimit	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/readlink	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/runsvdir	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/free	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/time	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pgrep	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/reset	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/fuser	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/timeout	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/traceroute	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/traceroute6	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/iap_role_switch	regular file	20504	755	root	1577929930	ab178180bf22019649ace03e9bb92056	
+/usr/bin/diff	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lsof	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/shuf	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unexpand	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/dumpleases	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/logger	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ftpget	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/xargs	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/mesg	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/uudecode	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/basename	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/mkfifo	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/split	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unlink	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/renice	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/whois	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/script	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/resize	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/uptime	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/unzip	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/strings	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sha1sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/sha3sum	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tail	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pkill	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/wall	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/killall	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/iap_trigger	regular file	20504	755	root	1783656161	6c337d3fa575d32fa593f045ad3217b6	
+/usr/bin/comm	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/smemcap	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/setuidgid	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/envuidgid	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/rpm2cpio	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/openvt	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/printf	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/telnet	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/logname	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/volname	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/crontab	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/dirname	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/setkeycodes	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/pmap	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/beep	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/bzip2	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/ftpput	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/tftp	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/lzopcat	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/cryptpw	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/realpath	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/bin/uniq	symbolic link	17	777	UNKNOWN	1480478174		../../bin/busybox
+/usr/share	directory	0	755	UNKNOWN	1480478173		
+/usr/share/udhcpc	directory	0	755	UNKNOWN	1480478173		
+/usr/share/udhcpc/default.script	regular file	1285	755	UNKNOWN	1480478173	9be6ba4968cf1849677887bcb81ac4cc	
+/usr/libexec	directory	0	755	root	1061		
+/usr/libexec/sftp-server	regular file	91764	755	root	1062	af5c731deeb4429261fdf4afa4fbc2aa	
+/usr/sbin	directory	0	777	UNKNOWN	1577924969		
+/usr/sbin/lpd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/btd	regular file	599768	755	root	1577929928	1f14e1693e523e0aa1312e2829144568	
+/usr/sbin/ubirmvol	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ubirsvol	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/powertop	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/rdate	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/chat	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/brctl	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/hcitool	regular file	48504	775	UNKNOWN	1733563200	0ac13de6f066810b4df8261d34091181	
+/usr/sbin/hostapd	regular file	284560	775	UNKNOWN	1614152261	3b107080a27da409b7f063720a50ddbf	
+/usr/sbin/dbus-daemon	regular file	119016	775	UNKNOWN	1606208901	cbc3002f05b14fcc4f7cf83da270418a	
+/usr/sbin/carplayd	regular file	1902160	755	root	1577924968	dc6433e80b50200f341d8500840e85a4	
+/usr/sbin/adduser	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/deluser	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/popmaildir	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/hciconfig	regular file	33484	775	UNKNOWN	1692103991	5056f828138f9730299a3efcb582a9b2	
+/usr/sbin/rdev	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/add-shell	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/killall5	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/readahead	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/rtcwake	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/setlogcons	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ubidetach	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ubiattach	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/hciattach	regular file	16056	777	UNKNOWN	315532800	da1cff5f97406e5b4c8938c0eb07d0ee	
+/usr/sbin/bluetoothDaemon	regular file	173032	755	root	1577923233	ca65b75ab4c1cbd749bfc72cccb0a7b4	
+/usr/sbin/fdformat	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/chpasswd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/readprofile	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/fw_loader_linux	regular file	22380	777	UNKNOWN	1711611702	76fb1f7cd329b3abbaf4f424a4b97889	
+/usr/sbin/ubimkvol	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/udhcpd	regular file	15000	775	UNKNOWN	1724230681	2d01a31f032b27387b6da110330c9925	
+/usr/sbin/ether-wake	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/hcid	regular file	105976	775	UNKNOWN	1732764724	bd54aecf2a355e056744f14f0c04c3be	
+/usr/sbin/hfpd	regular file	126248	775	UNKNOWN	1732791545	44ed47fdf6964e89ad3019c70138f1a9	
+/usr/sbin/ftpd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ntpd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/dnsd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/remove-shell	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/fbset	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/sendmail	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/dropbear	regular file	436856	755	root	1577933533	e7a1f363cf757cf287fe9052952af1f3	
+/usr/sbin/setfont	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/set_wifi_mac	regular file	6256	775	UNKNOWN	1680604322	d9035269f8fb76035967fafdddbeaa74	
+/usr/sbin/addgroup	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/delgroup	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/aa-bridge	regular file	365736	755	root	1577929930	ab6781513a769e463383a889788bb477	
+/usr/sbin/arping	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/nanddump	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/iap2d	regular file	539840	755	root	1577924971	77d9262eed959663d757c8c04bf3a534	
+/usr/sbin/.delete	regular file	12	775	UNKNOWN	1637896872	a33cfdf6c8533aea21ca4fd16c9ab5bb	
+/usr/sbin/ifplugd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ocbmd	regular file	432056	755	root	1577949549	00e11834f0a53fe916085cb43406a11c	
+/usr/sbin/loadfont	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/nandwrite	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/crond	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/telnetd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/svlogd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/chroot	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/nbd-client	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/tftpd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/httpd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/fakeidentd	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/ubiupdatevol	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/usr/sbin/dhcprelay	symbolic link	17	777	UNKNOWN	1480478173		../../bin/busybox
+/sys	directory	0	555	root	162		
+/mnt	directory	0	755	UNKNOWN	1577923314		
+/mnt/TF	directory	0	755	UNKNOWN	1480478172		
+/mnt/LJ	directory	0	755	UNKNOWN	1480478172		
+/mnt/SK	directory	0	755	UNKNOWN	1480478172		
+/mnt/usb	directory	0	755	root	1577923314		
+/mnt/UPAN	directory	0	755	UNKNOWN	1480478172		
+/not	regular empty file	0	644	root	1791445671	d41d8cd98f00b204e9800998ecf8427e	
+/dev	directory	2800	755	root	1577923363		
+/binr:	regular empty file	0	644	root	1791444613	d41d8cd98f00b204e9800998ecf8427e	
+/[ror:	regular empty file	0	644	root	1791444617	d41d8cd98f00b204e9800998ecf8427e	
+/Library	directory	0	700	root	1747752313		
+/Library/Keychains	directory	0	700	root	1775008762		
+/Library/Keychains/default.keychain	regular file	870	644	root	1774951170	9e5406ce3cee924ff04e4e0da7888bd7	
+/W?Hh?????J???????????????????	regular empty file	0	644	root	1577923209	d41d8cd98f00b204e9800998ecf8427e	
+/ror:	regular empty file	0	644	root	1791442713	d41d8cd98f00b204e9800998ecf8427e	
+/ant:	regular empty file	0	644	root	1791404646	d41d8cd98f00b204e9800998ecf8427e	
+/boot@~]#	regular empty file	0	644	root	1791346720	d41d8cd98f00b204e9800998ecf8427e	
+/root@~]#	regular empty file	0	644	root	1577923257	d41d8cd98f00b204e9800998ecf8427e	
+/pected	regular empty file	0	644	root	1791340369	d41d8cd98f00b204e9800998ecf8427e	
+/root	directory	0	700	root	1577923760		
+/root/.ash_history	regular file	4549	600	root	1577923280	ca553e32c2d9c369635a2c3675c805d7	
+/root/.ssh	directory	0	700	root	1577937086		
+/root/.ssh/authorized_keys	regular file	208	600	root	1577924444	8201603bdf988859678ab12fd339d137	
+/control	regular empty file	0	644	root	1791444563	d41d8cd98f00b204e9800998ecf8427e	
+/linuxrc	symbolic link	11	777	UNKNOWN	1480478172		bin/busybox
+/[expected	regular empty file	0	644	root	1791442402	d41d8cd98f00b204e9800998ecf8427e	
+/.ash_history	regular file	2810	600	root	1792449220	2bf3d6971b87f9b6f613a63ef26ffb4f	
+/ntax	regular empty file	0	644	root	1791442715	d41d8cd98f00b204e9800998ecf8427e	
+/@~]#	regular empty file	0	644	root	1791444587	d41d8cd98f00b204e9800998ecf8427e	
+/oot@~]#	regular empty file	0	644	root	1791445678	d41d8cd98f00b204e9800998ecf8427e	
+/t@~]#	regular empty file	0	644	root	1791446109	d41d8cd98f00b204e9800998ecf8427e	
+/Permission	regular empty file	0	644	root	1577923215	d41d8cd98f00b204e9800998ecf8427e	
+/ot@~]#	regular empty file	0	644	root	1791445679	d41d8cd98f00b204e9800998ecf8427e	
+/proc	directory	0	555	root	0		
+/biected	regular empty file	0	644	root	1791343122	d41d8cd98f00b204e9800998ecf8427e	
+/nied	regular empty file	0	644	root	1791442735	d41d8cd98f00b204e9800998ecf8427e	
+/rned	regular empty file	0	644	root	1791444563	d41d8cd98f00b204e9800998ecf8427e	
+/enied	regular empty file	0	644	root	1577923203	d41d8cd98f00b204e9800998ecf8427e	
+/script	directory	0	775	UNKNOWN	1792449221		
+/script/run_ocbmd.sh	regular file	757	755	root	1577929931	3e6074953f9a7f9559a2e59b44a0e86e	
+/script/peer_store.sh	regular file	2462	755	root	1577929932	9c639955aa82a7e0c9b6fc3838078dbb	
+/script/uart_console.sh	regular file	356	755	root	1577924321	051bed25e3681570d20f57abe4773b36	
+/script/start_bluetooth_wifi.sh	regular file	2167	755	root	1577927358	1e1a94cb034dd9137370c0196f43c5e4	
+/script/session_supervisor.sh	regular file	93663	755	root	1577948906	2465ee1cf3fa0162aa73a3d318097efe	
+/script/phone_reset.sh	regular file	2229	755	root	1577929932	f026e301559ddaa4a5454840fc9d00e7	
+/script/run_supervisor.sh	regular file	1158	755	root	1577929931	2e8a8eab71daf506996010731974b9ba	
+/script/carplay-status.sh	regular file	1325	755	root	1577929932	444711976a861e4f9821948d52905558	
+/script/bt_off.sh	regular file	634	755	root	1577928951	13543f2bd2cd461706f33238ca26372d	
+/script/radio_detect.sh	regular file	16103	755	root	1577929932	d17644230ff2eb88314c328aa8af6b67	
+/script/attach_bluetooth.sh	regular file	6218	755	root	1787967220	80fb805bc13823df776d65424fadfbbd	
+/script/radio_ap_up.sh	regular file	14421	755	root	1577929932	0bcfb06a0a97e2d79bcce3ac69e60bcc	
+/script/ko.tar.gz	regular file	51417	644	root	1577929980	9f5da4cbdc0f08f170b24c3df67bcdf9	
+/script/ocbm_failover	regular empty file	0	644	root	1577931091	d41d8cd98f00b204e9800998ecf8427e	
+/script/ocbm_boot.sh	regular file	9145	755	root	1577929930	bd23098d47f990827e61e814b6d012a8	
+/script/ncm_only	regular empty file	0	644	root	1792449221	d41d8cd98f00b204e9800998ecf8427e	
+/script/ocbm_failover.log	regular file	2825	644	root	1577923322	da864cc37e58eebbfabe8728e76e823d	
+/script/wlan_off.sh	regular file	1030	755	root	1577938829	7b461055f13d73beeb67f434abb912b0	
+/script/init_gpio.sh	regular file	1100	755	root	1577937821	bc276210dc5ede20cdacbecb073c6977	
+/script/early_console.sh	regular file	505	755	root	1577937821	11270953653d5f20535cc798d137ec93	
+/script/wlan_on.sh	regular file	1614	755	root	1577934686	6b065e4898f7f0fa19f87b9d5787ef8a	
+/script/sync_box_time.sh	regular file	1605	755	root	1577923211	471d251f8909672c2871b087041bc545	
+/script/custom_init.sh	regular file	3389	755	root	1577924523	8f1408df94f5760598b4a93f69d15bde	
+/script/radio_hal.sh	regular file	43253	755	root	1577929932	21f698c6e281553ad0d35413c501d63b	
+/script/copy_to_tmp.sh	regular file	1296	755	root	1577938829	1d49e602d796034e5f8f0bdc380f49df	
+/script/mount_usb.sh	regular file	1207	755	root	1577932167	7946da975ea8616228a3c83469ec4645	
+/script/start_ncm.sh	regular file	672	755	root	1577923210	e72740008822861f6affff3e93cdf1d3	
+/script/after_shutdown.sh	regular file	934	755	root	1577938829	04483619f89d8e1a63b7c36ffd40376c	
+/script/bt_on.sh	regular file	3364	755	root	1784938580	2184dbfb23b3a64a52fc77da2bdd9013	
+/script/projection_up.sh	regular file	4025	755	root	1577929931	1e2213775d9f14a448b3c242b5346e42	
+/script/start_main_service.sh	regular file	3452	755	root	1577925530	948d637e161567dfaa67721b0737c369	
+/Killed	regular empty file	0	644	root	1791379227	d41d8cd98f00b204e9800998ecf8427e	
+/trol	regular empty file	0	644	root	1791444614	d41d8cd98f00b204e9800998ecf8427e	
+/sbin	directory	0	755	UNKNOWN	1480478172		
+/sbin/ip	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/arp	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/logread	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/fstrim	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/fdisk	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/adjtimex	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/ifenslave	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/init	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/halt	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/getty	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/route	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/watchdog	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/runlevel	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/modprobe	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/iprule	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/makedevs	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mdev	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/pivot_root	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mkswap	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/fbsplash	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/setconsole	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mkfs.minix	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/hdparm	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/slattach	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/udhcpc	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/tunctl	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/sysctl	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/ipaddr	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/findfs	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/nameif	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/losetup	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mkfs.ext2	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/freeramdisk	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/blockdev	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/klogd	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/start-stop-daemon	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/raidautorun	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/poweroff	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/blkid	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/iplink	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/acpid	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/modinfo	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/loadkmap	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mke2fs	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/fsck	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/hwclock	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/syslogd	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/depmod	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/insmod	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/devmem	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/switch_root	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/fsck.minix	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/bootchartd	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/ifconfig	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/vconfig	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/reboot	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/ifdown	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/rmmod	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/lsmod	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mkdosfs	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/sulogin	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/iproute	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/mkfs.vfat	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/swapon	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/zcip	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/swapoff	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/ifup	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/sbin/iptunnel	symbolic link	14	777	UNKNOWN	1480478172		../bin/busybox
+/binn	regular empty file	0	644	root	1791346729	d41d8cd98f00b204e9800998ecf8427e	
+/sion	regular empty file	0	644	root	1577923209	d41d8cd98f00b204e9800998ecf8427e	
+/turned	regular empty file	0	644	root	1577923209	d41d8cd98f00b204e9800998ecf8427e	
+/found	regular empty file	0	644	root	1577923209	d41d8cd98f00b204e9800998ecf8427e	
+/ntrol	regular empty file	0	644	root	1791446106	d41d8cd98f00b204e9800998ecf8427e	
+/error:	regular empty file	0	644	root	1791442713	d41d8cd98f00b204e9800998ecf8427e	

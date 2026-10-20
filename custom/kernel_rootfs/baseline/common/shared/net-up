@@ -1,0 +1,118 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/initramfs/net-up (https://github.com/f-io/LIVI,
+# GPL-3.0-or-later). Changes: identity from /etc/baseline/usb-ids.conf and ocbm-identity, no bridge,
+# the interface name is read back from configfs instead of assumed, per-unit fixed MACs, a one-address
+# udhcpd on the NCM subnet, and no shell is started here (the caller starts telnetd or dropbear).
+#
+#   net-up [ncm]   USB NCM on the UDC; on success prints the network interface name on stdout
+#   net-up acm     a shell on ttyGS0 (recovery initramfs only: unauthenticated)
+#   net-up ocbm    refused: needs FunctionFS + ocbmd, not part of the baseline
+# The UDC has a small endpoint budget, so one function at a time; net-down first to switch.
+MODE=${1:-ncm}
+C=/etc/baseline
+. "$C/usb-ids.conf"
+. "$C/ncm.conf"
+[ -r "$C/board.env" ] && . "$C/board.env"
+R=${OCBM_RUN:-/run/ocbm}
+G=/sys/kernel/config/usb_gadget/baseline
+log() { echo "net-up: $*" >&2; }
+
+case $MODE in
+    ncm) VID=$USB_VID PID=$USB_NCM_PID F=ncm.usb0 ;;
+    acm)
+        [ -e "$C/recovery" ] || { log "acm shell is recovery-only (unauthenticated)"; exit 1; }
+        VID=$USB_ACM_VID PID=$USB_ACM_PID F=acm.GS0 ;;
+    ocbm) log "OCBM mode ($USB_VID:$USB_OCBM_PID) needs FunctionFS and ocbmd, not in the baseline"; exit 1 ;;
+    *) log "usage: net-up [ncm|acm]"; exit 1 ;;
+esac
+
+[ -d /sys/kernel/config/usb_gadget ] || { log "no /sys/kernel/config/usb_gadget (configfs not mounted?)"; exit 1; }
+
+if [ -d "$G" ]; then
+    if [ "$MODE" = ncm ] && [ -e "$G/functions/ncm.usb0/ifname" ]; then
+        cat "$G/functions/ncm.usb0/ifname"
+        exit 0
+    fi
+    log "a gadget is already up, net-down first"
+    exit 1
+fi
+
+# The UDC (ci_hdrc) can probe late; wait, bounded. With NCM_UDC_MATCH (board.env) only the UDC whose
+# sysfs path contains that controller counts: with two UDCs the first one may be the wrong port.
+UDC=
+n=0
+while :; do
+    for u in /sys/class/udc/*; do
+        [ -e "$u" ] || continue
+        if [ -n "${NCM_UDC_MATCH:-}" ]; then
+            case $(readlink -f "$u") in */"$NCM_UDC_MATCH"/*) UDC=${u##*/}; break ;; esac
+        else
+            UDC=${u##*/}
+            break
+        fi
+    done
+    [ -n "$UDC" ] && break
+    n=$((n + 1))
+    [ "$n" -gt "${NET_UP_UDC_WAIT:-60}" ] && { log "no UDC after ${NET_UP_UDC_WAIT:-60} s (dmesg)"; exit 1; }
+    sleep 1
+done
+
+serial=
+[ -r "$R/serial" ] && read -r serial < "$R/serial"
+[ -n "$serial" ] || serial=$USB_SERIAL_FALLBACK
+
+mkdir -p "$G/strings/0x409" "$G/configs/c.1/strings/0x409" "$G/functions/$F" || { log "configfs mkdir failed"; exit 1; }
+echo "$VID" > "$G/idVendor"
+echo "$PID" > "$G/idProduct"
+echo 0x0200 > "$G/bcdUSB"
+if [ "$MODE" = ncm ]; then
+    echo "$USB_NCM_CLASS" > "$G/bDeviceClass"
+    echo "$USB_NCM_SUBCLASS" > "$G/bDeviceSubClass"
+    echo "$USB_NCM_PROTOCOL" > "$G/bDeviceProtocol"
+    # Fixed per unit, so the host keeps its interface and its one DHCP lease across boots.
+    for a in dev_addr host_addr; do
+        if [ -r "$R/$a" ]; then
+            read -r v < "$R/$a"
+            echo "$v" > "$G/functions/ncm.usb0/$a" || log "could not set $a"
+        fi
+    done
+fi
+echo "$USB_MANUFACTURER" > "$G/strings/0x409/manufacturer"
+echo "$USB_PRODUCT" > "$G/strings/0x409/product"
+echo "$serial" > "$G/strings/0x409/serialnumber"
+echo "$MODE" > "$G/configs/c.1/strings/0x409/configuration"
+ln -s "$G/functions/$F" "$G/configs/c.1/"
+if ! echo "$UDC" > "$G/UDC" 2>/dev/null; then
+    log "binding $UDC as $MODE failed (dmesg)"
+    net-down >/dev/null 2>&1
+    exit 1
+fi
+
+if [ "$MODE" = acm ]; then
+    ( while [ -c /dev/ttyGS0 ]; do setsid cttyhack sh < /dev/ttyGS0 > /dev/ttyGS0 2>&1; sleep 1; done ) &
+    echo $! > /run/acm-shell.pid
+    log "$UDC bound, ACM shell on ttyGS0"
+    exit 0
+fi
+
+IF=
+[ -r "$G/functions/ncm.usb0/ifname" ] && read -r IF < "$G/functions/ncm.usb0/ifname"
+[ -n "$IF" ] && [ -d "/sys/class/net/$IF" ] || { log "NCM bound but no network interface ($IF)"; exit 1; }
+ifconfig "$IF" "$NCM_DEV_IP" netmask "$NCM_NETMASK" up || { log "ifconfig $IF failed"; exit 1; }
+
+[ -r /run/udhcpd-ncm.pid ] && kill "$(cat /run/udhcpd-ncm.pid)" 2>/dev/null
+cat > /run/udhcpd-ncm.conf <<EOF
+start $NCM_HOST_IP
+end $NCM_HOST_IP
+max_leases 1
+interface $IF
+option subnet $NCM_NETMASK
+option lease $NCM_LEASE
+lease_file /run/udhcpd-ncm.leases
+pidfile /run/udhcpd-ncm.pid
+EOF
+: > /run/udhcpd-ncm.leases
+udhcpd /run/udhcpd-ncm.conf || log "udhcpd failed (the host can still use a static $NCM_HOST_IP)"
+log "$UDC bound, $IF $NCM_DEV_IP, DHCP hands out $NCM_HOST_IP"
+echo "$IF"

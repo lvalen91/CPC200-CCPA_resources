@@ -1,0 +1,100 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Flow derived from LIVI install() (native/livi-link/crates/livi-link-provision/src/dongle/arm/imx6ul/
+# boot.rs, GPL-3.0-or-later): write the staged kernel partition, read it back, erase only the env
+# block, check U-Boot itself is unchanged, reboot so U-Boot converts the staged head. Changes: runs on
+# the unit; the image is staged on the HOST (tools/stage_kernel.py) because the fuse-derived key never
+# has to reach this script; refuses without the caller's sha256 and refuses an image whose first
+# 192 KiB differ from this unit's partition (staged from a stale dump or another unit) unless
+# --restore; erases the 'env' MTD of our DT instead of a byte range of 'uboot'.
+#
+#   flash-kernel [--restore] [--if-changed] <partition-image|host:port> <sha256>
+#
+#   --restore     the image is a raw dump of THIS unit's kernel partition (e.g. backup mtd1.bin);
+#                 skips the head check, which a raw backup of another kernel cannot pass
+#   --if-changed  do nothing at all (no env erase, no reboot) if the partition already holds it;
+#                 exit status 3 says so (0 = written, anything else = failed)
+#   NO_REBOOT=1   stop after the env erase instead of rebooting
+#
+# NOT RECOVERABLE FROM HERE: this recovery lives inside the kernel partition it writes. A power loss
+# between the start of the write and the end of the env erase leaves the old encrypted head in front
+# of the new body: U-Boot has no bootable kernel, there is no USB, and only an SPI programmer
+# (full_16MB_for_programmer.bin of this unit) brings it back. A FAILED write with power still on is
+# recoverable: this recovery keeps running from RAM, so retry, or --restore a backup.
+ME=flash-kernel
+LOG=/run/flash-kernel.log
+. /lib/baseline/mtd.sh
+. /lib/baseline/flash-lib.sh
+. /etc/baseline/board.env
+
+restore=
+if_changed=
+while :; do
+    case $1 in
+        --restore) restore=1; shift ;;
+        --if-changed) if_changed=1; shift ;;
+        *) break ;;
+    esac
+done
+[ $# -eq 2 ] || { echo "usage: $ME [--restore] [--if-changed] <partition-image|host:port> <sha256>" >&2; exit 2; }
+valid_sha "$2" || die "the second argument must be the image's sha256 (64 lowercase hex)"
+WANT=$2
+
+K=$(mtd_num kernel) || die "no 'kernel' MTD partition"
+E=$(mtd_num env) || die "no 'env' MTD partition (not our DT; the vendor map keeps env inside 'uboot')"
+U=$(mtd_num uboot) || die "no 'uboot' MTD partition"
+[ "$(mtd_attr "$K" size)" = "$KERNEL_PART_SIZE" ] || die "'kernel' is $(mtd_attr "$K" size) B, not $KERNEL_PART_SIZE"
+[ "$(mtd_attr "$E" size)" = "$ERASE_SIZE" ] || die "'env' is $(mtd_attr "$E" size) B, not one $ERASE_SIZE B block"
+for m in "$K" "$E"; do
+    [ "$(mtd_attr "$m" erasesize)" = "$ERASE_SIZE" ] || die "mtd$m erase size is $(mtd_attr "$m" erasesize), not $ERASE_SIZE"
+done
+# The env erase must hit flash 0x30000 and nothing else.
+[ "$(mtd_attr "$E" offset)" = "$ENV_FLASH_OFFSET" ] || die "'env' is not at flash offset $ENV_FLASH_OFFSET (sysfs offset: $(mtd_attr "$E" offset))"
+[ "$(mtd_attr "$K" offset)" = "$KERNEL_FLASH_OFFSET" ] || die "'kernel' is not at flash offset $KERNEL_FLASH_OFFSET"
+
+IMG=$(fetch "$1" /tmp/kernel-part.img) || die "cannot read $1 (a file, or host:port of a one-shot server)"
+SIZE=$(fsize "$IMG")
+[ "$SIZE" = "$KERNEL_PART_SIZE" ] || die "image is $SIZE B; a staged partition image is exactly $KERNEL_PART_SIZE B"
+GOT=$(sha_file "$IMG")
+[ "$GOT" = "$WANT" ] || die "image sha256 is $GOT, not $WANT; nothing written"
+if [ -z "$restore" ]; then
+    IH=$(dd if="$IMG" bs="$ERASE_SIZE" count=3 2>/dev/null | sha_stdin)
+    CH=$(dd if="/dev/mtd$K" bs="$ERASE_SIZE" count=3 2>/dev/null | sha_stdin)
+    [ "$IH" = "$CH" ] || die "the image's first 192 KiB differ from this unit's kernel partition: it was staged from another dump or another unit. Dump this partition again, re-stage, or use --restore for a raw backup of THIS unit"
+fi
+# The staged head U-Boot converts after the env erase. Erased flash there would be "converted" into a
+# garbage head. (Offset from the U-Boot layout of the units we know; stage_kernel.py checks the
+# unit's own layout from its update env.)
+SH=$(dd if="$IMG" bs=8 skip=$((STAGING_PART_OFFSET / 8)) count=$((3 * ERASE_SIZE / 8)) 2>/dev/null | sha_stdin)
+[ "$SH" != "$ERASED_HEAD_SHA256" ] || die "the image has no staged head at partition offset $STAGING_PART_OFFSET; erasing env now would brick the unit"
+
+UB_BEFORE=$(sha_file "/dev/mtd$U")
+NOW=$(sha_file "/dev/mtd$K")
+if [ "$NOW" = "$WANT" ]; then
+    say "mtd$K already holds this image"
+    [ -n "$if_changed" ] && exit 3
+else
+    say "writing mtd$K (log $LOG). From now until the env erase completes, a power loss needs an SPI programmer"
+    flashcp -v "$IMG" "/dev/mtd$K" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG). DO NOT REBOOT OR POWER OFF: retry $ME with the same image, or $ME --restore <backup> <sha256>"
+    sync
+    NOW=$(sha_file "/dev/mtd$K")
+    [ "$NOW" = "$WANT" ] || die "mtd$K does not read back as written ($NOW). DO NOT REBOOT OR POWER OFF: retry $ME"
+    say "wrote and verified mtd$K"
+fi
+
+# Erasing the env block is what makes U-Boot run heweiencrypt on the next boot. Done even when the
+# image was already there: a previous run may have stopped between the write and this step.
+flash_eraseall -q "/dev/mtd$E" >> "$LOG" 2>&1 || die "erasing mtd$E failed. DO NOT REBOOT: retry 'flash_eraseall -q /dev/mtd$E'"
+sync
+[ "$(sha_file "/dev/mtd$E")" = "$ERASED_BLOCK_SHA256" ] || die "mtd$E did not erase. DO NOT REBOOT: retry 'flash_eraseall -q /dev/mtd$E'"
+[ "$(sha_file "/dev/mtd$U")" = "$UB_BEFORE" ] || die "the uboot partition changed although only env was erased. DO NOT REBOOT; compare it with your backup"
+say "env erased, U-Boot unchanged"
+[ "$IMG" = /tmp/kernel-part.img ] && rm -f /tmp/kernel-part.img
+if [ -n "$NO_REBOOT" ]; then
+    say "NO_REBOOT set: reboot when ready (U-Boot converts the staged head, rewrites env, resets once more)"
+    exit 0
+fi
+say "rebooting: U-Boot converts the staged head, rewrites its env and resets once more"
+sync
+sleep 1
+exec /bin/busybox reboot -f

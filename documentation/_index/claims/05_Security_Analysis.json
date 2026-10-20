@@ -2824,7 +2824,7 @@
    "local_id": 69,
    "statement": "On stock 3.14, mxs-dcp is bound but registers no algorithms; no AF_ALG, no /dev/crypto, DCP IRQ count 0 (live observation, not captured).",
    "topic": "dcp-linux",
-   "source_lines": "132",
+   "source_lines": "136",
    "confidence": "medium",
    "signals": [
     "2026-10-19",
@@ -2838,7 +2838,7 @@
    "local_id": 70,
    "statement": "A modified or unsigned U-Boot cannot replace the vendor one; vendor-signed U-Boot images (e.g. AutoBox.img updates) pass HAB.",
    "topic": "hab",
-   "source_lines": "139",
+   "source_lines": "143",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -2852,7 +2852,7 @@
    "local_id": 71,
    "statement": "Owner reports (unit, date and port not recorded) no boot-ROM serial-download device with the U-Boot block blank/erased on the tested port; not part of the RUNBOOK runs.",
    "topic": "hab-serial-download",
-   "source_lines": "140",
+   "source_lines": "144",
    "confidence": "medium",
    "signals": [
     "2026-10-19",
@@ -2866,7 +2866,7 @@
    "local_id": 72,
    "statement": "Hypothesis (unresolved): the ROM serial downloader uses the first OTG controller ci_hdrc.0 (female USB-A port).",
    "topic": "hab-serial-download",
-   "source_lines": "140",
+   "source_lines": "144",
    "confidence": "low",
    "signals": [
     "2026-10-19",
@@ -2880,7 +2880,7 @@
    "local_id": 73,
    "statement": "A shell recipe recovers the stock zImage and DTB from mtd0/mtd1 and the UpgKey text, reading KLEN and the staging offset from the env and stopping on a wrong key; tested on E1 (sha256 matched) and E4's 2025.02.25.1521 dump (0x303080).",
    "topic": "kernel-recovery",
-   "source_lines": "144",
+   "source_lines": "148",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -2894,7 +2894,7 @@
    "local_id": 74,
    "statement": "Adding a further unit's dumps or uuid would add its identity to the repository; leave them out unless needed.",
    "topic": "identity",
-   "source_lines": "171",
+   "source_lines": "175",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -2908,7 +2908,7 @@
    "local_id": 75,
    "statement": "The 2026-06-30 cipher statements describe only the first 0x30000 bytes; the rest of the kernel is plaintext on flash.",
    "topic": "kernel-format",
-   "source_lines": "177",
+   "source_lines": "181",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -2921,7 +2921,7 @@
    "local_id": 76,
    "statement": "The plaintext kernel was extracted from live RAM on 2026-06-30 without DCP register access.",
    "topic": "kernel-ram-dump",
-   "source_lines": "179",
+   "source_lines": "183",
    "confidence": "high",
    "signals": [],
    "quote": "**The plaintext kernel has been extracted, from live RAM, no DCP register access required.**"
@@ -2932,7 +2932,7 @@
    "local_id": 77,
    "statement": "The kernel head is AES-128-CBC using the DCP OTP_KEY mode (KEY_SELECT=0xfe, DCP_PAES_KEY_UNIQUE), a per-chip key never software-readable.",
    "topic": "dcp-head",
-   "source_lines": "181",
+   "source_lines": "185",
    "confidence": "high",
    "signals": [],
    "quote": "The kernel head in mtd1 is encrypted with **AES-128-CBC**"
@@ -2943,7 +2943,7 @@
    "local_id": 78,
    "statement": "The DCP IV is OCOTP_CFG0 || CFG1 || SW_GP2 || SW_GP3, readable but device-specific.",
    "topic": "dcp-head",
-   "source_lines": "181",
+   "source_lines": "185",
    "confidence": "medium",
    "signals": [],
    "quote": "The 16-byte IV is `OCOTP_CFG0 ‖ OCOTP_CFG1 ‖ SW_GP2 ‖ SW_GP3`"
@@ -2954,7 +2954,7 @@
    "local_id": 79,
    "statement": "The DCP mode applies to the three head blocks only and does not make the write side hard.",
    "topic": "dcp-head",
-   "source_lines": "181",
+   "source_lines": "185",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -2967,7 +2967,7 @@
    "local_id": 80,
    "statement": "The 2026-06-30 morning CTR/keystream.bin claim was incorrect; no keystream.bin or decrypted_gzip.bin ever existed.",
    "topic": "keystream-retraction",
-   "source_lines": "183",
+   "source_lines": "187",
    "confidence": "high",
    "signals": [
     "correction"
@@ -2980,7 +2980,7 @@
    "local_id": 81,
    "statement": "The zero-repeated-block test cannot distinguish CBC from CTR on gzip plaintext.",
    "topic": "keystream-retraction",
-   "source_lines": "183",
+   "source_lines": "187",
    "confidence": "high",
    "signals": [],
    "quote": "doesn't actually distinguish CBC from CTR when the plaintext is gzip-compressed data"
@@ -2991,7 +2991,7 @@
    "local_id": 82,
    "statement": "The kernel partition (mtd1) is 3,407,872 bytes (0x340000).",
    "topic": "kernel-properties",
-   "source_lines": "192",
+   "source_lines": "196",
    "confidence": "high",
    "signals": [],
    "quote": "| Partition size | 3,407,872 bytes (3.3 MB, `0x340000`) |"
@@ -3002,7 +3002,7 @@
    "local_id": 83,
    "statement": "The zImage length read by U-Boot is 3,157,976 bytes (0x302fd8), replacing the 3,358,720-byte payload claim.",
    "topic": "kernel-properties",
-   "source_lines": "193",
+   "source_lines": "197",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3017,7 +3017,7 @@
    "local_id": 84,
    "statement": "Only the first 3 x 64 KB (0x30000) of the kernel are encrypted (DCP OTP_KEY, AES-128-CBC); the body is plaintext.",
    "topic": "kernel-properties",
-   "source_lines": "194",
+   "source_lines": "198",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3032,7 +3032,7 @@
    "local_id": 85,
    "statement": "0xFF padding runs from 0x332fd8 to the end of the partition (53,288 bytes), replacing the 49,152-byte claim.",
    "topic": "kernel-properties",
-   "source_lines": "196",
+   "source_lines": "200",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3047,7 +3047,7 @@
    "local_id": 86,
    "statement": "The kernel flash offset is 0x40000, replacing the 0x100000 claim.",
    "topic": "kernel-properties",
-   "source_lines": "197",
+   "source_lines": "201",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3062,7 +3062,7 @@
    "local_id": 87,
    "statement": "The kernel RAM load address is 0x80800000.",
    "topic": "kernel-properties",
-   "source_lines": "198",
+   "source_lines": "202",
    "confidence": "high",
    "signals": [],
    "quote": "| RAM load address | 0x80800000 |"
@@ -3073,7 +3073,7 @@
    "local_id": 88,
    "statement": "The kernel is an ARM zImage that decompresses itself; U-Boot does not gunzip.",
    "topic": "kernel-properties",
-   "source_lines": "199",
+   "source_lines": "203",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3088,7 +3088,7 @@
    "local_id": 89,
    "statement": "U-Boot mtd0 was re-disassembled (Capstone, Thumb-2, base 0x877FE7D0) around do_decrypt_decompress (file 0x29B0, link 0x87801180) and its worker at 0x87800df4.",
    "topic": "uboot-disassembly",
-   "source_lines": "205",
+   "source_lines": "209",
    "confidence": "high",
    "signals": [],
    "quote": "around `do_decrypt_decompress` (file offset `0x29B0`, link addr `0x87801180`)"
@@ -3099,7 +3099,7 @@
    "local_id": 90,
    "statement": "The DCP descriptor matches Linux's struct dcp_dma_desc: control0 0x723 first block / 0x523 continuation, control1 0xfe10.",
    "topic": "dcp-descriptor",
-   "source_lines": "213",
+   "source_lines": "217",
    "confidence": "high",
    "signals": [],
    "quote": "+0x08: control1    = 0xfe10"
@@ -3110,7 +3110,7 @@
    "local_id": 91,
    "statement": "The descriptor payload points to the 16-byte IV buffer CFG0||CFG1||SW_GP2||SW_GP3.",
    "topic": "dcp-descriptor",
-   "source_lines": "217",
+   "source_lines": "221",
    "confidence": "medium",
    "signals": [],
    "quote": "+0x18: payload      = <ptr to 16-byte IV buffer: OCOTP_CFG0 ‖ CFG1 ‖ SW_GP2 ‖ SW_GP3>"
@@ -3121,7 +3121,7 @@
    "local_id": 92,
    "statement": "U-Boot's boot environment calls the DCP decrypt three times on 0x10000 bytes, not one descriptor over 3,358,720 bytes.",
    "topic": "dcp-descriptor",
-   "source_lines": "221",
+   "source_lines": "225",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19",
@@ -3135,7 +3135,7 @@
    "local_id": 93,
    "statement": "CTRL1 is 0xfe10 (CBC) not 0xfe00 (ECB).",
    "topic": "dcp-descriptor",
-   "source_lines": "225",
+   "source_lines": "229",
    "confidence": "high",
    "signals": [],
    "quote": "The actual value, confirmed twice independently from the disassembly literal pool, is **`0xfe10`**."
@@ -3146,7 +3146,7 @@
    "local_id": 94,
    "statement": "CONTROL0 0x723 sets CIPHER_ENCRYPT; the boot-time recovery uses the encrypt datapath.",
    "topic": "dcp-descriptor",
-   "source_lines": "226",
+   "source_lines": "230",
    "confidence": "high",
    "signals": [],
    "quote": "`CONTROL0 = 0x723` also encodes **`CIPHER_ENCRYPT`**"
@@ -3157,7 +3157,7 @@
    "local_id": 95,
    "statement": "PAYLOAD is a 16-byte IV, as in mxs-dcp.c for referenced/OTP keys.",
    "topic": "dcp-descriptor",
-   "source_lines": "228",
+   "source_lines": "232",
    "confidence": "high",
    "signals": [],
    "quote": "`PAYLOAD` is a 16-byte **IV**"
@@ -3168,7 +3168,7 @@
    "local_id": 96,
    "statement": "DCP_BASE is 0x02280000 (crypto@2280000 in /proc/iomem).",
    "topic": "dcp-registers",
-   "source_lines": "233",
+   "source_lines": "237",
    "confidence": "high",
    "signals": [],
    "quote": "DCP_BASE            = 0x02280000"
@@ -3179,7 +3179,7 @@
    "local_id": 97,
    "statement": "CH0STAT_CLR (+0x128) must be cleared before every submission.",
    "topic": "dcp-registers",
-   "source_lines": "241",
+   "source_lines": "245",
    "confidence": "high",
    "signals": [],
    "quote": "CH0STAT_CLR        = +0x128"
@@ -3190,7 +3190,7 @@
    "local_id": 98,
    "statement": "Earlier tooling cleared global STAT_CLR but not per-channel CH0STAT_CLR, causing flakiness.",
    "topic": "dcp-tooling",
-   "source_lines": "244",
+   "source_lines": "248",
    "confidence": "high",
    "signals": [],
    "quote": "earlier attempts cleared the *global* `STAT_CLR` (0x18) before each descriptor but never the *per-channel* `CH0STAT_CLR` (0x128)"
@@ -3201,7 +3201,7 @@
    "local_id": 99,
    "statement": "DCP uses STMP Set/Clear/Toggle aliasing; dcp_decrypt.c ports stmp_reset_block().",
    "topic": "dcp-reset",
-   "source_lines": "248",
+   "source_lines": "252",
    "confidence": "high",
    "signals": [],
    "quote": "DCP (and every other \"mxs\"-family Freescale/NXP IP block) uses **STMP-style Set/Clear/Toggle register aliasing**"
@@ -3212,7 +3212,7 @@
    "local_id": 100,
    "statement": "The live DCP attempts fed the whole mtd1 region and expected gzip magic, neither matching the real format.",
    "topic": "dcp-live-attempts",
-   "source_lines": "254",
+   "source_lines": "258",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -3225,7 +3225,7 @@
    "local_id": 101,
    "statement": "A static ARM/musl tool custom/tools/dcp_decrypt.c drives the DCP via /dev/mem with OCRAM 0x00905000-0x0091ffff as scratch.",
    "topic": "dcp-live-attempts",
-   "source_lines": "256",
+   "source_lines": "260",
    "confidence": "high",
    "signals": [],
    "quote": "Built a small static ARM/musl tool (`custom/tools/dcp_decrypt.c`"
@@ -3236,7 +3236,7 @@
    "local_id": 102,
    "statement": "For /dev/mem bulk transfer use mmap, not dd (dd on OCRAM gives EFAULT).",
    "topic": "devmem",
-   "source_lines": "259",
+   "source_lines": "263",
    "confidence": "high",
    "signals": [],
    "quote": "**Always use mmap, not dd, for /dev/mem bulk transfer on this kernel.**"
@@ -3247,7 +3247,7 @@
    "local_id": 103,
    "statement": "A tight retry-with-reset loop wedged the device once; recovered by power-cycle with no flash written.",
    "topic": "dcp-live-attempts",
-   "source_lines": "263",
+   "source_lines": "267",
    "confidence": "high",
    "signals": [],
    "quote": "**A tight retry-with-full-hardware-reset loop"
@@ -3258,7 +3258,7 @@
    "local_id": 104,
    "statement": "Even with all tool bugs fixed, the first DCP trigger on a clean boot never signals completion.",
    "topic": "dcp-live-attempts",
-   "source_lines": "266",
+   "source_lines": "270",
    "confidence": "high",
    "signals": [],
    "quote": "the very first attempt on a clean boot still never signals completion"
@@ -3269,7 +3269,7 @@
    "local_id": 105,
    "statement": "dcp_decrypt.c clamps the chunk size to the OCRAM buffer capacity.",
    "topic": "dcp-tooling",
-   "source_lines": "266",
+   "source_lines": "270",
    "confidence": "high",
    "signals": [],
    "quote": "`dcp_decrypt.c` now clamps any requested chunk size to the actual OCRAM buffer capacity"
@@ -3280,7 +3280,7 @@
    "local_id": 106,
    "statement": "The open DCP questions are no longer needed for reading or writing kernels.",
    "topic": "dcp-live-attempts",
-   "source_lines": "268",
+   "source_lines": "272",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -3293,7 +3293,7 @@
    "local_id": 107,
    "statement": "Patching U-Boot is not possible: HAB is closed and the CSF authenticates mtd0 0x1000-0x20FFF (the U-Boot code); the environment outside it drives the kernel path.",
    "topic": "hab",
-   "source_lines": "271",
+   "source_lines": "275",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19",
@@ -3307,7 +3307,7 @@
    "local_id": 108,
    "statement": "/proc/iomem shows System RAM 80000000-87ffffff, Kernel code 80008000-8058b327, Kernel data 805c0000-806684c7.",
    "topic": "memory-map",
-   "source_lines": "281",
+   "source_lines": "285",
    "confidence": "high",
    "signals": [],
    "quote": "80000000-87ffffff : System RAM"
@@ -3318,7 +3318,7 @@
    "local_id": 109,
    "statement": "The RAM dump command was dd if=/dev/mem bs=4096 skip=524296 count=2048 (8 MiB from 0x80008000).",
    "topic": "kernel-ram-dump",
-   "source_lines": "291",
+   "source_lines": "295",
    "confidence": "high",
    "signals": [],
    "quote": "dd if=/dev/mem bs=4096 skip=524296 count=2048"
@@ -3329,7 +3329,7 @@
    "local_id": 110,
    "statement": "/proc/kallsyms had 42,960 entries.",
    "topic": "kernel-symbols",
-   "source_lines": "296",
+   "source_lines": "300",
    "confidence": "high",
    "signals": [],
    "quote": "Also pulled `/proc/kallsyms` (42,960 entries"
@@ -3340,7 +3340,7 @@
    "local_id": 111,
    "statement": "The dump contains the banner Linux version 3.14.52+g94d07bb (hcw@ubuntu) (gcc version 4.9.2 (GCC)) #12 SMP PREEMPT Fri Sep 26 16:45:10 CST 2025.",
    "topic": "kernel-version",
-   "source_lines": "300",
+   "source_lines": "304",
    "confidence": "high",
    "signals": [],
    "quote": "`strings` on the dump surfaces `Linux version 3.14.52+g94d07bb (hcw@ubuntu)"
@@ -3351,7 +3351,7 @@
    "local_id": 112,
    "statement": "_stext is at 80008200, 0x200 into the dump.",
    "topic": "kernel-symbols",
-   "source_lines": "302",
+   "source_lines": "306",
    "confidence": "high",
    "signals": [],
    "quote": "`_stext` at `80008200`, is 0x200 into the dump"
@@ -3362,7 +3362,7 @@
    "local_id": 113,
    "statement": "The RAM dump is the linked resident image, not a byte-identical zImage; the flashed zImage is now recovered from staging.",
    "topic": "kernel-ram-dump",
-   "source_lines": "307",
+   "source_lines": "311",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -3375,7 +3375,7 @@
    "local_id": 114,
    "statement": "The write side is solved without DCP or U-Boot changes: plain body, UpgKey-encrypted staging head, erase env block, reboot.",
    "topic": "kernel-write-path",
-   "source_lines": "309",
+   "source_lines": "313",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19",
@@ -3389,7 +3389,7 @@
    "local_id": 115,
    "statement": "custom/kernel_dumps/ holds kernel_ram_dump_0x80008000.bin, kallsyms_running.txt and dmesg_boot.txt.",
    "topic": "artifacts",
-   "source_lines": "315",
+   "source_lines": "319",
    "confidence": "high",
    "signals": [],
    "quote": "| `kernel_ram_dump_0x80008000.bin` | 8 MiB raw dump"
@@ -3400,7 +3400,7 @@
    "local_id": 116,
    "statement": "The capture-time /proc/cmdline was console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=21e0000.qspi:256k(uboot),3328K(kernel),12800K(rootfs) rootwait quiet rw.",
    "topic": "boot-cmdline",
-   "source_lines": "319",
+   "source_lines": "323",
    "confidence": "high",
    "signals": [],
    "quote": "`/proc/cmdline`: `console=ttyLogFile0 root=/dev/mtdblock2"
@@ -3411,7 +3411,7 @@
    "local_id": 117,
    "statement": "The ludwig-v repo is the same platform family: i.MX6ULL, MX25L12835F, identical partition string and kernel version.",
    "topic": "cross-product",
-   "source_lines": "325",
+   "source_lines": "329",
    "confidence": "high",
    "signals": [],
    "quote": "**it's the same hardware/software platform family**"
@@ -3422,7 +3422,7 @@
    "local_id": 118,
    "statement": "U2W 20200122 has a plaintext kernel partition with zImage magic at partition offset 0xC0024.",
    "topic": "cross-product",
-   "source_lines": "331",
+   "source_lines": "335",
    "confidence": "high",
    "signals": [],
    "quote": "**Plaintext** — real ARM zImage magic (`0x016F2818`) found at partition offset `0xC0024`"
@@ -3433,7 +3433,7 @@
    "local_id": 119,
    "statement": "Kernel partition encryption appeared between 2020-01-22 and 2020-08-04.",
    "topic": "cross-product",
-   "source_lines": "332",
+   "source_lines": "336",
    "confidence": "high",
    "signals": [],
    "quote": "Encryption was introduced **between 2020-01-22 and 2020-08-04**"
@@ -3444,7 +3444,7 @@
    "local_id": 120,
    "statement": "CCPA mtd1 encrypts only the first 0x30000 bytes; the plaintext gzip body also looks random.",
    "topic": "cross-product",
-   "source_lines": "333",
+   "source_lines": "337",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -3457,7 +3457,7 @@
    "local_id": 121,
    "statement": "Whether the U2W 20200804+ dumps use the same head+staging layout was not checked (inferred likely).",
    "topic": "cross-product",
-   "source_lines": "335",
+   "source_lines": "339",
    "confidence": "low",
    "signals": [
     "2026-10-19",
@@ -3471,7 +3471,7 @@
    "local_id": 122,
    "statement": "Some same-family builds share byte-identical kernel ciphertext (e.g. U2W_FW_20220124 and U2W_CFW_20231228_FORGED_RTL8822BS).",
    "topic": "cross-product",
-   "source_lines": "338",
+   "source_lines": "342",
    "confidence": "high",
    "signals": [],
    "quote": "`U2W_FW_20220124` and `U2W_CFW_20231228_FORGED_RTL8822BS` are identical"
@@ -3482,7 +3482,7 @@
    "local_id": 123,
    "statement": "Identical leading ciphertext with later divergence is explained equally by a same-unit head with a different plaintext body.",
    "topic": "cross-product",
-   "source_lines": "339",
+   "source_lines": "343",
    "confidence": "medium",
    "signals": [
     "Corrected 2026-10-19"
@@ -3495,7 +3495,7 @@
    "local_id": 124,
    "statement": "No static Carlinkit key can be the CCPA kernel-head key, which is hardware-bound per chip.",
    "topic": "kernel-keys",
-   "source_lines": "343",
+   "source_lines": "347",
    "confidence": "high",
    "signals": [],
    "quote": "can be the CCPA kernel-head key, because it's confirmed hardware-bound per-chip"
@@ -3506,7 +3506,7 @@
    "local_id": 125,
    "statement": "The pre/post-encryption U-Boot diff lead now matters only for using the DCP from Linux.",
    "topic": "cross-product",
-   "source_lines": "343",
+   "source_lines": "347",
    "confidence": "high",
    "signals": [
     "Corrected 2026-10-19"
@@ -3519,7 +3519,7 @@
    "local_id": 126,
    "statement": "AutoPlay9uPT4n17 is the OTA image key, not the kernel key.",
    "topic": "kernel-keys",
-   "source_lines": "351",
+   "source_lines": "355",
    "confidence": "high",
    "signals": [],
    "quote": "| `AutoPlay9uPT4n17` | AES-128-CBC | OTA image key, not kernel key |"
@@ -3530,7 +3530,7 @@
    "local_id": 127,
    "statement": "W2EC1X1NbZ58TXtn is the USB session key, not the kernel key.",
    "topic": "kernel-keys",
-   "source_lines": "352",
+   "source_lines": "356",
    "confidence": "high",
    "signals": [],
    "quote": "| `W2EC1X1NbZ58TXtn` | AES-128-CBC | USB session key, not kernel key |"
@@ -3541,7 +3541,7 @@
    "local_id": 128,
    "statement": "CFG0+CFG1+GP2+GP3 is the DCP IV, not the AES key.",
    "topic": "kernel-keys",
-   "source_lines": "354",
+   "source_lines": "358",
    "confidence": "high",
    "signals": [],
    "quote": "This is the IV (DCP `PAYLOAD` field), not the AES key"
@@ -3552,7 +3552,7 @@
    "local_id": 129,
    "statement": "The UpgKey decrypts the staging blocks and the update environment; it is not the head key.",
    "topic": "kernel-keys",
-   "source_lines": "356",
+   "source_lines": "360",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3566,7 +3566,7 @@
    "local_id": 130,
    "statement": "/proc/config.gz is absent; CONFIG_STRICT_DEVMEM unconfirmed; dd on the kernel RAM range worked.",
    "topic": "anti-debug",
-   "source_lines": "362",
+   "source_lines": "366",
    "confidence": "medium",
    "signals": [],
    "quote": "`CONFIG_STRICT_DEVMEM` claim **needs re-verification**"
@@ -3577,7 +3577,7 @@
    "local_id": 131,
    "statement": "The recovered stock zImage contains no IKCFG_ST marker, so there is no embedded kernel config.",
    "topic": "kernel-config",
-   "source_lines": "362",
+   "source_lines": "366",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -3591,7 +3591,7 @@
    "local_id": 132,
    "statement": "ptrace is globally rejected with EINVAL.",
    "topic": "anti-debug",
-   "source_lines": "363",
+   "source_lines": "367",
    "confidence": "high",
    "signals": [],
    "quote": "`ptrace` globally rejected with `EINVAL`"
@@ -3602,7 +3602,7 @@
    "local_id": 133,
    "statement": "There is no ftrace (/sys/kernel/debug/tracing absent).",
    "topic": "anti-debug",
-   "source_lines": "364",
+   "source_lines": "368",
    "confidence": "high",
    "signals": [],
    "quote": "No ftrace (`/sys/kernel/debug/tracing` absent)"
@@ -3613,7 +3613,7 @@
    "local_id": 134,
    "statement": "U-Boot mtd0.bin link base is 0x877FE7D0 with the IVT at file 0x1000.",
    "topic": "references",
-   "source_lines": "370",
+   "source_lines": "374",
    "confidence": "high",
    "signals": [],
    "quote": "U-Boot binary: `mtd0.bin` (link base 0x877FE7D0; IVT at file 0x1000"
@@ -3624,7 +3624,7 @@
    "local_id": 135,
    "statement": "OCOTP values of the 2026-06-30 unit were read via /sys/fsl_otp/ and /dev/mem at 0x021bc410/0x021bc420; SW_GP2 and SW_GP3 are 0.",
    "topic": "references",
-   "source_lines": "372",
+   "source_lines": "376",
    "confidence": "high",
    "signals": [],
    "quote": "OCOTP live values (2026-06-30"
@@ -3635,7 +3635,7 @@
    "local_id": 136,
    "statement": "Flash map and U-Boot environment are documented in 01_Firmware_Architecture/flash_layout.md.",
    "topic": "references",
-   "source_lines": "377",
+   "source_lines": "381",
    "confidence": "high",
    "signals": [],
    "quote": "Flash map and U-Boot environment: `01_Firmware_Architecture/flash_layout.md`"
@@ -5825,7 +5825,7 @@
    "local_id": 154,
    "statement": "The RUNBOOK runs never wrote U-Boot; the only mtd0 write was the env-block erase.",
    "topic": "hab",
-   "source_lines": "136",
+   "source_lines": "140",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -5839,7 +5839,7 @@
    "local_id": 155,
    "statement": "SEC_CONFIG is closed on E1 per the 2026-06-30 OCOTP read (MISC_CONF=0x40) of the same chip; not re-read on 2026-10-19.",
    "topic": "hab",
-   "source_lines": "138",
+   "source_lines": "142",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -5853,7 +5853,7 @@
    "local_id": 156,
    "statement": "The recovery recipe reads KLEN and the staging offset from the decrypted env instead of assuming them.",
    "topic": "kernel-recovery",
-   "source_lines": "144",
+   "source_lines": "148",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -5868,7 +5868,7 @@
    "local_id": 157,
    "statement": "Already tracked in the repo: E1's mtd0/mtd1, E4's full dumps, E1's OCOTP words and both recorded units' uuids.",
    "topic": "identity",
-   "source_lines": "171",
+   "source_lines": "175",
    "confidence": "high",
    "signals": [
     "2026-10-19",
@@ -5882,7 +5882,7 @@
    "local_id": 158,
    "statement": "The tracked uuids and fuse words tell a reader nothing a connected host does not already receive (inferred from BoxSettings uuid = fuse words in hex).",
    "topic": "identity",
-   "source_lines": "171",
+   "source_lines": "175",
    "confidence": "medium",
    "signals": [
     "2026-10-19",

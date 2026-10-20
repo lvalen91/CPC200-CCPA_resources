@@ -1,0 +1,11 @@
+layout: kernel_len=0x302fd8 staging=0x342fd8 (partition offset 0x302fd8) convert pairs=[('0x342fd8', '0x40000'), ('0x352fd8', '0x50000'), ('0x362fd8', '0x60000')]
+zImage: 3124994 bytes sha256 19b4f7ffc89635af
+plan.unchanged (kernel partition already holds this): False
+differing bytes: 3145661 first at 0x30000 last at 0x332fd7
+{'head(0..0x2ffff)': 0, 'body': 2949833, 'staging': 195828, 'tail/other': 0}
+mtd0 env block @0x30000: holds data (65280 non-FF bytes); U-Boot+update block (first 0x30000 bytes) is untouched by the flow
+sha256(current mtd1) = 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128
+sha256(planned mtd1) = eee0c97009af1a11025c1b68181205074ff77db1bca407e223efb4a7ef8c1a4a
+
+Bundle: LIVI 9.5.0 build 168c4922 imx6ul_iw416 (sha256 verified against firmware.json): kernel 3,124,994 B (headroom 32,982 B under 0x302fd8), rootfs squashfs 1,933,312 B (4 KiB multiple, fits the 12,800 KB partition). Offline only; nothing written. LIVI order on a vendor unit: backup -> write kernel partition (flash_erase all of mtd1 + cat) -> erase env block -> reboot/convert -> must reach RESCUE (initramfs) -> only then write rootfs squashfs -> reboot.
+Exposed (non-atomic) window: from the start of the mtd1 erase until the env erase completes: datasheet est. 22-54 s (52 x 64K erases + ~13k page programs). A power loss there leaves old encrypted head + new body: no valid kernel, no USB, SPI programmer needed.

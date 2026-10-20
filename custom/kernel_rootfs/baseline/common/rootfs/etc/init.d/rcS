@@ -1,0 +1,46 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Baseline rootfs boot. The bootstate handling is LIVI's (scripts/livi-link/common/rootfs/etc/init.d/rcS,
+# https://github.com/f-io/LIVI, GPL-3.0-or-later): clear the mark the initramfs set once the ways in
+# are up. Everything else differs: no radio, no MFi bridge, no web UI, no telnetd; NCM + SSH (key
+# only) and the UART shell (inittab) are the ways in.
+#
+# The network part runs in the background so a missing UDC never delays the UART shell, which
+# busybox init starts only after this script returns.
+mkdir -p /run/baseline /run/log
+exec > /run/baseline/rcS.log 2>&1 < /dev/null
+. /etc/baseline/board.env
+. /etc/baseline/ncm.conf
+. /lib/baseline/mtd.sh
+con() { echo "rcS: $*"; echo "rcS: $*" > /dev/console; }
+
+hostname -F /etc/hostname
+ifconfig lo 127.0.0.1 up
+[ -s /run/ocbm/serial ] || ocbm-identity || con "no chip identity, the USB serial falls back to a placeholder"
+[ -r /etc/baseline/board-rcS.sh ] && . /etc/baseline/board-rcS.sh
+command -v board_early > /dev/null 2>&1 && board_early
+
+(
+    persist load
+    ok=
+    if IF=$(net-up ncm); then
+        if ssh-up "$NCM_DEV_IP"; then
+            ok=1
+            con "NCM $IF $NCM_DEV_IP, ssh (key only) on $NCM_DEV_IP:22, host gets $NCM_HOST_IP"
+        else
+            con "dropbear did not start (/run/log/dropbear.log)"
+        fi
+    else
+        con "NCM did not come up (dmesg)"
+    fi
+    N=$(mtd_num bootstate)
+    if [ -n "$ok" ] && [ -n "$N" ]; then
+        bootstate_clear "$N" && echo "rcS: bootstate cleared"
+    elif [ -n "$N" ]; then
+        con "the ways in are not all up: bootstate stays set, the next boot stays in recovery"
+    fi
+    command -v board_late > /dev/null 2>&1 && board_late "$ok"
+    echo 4 > /proc/sys/kernel/printk
+    echo "rcS: done"
+) &
+exit 0

@@ -18,6 +18,8 @@
 
 **Total Flash:** 16MB QSPI NOR (21e0000.qspi)
 
+> **[Added 2026-10-20]** The table above is the **vendor** map. A unit running LIVI's kernel, or the baseline kernel that keeps LIVI's DTB map, shows six MTDs instead: uboot `0x30000` (read-only), env `0x10000`, kernel `0x340000`, rootfs `0xc60000`, customer `0x10000`, bootstate `0x10000`. There the kernel is `/dev/mtd2` and the env block is `/dev/mtd1`. The map was read live on 2026-10-19 and 2026-10-20 and is listed in `custom/kernel_rootfs/livi/README.md` §1 and `kernel_compilation.md` § Getting back from LIVI.
+
 > **Note (boot device):** This 3-partition layout (mtd0 uboot / mtd1 kernel / mtd2 rootfs) is the authoritative one; the running kernel boots with `root=/dev/mtdblock2`. There is no 4th MTD partition. **[Corrected 2026-10-19]** `root=/dev/mtdblock3` is not in the environment U-Boot runs: it comes from NXP 14x14-EVK template text inside the U-Boot image that U-Boot never uses as its environment. The environment it does run sets `root=/dev/mtdblock2` itself (see U-Boot Environment below).
 
 ### Boot Command Line

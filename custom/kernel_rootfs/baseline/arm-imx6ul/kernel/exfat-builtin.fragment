@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# RECOVERY_EXFAT=1: exFAT built in, so the recovery USB step can read exFAT sticks (modules live in the
+# rootfs and are not available to the recovery initramfs). Default off: recovery reads vfat only.
+CONFIG_EXFAT_FS=y

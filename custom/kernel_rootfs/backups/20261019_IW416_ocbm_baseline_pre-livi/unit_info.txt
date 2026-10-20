@@ -1,0 +1,12 @@
+dev:    size   erasesize  name
+mtd0: 00040000 00010000 "uboot"
+mtd1: 00340000 00010000 "kernel"
+mtd2: 00c80000 00010000 "rootfs"
+crw-rw----    1 root     root       90,   0 Jan  1  1970 /dev/mtd0
+crw-rw----    1 root     root       90,   2 Jan  1  1970 /dev/mtd1
+crw-rw----    1 root     root       90,   4 Jan  1  1970 /dev/mtd2
+/dev/root on / type jffs2 (rw,relatime)
+0x692173ca
+0x1d16c1d7
+0x767bb8ec
+0xfefd6672

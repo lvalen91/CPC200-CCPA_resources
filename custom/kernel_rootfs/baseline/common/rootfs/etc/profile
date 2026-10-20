@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/rootfs/etc/profile (GPL-3.0-or-later). Change: the
+# identity banner for interactive logins (UART, SSH after authentication).
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+export HOME=/root
+export PS1='\u@\h:\w# '
+case $- in
+    *i*) ocbm-banner 2>/dev/null ;;
+esac

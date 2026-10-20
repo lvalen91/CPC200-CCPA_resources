@@ -428,3 +428,7 @@ Other Carlinkit device models use different keys:
 - Verify `dropbear` line is uncommented in `/etc/init.d/rcS`
 - Verify `/usr/sbin/dropbear` binary exists in your firmware tar
 - Connect to adapter WiFi (default: `192.168.43.1`)
+
+## Related: replacing the kernel and rootfs
+
+This guide covers the vendor `.img` update path. Running a mainline kernel and a new rootfs behind the stock U-Boot is a separate track: LIVI Link analysis, the vanilla baseline recipe, hardware run logs and backups. That work is in [`../kernel_rootfs/README.md`](../kernel_rootfs/README.md).

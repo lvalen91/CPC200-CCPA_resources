@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Derived from LIVI scripts/livi-link/arm/imx6ul/imx6ull-iw416.dtsi (https://github.com/f-io/LIVI;
+ * project GPL-3.0-or-later, upstream SPDX tag GPL-2.0 kept). NXP IW416: mwifiex loads the combo
+ * firmware over SDIO, btnxpuart only attaches. Change: LIVI's bootargs override
+ * (mwifiex.driver_mode=2) is dropped, it would replace panic=10; pass it at load time instead:
+ * `modprobe mwifiex driver_mode=2` (the AP interface uap0 next to the station). Only the BT node.
+ */
+&uart3 {
+	bluetooth {
+		compatible = "nxp,88w8987-bt";
+		fw-init-baudrate = <3000000>;
+	};
+};

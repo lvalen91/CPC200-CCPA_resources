@@ -146,6 +146,7 @@ The kernel (mtd1, 3328 KB) is **encrypted with a per-chip key derived from the O
 > - A kernel can therefore be moved to another unit: write the body, encrypt the head into staging with the **target's** UpgKey, erase the target's env block, and U-Boot rebuilds the DCP head. This method is VERIFIED on one unit with LIVI's kernel; a cross-unit transplant is INFERRED.
 > - U-Boot does not verify the kernel [VERIFIED: LIVI's mainline 7.2.10 kernel booted].
 > - Full format: `05_Security_Analysis/kernel_encryption.md`.
+> - **[Added 2026-10-20]** The kernel-replacement work (LIVI analysis, the vanilla baseline, run logs, backups) is in `custom/kernel_rootfs/`. Nothing there writes U-Boot.
 
 This is the true barrier to whole-flash transplants between devices, confirmed by experiment:
 

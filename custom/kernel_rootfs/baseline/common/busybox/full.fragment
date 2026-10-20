@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# BusyBox 1.38.0 for the baseline ROOTFS: `make defconfig`, then these lines win (build.sh replaces each
+# symbol's line, runs oldconfig, and fails if a value did not stick). Goal: every applet that can build
+# static and can work on the board; out only what cannot work there:
+#   PAM, SELinux             no such libraries/policies in a static musl/glibc userspace
+#   NFS / CIFS mount helpers no RPC/CIFS userspace or kernel client in the baseline
+#   TC, HWCLOCK              do not build: tc.c against 7.x headers (TCA_CBQ_MAX), hwclock.c against
+#                            musl 1.2 time64 (SYS_settimeofday). Measured by the C2Air session with the
+#                            same 1.38.0 (c2air docs/userspace-spec.md); LIVI's busybox.sed drops TC too.
+# "udev helpers": BusyBox has no udev applets; mdev is built but never registered as the hotplug helper
+# (nothing may autoload radio modules), so nothing else is excluded under that heading.
+# Additions over defconfig: static, the MTD/UBI tools (flash_erase itself is not a BusyBox applet: see
+# the mtd-utils recipe). The VT/console applets LIVI's busybox.sed removes are KEPT (they build; the
+# owner rule is "exclude only what cannot work"); drop them here if the rootfs ever gets tight.
+CONFIG_STATIC=y
+# CONFIG_PAM is not set
+# CONFIG_SELINUX is not set
+# CONFIG_FEATURE_MOUNT_NFS is not set
+# CONFIG_FEATURE_MOUNT_CIFS is not set
+# CONFIG_FEATURE_INETD_RPC is not set
+# CONFIG_TC is not set
+# CONFIG_FEATURE_TC_INGRESS is not set
+# CONFIG_HWCLOCK is not set
+CONFIG_FLASHCP=y
+CONFIG_FLASH_ERASEALL=y
+CONFIG_FLASH_LOCK=y
+CONFIG_FLASH_UNLOCK=y
+CONFIG_NANDWRITE=y
+CONFIG_NANDDUMP=y
+CONFIG_UBIATTACH=y
+CONFIG_UBIDETACH=y
+CONFIG_UBIMKVOL=y
+CONFIG_UBIRMVOL=y
+CONFIG_UBIRSVOL=y
+CONFIG_UBIUPDATEVOL=y
+CONFIG_UBIRENAME=y
+CONFIG_DEVMEM=y
+CONFIG_I2CGET=y
+CONFIG_I2CSET=y
+CONFIG_I2CDUMP=y
+CONFIG_I2CDETECT=y
+CONFIG_I2CTRANSFER=y
+CONFIG_MODPROBE=y
+CONFIG_DEPMOD=y
+CONFIG_MOUNTPOINT=y
+CONFIG_READLINK=y
+CONFIG_FEATURE_READLINK_FOLLOW=y
+CONFIG_CTTYHACK=y
+CONFIG_TAR=y
+CONFIG_FEATURE_TAR_CREATE=y

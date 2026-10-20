@@ -1,0 +1,30 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ssh-up ADDR: start dropbear on ADDR:22, public-key login only (compiled that way, see
+# common/dropbear/localoptions.h, and -s here as a second lock).
+#   host key        ed25519, kept in the persist archive on the 'customer' MTD so the fingerprint
+#                   survives reboots and rootfs reflashes; generated on first boot
+#   authorized_keys /etc/baseline/authorized_keys (baked in at build time) + /run/persist/authorized_keys
+#                   (added at runtime with `persist add-key FILE`), assembled into /run/ssh, which
+#                   /root/.ssh points at
+ADDR=${1:?usage: ssh-up ADDR}
+P=/run/persist
+K=$P/dropbear_ed25519_host_key
+umask 077
+mkdir -p /run/dropbear /run/ssh "$P"
+if [ ! -s "$K" ]; then
+    rm -f "$K"
+    dropbearkey -t ed25519 -f "$K" > /dev/null 2>&1 || { echo "ssh-up: dropbearkey failed" >&2; exit 1; }
+    persist save || echo "ssh-up: new host key NOT persisted, it changes on the next boot" >&2
+fi
+: > /run/ssh/authorized_keys
+for f in /etc/baseline/authorized_keys "$P/authorized_keys"; do
+    [ -r "$f" ] && cat "$f" >> /run/ssh/authorized_keys
+done
+chmod 0600 /run/ssh/authorized_keys
+[ -s /run/ssh/authorized_keys ] || echo "ssh-up: no authorized keys: nobody can log in over SSH (UART only)" >&2
+[ -r /run/dropbear.pid ] && kill "$(cat /run/dropbear.pid)" 2>/dev/null
+# -E: log to stderr (no syslogd here), -s: no password logins, -r: our host key only.
+dropbear -E -s -r "$K" -p "$ADDR:22" -P /run/dropbear.pid 2>> /run/log/dropbear.log || exit 1
+sleep 1
+[ -r /run/dropbear.pid ] && kill -0 "$(cat /run/dropbear.pid)" 2>/dev/null

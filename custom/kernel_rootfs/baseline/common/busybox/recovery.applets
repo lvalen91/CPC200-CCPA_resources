@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# BusyBox 1.38.0 for the RECOVERY initramfs: allnoconfig plus exactly these CONFIG_ symbols (build.sh
+# fails if one does not stick). Derived from RESCUE_APPLETS in LIVI scripts/livi-link/arm/imx6ul/board.sh
+# (https://github.com/f-io/LIVI, GPL-3.0-or-later). Changes: no brctl/vi/awk/sed/grep/xxd/pkill/
+# killall/cut/tr/...; added ip, i2cdetect/i2cget, nandwrite/nanddump, rmdir, ln, mv, chmod, wc, readlink -f.
+# Every applet the recovery scripts call is here; build.sh checks the built busybox.links against its
+# RECOVERY_NEEDS list before it builds a kernel.
+
+# shell and init plumbing
+LFS BUSYBOX FEATURE_INSTALLER FEATURE_DEVPTS
+ASH SH_IS_ASH ASH_JOB_CONTROL ASH_ECHO ASH_PRINTF ASH_TEST ASH_CMDCMD ASH_OPTIMIZE_FOR_SIZE
+FEATURE_SH_MATH FEATURE_EDITING FEATURE_TAB_COMPLETION
+CTTYHACK SETSID STTY SWITCH_ROOT
+# mount -o move/bind/nosuid/nodev: without it init's /run tmpfs mount fails ("tmpfs: Unknown parameter
+# 'nosuid'", QEMU 2026-10-20) and the /dev, /run moves before switch_root cannot work
+FEATURE_MOUNT_FLAGS
+
+# the owner's list
+FLASHCP FLASH_ERASEALL DD NANDWRITE NANDDUMP SHA256SUM MD5SUM NC NC_SERVER HEXDUMP
+LS CAT MOUNT UMOUNT MKDIR SYNC REBOOT IFCONFIG FEATURE_IFCONFIG_STATUS
+IP FEATURE_IP_ADDRESS FEATURE_IP_LINK FEATURE_IP_ROUTE UDHCPD I2CDETECT I2CGET
+
+# what init, net-up, net-down, ocbm-identity, flash-* and usb-update call
+TELNETD FEATURE_TELNETD_STANDALONE ECHO PRINTF TEST TEST1 TRUE FALSE SLEEP RM RMDIR LN MV CHMOD WC
+KILL PS DMESG READLINK FEATURE_READLINK_FOLLOW
+
+# rescue extras (small): xmodem over the UART when NCM is down, register reads for the open usbotg1
+# questions, a ping to check the NCM link
+RX DEVMEM PING

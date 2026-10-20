@@ -1,0 +1,137 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Kconfig fragment, merged onto allnoconfig (scripts/kconfig/merge_config.sh -n) for linux 7.2.10.
+# Derived from the scripts/config list in LIVI scripts/livi-link/arm/imx6ul/build.sh
+# (https://github.com/f-io/LIVI, GPL-3.0-or-later). build.sh fails if any value below does not
+# survive into the final .config (a dropped dependency is otherwise silent).
+# KEPT from LIVI: i.MX6UL/ULL core, VFP/NEON, !SMP, PREEMPT, size, XZ kernel, modules, built-in
+# initramfs, squashfs+xz, pseudo fs, serial console, I2C, GPIO, LEDs, watchdog, OCOTP, QSPI NOR,
+# chipidea UDC + NCM/ACM, IPv4/IPv6. DROPPED (built-in): Wi-Fi/cfg80211, Bluetooth, bridge, MMC/SDHCI
+# (radio drivers are rootfs modules, radio-modules.fragment). See README "Changes against LIVI".
+CONFIG_MMU=y
+CONFIG_ARCH_MULTIPLATFORM=y
+CONFIG_ARCH_MULTI_V7=y
+CONFIG_ARCH_MXC=y
+CONFIG_SOC_IMX6UL=y
+# The i.MX6UL/ULL pin controller. Its Kconfig default (SOC_IMX6UL) does not survive allnoconfig, and
+# LIVI's config lacks it too: without it every node with pinctrl-0 (uart1, i2c, gpio banks, reg_wlan)
+# keeps deferring its probe (drivers/pinctrl/devicetree.c: -EPROBE_DEFER when no pin controller driver
+# exists and MODULES=y) and no DT pin muxing is applied (QEMU 2026-10-20: gpio-mxc -517, no console).
+CONFIG_PINCTRL_IMX6UL=y
+CONFIG_ARM_APPENDED_DTB=y
+# CONFIG_ARM_ATAG_DTB_COMPAT is not set
+CONFIG_VFP=y
+CONFIG_VFPv3=y
+CONFIG_NEON=y
+# Thumb user binaries: Debian/Ubuntu armhf gcc defaults to -mthumb, and without ARM_THUMB the kernel
+# rejects a Thumb-entry ELF with ENOEXEC (QEMU 2026-10-20: "Failed to execute /init (error -8)").
+CONFIG_ARM_THUMB=y
+# CONFIG_SMP is not set
+CONFIG_PREEMPT=y
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+CONFIG_KERNEL_XZ=y
+CONFIG_MODULES=y
+CONFIG_MODULE_UNLOAD=y
+CONFIG_EXPERT=y
+# CONFIG_IO_URING is not set
+# CONFIG_ETHTOOL_NETLINK is not set
+CONFIG_PRINTK=y
+CONFIG_PRINTK_TIME=y
+CONFIG_BUG=y
+CONFIG_FUTEX=y
+CONFIG_EPOLL=y
+CONFIG_EVENTFD=y
+CONFIG_SIGNALFD=y
+CONFIG_TIMERFD=y
+CONFIG_POSIX_TIMERS=y
+CONFIG_MULTIUSER=y
+CONFIG_FILE_LOCKING=y
+CONFIG_ADVISE_SYSCALLS=y
+CONFIG_SHMEM=y
+CONFIG_COMPAT_32BIT_TIME=y
+CONFIG_HIGH_RES_TIMERS=y
+CONFIG_NO_HZ_IDLE=y
+CONFIG_SYSVIPC=y
+CONFIG_INOTIFY_USER=y
+CONFIG_BLOCK=y
+CONFIG_BLK_DEV_WRITE_MOUNTED=y
+CONFIG_BINFMT_ELF=y
+CONFIG_BINFMT_SCRIPT=y
+CONFIG_PROC_FS=y
+CONFIG_PROC_SYSCTL=y
+CONFIG_SYSFS=y
+CONFIG_TMPFS=y
+CONFIG_DEVTMPFS=y
+CONFIG_CONFIGFS_FS=y
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_INITRAMFS_COMPRESSION_NONE=y
+CONFIG_MISC_FILESYSTEMS=y
+CONFIG_SQUASHFS=y
+CONFIG_SQUASHFS_XZ=y
+CONFIG_TTY=y
+CONFIG_UNIX98_PTYS=y
+CONFIG_SERIAL_IMX=y
+CONFIG_SERIAL_IMX_CONSOLE=y
+CONFIG_I2C=y
+CONFIG_I2C_CHARDEV=y
+CONFIG_I2C_IMX=y
+CONFIG_GPIOLIB=y
+CONFIG_GPIO_MXC=y
+CONFIG_GPIO_SYSFS=y
+CONFIG_NEW_LEDS=y
+CONFIG_LEDS_CLASS=y
+CONFIG_LEDS_GPIO=y
+CONFIG_LEDS_TRIGGERS=y
+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+CONFIG_LEDS_TRIGGER_TIMER=y
+CONFIG_REGULATOR=y
+CONFIG_REGULATOR_FIXED_VOLTAGE=y
+CONFIG_REGULATOR_ANATOP=y
+CONFIG_WATCHDOG=y
+CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=y
+CONFIG_IMX2_WDT=y
+CONFIG_NVMEM=y
+CONFIG_NVMEM_IMX_OCOTP=y
+# /sys/bus/nvmem/devices/imx-ocotp0/nvmem (ocbm-identity's chip-ID source) exists only with this;
+# allnoconfig drops it (QEMU 2026-10-20: the device was there, the nvmem file was not)
+CONFIG_NVMEM_SYSFS=y
+CONFIG_MTD=y
+CONFIG_MTD_BLOCK=y
+# (no MTD_CHAR symbol: mtdchar.o is part of mtd-y in drivers/mtd/Makefile, always built with MTD;
+#  verified against 7.2.10 on 2026-10-20)
+CONFIG_MTD_OF_PARTS=y
+CONFIG_MTD_SPI_NOR=y
+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+CONFIG_SPI=y
+CONFIG_SPI_MEM=y
+CONFIG_SPI_FSL_QUADSPI=y
+CONFIG_USB_SUPPORT=y
+CONFIG_USB_PHY=y
+CONFIG_USB_MXS_PHY=y
+CONFIG_USB_CHIPIDEA=y
+CONFIG_USB_CHIPIDEA_UDC=y
+CONFIG_USB_CHIPIDEA_IMX=y
+# CONFIG_USB_CHIPIDEA_HOST is not set
+CONFIG_USB_GADGET=y
+CONFIG_USB_LIBCOMPOSITE=y
+CONFIG_USB_CONFIGFS=y
+CONFIG_USB_CONFIGFS_NCM=y
+CONFIG_USB_CONFIGFS_ACM=y
+CONFIG_NET=y
+CONFIG_INET=y
+CONFIG_IPV6=y
+# CONFIG_IPV6_SIT is not set
+CONFIG_PACKET=y
+CONFIG_UNIX=y
+CONFIG_NETDEVICES=y
+CONFIG_FW_LOADER=y
+# CONFIG_WIRELESS is not set
+# CONFIG_WLAN is not set
+# CONFIG_CFG80211 is not set
+# CONFIG_BT is not set
+# CONFIG_BRIDGE is not set
+# CONFIG_MMC is not set
+# CONFIG_IMX_MU_MSI is not set
+CONFIG_DEVMEM=y
+# CONFIG_STRICT_DEVMEM is not set
+CONFIG_MAGIC_SYSRQ=y
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7

@@ -19,6 +19,7 @@ centralized documentation, and binary patches.
 | `custom/scripts/` | Custom scripts / script changes |
 | `custom/patches/` | Binary patches - WIP |
 | `custom/docs/` | Custom-firmware docs (USB-NCM quick start, etc.) |
+| `custom/kernel_rootfs/` | Mainline kernel + rootfs behind the stock signed U-Boot. Contains the LIVI Link analysis, the vanilla baseline recipe, dated hardware runs, tools and the bench unit's flash backups. Start at [`custom/kernel_rootfs/README.md`](custom/kernel_rootfs/README.md) |
 | **`ocbm/`** | **OCBM protocol conversion** — tooling to take an adapter from stock Carlinkit firmware to an OCBM-default appliance, plus newer busybox/dropbear binaries and a full test run. **Requires the [NCM CFW image](custom/firmware/2025.10.15.1127/NCM/) to be installed first — read [`ocbm/README.md`](ocbm/README.md) before touching anything** |
 | **`web_interface/`** | Replacement web UI for the adapter's Boa config server — vanilla-JS drop-in (~70 KB) + SSH installer + unpacked OEM backup; requires the SSH custom firmware. See [`documentation/01_Firmware_Architecture/web_interface.md`](documentation/01_Firmware_Architecture/web_interface.md) |
 | **`flash_dumps/`** | Raw 16 MB SPI flash IC dumps, date-versioned (stock + post-custom `.ncm`), **plus one non-CCPA variant — see below** |

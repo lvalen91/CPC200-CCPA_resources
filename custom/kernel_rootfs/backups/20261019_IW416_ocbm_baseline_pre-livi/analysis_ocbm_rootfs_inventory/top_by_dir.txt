@@ -1,0 +1,10 @@
+/usr	29 files	6304131 apparent bytes
+/lib	46 files	4789410 apparent bytes
+/bin	6 files	1001020 apparent bytes
+/script	31 files	272326 apparent bytes
+/var	6 files	198728 apparent bytes
+/g	1 files	34179 apparent bytes
+/etc	54 files	22662 apparent bytes
+/root	2 files	4757 apparent bytes
+/(root files)	49 files	2810 apparent bytes
+/Library	1 files	870 apparent bytes
