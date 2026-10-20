@@ -12,10 +12,16 @@ CONFIG_ARCH_MULTIPLATFORM=y
 CONFIG_ARCH_MULTI_V7=y
 CONFIG_ARCH_MXC=y
 CONFIG_SOC_IMX6UL=y
-# The i.MX6UL/ULL pin controller. Its Kconfig default (SOC_IMX6UL) does not survive allnoconfig, and
-# LIVI's config lacks it too: without it every node with pinctrl-0 (uart1, i2c, gpio banks, reg_wlan)
-# keeps deferring its probe (drivers/pinctrl/devicetree.c: -EPROBE_DEFER when no pin controller driver
-# exists and MODULES=y) and no DT pin muxing is applied (QEMU 2026-10-20: gpio-mxc -517, no console).
+# The i.MX6UL/ULL pin controller. Its Kconfig default (`default SOC_IMX6UL`) never applies in THIS
+# flow: merge_config.sh -n feeds the fragment into the allnoconfig pass itself, which answers every
+# visible prompt not named here with n, and the later olddefconfig keeps that n. LIVI's flow differs
+# (allnoconfig first, then scripts/config, then olddefconfig: symbols that only became visible after the
+# enables get their Kconfig defaults), so LIVI's kernel has it without naming it (corrected 2026-10-20:
+# this comment said LIVI's config lacks it; review: LIVI's shipped Image contains imx6ul-pinctrl). Same
+# mechanism for NVMEM_SYSFS and ARM_THUMB below. Without it every node with pinctrl-0 (uart1, i2c, gpio
+# banks, reg_wlan) keeps deferring its probe (drivers/pinctrl/devicetree.c: -EPROBE_DEFER when no pin
+# controller driver exists and MODULES=y) and no DT pin muxing is applied (QEMU 2026-10-20: gpio-mxc
+# -517, no console).
 CONFIG_PINCTRL_IMX6UL=y
 CONFIG_ARM_APPENDED_DTB=y
 # CONFIG_ARM_ATAG_DTB_COMPAT is not set

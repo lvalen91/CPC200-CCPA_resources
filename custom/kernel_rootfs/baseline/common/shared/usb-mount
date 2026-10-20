@@ -1,0 +1,300 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# usb-mount: the ONE USB-stick mounter of the recovery initramfs (/sbin) and the rootfs (/usr/sbin).
+#
+#   usb-mount [--wait N]       mount the first suitable partition of the first USB disk read-write at
+#                              /mnt/usb (waits up to N s for a USB disk to appear; default 0)
+#   usb-mount -u               sync and unmount /mnt/usb
+#   usb-mount --plan DEV|IMG   dry run: print each partition and the verdict, mount nothing; DEV is a
+#                              disk (/dev/sda), IMG a whole-disk image file (512-byte sectors)
+#   usb-mount --mdev           rootfs only, run by mdev (etc/mdev.conf) with ACTION and MDEV=sdX
+#   usb-mount --modules        rootfs only: load the storage stack when it is modular (USB_HOST=1 builds)
+#
+# Suitable: a partition whose boot sector carries a FAT12/16/32 or exFAT signature ("FAT1x/FAT32   " at
+# 0x36/0x52, "EXFAT   " at 3, 0x55AA at 510) and that is NOT an EFI System Partition (GPT type
+# C12A7328-F81F-11D2-BA4B-00A0C93EC93B, MBR type 0xEF). The table: an MBR with a type 0xEE entry
+# (protective MBR) is read as GPT ("EFI PART" at LBA 1); an MBR extended container (0x05/0x0F/0x85) is
+# not a filesystem; its logical partitions (5+) are judged by signature only, their EBR types are not
+# read (an ESP is a primary MBR or a GPT partition, never a logical one). A disk the kernel found no
+# partitions on is tried whole. Order: table order; on a device every table entry must exist in the
+# kernel's view (/sys/block/sdX/sdXN) with the same start sector, or it is skipped.
+#
+# Shell builtins + dd/hexdump/mount only: the recovery BusyBox has no grep/sed/awk. Messages go to
+# stderr (under --mdev to /run/log/usb-mount.log); stdout carries nothing.
+MNT=${USB_MNT:-/mnt/usb}
+REC=/run/usb-mount.dev
+T=${TMPDIR:-/tmp}/usb-mount.$$
+ESP_GUID=28732ac11ff8d211ba4b00a0c93ec93b   # C12A7328-F81F-11D2-BA4B-00A0C93EC93B as stored (mixed endian)
+DRY=
+SS=512
+trap 'rm -f "$T".*' EXIT
+
+say() { echo "usb-mount: $*" >&2; }
+
+# hx FILE OFF LEN: LEN bytes at OFF as lowercase hex.  le32 FILE OFF: little-endian u32, decimal.
+hx() { hexdump -v -s "$2" -n "$3" -e '1/1 "%02x"' "$1" 2>/dev/null; }
+le32() { hexdump -v -s "$2" -n 4 -e '1/4 "%u"' "$1" 2>/dev/null; }
+
+# rd SRC LBA COUNT DEST: COUNT sectors of $SS bytes from LBA of SRC.
+rd() { dd if="$1" of="$4" bs="$SS" skip="$2" count="$3" 2>/dev/null; }
+
+mounted() {
+    while read -r _md _mm _mr; do
+        [ "$_mm" = "$MNT" ] && return 0
+    done < /proc/mounts
+    return 1
+}
+
+# fs_of SRC LBA: fat12|fat16|fat32|exfat from the boot sector at LBA, or nothing.
+fs_of() {
+    rd "$1" "$2" 1 "$T.b" || return 0
+    [ "$(hx "$T.b" 510 2)" = 55aa ] || return 0
+    [ "$(hx "$T.b" 3 8)" = 4558464154202020 ] && { echo exfat; return 0; }
+    [ "$(hx "$T.b" 82 8)" = 4641543332202020 ] && { echo fat32; return 0; }
+    case $(hx "$T.b" 54 8) in
+        4641543132202020) echo fat12 ;;
+        4641543136202020) echo fat16 ;;
+    esac
+}
+
+# table SRC: one line "N START TYPE" per partition table entry (TYPE mbr:XX or gpt:<guid hex>).
+table() {
+    rd "$1" 0 1 "$T.m" || return 1
+    [ "$(hx "$T.m" 510 2)" = 55aa ] || return 0
+    _gpt=
+    for _i in 1 2 3 4; do
+        [ "$(hx "$T.m" $((446 + (_i - 1) * 16 + 4)) 1)" = ee ] && _gpt=1
+    done
+    if [ -n "$_gpt" ]; then
+        rd "$1" 1 1 "$T.g" || return 1
+        if [ "$(hx "$T.g" 0 8)" != 4546492050415254 ]; then   # "EFI PART"
+            say "protective MBR (0xEE) but no GPT header at LBA 1: no partition used"
+            return 0
+        fi
+        _lba=$(le32 "$T.g" 72)
+        _cnt=$(le32 "$T.g" 80)
+        _esz=$(le32 "$T.g" 84)
+        if [ "$(le32 "$T.g" 76)" != 0 ] || [ -z "$_esz" ] || [ "$_esz" -lt 128 ] || [ $((_esz % 8)) -ne 0 ] \
+            || [ -z "$_cnt" ] || [ "$_cnt" -lt 1 ]; then
+            say "GPT header with an unusable partition entry array"
+            return 0
+        fi
+        [ "$_cnt" -gt 128 ] && _cnt=128
+        rd "$1" "$_lba" $(((_cnt * _esz + SS - 1) / SS)) "$T.e" || return 1
+        _i=0
+        while [ "$_i" -lt "$_cnt" ]; do
+            _o=$((_i * _esz))
+            _g=$(hx "$T.e" "$_o" 16)
+            if [ -n "$_g" ] && [ "$_g" != 00000000000000000000000000000000 ]; then
+                if [ "$(le32 "$T.e" $((_o + 36)))" = 0 ]; then
+                    echo "$((_i + 1)) $(le32 "$T.e" $((_o + 32))) gpt:$_g"
+                else
+                    say "GPT partition $((_i + 1)) starts beyond LBA 2^32: skipped"
+                fi
+            fi
+            _i=$((_i + 1))
+        done
+        return 0
+    fi
+    for _i in 1 2 3 4; do
+        _o=$((446 + (_i - 1) * 16))
+        _t=$(hx "$T.m" $((_o + 4)) 1)
+        [ "$_t" = 00 ] || [ "$(le32 "$T.m" $((_o + 12)))" = 0 ] && continue
+        echo "$_i $(le32 "$T.m" $((_o + 8))) mbr:$_t"
+    done
+}
+
+# verdict TYPE: "skip:<why>" for what is never mounted, else nothing.
+verdict() {
+    case $1 in
+        "gpt:$ESP_GUID" | mbr:ef) echo "skip:EFI System Partition" ;;
+        mbr:05 | mbr:0f | mbr:85) echo "skip:extended partition container" ;;
+    esac
+}
+
+# try NODE FS WHAT: mount NODE (fs from fs_of) at $MNT, read-write.
+try() {
+    case $2 in
+        exfat) _t=exfat ;;
+        fat12 | fat16 | fat32) _t=vfat ;;
+        *) return 1 ;;
+    esac
+    if [ -n "$DRY" ]; then
+        say "WOULD MOUNT $1 ($2, $3) read-write at $MNT"
+        return 0
+    fi
+    mkdir -p "$MNT"
+    if mount -t "$_t" -o rw,noatime "$1" "$MNT"; then
+        echo "$1" > "$REC"
+        say "$1 ($2, $3) mounted read-write at $MNT; 'usb-mount -u' before pulling the stick"
+        return 0
+    fi
+    say "$1 ($2) did not mount (dmesg)"
+    return 1
+}
+
+# disk DISK: mount (or with DRY, plan) the first suitable partition of /dev/DISK.
+disk() {
+    _d=$1
+    [ -b "/dev/$_d" ] || { say "no block device /dev/$_d"; return 1; }
+    SS=$(cat "/sys/block/$_d/queue/logical_block_size" 2>/dev/null)
+    case $SS in "" | *[!0-9]*) SS=512 ;; esac
+    _parts=
+    for _p in "/sys/block/$_d/$_d"*; do
+        [ -e "$_p/partition" ] && _parts="$_parts ${_p##*/}"
+    done
+    if [ -z "$_parts" ]; then
+        _f=$(fs_of "/dev/$_d" 0)
+        [ -n "$_f" ] || { say "/dev/$_d: no partitions and no FAT/exFAT on the whole disk"; return 1; }
+        try "/dev/$_d" "$_f" "whole disk, no partition table"
+        return $?
+    fi
+    table "/dev/$_d" > "$T.t" || { say "/dev/$_d: cannot read the partition table"; return 1; }
+    _ext=
+    while read -r _n _s _ty; do
+        _v=$(verdict "$_ty")
+        case $_ty in mbr:05 | mbr:0f | mbr:85) _ext=1 ;; esac
+        if [ -n "$_v" ]; then
+            say "/dev/$_d$_n ($_ty): ${_v#skip:}, skipped"
+            continue
+        fi
+        if [ ! -e "/sys/block/$_d/$_d$_n/partition" ]; then
+            say "/dev/$_d$_n is in the table but not in the kernel's view: skipped"
+            continue
+        fi
+        _ks=$(cat "/sys/block/$_d/$_d$_n/start" 2>/dev/null)
+        if [ "$_ks" != $((_s * SS / 512)) ]; then
+            say "/dev/$_d$_n: table start $_s x $SS B, kernel start $_ks x 512 B: skipped"
+            continue
+        fi
+        _f=$(fs_of "/dev/$_d$_n" 0)
+        if [ -z "$_f" ]; then
+            say "/dev/$_d$_n ($_ty): no FAT/exFAT boot sector, skipped"
+            continue
+        fi
+        try "/dev/$_d$_n" "$_f" "partition $_n, $_ty" && return 0
+    done < "$T.t"
+    if [ -n "$_ext" ]; then
+        for _p in $_parts; do
+            _n=${_p#"$_d"}
+            [ "$_n" -ge 5 ] 2>/dev/null || continue
+            _f=$(fs_of "/dev/$_p" 0)
+            [ -n "$_f" ] && try "/dev/$_p" "$_f" "logical partition $_n" && return 0
+        done
+    fi
+    say "/dev/$_d: no suitable FAT32/exFAT data partition"
+    return 1
+}
+
+# plan_image IMG: the same decisions on an image file (no kernel view; logical partitions not judged).
+plan_image() {
+    SS=512
+    _f=$(fs_of "$1" 0)
+    if [ -n "$_f" ]; then
+        say "$1: $_f on the whole image (no partition table): WOULD MOUNT it read-write at $MNT"
+        return 0
+    fi
+    table "$1" > "$T.t" || { say "$1: cannot read"; return 1; }
+    [ -s "$T.t" ] || { say "$1: no partition table and no filesystem"; return 1; }
+    _pick=
+    while read -r _n _s _ty; do
+        _v=$(verdict "$_ty")
+        if [ -n "$_v" ]; then
+            say "partition $_n at LBA $_s ($_ty): ${_v#skip:}, skipped"
+            case $_ty in mbr:05 | mbr:0f | mbr:85) say "  (its logical partitions are judged on a device only)" ;; esac
+            continue
+        fi
+        _f=$(fs_of "$1" "$_s")
+        if [ -z "$_f" ]; then
+            say "partition $_n at LBA $_s ($_ty): no FAT/exFAT boot sector, skipped"
+            continue
+        fi
+        if [ -z "$_pick" ]; then
+            _pick=$_n
+            say "partition $_n at LBA $_s ($_ty): $_f: WOULD MOUNT it read-write at $MNT"
+        else
+            say "partition $_n at LBA $_s ($_ty): $_f, not used (partition $_pick comes first)"
+        fi
+    done < "$T.t"
+    [ -n "$_pick" ] || { say "$1: no suitable FAT32/exFAT data partition"; return 1; }
+}
+
+usb_disks() {
+    for _b in /sys/block/sd*; do
+        [ -e "$_b" ] || continue
+        case $(readlink -f "$_b") in */usb*) echo "${_b##*/}" ;; esac
+    done
+}
+
+case ${1:-} in
+    -u)
+        sync
+        if mounted; then umount "$MNT" || exit 1; fi
+        rm -f "$REC"
+        exit 0
+        ;;
+    --plan)
+        [ -n "${2:-}" ] || { echo "usage: usb-mount --plan /dev/sdX|IMAGE" >&2; exit 2; }
+        DRY=1
+        if [ -b "$2" ]; then disk "${2##*/}"; else plan_image "$2"; fi
+        exit $?
+        ;;
+    --modules)
+        for m in usb-storage sd_mod vfat exfat nls_cp437 nls_iso8859-1 nls_utf8; do
+            modprobe -q "$m" 2>/dev/null
+        done
+        exit 0
+        ;;
+    --mdev)
+        mkdir -p /run/log
+        exec >> /run/log/usb-mount.log 2>&1 < /dev/null
+        case ${MDEV:-} in sd[a-z] | sd[a-z][a-z]) ;; *) exit 0 ;; esac
+        case ${ACTION:-add} in
+            add | change)
+                mounted && exit 0
+                case $(readlink -f "/sys/block/$MDEV") in */usb*) ;; *) exit 0 ;; esac
+                # devtmpfs creates the partition nodes before the disk's add event; give a slow
+                # stick's partition scan a moment anyway
+                sleep 1
+                disk "$MDEV"
+                ;;
+            remove)
+                if [ -r "$REC" ] && read -r was < "$REC"; then
+                    case $was in
+                        "/dev/$MDEV" | "/dev/$MDEV"[0-9]*)
+                            umount -l "$MNT" && say "$was removed: $MNT unmounted (lazy)"
+                            rm -f "$REC"
+                            ;;
+                    esac
+                fi
+                ;;
+        esac
+        exit 0
+        ;;
+    --wait)
+        n=0
+        while [ -z "$(usb_disks)" ] && [ "$n" -lt "${2:-0}" ]; do
+            sleep 1
+            n=$((n + 1))
+        done
+        # /sys/block/sdX appears before its partition scan is done: let it settle
+        [ -n "$(usb_disks)" ] && sleep 2
+        ;;
+    "") ;;
+    *)
+        echo "usage: usb-mount [--wait N] | -u | --plan /dev/sdX|IMAGE | --mdev | --modules" >&2
+        exit 2
+        ;;
+esac
+
+if mounted; then
+    say "$MNT is already mounted ($(cat "$REC" 2>/dev/null)); 'usb-mount -u' first"
+    exit 0
+fi
+[ -d /sys/bus/usb ] || { say "this kernel has no USB host support"; exit 1; }
+d=$(usb_disks)
+[ -n "$d" ] || { say "no USB disk (dmesg)"; exit 1; }
+for x in $d; do
+    disk "$x" && exit 0
+done
+exit 1

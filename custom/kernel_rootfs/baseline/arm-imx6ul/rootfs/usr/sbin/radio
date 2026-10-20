@@ -1,0 +1,210 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# radio up|down|status (also as radio-up / radio-down): the Wi-Fi/BT module ON DEMAND. Nothing runs this
+# at boot; the radios stay off until it is called (README §2.5).
+#
+# up    1. load the MMC host (sdhci-esdhc-imx): it switches the module's power on through reg_wlan
+#          (vmmc-supply of usdhc1 in the DT; userspace has no other handle on that regulator) and
+#          enumerates the SDIO card
+#       2. identify the chip by the card's own SDIO vendor:device (/sys/bus/sdio/devices/*/):
+#            0x02df:0x9159  NXP IW416 (SD8978)  mwifiex_sdio (mrvl/sdiouartiw416_combo_v0.bin),
+#                                                BT: btnxpuart after the combo firmware (DT node nxp,88w8987-bt)
+#            0x024c:0xc822  Realtek RTL8822CS   rtw88_8822cs (rtw88/rtw8822c_fw.bin),
+#                                                BT: hci_uart H5 + btrtl (DT node realtek,rtl8822cs-bt)
+#            0x024c:0xb822  Realtek RTL8822BS   rtw88_8822bs (rtw88/rtw8822b_fw.bin), Wi-Fi only (LIVI:
+#                                                btrtl knows the 8822B over USB only; UNVERIFIED)
+#          an unknown id is reported and nothing is loaded for it (the module stays powered: radio down)
+#       3. bring every wireless interface up (names are the driver's: mlan0 on mwifiex, wlan0 on rtw88;
+#          enumerated from /sys/class/net/*/phy80211, never assumed) and, when the kernel image carries
+#          the chip's Bluetooth DT node (RADIO_DT=<chip> build), the HCI device with hciup
+#       Bluetooth WITHOUT that DT node (btattach on /dev/ttymxc2) is not done here: UNVERIFIED.
+# down  interfaces down, HCI down, radio modules unloaded, MMC host unloaded (reg_wlan off), checked
+# status  what is powered, loaded and up
+# MWIFIEX_DRIVER_MODE=<n> passes driver_mode to mwifiex (0x1 station = default, 0x3 AP + station).
+. /etc/baseline/board.env
+HOST=${RADIO_MMC_HOST:-2190000.mmc}
+HOSTDRV=/sys/bus/platform/drivers/sdhci-esdhc-imx
+FW=/lib/firmware
+# Unload order for `down` (absent ones are skipped; repeated until nothing more unloads).
+MODS="btnxpuart hci_uart btrtl btintel btbcm btmtk mwifiex_sdio mwifiex rtw88_8822cs rtw88_8822bs rtw88_sdio
+rtw88_8822c rtw88_8822b rtw88_core mac80211 cfg80211 sdhci_esdhc_imx sdhci_pltfm sdhci cqhci mmc_core"
+
+say() { echo "radio: $*"; }
+
+reg_wlan() {
+    for r in /sys/class/regulator/regulator.*; do
+        [ "$(cat "$r/name" 2>/dev/null)" = wlan ] || continue
+        echo "$(cat "$r/state" 2>/dev/null || echo unknown), users $(cat "$r/num_users" 2>/dev/null)"
+        return 0
+    done
+    echo "not found"
+}
+
+sdio_ids() {
+    for f in /sys/bus/sdio/devices/*; do
+        [ -r "$f/vendor" ] || continue
+        echo "${f##*/} $(cat "$f/vendor"):$(cat "$f/device")"
+    done
+}
+
+wifs() {
+    for n in /sys/class/net/*; do
+        [ -e "$n/phy80211" ] && echo "${n##*/}"
+    done
+}
+
+hcis() {
+    for h in /sys/class/bluetooth/hci*; do
+        [ -e "$h" ] && echo "${h##*/}"
+    done
+}
+
+# The compatible of the Bluetooth child of uart3 in the running DT, if the image has one.
+bt_node() {
+    for c in /sys/bus/serial/devices/*/of_node/compatible; do
+        [ -r "$c" ] && { tr '\0' ' ' < "$c"; echo; return 0; }
+    done
+    return 1
+}
+
+loaded() { grep -q "^$1 " /proc/modules; }
+
+need_fw() {
+    for f in "$@"; do
+        [ -s "$FW/$f" ] || { say "firmware $FW/$f is missing: the driver will fail"; return 1; }
+    done
+}
+
+status() {
+    say "reg_wlan (module power): $(reg_wlan)"
+    if [ -e "$HOSTDRV/$HOST" ]; then say "MMC host $HOST: bound"; else say "MMC host $HOST: not bound"; fi
+    ids=$(sdio_ids)
+    say "SDIO functions: ${ids:-none}"
+    m=
+    for x in $MODS bluetooth; do loaded "$x" && m="$m $x"; done
+    say "radio modules loaded:${m:- none}"
+    for i in $(wifs); do say "wireless interface $i: $(cat "/sys/class/net/$i/operstate"), $(cat "/sys/class/net/$i/address")"; done
+    for h in $(hcis); do say "$(hciup -i "$h" 2>&1)"; done
+    say "Bluetooth DT node: $(bt_node || echo none)"
+}
+
+up() {
+    if [ ! -e "$HOSTDRV/$HOST" ]; then
+        if loaded sdhci_esdhc_imx; then
+            echo "$HOST" > "$HOSTDRV/bind" 2>/dev/null || { say "binding $HOST to sdhci-esdhc-imx failed (dmesg)"; return 1; }
+        else
+            modprobe sdhci-esdhc-imx || { say "modprobe sdhci-esdhc-imx failed"; return 1; }
+        fi
+    fi
+    n=0
+    while [ -z "$(sdio_ids)" ] && [ "$n" -lt 20 ]; do
+        usleep 500000
+        n=$((n + 1))
+    done
+    say "module power (reg_wlan): $(reg_wlan)"
+    ids=$(sdio_ids)
+    [ -n "$ids" ] || { say "no SDIO card enumerated in 10 s (dmesg); 'radio down' powers the module off"; return 1; }
+    say "SDIO: $ids"
+    chip=
+    for id in $(echo "$ids" | while read -r _f vd; do echo "$vd"; done); do
+        case $id in
+            0x02df:0x9159) chip=iw416 ;;
+            0x024c:0xc822) chip=rtl8822cs ;;
+            0x024c:0xb822) chip=rtl8822bs ;;
+        esac
+        [ -n "$chip" ] && break
+    done
+    node=$(bt_node)
+    case $chip in
+        iw416)
+            say "NXP IW416: mwifiex_sdio${MWIFIEX_DRIVER_MODE:+ driver_mode=$MWIFIEX_DRIVER_MODE}"
+            need_fw mrvl/sdiouartiw416_combo_v0.bin
+            # shellcheck disable=SC2086
+            modprobe mwifiex_sdio ${MWIFIEX_DRIVER_MODE:+driver_mode=$MWIFIEX_DRIVER_MODE} || say "modprobe mwifiex_sdio failed"
+            btmod=btnxpuart btnode=nxp,88w8987-bt
+            ;;
+        rtl8822cs)
+            say "Realtek RTL8822CS: rtw88_8822cs"
+            need_fw rtw88/rtw8822c_fw.bin
+            modprobe rtw88_8822cs || say "modprobe rtw88_8822cs failed"
+            btmod=hci_uart btnode=realtek,rtl8822cs-bt
+            need_fw rtl_bt/rtl8822cs_fw.bin rtl_bt/rtl8822cs_config.bin
+            ;;
+        rtl8822bs)
+            say "Realtek RTL8822BS: rtw88_8822bs (Wi-Fi only)"
+            need_fw rtw88/rtw8822b_fw.bin
+            modprobe rtw88_8822bs || say "modprobe rtw88_8822bs failed"
+            btmod='' btnode=''
+            ;;
+        *)
+            say "unknown radio ($ids): no driver loaded; the module stays powered, 'radio down' switches it off"
+            return 1
+            ;;
+    esac
+    n=0
+    while [ -z "$(wifs)" ] && [ "$n" -lt 20 ]; do
+        usleep 500000
+        n=$((n + 1))
+    done
+    [ -n "$(wifs)" ] || say "no wireless interface appeared (dmesg: firmware download?)"
+    for i in $(wifs); do
+        if ip link set dev "$i" up; then say "Wi-Fi: $i up ($(cat "/sys/class/net/$i/address"))"; else say "Wi-Fi: $i did not come up"; fi
+    done
+    if [ -z "$btmod" ]; then
+        say "Bluetooth: none for this chip"
+    elif [ -z "$node" ]; then
+        say "Bluetooth: this kernel image has no Bluetooth DT node (use the RADIO_DT=$chip image); not attached"
+    else
+        case $node in
+            *"$btnode"*) ;;
+            *) say "Bluetooth: the DT node is '$node', expected $btnode: wrong RADIO_DT image for this chip"; return 1 ;;
+        esac
+        modprobe "$btmod" || say "modprobe $btmod failed"
+        n=0
+        while [ -z "$(hcis)" ] && [ "$n" -lt 20 ]; do
+            usleep 500000
+            n=$((n + 1))
+        done
+        h=$(hcis | head -n 1)
+        if [ -z "$h" ]; then
+            say "Bluetooth: no HCI device appeared (dmesg)"
+        else
+            # The kernel powers a new controller for its setup and off again 2 s later when no
+            # Bluetooth daemon claims it; give that setup time, then bring it up for good.
+            sleep 3
+            say "Bluetooth: $(hciup "$h" 2>&1)"
+        fi
+    fi
+    say "done ('radio status', 'radio down')"
+}
+
+down() {
+    for i in $(wifs); do ip link set dev "$i" down 2>/dev/null; done
+    for h in $(hcis); do hciup -d "$h" > /dev/null 2>&1; done
+    pass=0
+    while [ "$pass" -lt 4 ]; do
+        for m in $MODS; do loaded "$m" && rmmod "$m" 2>/dev/null; done
+        pass=$((pass + 1))
+    done
+    if [ -e "$HOSTDRV/$HOST" ]; then
+        echo "$HOST" > "$HOSTDRV/unbind" 2>/dev/null && say "MMC host $HOST unbound (its module is still in use)"
+    fi
+    left=
+    for m in $MODS; do loaded "$m" && left="$left $m"; done
+    [ -n "$left" ] && say "still loaded:$left"
+    say "module power (reg_wlan): $(reg_wlan)"
+    ids=$(sdio_ids)
+    [ -z "$ids" ] || { say "SDIO card still present: $ids"; return 1; }
+    say "radio off"
+}
+
+case ${0##*/} in
+    radio-up) up; exit $? ;;
+    radio-down) down; exit $? ;;
+esac
+case ${1:-} in
+    up) up ;;
+    down) down ;;
+    status) status ;;
+    *) echo "usage: radio up|down|status (or radio-up / radio-down)" >&2; exit 2 ;;
+esac

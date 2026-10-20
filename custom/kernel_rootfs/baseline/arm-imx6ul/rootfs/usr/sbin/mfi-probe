@@ -1,0 +1,56 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# mfi-probe: READ-ONLY check of the Apple MFi 2.0C authentication coprocessor on /dev/i2c-1 address
+# 0x11 (board.env MFI_I2C_BUS / MFI_I2C_ADDR: the &i2c2 controller on the UART5 pads). It reads two
+# registers whose meaning this project has proven on the chip, with the same access the project's
+# daemons use (crates/vendor/mfi-i2c-local/src/lib.rs i2c_rd: one transaction, register-address write +
+# repeated-start read, 5 tries 5 ms apart; ccpa/carplayd/src/main.rs device_version):
+#   0x00  DeviceVersion, 1 byte (0x03 on the IW416 unit)
+#   0x30  accessory certificate length, 2 bytes big-endian
+# The register-address byte is a pointer write, not a register write; no control register (0x10) is
+# touched, no challenge is written, nothing is signed. Holds /tmp/carplay_mfi.lock (the lock every MFi
+# user of this project takes) while it reads.
+#   mfi-probe            the two values
+#   mfi-probe -v         also the raw i2ctransfer output
+. /etc/baseline/board.env
+BUS=${MFI_I2C_BUS:-1}
+ADDR=${MFI_I2C_ADDR:-0x11}
+V=
+[ "${1:-}" = -v ] && V=1
+say() { echo "mfi-probe: $*"; }
+
+[ -c "/dev/i2c-$BUS" ] || { say "no /dev/i2c-$BUS (i2c-dev, the i2c2 controller)"; exit 1; }
+
+# rd REG LEN: the LEN bytes i2ctransfer prints ("0x03 0x02 ...").
+rd() {
+    _n=0
+    while [ "$_n" -lt 5 ]; do
+        if _o=$(i2ctransfer -y "$BUS" "w1@$ADDR" "$1" "r$2" 2>/dev/null); then
+            [ -n "$V" ] && say "raw reg $1: $_o"
+            echo "$_o"
+            return 0
+        fi
+        usleep 5000
+        _n=$((_n + 1))
+    done
+    return 1
+}
+
+exec 9> /tmp/carplay_mfi.lock
+flock -w 10 9 || { say "the MFi lock is busy (another MFi user holds /tmp/carplay_mfi.lock)"; exit 1; }
+
+if ver=$(rd 0x00 1); then
+    say "DeviceVersion (reg 0x00) = $ver at $ADDR on /dev/i2c-$BUS"
+else
+    say "no answer at $ADDR on /dev/i2c-$BUS (5 tries): chip absent, asleep or wired elsewhere"
+    exit 1
+fi
+if len=$(rd 0x30 2); then
+    # shellcheck disable=SC2086
+    set -- $len
+    say "certificate length (reg 0x30) = $(( ($1 << 8) | $2 )) bytes"
+else
+    say "reg 0x30 (certificate length) did not answer"
+    exit 1
+fi
+exit 0

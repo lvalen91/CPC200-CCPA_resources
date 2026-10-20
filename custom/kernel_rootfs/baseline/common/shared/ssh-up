@@ -1,0 +1,95 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ssh-up ADDR: dropbear on ADDR:22 only (SSH; SCP and SFTP through the same server), in the recovery
+# initramfs AND the rootfs. Login: root with a public key OR the password (dropbear built with
+# DROPBEAR_SVR_PASSWORD_AUTH 1, common/dropbear/localoptions.h). Deliberately NOT passed: -s and -g (they
+# switch password logins off; dropbear 2026.94 svr-runopts.c), -t (it would require password AND key),
+# -w (no root logins), -B (blank passwords).
+#   host key  /run/persist/dropbear_ed25519_host_key (from the persist archive on 'customer', `persist
+#             load` ran first) if dropbearkey accepts it; otherwise
+#               rootfs:   a new ed25519 key, kept with `persist save`
+#               recovery: an ephemeral ed25519 key in RAM (/run/dropbear), never written to flash
+#             and if dropbearkey fails too: dropbear -R (it makes its keys on the first connection)
+#   keys      /run/ssh/authorized_keys (= /root/.ssh/authorized_keys): the rootfs's build-time keys
+#             (/etc/baseline/authorized_keys; recovery reads the copy the rootfs keeps in the archive as
+#             authorized_keys.rootfs) + the keys added with `persist add-key`
+#   password  /etc/shadow -> /run/etc/shadow, seeded by `persist load` (archive copy after `passwd`, else
+#             the build default ROOT_PASSWORD_HASH)
+# Exit 0 if and only if dropbear is running afterwards; every reason it is not goes to stderr.
+ADDR=${1:?usage: ssh-up ADDR}
+P=/run/persist
+REC=
+[ -e /etc/baseline/recovery ] && REC=1
+umask 077
+mkdir -p /run/dropbear /run/ssh /run/log "$P"
+say() { echo "ssh-up: $*" >&2; }
+changed=
+
+K=$P/dropbear_ed25519_host_key
+KEYOPT=
+if [ -s "$K" ] && dropbearkey -y -f "$K" > /dev/null 2>&1; then
+    KEYOPT="-r $K"
+else
+    [ -e "$K" ] && say "the archived host key does not parse; not used"
+    if [ -n "$REC" ]; then
+        K=/run/dropbear/ephemeral_ed25519_host_key
+        say "recovery: ephemeral host key (no usable key in the persist archive; recovery never writes flash)"
+    else
+        say "rootfs: new host key"
+        changed=1
+    fi
+    rm -f "$K"
+    if dropbearkey -t ed25519 -f "$K" > /dev/null 2>&1; then
+        KEYOPT="-r $K"
+    else
+        say "dropbearkey failed; dropbear -R makes a key on the first connection (not persisted)"
+        KEYOPT=-R
+        changed=
+    fi
+fi
+
+# The rootfs keeps its build-time keys in the archive too, for recovery to read.
+if [ -z "$REC" ]; then
+    if [ -s /etc/baseline/authorized_keys ]; then
+        if ! cmp -s /etc/baseline/authorized_keys "$P/authorized_keys.rootfs" 2>/dev/null; then
+            cat /etc/baseline/authorized_keys > "$P/authorized_keys.rootfs" && changed=1
+        fi
+    elif [ -e "$P/authorized_keys.rootfs" ]; then
+        rm -f "$P/authorized_keys.rootfs" && changed=1
+    fi
+    if [ -n "$changed" ]; then
+        persist save > /dev/null || say "the persist archive was NOT saved: a new host key changes on the next boot"
+    fi
+fi
+
+if [ -n "$REC" ]; then
+    srcs="$P/authorized_keys.rootfs $P/authorized_keys"
+else
+    srcs="/etc/baseline/authorized_keys $P/authorized_keys"
+fi
+: > /run/ssh/authorized_keys
+for f in $srcs; do
+    [ -r "$f" ] && cat "$f" >> /run/ssh/authorized_keys
+done
+chmod 0700 /run/ssh
+chmod 0600 /run/ssh/authorized_keys
+[ -s /run/ssh/authorized_keys ] || say "no authorized keys: password login only"
+[ -s /run/etc/shadow ] || say "no /run/etc/shadow (persist load did not run?): public-key login only"
+
+[ -r /run/dropbear.pid ] && kill "$(cat /run/dropbear.pid)" 2>/dev/null
+rm -f /run/dropbear.pid
+# -E: log to stderr (no syslogd), appended to /run/log/dropbear.log. KEYOPT is "-r FILE" or "-R".
+# shellcheck disable=SC2086
+if ! dropbear -E $KEYOPT -p "$ADDR:22" -P /run/dropbear.pid 2>> /run/log/dropbear.log; then
+    say "dropbear exited with an error (see /run/log/dropbear.log)"
+fi
+n=0
+while [ "$n" -lt 3 ]; do
+    if [ -r /run/dropbear.pid ] && kill -0 "$(cat /run/dropbear.pid)" 2>/dev/null; then
+        exit 0
+    fi
+    sleep 1
+    n=$((n + 1))
+done
+say "dropbear is not running (see /run/log/dropbear.log)"
+exit 1

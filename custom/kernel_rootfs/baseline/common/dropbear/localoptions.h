@@ -2,17 +2,19 @@
  *
  * Dropbear 2026.94 localoptions.h for the vanilla baselines (CCPA arm-imx6ul, C2Air riscv).
  * Copied into the source tree before ./configure. Dropbear silently ignores a macro it does not know,
- * so build.sh fails if any name defined here is absent from that version's default_options.h. The
- * names below were written from the 2024/2025 option set and are UNVERIFIED against 2026.94 until
- * that check runs.
+ * so build.sh fails if any name defined here is absent from that version's default_options.h
+ * (checked against 2026.94 by the 2026-10-20 builds).
  *
- * Server: public-key login only (no password, no PAM), ed25519 host key, no X11 or agent forwarding,
- * no legacy algorithms; SFTP through a static OpenSSH sftp-server (modern `scp` speaks SFTP).
- * Host keys live under /run (the rootfs is a read-only squashfs); rcS passes -r explicitly anyway.
+ * Server (recovery and rootfs, common/shared/ssh-up): public-key OR password login (owner decision
+ * 2026-10-20; password from /etc/shadow via getspnam + crypt, sha512-crypt; no PAM), ed25519 host key,
+ * no X11 or agent forwarding, no legacy algorithms; SFTP through a static OpenSSH sftp-server (modern
+ * `scp` speaks SFTP). Host keys live under /run (the rootfs is a read-only squashfs); ssh-up passes -r.
+ * With PASSWORD_AUTH 0, dropbear 2026.94 accepts -s/-g and ignores them (svr-runopts.c); with 1, -s or
+ * -g would switch password logins off, so ssh-up passes neither.
  */
 
 /* Authentication */
-#define DROPBEAR_SVR_PASSWORD_AUTH 0
+#define DROPBEAR_SVR_PASSWORD_AUTH 1
 #define DROPBEAR_SVR_PAM_AUTH 0
 #define DROPBEAR_SVR_PUBKEY_AUTH 1
 #define DROPBEAR_SVR_PUBKEY_OPTIONS 1

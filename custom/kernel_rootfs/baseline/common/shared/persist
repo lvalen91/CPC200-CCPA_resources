@@ -1,0 +1,108 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# persist load|save|add-key FILE|list: a tar archive of /run/persist on the 'customer' MTD (64 KiB), the
+# only thing the baseline writes to flash at runtime besides the bootstate mark. It holds
+#   dropbear_ed25519_host_key  the SSH host key (same fingerprint in the rootfs and in recovery)
+#   authorized_keys            keys added at runtime (`persist add-key FILE`)
+#   authorized_keys.rootfs     a copy of the rootfs's build-time keys (ssh-up refreshes it), so recovery,
+#                              which has no build-time keys of its own, admits the same keys
+#   shadow                     root's password hash after `passwd` (absent: the build default is used)
+# and no unit identity (the chip ID is re-derived each boot).
+#
+# In the RECOVERY initramfs only `load` and `list` exist: recovery reads the archive (through the
+# read-only /dev/mtdNro node) and never writes the customer MTD.
+# `load` also seeds /run/etc/shadow (the target of /etc/shadow): the archived hash if the archive has
+# one for root, else /etc/baseline/shadow.default (build variable ROOT_PASSWORD_HASH); it does this even
+# when there is no archive or no MTD at all, so the password login always has a hash to check.
+# The 'customer' partition is the one LIVI's livid keeps its settings in: a LIVI archive there does not
+# parse as tar, `load` reports it, and the first rootfs `save` replaces it.
+# A power loss during `save` loses the archive (the host key is regenerated, the fingerprint changes).
+# PERSIST_DEV=<file> replaces the MTD (tests; recovery still refuses to write).
+. /lib/baseline/mtd.sh
+P=/run/persist
+REC=
+[ -e /etc/baseline/recovery ] && REC=1
+umask 077
+mkdir -p "$P"
+
+if [ -n "${PERSIST_DEV:-}" ]; then
+    D=$PERSIST_DEV
+    DR=$PERSIST_DEV
+    WHERE=$PERSIST_DEV
+elif N=$(mtd_num customer); then
+    D=$MTD_DEV/mtd$N
+    DR=$D
+    [ -c "$MTD_DEV/mtd${N}ro" ] && DR=$MTD_DEV/mtd${N}ro
+    WHERE=mtd$N
+else
+    D=
+    DR=
+    WHERE="no 'customer' MTD"
+fi
+
+seed_shadow() {
+    mkdir -p /run/etc
+    _src=/etc/baseline/shadow.default
+    if [ -s "$P/shadow" ]; then
+        while IFS=: read -r _u _h _rest; do
+            [ "$_u" = root ] && [ -n "$_h" ] && { _src=$P/shadow; break; }
+        done < "$P/shadow"
+    fi
+    if [ -r "$_src" ] && cat "$_src" > /run/etc/shadow.new && mv /run/etc/shadow.new /run/etc/shadow; then
+        chmod 0600 /run/etc/shadow
+        [ "$_src" = "$P/shadow" ] && echo "persist: root password from the archive (set with passwd)" \
+            || echo "persist: root password = build default (ROOT_PASSWORD_HASH)"
+    else
+        echo "persist: no password database ($_src unreadable): password login is off" >&2
+    fi
+}
+
+case ${1:-} in
+    load)
+        rc=1
+        if [ -z "$DR" ]; then
+            echo "persist: $WHERE, nothing loaded"
+        elif tar -xf "$DR" -C "$P" 2>/dev/null; then
+            echo "persist: loaded from $WHERE"
+            rc=0
+        else
+            echo "persist: $WHERE holds no persist archive (erased, or another system's data)"
+        fi
+        seed_shadow
+        exit $rc
+        ;;
+    save)
+        [ -n "$REC" ] && { echo "persist: recovery never writes the customer MTD" >&2; exit 1; }
+        [ -n "$D" ] || { echo "persist: $WHERE" >&2; exit 1; }
+        tar -cf /run/persist.tar -C "$P" . || exit 1
+        size=$(($(wc -c < /run/persist.tar)))
+        if [ -n "${PERSIST_DEV:-}" ]; then
+            part=65536
+        else
+            part=$(mtd_attr "$N" size)
+        fi
+        [ "$size" -le "$part" ] || { echo "persist: archive is $size B, $WHERE $part B" >&2; rm -f /run/persist.tar; exit 1; }
+        if [ -n "${PERSIST_DEV:-}" ]; then
+            cat /run/persist.tar > "$D" || { rm -f /run/persist.tar; exit 1; }
+        else
+            flashcp /run/persist.tar "$D" || { echo "persist: flashcp failed" >&2; rm -f /run/persist.tar; exit 1; }
+        fi
+        rm -f /run/persist.tar
+        echo "persist: saved to $WHERE ($size B)"
+        ;;
+    add-key)
+        [ -n "$REC" ] && { echo "persist: recovery never writes the customer MTD" >&2; exit 1; }
+        [ -r "${2:-}" ] || { echo "usage: persist add-key FILE (an OpenSSH public key line)" >&2; exit 2; }
+        cat "$2" >> "$P/authorized_keys" && chmod 0600 "$P/authorized_keys" && "$0" save \
+            && cat "$2" >> /run/ssh/authorized_keys && echo "persist: key added (active now)"
+        ;;
+    list) ls -la "$P" ;;
+    *)
+        if [ -n "$REC" ]; then
+            echo "usage: persist load|list (recovery: read-only)" >&2
+        else
+            echo "usage: persist load|save|add-key FILE|list" >&2
+        fi
+        exit 2
+        ;;
+esac

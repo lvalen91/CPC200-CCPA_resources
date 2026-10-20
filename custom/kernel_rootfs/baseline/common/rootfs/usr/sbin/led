@@ -1,0 +1,27 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# led [red|blue [on|off|blink [ON_MS OFF_MS]|heartbeat]]: the two gpio-leds of the DT (board.env
+# LED_RED/LED_BLUE). Without arguments: the state of both. What the baseline does with them:
+#   blue  heartbeat trigger from kernel start (kernel alive), never changed by the scripts
+#   red   on from kernel start; recovery: blinking 500/500 ms; a flash write in recovery: 100/100 ms,
+#         solid on if that write failed after it started; rootfs: off once NCM + SSH are up, stays on
+#         if a way in did not come up (the reason is on the console and in /run/baseline/rcS.log)
+. /etc/baseline/board.env
+show() {
+    for l in red blue; do
+        eval "d=\$LED_$(echo $l | tr a-z A-Z)"
+        [ -d "$d" ] || { echo "$l: no $d"; continue; }
+        t=$(sed -n 's/.*\[\(.*\)\].*/\1/p' "$d/trigger")
+        echo "$l: trigger $t, brightness $(cat "$d/brightness")"
+    done
+}
+[ $# -eq 0 ] && { show; exit 0; }
+case $1 in red) d=$LED_RED ;; blue) d=$LED_BLUE ;; *) echo "usage: led [red|blue on|off|blink [ON OFF]|heartbeat]" >&2; exit 2 ;; esac
+[ -d "$d" ] || { echo "led: no $d (gpio-leds not probed?)" >&2; exit 1; }
+case ${2:-} in
+    on) echo none > "$d/trigger"; echo 1 > "$d/brightness" ;;
+    off) echo none > "$d/trigger"; echo 0 > "$d/brightness" ;;
+    blink) echo timer > "$d/trigger"; echo "${3:-500}" > "$d/delay_on"; echo "${4:-500}" > "$d/delay_off" ;;
+    heartbeat) echo heartbeat > "$d/trigger" ;;
+    *) echo "usage: led $1 on|off|blink [ON_MS OFF_MS]|heartbeat" >&2; exit 2 ;;
+esac

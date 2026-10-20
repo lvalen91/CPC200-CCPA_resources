@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Radio drivers as MODULES for the rootfs (RADIO_MODULES=1, the default). Nothing loads them at boot:
-# there is no uevent helper, no mdev hotplug and no modalias loader, and the modules' only triggers are
-# uevents (sdio:/of: aliases). Load by hand: modprobe sdhci-esdhc-imx; modprobe mwifiex_sdio ...
+# their only triggers are device modaliases (sdio:/of:), and nothing acts on those: no uevent helper,
+# and the rootfs's mdev (USB sticks only) has no $MODALIAS rule. `radio up` loads them on demand.
 # Symbols from LIVI scripts/livi-link/arm/imx6ul/build.sh (GPL-3.0-or-later), there built in.
 # SERIAL_DEV_BUS/CTRL_TTYPORT must be built in for the serdev Bluetooth drivers (small).
 CONFIG_WIRELESS=y

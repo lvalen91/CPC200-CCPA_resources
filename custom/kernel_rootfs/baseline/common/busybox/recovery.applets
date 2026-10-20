@@ -20,9 +20,11 @@ FLASHCP FLASH_ERASEALL DD NANDWRITE NANDDUMP SHA256SUM MD5SUM NC NC_SERVER HEXDU
 LS CAT MOUNT UMOUNT MKDIR SYNC REBOOT IFCONFIG FEATURE_IFCONFIG_STATUS
 IP FEATURE_IP_ADDRESS FEATURE_IP_LINK FEATURE_IP_ROUTE UDHCPD I2CDETECT I2CGET
 
-# what init, net-up, net-down, ocbm-identity, flash-* and usb-update call
+# what init, net-up, net-down, ocbm-identity, flash-*, usb-update, usb-mount, persist and ssh-up call;
+# tar extracts the persist archive (read-only), 64-bit shell/test arithmetic for usb-mount's sector
+# numbers on large sticks
 TELNETD FEATURE_TELNETD_STANDALONE ECHO PRINTF TEST TEST1 TRUE FALSE SLEEP RM RMDIR LN MV CHMOD WC
-KILL PS DMESG READLINK FEATURE_READLINK_FOLLOW
+KILL PS DMESG READLINK FEATURE_READLINK_FOLLOW TAR FEATURE_SH_MATH_64 FEATURE_TEST_64
 
 # rescue extras (small): xmodem over the UART when NCM is down, register reads for the open usbotg1
 # questions, a ping to check the NCM link

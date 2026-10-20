@@ -2,13 +2,52 @@
 # Shared by flash-rootfs and flash-kernel (installed as /lib/baseline/flash-lib.sh in the recovery
 # initramfs). The verify-by-readback (dd | sha256sum) and erase-only-after-verify steps follow LIVI's
 # provisioner (native/livi-link/crates/livi-link-provision/src/dongle/arm/imx6ul/boot.rs, GPL-3.0-or-later).
+#
+# Exit status of both helpers (usb-update and the self-test rely on it):
+#   0  written and verified (flash-kernel: env erased too)
+#   2  usage
+#   3  nothing to do: the partition already holds the image (with --if-changed), or flash-kernel found
+#      this kernel already installed (U-Boot converted its staged head); nothing was written
+#   4  refused before anything was written (wrong sha256, size, magic, layout, stale or foreign image):
+#      flash is untouched, powering off is safe
+#   1  failed AFTER the write started: read the message (flash-kernel: DO NOT POWER OFF)
+# LED (red): fast blink while a write runs, back to the recovery blink when done, solid on after a
+# failure that happened after the write started.
 
-# Long writes are started from telnet sessions; a closed session must not SIGHUP flashcp (RUNBOOK
+# Long writes are started from telnet/ssh sessions; a closed session must not SIGHUP flashcp (RUNBOOK
 # 2026-10-19: a flashcp was killed mid-write that way). SIG_IGN is inherited across exec.
 trap '' HUP PIPE
 
+STARTED=
+LEDR=${LED_RED:-/sys/class/leds/red}
+
+led() { # led timer ON OFF | led solid
+    [ -w "$LEDR/trigger" ] || return 0
+    if [ "$1" = solid ]; then
+        echo none > "$LEDR/trigger"
+        echo 1 > "$LEDR/brightness"
+    else
+        echo timer > "$LEDR/trigger"
+        echo "$2" > "$LEDR/delay_on"
+        echo "$3" > "$LEDR/delay_off"
+    fi
+} 2>/dev/null
+
 say() { echo "$ME: $*"; echo "$ME: $*" >> "$LOG"; }
-die() { echo "$ME: $*" >&2; echo "$ME: FAILED: $*" >> "$LOG"; exit 1; }
+die() {
+    if [ -n "$STARTED" ]; then
+        echo "$ME: $*" >&2
+        echo "$ME: FAILED: $*" >> "$LOG"
+        led solid
+        exit 1
+    fi
+    echo "$ME: $* (nothing written)" >&2
+    echo "$ME: REFUSED: $* (nothing written)" >> "$LOG"
+    exit 4
+}
+# started: from here on a failure is a failed write, not a refusal.
+started() { STARTED=1; led timer 100 100; }
+finished() { led timer 500 500; }
 
 valid_sha() {
     [ "${#1}" -eq 64 ] || return 1
@@ -37,9 +76,9 @@ mounted() {
     return 1
 }
 
-# fetch SRC DEST: SRC is a local file (used in place) or host:port, which is PULLED with nc into
-# DEST. Pull, not push: a macOS nc pushing into busybox nc over NCM truncated at ~146 KB three times
-# (RUNBOOK 2026-10-19), a pull from a host-side server did not.
+# fetch SRC DEST: SRC is a local file (used in place, e.g. /mnt/usb/rootfs.img) or host:port, which is
+# PULLED with nc into DEST. Pull, not push: a macOS nc pushing into busybox nc over NCM truncated at
+# ~146 KB three times (RUNBOOK 2026-10-19), a pull from a host-side server did not.
 fetch() {
     if [ -f "$1" ]; then
         echo "$1"

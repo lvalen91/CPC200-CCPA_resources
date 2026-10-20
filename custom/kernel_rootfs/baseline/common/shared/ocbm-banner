@@ -8,22 +8,37 @@
 [ -r /etc/baseline/ncm.conf ] && . /etc/baseline/ncm.conf
 R=${OCBM_RUN:-/run/ocbm}
 v() { [ -r "$1" ] && cat "$1" || echo "(unknown)"; }
+# The build used the documented dev default password (build.sh writes the marker) and root's hash in
+# use is still that one (or not known yet).
+dev_pw() {
+    [ -e /etc/baseline/dev-password ] || return 1
+    [ -r /run/etc/shadow ] && [ -r /etc/baseline/shadow.default ] || return 0
+    read -r _a < /run/etc/shadow
+    read -r _b < /etc/baseline/shadow.default
+    [ "$_a" = "$_b" ]
+}
 echo
 echo "${BOARD_NAME:-baseline} $(v /etc/baseline-release)${1:+ - $1}"
 echo "  iSerial  $(v "$R/serial")"
 echo "  chip ID  $(v "$R/chip-id")   (raw OCOTP CFG0,CFG1: local only, half of the kernel-staging key)"
 echo "  NCM      device ${NCM_DEV_IP:-?}, host ${NCM_HOST_IP:-?} (DHCP)"
+dev_pw && echo "  root password: the documented DEV DEFAULT 'baseline' - change it in the rootfs with passwd"
 if [ -e /etc/baseline/recovery ]; then
     cat <<'EOT'
+  recovery ways in: this UART shell; on NCM telnet (no password, rescue only) and ssh/scp/sftp as root
+  (a public key from the rootfs's persist archive, or root's password)
   recovery tools:
     flash-rootfs <img|host:port> <sha256>            write + verify the rootfs squashfs, clear bootstate
-    flash-kernel [--restore] <img|host:port> <sha256> write + verify the HOST-STAGED kernel partition
+    flash-kernel [--restore] [--dry-run] <img|host:port> <sha256>
+                                                      write + verify the HOST-STAGED kernel partition
                                                       image (stage_kernel.py), erase env, reboot
+    usb-mount [-u] / usb-mount --plan /dev/sda        USB stick (FAT32/exFAT, ESP skipped) at /mnt/usb
+                                                      (rw), e.g. flash-rootfs /mnt/usb/rootfs.img <sha256>
     net-up [ncm|acm] / net-down      USB gadget, one function at a time
     rx FILE                          receive a file over the UART (xmodem)
     reboot                           = sync + reboot -f (PID 1 here is a script, not init)
   host:port pulls with nc from a one-shot server (baseline/common/tools/serve_once.py).
-  Long writes over telnet: the helpers ignore SIGHUP and log to /run/flash-*.log.
+  Long writes over telnet/ssh: the helpers ignore SIGHUP and log to /run/flash-*.log.
 EOT
 fi
 echo

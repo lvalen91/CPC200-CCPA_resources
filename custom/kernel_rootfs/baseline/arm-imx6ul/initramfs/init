@@ -1,18 +1,22 @@
 #!/bin/busybox sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Derived from LIVI scripts/livi-link/common/initramfs/init (https://github.com/f-io/LIVI,
-# GPL-3.0-or-later). Changes against LIVI: no bridge, no Wi-Fi AP, no second telnetd; telnetd is bound
-# to the NCM address only; the rootfs is taken over only if it carries /etc/baseline-release; the
-# rootfs sets its own gadget up (no LINK_ONLY hand-over); /run is a tmpfs moved into the rootfs; PID 1
-# never execs the UART shell (an `exit` there would kill init and panic the kernel), it respawns it;
-# an optional, last, quiet USB update step (RECOVERY_USB=1 builds only).
+# GPL-3.0-or-later). Changes against LIVI: no bridge, no Wi-Fi AP, no second telnetd; telnetd and
+# dropbear are bound to the NCM address only; the rootfs is taken over only if it carries
+# /etc/baseline-release; the rootfs sets its own gadget up (no LINK_ONLY hand-over); /run is a tmpfs
+# moved into the rootfs; PID 1 never execs the UART shell (an `exit` there would kill init and panic the
+# kernel), it respawns it; a last, quiet, one-shot USB step (RECOVERY_USB=1 builds, the default).
 #
 # PID 1 of the recovery initramfs built into the kernel image. Order:
 #   1. pseudo filesystems, chip identity (/run/ocbm)
 #   2. take over the squashfs on the 'rootfs' MTD if it is a baseline rootfs, the 'bootstate' marker
 #      is clear and nobody presses Enter on the UART within 1 s; else stay here:
 #   3. UART shell (respawned) + NCM: 192.168.50.2, DHCP for the host, telnetd on 192.168.50.2:23
-#      (unauthenticated, rescue only), then [RECOVERY_USB=1] usb-update in the background.
+#      (unauthenticated, rescue only) and [RECOVERY_SSH=1] dropbear on 192.168.50.2:22 (root, public
+#      key or password; host key and keys READ from the rootfs's persist archive on 'customer', else an
+#      ephemeral host key; recovery never writes 'customer'), then [RECOVERY_USB=1] in the background
+#      usb-update: one scan for a USB stick (at most 20 s), mounted read-write at /mnt/usb, and the
+#      ccpa-baseline/ bundle on it flashed if it differs from flash. A stick plugged in later: usb-mount.
 /bin/busybox --install -s
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
@@ -22,7 +26,8 @@ mount -t devpts devpts /dev/pts
 mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
 mount -t configfs configfs /sys/kernel/config
 [ -e /var/run ] || ln -s /run /var/run
-# No modules in here: the kernel must not exec a modprobe helper that does not exist.
+# No modules in here: the kernel must not exec a modprobe helper that does not exist. This sysctl is
+# global and survives switch_root; the rootfs /init writes /sbin/modprobe back.
 [ -w /proc/sys/kernel/modprobe ] && echo > /proc/sys/kernel/modprobe
 
 . /etc/baseline/board.env
@@ -74,19 +79,28 @@ con "recovery: $why"
 [ -e /sys/class/leds/red/trigger ] && echo timer > /sys/class/leds/red/trigger
 ifconfig lo 127.0.0.1 up
 umask 077
-# ocbm-identity creates /run/ocbm only when it succeeds; the banner (and telnetd -f) need it anyway.
-mkdir -p /run/ocbm
+# /run/ocbm may be missing when ocbm-identity failed early; the banner (and telnetd -f) need it.
+mkdir -p /run/ocbm /run/log
+# Read-only: SSH host key, keys and a changed root password from the rootfs's archive on 'customer'.
+[ -x /usr/sbin/dropbear ] && persist load > /run/log/persist.log 2>&1
 ocbm-banner "recovery: $why" > /run/ocbm/banner 2>/dev/null
 umask 022
 
-# NCM shell: link, address, DHCP, then telnetd bound to the NCM address only. Background, so a slow
-# or missing UDC never delays the UART shell.
+# NCM: link, address, DHCP, then telnetd and dropbear bound to the NCM address only. Background, so a
+# slow or missing UDC never delays the UART shell.
 (
     if IF=$(net-up ncm 2> /dev/console); then
         if telnetd -b "$NCM_DEV_IP:23" -l /bin/sh -f /run/ocbm/banner; then
             con "recovery: NCM shell on $IF: telnet $NCM_DEV_IP (unauthenticated, rescue only)"
         else
             con "recovery: telnetd failed"
+        fi
+        if [ -x /usr/sbin/dropbear ]; then
+            if ssh-up "$NCM_DEV_IP" 2> /run/log/ssh-up.log; then
+                con "recovery: ssh/scp/sftp root@$NCM_DEV_IP (key or password)"
+            else
+                con "recovery: ssh did not start (/run/log/ssh-up.log, /run/log/dropbear.log); telnet is up"
+            fi
         fi
     fi
 ) &

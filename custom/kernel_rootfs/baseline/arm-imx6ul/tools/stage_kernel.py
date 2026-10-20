@@ -7,7 +7,8 @@
 # and from our offline reproduction of it:
 #   carlinkit_misc/ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/round_trip/dryrun.py
 # Changes: Python port, pure-Python AES-128 (the key never appears on a command line), fuse words
-# read from a file (never from argv, never printed), appended-DTB detection, --self-test.
+# read from a file (never from argv, never printed), an image without a complete appended DTB is
+# refused, --self-test.
 """Stage a kernel image for the CPC200-CCPA (i.MX6ULL) vendor U-Boot. Host side, files only.
 
 The vendor U-Boot reads 0x302fd8 bytes from flash 0x40000; the first three 64 KiB blocks are
@@ -49,7 +50,12 @@ ZIMAGE_MAGIC = 0x016F2818
 FDT_MAGIC = 0xD00DFEED
 LOAD = 0x80800000
 KERNEL_PART = 0x340000      # "kernel" partition size in the vendor map and in ours
-KERNEL_MAX = 0x302FD8       # what the vendor U-Boot reads on the units we know
+# What the vendor U-Boot reads on the units read so far (build 2025.10.15.1127). NOT universal: build
+# 2025.02.25.1521 reads 0x303080 and stages at partition offset 0x303080 (CPC200-CCPA_resources
+# documentation/05_Security_Analysis/kernel_encryption.md). This tool always takes kernel_len and the
+# staging offset from the unit's own update env (layout()); KERNEL_MAX is only the baseline's image
+# budget, which board.env (KERNEL_MAX, STAGING_PART_OFFSET) and flash-kernel's staged-head probe share.
+KERNEL_MAX = 0x302FD8
 
 
 class StageError(Exception):
@@ -339,8 +345,24 @@ def zimage_info(z):
     return info
 
 
+def require_dtb(z):
+    """The image must END in a complete appended DTB: without one the kernel takes the FDT the vendor
+    U-Boot passes (norboot copies it from its update env), whose bootargs say console=ttyLogFile0 and
+    whose partition map is the vendor's: no UART console, no recovery, nothing to reach the unit with."""
+    zi = zimage_info(z)
+    if zi["dtb_at"] is None:
+        raise StageError("image has no appended DTB (no FDT magic right after the zImage): the vendor "
+                         "U-Boot's own FDT would take over (console=ttyLogFile0, vendor partitions), "
+                         "so the unit would come up without a console or recovery. Use build.sh's "
+                         "ccpa-baseline-<radio>.zimg (zImage + DTB)")
+    if zi["dtb_size"] < 0x28 or zi["dtb_at"] + zi["dtb_size"] > len(z):
+        raise StageError("appended DTB is truncated (totalsize %d, %d bytes present)"
+                         % (zi["dtb_size"], len(z) - zi["dtb_at"]))
+    return zi
+
+
 def kernel_partition(current, z, lay, key):
-    zimage_info(z)
+    require_dtb(z)
     if len(z) > lay["kernel_len"]:
         raise StageError("image is %d bytes, this unit's U-Boot reads %d" % (len(z), lay["kernel_len"]))
     so = lay["staging"] - KERNEL
@@ -373,10 +395,9 @@ def plan(mtd0, cur, z, fuses, out=sys.stdout):
     so = lay["staging"] - KERNEL
     p("layout: kernel_len=%#x staging=%#x (partition offset %#x) convert pairs=%s"
       % (lay["kernel_len"], lay["staging"], so, [(hex(a), hex(b)) for a, b in lay["pairs"]]))
-    zi = zimage_info(z)
-    p("image: %d bytes sha256 %s; zImage proper %d bytes; appended DTB: %s"
-      % (len(z), sha(z), zi["zimage_len"],
-         "none" if zi["dtb_at"] is None else "at %#x, totalsize %d" % (zi["dtb_at"], zi["dtb_size"])))
+    zi = require_dtb(z)
+    p("image: %d bytes sha256 %s; zImage proper %d bytes; appended DTB at %#x, totalsize %d"
+      % (len(z), sha(z), zi["zimage_len"], zi["dtb_at"], zi["dtb_size"]))
     p("headroom under kernel_len: %d bytes" % (lay["kernel_len"] - len(z)))
     if lay["kernel_len"] != KERNEL_MAX:
         p("NOTE: this unit's U-Boot reads %#x, not the %#x the baseline budget assumes" % (lay["kernel_len"], KERNEL_MAX))
@@ -468,18 +489,49 @@ def self_test():
             nvf = os.path.join(tmp, "nvmem")
             with open(nvf, "wb") as f:
                 f.write(bytes(nv))
+            # A sysfs-like nvmem: the kernel answers a read shorter than the 4-byte word with EINVAL
+            # (drivers/nvmem/core.c bin_attr_nvmem_read). A plain file does not, which is how the
+            # dd bs=1 bug passed this test and shipped (hardware 2026-10-20: every unit
+            # OCBM-e3b0c44298fc). This dd stands in for that file: it refuses bs/ibs that are not
+            # whole words for OCBM_NVMEM and passes everything else to the real dd.
+            shim = os.path.join(tmp, "sysfs-bin")
+            os.mkdir(shim)
+            realdd = shutil.which("dd")
+            with open(os.path.join(shim, "dd"), "w") as f:
+                f.write("#!/bin/sh\n"
+                        "nv=; small=\n"
+                        "for a in \"$@\"; do case $a in\n"
+                        "  if=%s) nv=1 ;;\n"
+                        "  bs=* | ibs=*) v=${a#*=}; case $v in *[!0-9]*) small=1 ;; *) [ $((v %% 4)) -eq 0 ] && [ \"$v\" -ge 4 ] || small=1 ;; esac ;;\n"
+                        "esac; done\n"
+                        "if [ -n \"$nv\" ] && [ -n \"$small\" ]; then echo 'dd: error reading: Invalid argument' >&2; exit 1; fi\n"
+                        "exec %s \"$@\"\n" % (nvf, realdd))
+            os.chmod(os.path.join(shim, "dd"), 0o755)
+            empty_sha_serial = "OCBM-" + hashlib.sha256(b"").hexdigest()[:12]
             for shname in shells:
-                run = os.path.join(tmp, "run-" + shname)
-                env = dict(os.environ, OCBM_NVMEM=nvf, OCBM_CHIPID_OFFSET="4", OCBM_RUN=run)
-                r = subprocess.run([shname, idscript], env=env, capture_output=True, text=True)
-                got = {}
-                for n in ("serial", "dev_addr", "host_addr", "chip-id"):
-                    pth = os.path.join(run, n)
-                    got[n] = open(pth).read().strip() if os.path.exists(pth) else None
-                check("ocbm-identity under %s matches serial/MACs" % shname,
-                      r.returncode == 0 and all(got[n] == want[n] for n in ("serial", "dev_addr", "host_addr")))
-                check("ocbm-identity under %s chip-id is CFG0,CFG1 as %%08x%%08x" % shname,
-                      got["chip-id"] == "%08x%08x" % (FUSES[0], FUSES[1]))
+                for label, path in (("plain file", os.environ.get("PATH", "")),
+                                    ("sysfs-like word reads", shim + os.pathsep + os.environ.get("PATH", ""))):
+                    run = os.path.join(tmp, "run-%s-%d" % (shname, len(label)))
+                    env = dict(os.environ, OCBM_NVMEM=nvf, OCBM_CHIPID_OFFSET="4", OCBM_RUN=run, PATH=path)
+                    r = subprocess.run([shname, idscript], env=env, capture_output=True, text=True)
+                    got = {}
+                    for n in ("serial", "dev_addr", "host_addr", "chip-id"):
+                        pth = os.path.join(run, n)
+                        got[n] = open(pth).read().strip() if os.path.exists(pth) else None
+                    check("ocbm-identity under %s, %s: serial/MACs match" % (shname, label),
+                          r.returncode == 0 and all(got[n] == want[n] for n in ("serial", "dev_addr", "host_addr")))
+                    check("ocbm-identity under %s, %s: not sha256(\"\")" % (shname, label),
+                          got["serial"] not in (None, empty_sha_serial))
+                    check("ocbm-identity under %s, %s: chip-id is CFG0,CFG1 %%08x%%08x" % (shname, label),
+                          got["chip-id"] == "%08x%08x" % (FUSES[0], FUSES[1]))
+                # A source that yields nothing must be refused loudly, writing no identity.
+                emptyf = os.path.join(tmp, "nvmem-empty")
+                open(emptyf, "wb").close()
+                run = os.path.join(tmp, "run-empty-" + shname)
+                r = subprocess.run([shname, idscript], capture_output=True, text=True,
+                                   env=dict(os.environ, OCBM_NVMEM=emptyf, OCBM_RUN=run))
+                check("ocbm-identity under %s refuses an empty read (no serial written)" % shname,
+                      r.returncode != 0 and not os.path.exists(os.path.join(run, "serial")) and "read 0 of 8" in r.stderr)
         else:
             print("  ocbm-identity cross-check SKIPPED (script, dash/sh, sha256sum, hexdump or dd missing)")
         mm = usb_identity(FUSES[0], FUSES[1])
@@ -522,7 +574,9 @@ def self_test():
                   "sf update 0x80800000 0x30000  0x10000"]
         return env_with(["bootdelay=3", "norboot=%s;" % ";".join(norboot), "heweiencrypt=%s;" % ";".join(hewei)])
 
-    def zimage(n, dtb=b""):
+    DTB = struct.pack(">II", FDT_MAGIC, 0x40) + bytes(0x38)
+
+    def zimage(n, dtb=DTB):
         zz = bytearray(((i * 7 + i // 251) & 0xFF) for i in range(n))
         struct.pack_into("<I", zz, 0x24, ZIMAGE_MAGIC)
         struct.pack_into("<II", zz, 0x28, 0, n)
@@ -553,11 +607,14 @@ def self_test():
     check("zImage U-Boot would cut off is refused",
           raises(lambda: kernel_partition(cur, zimage(0x100001), {"kernel_len": 0x100000, "staging": 0x140000}, key)))
     check("non-zImage refused", raises(lambda: kernel_partition(cur, bytes(0x100000), lay2, key)))
+    check("image without an appended DTB refused (vendor FDT would take over)",
+          raises(lambda: kernel_partition(cur, zimage(0x2F0001, b""), lay2, key)))
+    check("image with a truncated appended DTB refused",
+          raises(lambda: kernel_partition(cur, zimage(0x2F0001, DTB[:0x20]), lay2, key)))
 
     uboot = bytearray(b"\x5a" * 0x40000)
     uboot[UPDATE_BLOCK:UPDATE_BLOCK + ERASE] = update_block(venv, key)
-    dtb = struct.pack(">II", FDT_MAGIC, 0x40) + bytes(0x38)
-    zd = zimage(0x2F0001, dtb)
+    zd = zimage(0x2F0001)
     sink = open(os.devnull, "w")
     try:
         p1, unch = plan(bytes(uboot), cur, zd, FUSES, out=sink)
@@ -567,6 +624,8 @@ def self_test():
               plan(bytes(uboot), p1, zd, FUSES, out=sink)[1])
         check("appended DTB detected", zimage_info(zd)["dtb_at"] == 0x2F0001)
         check("plan() refuses another unit's key", raises(lambda: plan(bytes(uboot), cur, zd, (1, 2, 3, 4), out=sink)))
+        check("plan() refuses an image without an appended DTB",
+              raises(lambda: plan(bytes(uboot), cur, zimage(0x2F0001, b""), FUSES, out=sink)))
     finally:
         sink.close()
 

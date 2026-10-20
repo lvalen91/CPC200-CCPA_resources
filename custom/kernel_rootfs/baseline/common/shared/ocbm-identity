@@ -3,7 +3,8 @@
 # ocbm-identity: this unit's USB identity, derived from the chip's unique ID only.
 #
 #   chip ID   = the OCBM_CHIPID_LEN (8) raw bytes at OCBM_CHIPID_OFFSET of OCBM_NVMEM
-#               (i.MX6ULL: OCOTP CFG0||CFG1, nvmem bytes 4..11, two little-endian words)
+#               (i.MX6ULL: OCOTP CFG0||CFG1, nvmem bytes 4..11, two little-endian words),
+#               read as whole 4-byte words (sysfs nvmem rejects shorter reads)
 #   h         = sha256 of those raw bytes
 #   iSerial   = "OCBM-" + h[0:12]
 #   dev_addr  = h[0:12]  as a MAC, unicast + locally administered (NCM device side)
@@ -15,18 +16,34 @@
 # raw ID hex IS the first half of the kernel-staging UpgKey text (key = hex(CFG0,CFG1)), so treat
 # chip-id like a secret: do not paste it into logs, issues or commits.
 #
-# The MAC fuses (MAC0/MAC1) are never used here. Exit 1, writing nothing, if the ID is unreadable.
+# The MAC fuses (MAC0/MAC1) are never used here. Exit 1, writing no identity file, if the ID is unreadable.
 [ -r /etc/baseline/board.env ] && . /etc/baseline/board.env
 : "${OCBM_NVMEM:=/sys/bus/nvmem/devices/imx-ocotp0/nvmem}"
 : "${OCBM_CHIPID_OFFSET:=4}"
 : "${OCBM_CHIPID_LEN:=8}"
 : "${OCBM_RUN:=/run/ocbm}"
 
-die() { echo "ocbm-identity: $*" >&2; exit 1; }
+tmp=
+die() { echo "ocbm-identity: $*" >&2; [ -n "$tmp" ] && rm -f "$tmp"; exit 1; }
 [ -r "$OCBM_NVMEM" ] || die "no $OCBM_NVMEM (NVMEM_IMX_OCOTP not probed?)"
 
+# The sysfs nvmem file refuses any read shorter than the device's word size (4 B on imx-ocotp) with
+# EINVAL (drivers/nvmem/core.c bin_attr_nvmem_read, 7.2.10). The first version hashed the output of a
+# `dd bs=1` that therefore read nothing: every unit got sha256("") and the same serial
+# (OCBM-e3b0c44298fc) and MACs (hardware, 2026-10-20). So: ONE read in whole 4-byte words into a private
+# file, its length checked, then hashed and printed from that same file.
+W=4
+[ $((OCBM_CHIPID_OFFSET % W)) -eq 0 ] && [ $((OCBM_CHIPID_LEN % W)) -eq 0 ] && [ "$OCBM_CHIPID_LEN" -gt 0 ] \
+    || die "OCBM_CHIPID_OFFSET/LEN must be whole $W-byte words"
+umask 077
+mkdir -p "$OCBM_RUN" || die "cannot create $OCBM_RUN"
+tmp=$OCBM_RUN/.chip-id.raw.$$
+dd if="$OCBM_NVMEM" of="$tmp" bs=$W skip=$((OCBM_CHIPID_OFFSET / W)) count=$((OCBM_CHIPID_LEN / W)) 2>/dev/null \
+    || die "reading the chip ID from $OCBM_NVMEM failed"
+got=$(($(wc -c < "$tmp")))
+[ "$got" -eq "$OCBM_CHIPID_LEN" ] || die "read $got of $OCBM_CHIPID_LEN chip ID bytes (empty or short read)"
 words=$((OCBM_CHIPID_LEN / 4))
-raw=$(hexdump -v -s "$OCBM_CHIPID_OFFSET" -n "$OCBM_CHIPID_LEN" -e "$words/4 \"%08x\"" "$OCBM_NVMEM" 2>/dev/null)
+raw=$(hexdump -v -n "$OCBM_CHIPID_LEN" -e "$words/4 \"%08x\"" "$tmp" 2>/dev/null)
 [ "${#raw}" -eq $((OCBM_CHIPID_LEN * 2)) ] || die "short read of the chip ID"
 case $raw in
     *[!0-9a-f]*) die "chip ID is not hex" ;;
@@ -38,9 +55,13 @@ case $raw in
 esac
 
 # shellcheck disable=SC2046
-set -- $(dd if="$OCBM_NVMEM" bs=1 skip="$OCBM_CHIPID_OFFSET" count="$OCBM_CHIPID_LEN" 2>/dev/null | sha256sum)
+set -- $(sha256sum "$tmp")
 h=$1
+rm -f "$tmp"
+tmp=
 [ "${#h}" -eq 64 ] || die "sha256sum failed"
+# Belt and braces against the bug above: the hash of an empty input is never an identity.
+[ "$h" != e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 ] || die "chip ID hash is sha256 of nothing"
 
 first12() { printf '%s' "${1%"${1#????????????}"}"; }
 mac() {
@@ -59,7 +80,6 @@ h0=$(first12 "$h")
 h1=$(first12 "${h#????????????}")
 
 umask 022
-mkdir -p "$OCBM_RUN" || die "cannot create $OCBM_RUN"
 printf 'OCBM-%s\n' "$h0" > "$OCBM_RUN/serial.new" && mv "$OCBM_RUN/serial.new" "$OCBM_RUN/serial"
 mac "$h0" > "$OCBM_RUN/dev_addr.new" && echo >> "$OCBM_RUN/dev_addr.new" && mv "$OCBM_RUN/dev_addr.new" "$OCBM_RUN/dev_addr"
 mac "$h1" > "$OCBM_RUN/host_addr.new" && echo >> "$OCBM_RUN/host_addr.new" && mv "$OCBM_RUN/host_addr.new" "$OCBM_RUN/host_addr"

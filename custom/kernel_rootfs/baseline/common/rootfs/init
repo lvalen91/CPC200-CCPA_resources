@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Derived from LIVI scripts/livi-link/common/rootfs/init (https://github.com/f-io/LIVI,
 # GPL-3.0-or-later). Changes: /dev and /run arrive moved from the recovery initramfs (mounted here
-# only if they did not), /tmp is a tmpfs. PID-1 shim: pseudo filesystems, then busybox init.
+# only if they did not), /tmp is a tmpfs, the modprobe helper path is restored. PID-1 shim: pseudo
+# filesystems, then busybox init.
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mountpoint -q /dev || mount -t devtmpfs devtmpfs /dev
@@ -11,4 +12,9 @@ mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /tmp
 mkdir -p /dev/pts
 mountpoint -q /dev/pts || mount -t devpts devpts /dev/pts
 mount -t configfs configfs /sys/kernel/config 2>/dev/null
+# The recovery init blanked kernel.modprobe (it has no modules); the sysctl is global and survives
+# switch_root. Restored, the kernel can load filesystem/codepage/protocol modules on demand (fs-*,
+# nls_*, net-pf-*). It cannot power a radio: the MMC host and the Wi-Fi/BT drivers load only by their
+# device modalias, which nothing here acts on (etc/mdev.conf has no $MODALIAS rule); radio-up loads them.
+[ -w /proc/sys/kernel/modprobe ] && echo /sbin/modprobe > /proc/sys/kernel/modprobe
 exec /sbin/init

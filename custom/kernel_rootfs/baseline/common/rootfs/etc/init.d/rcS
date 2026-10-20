@@ -2,11 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Baseline rootfs boot. The bootstate handling is LIVI's (scripts/livi-link/common/rootfs/etc/init.d/rcS,
 # https://github.com/f-io/LIVI, GPL-3.0-or-later): clear the mark the initramfs set once the ways in
-# are up. Everything else differs: no radio, no MFi bridge, no web UI, no telnetd; NCM + SSH (key
-# only) and the UART shell (inittab) are the ways in.
+# are up. Everything else differs: no radio at boot (radio-up), no MFi bridge (mfi-probe reads the
+# chip), no web UI, no telnetd; NCM + SSH (root, public key or password) and the UART shell (inittab)
+# are the ways in; mdev mounts USB sticks at /mnt/usb.
 #
 # The network part runs in the background so a missing UDC never delays the UART shell, which
-# busybox init starts only after this script returns.
+# busybox init starts only after this script returns. Every reason the ways in are not up is printed
+# on the console and kept in /run/baseline/rcS.log: a bootstate mark that stays set (next boot in
+# recovery) is never silent.
 mkdir -p /run/baseline /run/log
 exec > /run/baseline/rcS.log 2>&1 < /dev/null
 . /etc/baseline/board.env
@@ -20,24 +23,40 @@ ifconfig lo 127.0.0.1 up
 [ -r /etc/baseline/board-rcS.sh ] && . /etc/baseline/board-rcS.sh
 command -v board_early > /dev/null 2>&1 && board_early
 
+# USB sticks: mdev in daemon mode (netlink) runs usb-mount for every sd[a-z] add/remove
+# (etc/mdev.conf); its start-up scan mounts a stick that is already plugged in. etc/mdev.conf leaves
+# every device node to devtmpfs and has no $MODALIAS rule, so it loads no module (radios stay off).
+if [ -d /sys/bus/usb ]; then
+    usb-mount --modules
+    mdev -d || con "mdev did not start: no USB auto-mount (usb-mount by hand)"
+fi
+
 (
     persist load
     ok=
-    if IF=$(net-up ncm); then
-        if ssh-up "$NCM_DEV_IP"; then
+    why=
+    if IF=$(net-up ncm 2> /run/log/net-up.log); then
+        if ssh-up "$NCM_DEV_IP" 2> /run/log/ssh-up.log; then
             ok=1
-            con "NCM $IF $NCM_DEV_IP, ssh (key only) on $NCM_DEV_IP:22, host gets $NCM_HOST_IP"
+            con "NCM $IF $NCM_DEV_IP, ssh/scp/sftp root@$NCM_DEV_IP (key or password), host gets $NCM_HOST_IP"
         else
-            con "dropbear did not start (/run/log/dropbear.log)"
+            why="SSH: $(tail -n 2 /run/log/ssh-up.log | tr '\n' ' ')(/run/log/dropbear.log)"
         fi
     else
-        con "NCM did not come up (dmesg)"
+        why="NCM: $(tail -n 2 /run/log/net-up.log | tr '\n' ' ')"
     fi
     N=$(mtd_num bootstate)
     if [ -n "$ok" ] && [ -n "$N" ]; then
-        bootstate_clear "$N" && echo "rcS: bootstate cleared"
+        if bootstate_clear "$N"; then
+            echo "rcS: bootstate cleared"
+        else
+            con "could not clear bootstate (mtd$N): the next boot stays in recovery"
+        fi
     elif [ -n "$N" ]; then
-        con "the ways in are not all up: bootstate stays set, the next boot stays in recovery"
+        con "a way in is not up, $why"
+        con "bootstate stays set: the next boot stays in recovery (UART shell here still works)"
+    elif [ -z "$ok" ]; then
+        con "a way in is not up, $why"
     fi
     command -v board_late > /dev/null 2>&1 && board_late "$ok"
     echo 4 > /proc/sys/kernel/printk

@@ -6,15 +6,30 @@
 # the unit; the image is staged on the HOST (tools/stage_kernel.py) because the fuse-derived key never
 # has to reach this script; refuses without the caller's sha256 and refuses an image whose first
 # 192 KiB differ from this unit's partition (staged from a stale dump or another unit) unless
-# --restore; erases the 'env' MTD of our DT instead of a byte range of 'uboot'.
+# --restore; recognises an image that is already installed; erases the 'env' MTD of our DT instead of
+# a byte range of 'uboot'.
 #
-#   flash-kernel [--restore] [--if-changed] <partition-image|host:port> <sha256>
+#   flash-kernel [--restore] [--if-changed] [--dry-run] <partition-image|host:port> <sha256>
 #
 #   --restore     the image is a raw dump of THIS unit's kernel partition (e.g. backup mtd1.bin);
 #                 skips the head check, which a raw backup of another kernel cannot pass
-#   --if-changed  do nothing at all (no env erase, no reboot) if the partition already holds it;
-#                 exit status 3 says so (0 = written, anything else = failed)
+#   --if-changed  do nothing at all (no env erase, no reboot) if the partition already holds it
+#   --dry-run     every check, then say what would be written; writes and erases nothing
 #   NO_REBOOT=1   stop after the env erase instead of rebooting
+#   exit status   0 written (or would write), 3 nothing to do, 4 refused (nothing written),
+#                 1 failed after the write started; see flash-lib.sh
+#
+# "Already installed" (exit 3, nothing written): everything after the first 192 KiB of the partition
+# equals the image, only the head differs. That is what a successful install leaves: U-Boot's
+# heweiencrypt rewrites exactly the three head blocks from the staged ones and touches nothing else, so
+# a stick or file staged BEFORE the install no longer matches the head but is not stale.
+#
+# Layout constants (board.env): the staged head is looked for at partition offset STAGING_PART_OFFSET
+# = 0x302fd8, the kernel_len of the U-Boot env on the units read so far (2025.10.15.1127 build). Other
+# vendor builds differ (2025.02.25.1521: 0x303080, CPC200-CCPA_resources
+# documentation/05_Security_Analysis/kernel_encryption.md). The check here only asks "is anything
+# staged near there", which a staging at 0x303080 still answers; stage_kernel.py reads the unit's own
+# kernel_len and staging offset from its update env and refuses an image that does not fit them.
 #
 # NOT RECOVERABLE FROM HERE: this recovery lives inside the kernel partition it writes. A power loss
 # between the start of the write and the end of the env erase leaves the old encrypted head in front
@@ -29,14 +44,16 @@ LOG=/run/flash-kernel.log
 
 restore=
 if_changed=
+dry=
 while :; do
-    case $1 in
+    case ${1:-} in
         --restore) restore=1; shift ;;
         --if-changed) if_changed=1; shift ;;
+        --dry-run) dry=1; shift ;;
         *) break ;;
     esac
 done
-[ $# -eq 2 ] || { echo "usage: $ME [--restore] [--if-changed] <partition-image|host:port> <sha256>" >&2; exit 2; }
+[ $# -eq 2 ] || { echo "usage: $ME [--restore] [--if-changed] [--dry-run] <partition-image|host:port> <sha256>" >&2; exit 2; }
 valid_sha "$2" || die "the second argument must be the image's sha256 (64 lowercase hex)"
 WANT=$2
 
@@ -51,46 +68,72 @@ done
 # The env erase must hit flash 0x30000 and nothing else.
 [ "$(mtd_attr "$E" offset)" = "$ENV_FLASH_OFFSET" ] || die "'env' is not at flash offset $ENV_FLASH_OFFSET (sysfs offset: $(mtd_attr "$E" offset))"
 [ "$(mtd_attr "$K" offset)" = "$KERNEL_FLASH_OFFSET" ] || die "'kernel' is not at flash offset $KERNEL_FLASH_OFFSET"
+KD=$MTD_DEV/mtd$K
+ED=$MTD_DEV/mtd$E
+UD=$MTD_DEV/mtd$U
 
 IMG=$(fetch "$1" /tmp/kernel-part.img) || die "cannot read $1 (a file, or host:port of a one-shot server)"
 SIZE=$(fsize "$IMG")
 [ "$SIZE" = "$KERNEL_PART_SIZE" ] || die "image is $SIZE B; a staged partition image is exactly $KERNEL_PART_SIZE B"
 GOT=$(sha_file "$IMG")
-[ "$GOT" = "$WANT" ] || die "image sha256 is $GOT, not $WANT; nothing written"
-if [ -z "$restore" ]; then
+[ "$GOT" = "$WANT" ] || die "image sha256 is $GOT, not $WANT"
+
+BLOCKS=$((KERNEL_PART_SIZE / ERASE_SIZE))
+NOW=$(sha_file "$KD")
+if [ "$NOW" != "$WANT" ] && [ -z "$restore" ]; then
     IH=$(dd if="$IMG" bs="$ERASE_SIZE" count=3 2>/dev/null | sha_stdin)
-    CH=$(dd if="/dev/mtd$K" bs="$ERASE_SIZE" count=3 2>/dev/null | sha_stdin)
-    [ "$IH" = "$CH" ] || die "the image's first 192 KiB differ from this unit's kernel partition: it was staged from another dump or another unit. Dump this partition again, re-stage, or use --restore for a raw backup of THIS unit"
+    CH=$(dd if="$KD" bs="$ERASE_SIZE" count=3 2>/dev/null | sha_stdin)
+    if [ "$IH" != "$CH" ]; then
+        IT=$(dd if="$IMG" bs="$ERASE_SIZE" skip=3 count=$((BLOCKS - 3)) 2>/dev/null | sha_stdin)
+        CT=$(dd if="$KD" bs="$ERASE_SIZE" skip=3 count=$((BLOCKS - 3)) 2>/dev/null | sha_stdin)
+        if [ "$IT" = "$CT" ]; then
+            say "mtd$K already runs this kernel: all but the first 192 KiB match, the head differs only by U-Boot's conversion of the staged head. Nothing written, env untouched."
+            [ "$IMG" = /tmp/kernel-part.img ] && rm -f /tmp/kernel-part.img
+            exit 3
+        fi
+        die "the image's first 192 KiB differ from this unit's kernel partition, and so does the rest: it was staged from another dump or for another unit. Dump this partition again and re-stage it, or use --restore for a raw backup of THIS unit"
+    fi
 fi
 # The staged head U-Boot converts after the env erase. Erased flash there would be "converted" into a
-# garbage head. (Offset from the U-Boot layout of the units we know; stage_kernel.py checks the
-# unit's own layout from its update env.)
+# garbage head. (Probe offset: see "Layout constants" above.)
 SH=$(dd if="$IMG" bs=8 skip=$((STAGING_PART_OFFSET / 8)) count=$((3 * ERASE_SIZE / 8)) 2>/dev/null | sha_stdin)
 [ "$SH" != "$ERASED_HEAD_SHA256" ] || die "the image has no staged head at partition offset $STAGING_PART_OFFSET; erasing env now would brick the unit"
 
-UB_BEFORE=$(sha_file "/dev/mtd$U")
-NOW=$(sha_file "/dev/mtd$K")
+if [ -n "$dry" ]; then
+    if [ "$NOW" = "$WANT" ]; then
+        say "dry run: mtd$K already holds this image; would $([ -n "$if_changed" ] && echo 'do nothing (exit 3)' || echo 'erase env and reboot')"
+        [ -n "$if_changed" ] && exit 3
+    else
+        say "dry run: would write $SIZE B to mtd$K, verify, erase env (mtd$E), check uboot (mtd$U), $([ -n "$NO_REBOOT" ] && echo 'stop' || echo 'reboot')"
+    fi
+    exit 0
+fi
+
+UB_BEFORE=$(sha_file "$UD")
 if [ "$NOW" = "$WANT" ]; then
     say "mtd$K already holds this image"
     [ -n "$if_changed" ] && exit 3
+    started
 else
+    started
     say "writing mtd$K (log $LOG). From now until the env erase completes, a power loss needs an SPI programmer"
-    flashcp -v "$IMG" "/dev/mtd$K" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG). DO NOT REBOOT OR POWER OFF: retry $ME with the same image, or $ME --restore <backup> <sha256>"
+    flashcp -v "$IMG" "$KD" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG). DO NOT REBOOT OR POWER OFF: retry $ME with the same image, or $ME --restore <backup> <sha256>"
     sync
-    NOW=$(sha_file "/dev/mtd$K")
+    NOW=$(sha_file "$KD")
     [ "$NOW" = "$WANT" ] || die "mtd$K does not read back as written ($NOW). DO NOT REBOOT OR POWER OFF: retry $ME"
     say "wrote and verified mtd$K"
 fi
 
 # Erasing the env block is what makes U-Boot run heweiencrypt on the next boot. Done even when the
 # image was already there: a previous run may have stopped between the write and this step.
-flash_eraseall -q "/dev/mtd$E" >> "$LOG" 2>&1 || die "erasing mtd$E failed. DO NOT REBOOT: retry 'flash_eraseall -q /dev/mtd$E'"
+flash_eraseall -q "$ED" >> "$LOG" 2>&1 || die "erasing mtd$E failed. DO NOT REBOOT: retry 'flash_eraseall -q $ED'"
 sync
-[ "$(sha_file "/dev/mtd$E")" = "$ERASED_BLOCK_SHA256" ] || die "mtd$E did not erase. DO NOT REBOOT: retry 'flash_eraseall -q /dev/mtd$E'"
-[ "$(sha_file "/dev/mtd$U")" = "$UB_BEFORE" ] || die "the uboot partition changed although only env was erased. DO NOT REBOOT; compare it with your backup"
+[ "$(sha_file "$ED")" = "$ERASED_BLOCK_SHA256" ] || die "mtd$E did not erase. DO NOT REBOOT: retry 'flash_eraseall -q $ED'"
+[ "$(sha_file "$UD")" = "$UB_BEFORE" ] || die "the uboot partition changed although only env was erased. DO NOT REBOOT; compare it with your backup"
 say "env erased, U-Boot unchanged"
 [ "$IMG" = /tmp/kernel-part.img ] && rm -f /tmp/kernel-part.img
-if [ -n "$NO_REBOOT" ]; then
+finished
+if [ -n "${NO_REBOOT:-}" ]; then
     say "NO_REBOOT set: reboot when ready (U-Boot converts the staged head, rewrites env, resets once more)"
     exit 0
 fi

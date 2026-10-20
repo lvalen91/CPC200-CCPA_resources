@@ -138,7 +138,7 @@ build_busybox_recovery() {
 
 build_dropbear() {
     _s=$UBUILD/dropbear-$DROPBEAR_VER
-    note "dropbear $DROPBEAR_VER multi-call (dropbear dbclient dropbearkey scp), static, key-only server"
+    note "dropbear $DROPBEAR_VER multi-call (dropbear dbclient dropbearkey scp), static, public-key + password server"
     untar "$SRC/dropbear-$DROPBEAR_VER.tar.bz2" "$_s"
     x cp "$HERE/common/dropbear/localoptions.h" "$_s/localoptions.h"
     # A macro dropbear does not know is silently ignored: every name must exist upstream.
@@ -169,6 +169,15 @@ build_sftp_server() {
     x mkdir -p "$UOUT/usr/libexec"
     x "${CROSS_COMPILE}strip" -o "$UOUT/usr/libexec/sftp-server" "$_s/sftp-server"
     assert_static "$UOUT/usr/libexec/sftp-server"
+}
+
+# hciup: the baseline's one-file HCI up/down tool (common/hciup/hciup.c), for `radio up`'s Bluetooth.
+build_hciup() {
+    note "hciup (common/hciup/hciup.c), static"
+    x mkdir -p "$UBUILD/hciup" "$UOUT/usr/sbin"
+    x "$TARGET_CC" -static -Os -Wall -Wextra -o "$UBUILD/hciup/hciup" "$HERE/common/hciup/hciup.c"
+    x "${CROSS_COMPILE}strip" -o "$UOUT/usr/sbin/hciup" "$UBUILD/hciup/hciup"
+    assert_static "$UOUT/usr/sbin/hciup"
 }
 
 build_mtd_utils() {

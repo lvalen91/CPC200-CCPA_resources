@@ -7,6 +7,9 @@
 #
 #   flash-rootfs [--if-changed] <image|host:port> <sha256>
 #   (--if-changed: exit 3, touching nothing, if the partition already holds the image)
+#   image: a file (e.g. /mnt/usb/rootfs.img from a stick, or one copied in with scp/sftp) or host:port
+#   exit: 0 written, 3 nothing to do, 4 refused (nothing written), 1 the write failed (repairable:
+#   retry); see flash-lib.sh
 #
 # Writes a baseline rootfs squashfs to the 'rootfs' MTD. Never reboots. An interrupted write is
 # repairable: the kernel and this recovery are on another partition, and the bootstate mark set
@@ -24,6 +27,7 @@ WANT=$2
 
 N=$(mtd_num rootfs) || die "no 'rootfs' MTD partition"
 mounted "/dev/mtdblock$N" && die "/dev/mtdblock$N is mounted; flash it from recovery"
+M=$MTD_DEV/mtd$N
 PART=$(mtd_attr "$N" size)
 
 IMG=$(fetch "$1" /tmp/rootfs.img) || die "cannot read $1 (a file, or host:port of a one-shot server)"
@@ -34,20 +38,22 @@ SIZE=$(fsize "$IMG")
 GOT=$(sha_file "$IMG")
 [ "$GOT" = "$WANT" ] || die "image sha256 is $GOT, not $WANT; nothing written"
 
-NOW=$(dd if="/dev/mtd$N" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
+NOW=$(dd if="$M" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
 if [ "$NOW" = "$WANT" ]; then
     say "mtd$N already holds this image"
     [ -n "$if_changed" ] && exit 3
 else
+    started
     S=$(mtd_num bootstate) && { bootstate_set "$S" || say "could not set the bootstate mark"; }
     say "writing $SIZE B to mtd$N (log $LOG); an interruption here is repairable from recovery"
-    flashcp -v "$IMG" "/dev/mtd$N" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG); retry flash-rootfs"
+    flashcp -v "$IMG" "$M" >> "$LOG" 2>&1 || die "flashcp failed (see $LOG); retry flash-rootfs"
     sync
-    NOW=$(dd if="/dev/mtd$N" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
+    NOW=$(dd if="$M" bs=4096 count=$((SIZE / 4096)) 2>/dev/null | sha_stdin)
     [ "$NOW" = "$WANT" ] || die "mtd$N does not read back as written ($NOW); retry flash-rootfs"
     say "wrote and verified mtd$N"
 fi
 S=$(mtd_num bootstate) && bootstate_clear "$S" && say "bootstate cleared"
 [ "$IMG" = /tmp/rootfs.img ] && rm -f /tmp/rootfs.img
+finished
 say "done; 'reboot' boots the new rootfs"
 exit 0

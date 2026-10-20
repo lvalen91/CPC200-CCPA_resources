@@ -7,8 +7,9 @@
 #   TC, HWCLOCK              do not build: tc.c against 7.x headers (TCA_CBQ_MAX), hwclock.c against
 #                            musl 1.2 time64 (SYS_settimeofday). Measured by the C2Air session with the
 #                            same 1.38.0 (c2air docs/userspace-spec.md); LIVI's busybox.sed drops TC too.
-# "udev helpers": BusyBox has no udev applets; mdev is built but never registered as the hotplug helper
-# (nothing may autoload radio modules), so nothing else is excluded under that heading.
+# "udev helpers": BusyBox has no udev applets. mdev runs as `mdev -d` (netlink) for USB sticks only;
+# etc/mdev.conf has no $MODALIAS rule, so it never loads a module (radios stay off); nothing else is
+# excluded under that heading. passwd writes sha512-crypt (the defconfig default is des).
 # Additions over defconfig: static, the MTD/UBI tools (flash_erase itself is not a BusyBox applet: see
 # the mtd-utils recipe). The VT/console applets LIVI's busybox.sed removes are KEPT (they build; the
 # owner rule is "exclude only what cannot work"); drop them here if the rootfs ever gets tight.
@@ -48,3 +49,4 @@ CONFIG_FEATURE_READLINK_FOLLOW=y
 CONFIG_CTTYHACK=y
 CONFIG_TAR=y
 CONFIG_FEATURE_TAR_CREATE=y
+CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="sha512"
