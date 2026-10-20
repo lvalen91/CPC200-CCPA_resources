@@ -37,7 +37,11 @@
 # ============================== WHAT IS NEVER TOUCHED ==================================
 # * mtd0 (HAB-signed U-Boot) / mtd1 (OTPMK-encrypted kernel) — read for backup, never written.
 # * /script/ko.tar.gz — gadget modules built against THIS unit's kernel. Overwriting them
-#   with another unit's copy loses the gadget, and with it NCM, and with it the box.
+#   with another unit's copy loses the gadget, and with it NCM, and with it the box. It is
+#   never REPLACED. Since 2026-10-19 strip FILTERS the unit's own file in place: HeWei's
+#   Apple-gadget members (KO_DROP: g_iphone.ko, f_ptp*.ko) are dropped, every other member is
+#   repacked byte-identical, and the result must still list cleanly and carry KO_NEED
+#   (g_android_accessory.ko, storage_common.ko) or the original is left untouched.
 # * ANYTHING WLAN/BT — see the variant rule below. This is the single biggest hazard here.
 # * /etc/riddle.conf, unit MACs, dropbear host keys, hostapd SSID/PSK — unit identity.
 # * dropbear / telnetd / udhcpd and the gadget itself — that is the control channel you are
@@ -79,7 +83,7 @@
 #       a unit's bring-up at runtime from that unit's OWN vendor dispatcher. Installing them
 #       cannot put one chip's bring-up on another chip's board, which is the only thing (c)
 #       protects against. `is_radio()` gains `radio_*` so they are also protected from deletion.
-#       See docs/57. Do not "restore compliance" by removing them from the install list — that
+#       See docs/wireless/01_BT_AND_RADIO.md. Do not "restore compliance" by removing them from the install list — that
 #       leaves every non-IW416 unit with callers naming scripts it does not have.
 # Preflight reports the detected variant for the log; it never gates behaviour.
 #
@@ -108,7 +112,11 @@
 #                    DHCP lease from the adapter's udhcpd)
 #   --pass PW        root password; implies ssh. Omit for the shipped blank-password unit —
 #                    `install` prompts for an IP/password only if the default endpoint is dead
-#   --via telnet|ssh transport (default telnet)
+#   --via ssh|telnet transport (default ssh, changed 2026-09-05). TELNET IS THE RESCUE PATH:
+#                    it exists so a unit whose dropbear/authorized_keys is broken can be repaired,
+#                    and it moves files as 2 KB base64 chunks through a line-oriented shell. Do not
+#                    route a deploy through it because it happens to be the older default —
+#                    measured 2026-09-05, `scp -O` does 1.8 MB over USB-NCM in ~0.6 s.
 #   --host-if enX    your USB-NCM interface; forced to a static 192.168.50.1 while waiting
 #                    for a cold boot, for when macOS will not re-DHCP the new interface
 #   --run-dir DIR    where backups/reports land (default scratchpad/ncmbase_<stamp>)
@@ -128,7 +136,7 @@ BOXSH="$REPO/tools/boxsh.py"
 
 BOX="192.168.50.2"
 BOX_PW=""
-VIA="telnet"
+VIA="ssh"
 HOST_IF=""
 HOST_IP="192.168.50.1"
 RUN_DIR=""
@@ -176,7 +184,14 @@ gate() {
 # --------------------------------------------------------------------------------------
 # Transport. box/push/pull dispatch on --via so every phase below is written once.
 # --------------------------------------------------------------------------------------
-SSH_OPTS=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR
+# `id_ccpa_ncm` is the dedicated per-Mac key for the NCM maintenance link (see ~/.ssh/config's
+# `ccpa-ncm` host). Offered only when it exists, so a machine without it falls back to whatever the
+# agent/default identities provide. NOTE: never add `-o PubkeyAuthentication=no` here — dropbear on
+# this unit has NO root password set, so forcing password auth turns a working box into a confusing
+# "Permission denied (publickey,password)".
+[ -f "$HOME/.ssh/id_ccpa_ncm" ] && SSH_KEY_OPTS=(-o IdentityFile="$HOME/.ssh/id_ccpa_ncm") || SSH_KEY_OPTS=()
+SSH_OPTS=("${SSH_KEY_OPTS[@]}"
+          -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR
           -o ConnectTimeout=8 -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa
           -o KexAlgorithms=+diffie-hellman-group14-sha1 -o Ciphers=+aes128-ctr)
 
@@ -192,7 +207,19 @@ push() {  # $1 local  $2 remote  [$3 mode]
   if [ "$VIA" = telnet ]; then python3 "$BOXSH" --host "$BOX" --mode "${3:-755}" put "$1" "$2" >/dev/null
   else scp "${SSH_OPTS[@]}" -O "$1" "root@$BOX:$2" >/dev/null && ssh "${SSH_OPTS[@]}" "root@$BOX" "chmod ${3:-755} $2"; fi
 }
-pull() {  # $1 remote  $2 local — big files go over nc, which is ~100x faster than base64
+pull() {  # $1 remote  $2 local
+  # Under ssh just use scp: it is faster than the nc trick AND reliable. The nc path below stays for
+  # TELNET mode only, where the alternative is 2 KB base64 chunks. Do not promote it back to the
+  # default — measured 2026-09-05 on this USB-NCM link, a single-shot `busybox nc` truncated a
+  # 1.8 MB binary at 380 KB and again at 432 KB (different points, so it is the tool and its
+  # backgrounded listener dying with the shell session, not the link); `scp -O` moved the same file
+  # in ~0.6 s, md5-identical. The md5 check below is what caught that, which is why it stays.
+  if [ "$VIA" != telnet ]; then
+    scp "${SSH_OPTS[@]}" -O "root@$BOX:$1" "$2" >/dev/null && [ -s "$2" ] && return 0
+    warn "scp pull of $1 failed; falling back to base64"
+    python3 "$BOXSH" --host "$BOX" --timeout 180 get "$1" "$2" >/dev/null
+    return
+  fi
   local size; size=$(box "wc -c < $1" | tr -d ' \r\n')
   if [ "${size:-0}" -gt 262144 ] && command -v nc >/dev/null 2>&1; then
     boxq "pkill -f 'nc -l -p 9899'; :" || true
@@ -246,7 +273,7 @@ wait_box() {
 # or firmware is ever installed FROM the repo overlay (those are the IW416 baseline's). Each
 # unit keeps its own. The chipset-neutral seam (radio_detect/radio_hal/radio_ap_up) is the
 # sanctioned exception and IS installed — it carries no chipset payload; see the header and
-# docs/57.
+# docs/wireless/01_BT_AND_RADIO.md.
 # Detection below is reported for the log; it never gates behaviour.
 # ======================================================================================
 SBIN_A="AppleCarPlay ARMadb-driver ARMandroid_Mirror ARMAndroidAuto ARMHiCar ARMiPhoneIAP2 \
@@ -297,6 +324,14 @@ libnss_hesiod.so.2 libnss_nisplus-2.20.so libnss_nisplus.so libnss_nisplus.so.2 
 libpcprofile.so libpthread.so libSegFault.so libstdc++.so libthread_db-1.0.so \
 libthread_db.so libthread_db.so.1 libubsan.so libubsan.so.0"
 ETC_B="riddle_default.conf riddle.conf"          # riddle.conf carries unit config — --deep only
+# HeWei's Apple-gadget modules, FILTERED out of the unit's own /script/ko.tar.gz by strip
+# (owner decision 2026-10-19: this is an OCBM board now). OCBM's phone-facing gadget is the
+# BUILT-IN g_android (android0, functions=iap2,ncm, /dev/android_iap2) and the car-facing one is
+# g_android_accessory — docs/carplay/07_PHONE_SIDE.md. Their only loaders were start_iphone.sh,
+# check_mfg_mode.sh and start_mass_storage.sh, all in SCRIPT_A. KO_NEED must survive the filter
+# or the archive is left untouched: g_android_accessory.ko IS the NCM gadget.
+KO_DROP="g_iphone.ko f_ptp.ko f_ptp_appledev.ko f_ptp_appledev2.ko"
+KO_NEED="g_android_accessory.ko storage_common.ko"
 # Vendor daemons/loops to STOP before deleting their files. dropbear/telnetd/udhcpd and the
 # radio stack are absent from this list on purpose.
 KILL_PROCS="ARMadb-driver ARMiPhoneIAP2 ARMAndroidAuto ARMHiCar ARMandroid_Mirror AppleCarPlay \
@@ -377,9 +412,10 @@ echo \$t" 2>/dev/null | tr -d ' \r\n')
   │  Carlinkit stack ${vb:-?} projection binaries still installed
   ├─ WHAT THIS WILL DO ──────────────────────────────────────────────
   │  remove         the Carlinkit projection stack (~${reclaim:-?}K)
+  │  filter         g_iphone/f_ptp* out of this unit's own /script/ko.tar.gz
   │  install        the owned boot scripts + UART early console
   │  KEEP UNTOUCHED all WLAN/BT files for ${var:-this variant},
-  │                 /script/ko.tar.gz, unit identity, mtd0/mtd1,
+  │                 the other ko.tar.gz members, unit identity, mtd0/mtd1,
   │                 and dropbear/telnetd/udhcpd (your way in)
   └──────────────────────────────────────────────────────────────────
 
@@ -713,6 +749,7 @@ phase_strip() {
     echo "SBIN_A=\"$SBIN_A\""; echo "SBIN_B=\"$SBIN_B\""; echo "SCRIPT_A=\"$SCRIPT_A\""
     echo "ETC_A=\"$ETC_A\""; echo "ETC_B=\"$ETC_B\""
     echo "KILL_PROCS=\"$KILL_PROCS\""; echo "KILL_LOOPS=\"$KILL_LOOPS\""
+    echo "KO_DROP=\"$KO_DROP\""; echo "KO_NEED=\"$KO_NEED\""
     cat <<'EOS'
 set -u
 # THE WLAN/BT GUARD. Every deletion goes through this, so no kill list — present or future —
@@ -823,6 +860,89 @@ if [ -f "$MC" ] && grep -q "$UC" "$MC" && ! grep -v '^[[:space:]]*#' "$MC" | gre
   fi
 fi
 
+echo "--- HeWei Apple-gadget modules (g_iphone / f_ptp*) in the unit's own ko.tar.gz ---"
+# FILTER, never replace: the bundle is built against THIS unit's kernel (vermagic), so a shipped
+# copy is not an option (see the header). Extract to a tmpfs work dir, repack every member except
+# KO_DROP under its original name, prove the result (lists cleanly, member list exactly as
+# expected, KO_NEED present, KO_DROP absent, every kept member byte-identical), and only then
+# rename it over the original. Any surprise - an unlistable archive, a member that is not a flat
+# plain name, a missing KO_NEED, no tar create, no space - leaves the original as it was.
+# kill_one is not used for these: is_radio() matches every *.ko by design, and these four exact
+# names are USB gadget drivers, not radio files. Second run: nothing to drop, prints OK.
+KO=/script/ko.tar.gz
+KO_STAGE=/tmp
+ko_fail() { [ "$DRY" = 1 ] || rm -f "$KO.new" "$KO.pre.tmp"; echo "  KEEP $KO ($1) - left as is"; echo "KO_FILTER_FAILED"; return 1; }
+ko_filter() {
+  [ -f "$KO" ] || { echo "  $KO absent - nothing to filter"; return 0; }
+  L=$(tar -tzf "$KO" 2>/dev/null) || { ko_fail "does not list cleanly"; return 1; }
+  keep=""; drop=""; bad=""
+  oIFS=$IFS; IFS='
+'; set -f
+  for m in $L; do
+    n=${m#./}
+    case "$n" in
+      "") ;;                                            # the archive's own ./ entry
+      */*|.|..|-*|*[!A-Za-z0-9._+-]*) bad="$bad $m" ;;  # not a flat plain member name
+      *) case " $KO_DROP " in *" $n "*) drop="$drop $m" ;; *) keep="$keep $m" ;; esac ;;
+    esac
+  done
+  IFS=$oIFS; set +f
+  [ -z "$bad" ] || { ko_fail "unexpected member layout:$bad"; return 1; }
+  [ -n "$drop" ] || { echo "  OK $KO carries none of: $KO_DROP"; return 0; }
+  for n in $KO_NEED; do
+    case " $keep " in *" $n "*|*" ./$n "*) ;; *) ko_fail "would not contain $n afterwards"; return 1 ;; esac
+  done
+  if [ "$DRY" = 1 ]; then
+    echo "  WOULD FILTER $KO ($(du -sk "$KO" | cut -f1) KB): drop$drop"
+    echo "               keep$keep"
+    return 0
+  fi
+  W=$(mktemp -d "$KO_STAGE/kofilter.XXXXXX") || { ko_fail "no work dir in $KO_STAGE"; return 1; }
+  ko_build "$W"; rc=$?
+  rm -rf "$W"
+  return $rc
+}
+ko_build() {
+  W=$1
+  mkdir "$W/x" "$W/v" || { ko_fail "work dir"; return 1; }
+  tar -xzf "$KO" -C "$W/x" || { ko_fail "extract failed"; return 1; }
+  for m in $keep; do [ -f "$W/x/$m" ] || { ko_fail "member $m did not extract as a file"; return 1; }; done
+  rm -f "$KO.new"
+  tar -czf "$KO.new" -C "$W/x" $keep || { ko_fail "repack failed"; return 1; }
+  tar -tzf "$KO.new" > "$W/new.list" 2>/dev/null || { ko_fail "repacked archive does not list cleanly"; return 1; }
+  printf '%s\n' $keep > "$W/want.list"
+  cmp -s "$W/want.list" "$W/new.list" || { ko_fail "repacked member list is not the expected one"; return 1; }
+  for n in $KO_NEED; do
+    grep -qx -e "$n" -e "./$n" "$W/new.list" || { ko_fail "repacked archive lacks $n"; return 1; }
+  done
+  for n in $KO_DROP; do
+    grep -qx -e "$n" -e "./$n" "$W/new.list" && { ko_fail "repacked archive still has $n"; return 1; }
+  done
+  tar -xzf "$KO.new" -C "$W/v" || { ko_fail "repacked archive does not extract"; return 1; }
+  for m in $keep; do cmp -s "$W/x/$m" "$W/v/$m" || { ko_fail "member $m changed in the repack"; return 1; }; done
+  # On-box undo, same convention as every other .pre: the FIRST original is kept and tidy drops
+  # it. Staged through .pre.tmp so a short write (full flash) can never pose as a good .pre.
+  if [ ! -f "$KO.pre" ]; then
+    { cp "$KO" "$KO.pre.tmp" && cmp -s "$KO" "$KO.pre.tmp" && mv -f "$KO.pre.tmp" "$KO.pre"; } \
+      || { ko_fail "could not save $KO.pre"; return 1; }
+  fi
+  chmod 644 "$KO.new" && mv -f "$KO.new" "$KO" || { ko_fail "rename failed"; return 1; }
+  echo "  filtered $KO: removed$drop ($(du -sk "$KO" | cut -f1) KB now; kept$keep)"
+}
+ko_filter
+# The tmpfs copies copy_to_tmp.sh extracted at this boot. Exact names only; they would also go
+# with the coldtest2 reboot, after which the filtered archive no longer carries them.
+for m in $KO_DROP; do
+  f=$KO_STAGE/$m
+  [ -e "$f" ] || continue
+  if [ "$DRY" = 1 ]; then echo "  WOULD REMOVE $f (tmpfs copy)"; else rm -f "$f" && echo "  removed $f"; fi
+done
+# Report, never rmmod: the strip does not bounce a gadget. Nothing in the owned boot path loads
+# these, so a hit means something outside it did; the coldtest2 reboot clears it.
+for m in $KO_DROP; do
+  if grep -q "^${m%.ko} " /proc/modules 2>/dev/null; then echo "  NOTE: ${m%.ko} is LOADED - not unloaded here; gone after the next reboot"; fi
+done
+
 echo "=== free after: $(df -k / | tail -1 | awk '{print $4}') KB ==="
 echo "--- still running (should be: init, dropbear, telnetd, udhcpd, radios, early_console) ---"
 ps | grep -vE "\[.*\]"
@@ -841,6 +961,9 @@ EOS
     die "vendor daemons are still running: the owned boot path has not taken effect. Run 'bootpath' then 'coldtest' before stripping."
   fi
   grep -q STRIP_DONE "$RUN_DIR/strip.txt" || die "strip did not report STRIP_DONE — inspect /tmp/strip.log before doing anything else"
+  # Not fatal: a refused filter leaves the original ko.tar.gz intact and the unit fully working;
+  # the Apple-gadget modules simply remain until the reason printed above is dealt with.
+  grep -q KO_FILTER_FAILED "$RUN_DIR/strip.txt" && warn "ko.tar.gz was NOT filtered (g_iphone/f_ptp* remain on the unit) - see the KEEP line above"
   [ "$DRY" = 1 ] && { say "(dry-run) nothing was removed"; return 0; }
 
   say "strip complete. The boot path was already owned before this ran, so nothing that was"
