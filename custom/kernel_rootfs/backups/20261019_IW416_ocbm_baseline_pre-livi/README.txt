@@ -12,3 +12,11 @@ unit_info.txt holds this unit's OCOTP CFG0/CFG1/MAC0/MAC1 (identity; they key th
  Same unit: identical per-chip DCP kernel head and DCP env block, IW416 (CCPA_stripped/manifest.txt sdio=0x9159).
  Use those two files wherever "this backup's mtd0.bin/mtd1.bin" is meant; SHA256SUMS points there and `shasum -a 256 -c`
  run in this folder checks them. full_16MB_for_programmer.bin = those two || mtd2.bin, re-verified (4abc6de1...).]
+[2026-10-20, credentials: mtd2.bin and full_16MB_for_programmer.bin are NOT in this repo. Both hold this unit's OCBM
+ rootfs, which embeds device credentials (dropbear private host keys, root password hash, Wi-Fi SSID/passphrase,
+ /etc/carplay/bt_link_keys, /etc/carplay_peers.bin). They were removed from the unpushed commits before any push, so
+ they were never published from this repo. Kept local, byte-identical, in
+ ~/Documents/carlink/carlinkit_misc/ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/ :
+   0f89763501372d43c1d649a23fbd286fb7eb9b2496f4e06ead51b65599732d98  mtd2.bin
+   4abc6de17b9896e784025953e551461be7083232ce9a44f95064c02f56bb0ade  full_16MB_for_programmer.bin
+ A restore (SPI programmer or mtd2 write) uses those local copies.]

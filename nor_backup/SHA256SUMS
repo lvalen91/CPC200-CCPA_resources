@@ -4,5 +4,5 @@
 # uBoot+kernel HAB-fused: KEEP verbatim. Only mtd2 is replaceable.
 e62f62a9ef8f6f62d247902f64487c5436f1cc5c53418014867fe7fe1cec41f9  mtd0.bin (uboot)   [stored gz]
 738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128  mtd1.bin (kernel)  [stored gz]
-a0eb519bcf611f22d0f5c368aecda1b1a2c0c77d65a3b546e187993b28d87aa8  mtd2.bin (rootfs)  [stored gz]
-f591e3d44ae9392142abc4d9524e7aaf717d5d88d7c588d00d6f7f5f72f3a5d0  full_nor.bin (whole 16MB chip = mtd0|mtd1|mtd2, programmer-ready)
+# a0eb519bcf611f22d0f5c368aecda1b1a2c0c77d65a3b546e187993b28d87aa8  mtd2.bin (rootfs)  [stored gz: mtd2.bin.gz sha256 ae980207bd2609170234fe7dac75c48d352d708a07b59dff8a943c1b327b4626]  -- removed 2026-10-20, kept local (~/Documents/carlink/carlinkit_misc/ccpa_backups/_removed_from_repo_2026-10-20/CPC200-CCPA_resources/nor_backup/), contains device credentials
+# f591e3d44ae9392142abc4d9524e7aaf717d5d88d7c588d00d6f7f5f72f3a5d0  full_nor.bin (whole 16MB chip = mtd0|mtd1|mtd2, programmer-ready)  -- removed 2026-10-20, kept local (~/Documents/carlink/carlinkit_misc/ccpa_backups/_removed_from_repo_2026-10-20/CPC200-CCPA_resources/nor_backup/), contains device credentials

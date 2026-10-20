@@ -9,11 +9,24 @@ Device: A15W "carlink", NXP i.MX6UL, kernel 3.14.52, sw 2025.10.15.1127, iAP2 `s
 `documentation/01_Firmware_Architecture/version_comparison.md`).
 
 ## Files
-- CPC200-CCPA_full_nor_16MB.bin : complete 16MB SPI NOR image (flash @ 0x000000), mtd0+mtd1+mtd2
+- CPC200-CCPA_full_nor_16MB.bin : complete 16MB SPI NOR image (flash @ 0x000000), mtd0+mtd1+mtd2 — **kept local, not in this repo** (see below)
 - mtd0.bin (uboot,  256K)  @ 0x000000
 - mtd1.bin (kernel, 3328K) @ 0x040000
-- mtd2.bin (rootfs, 12800K)@ 0x380000
-- rootfs.tar.gz : live jffs2 rootfs contents (top-level dirs; excludes /proc /sys /dev /tmp)
+- mtd2.bin (rootfs, 12800K)@ 0x380000 — **kept local, not in this repo**
+- rootfs.tar.gz : live jffs2 rootfs contents (top-level dirs; excludes /proc /sys /dev /tmp) — **kept local, not in this repo**
+
+**Removed from the repo 2026-10-20 (owner decision): the three images that hold the rootfs embed
+device credentials** (dropbear private host keys, root password hashes, Wi-Fi configs). They were
+`git rm`'d here; earlier commits still contain them. Byte-identical local copies, same sha256:
+
+| File | sha256 | Local copy |
+|---|---|---|
+| `CPC200-CCPA_full_nor_16MB.bin` | `edd024536c6f71d8038aa1c9be7fe6379610ba9486636e655fe058300c9fc761` | `~/Documents/carlink/carlinkit_misc/ccpa_backups/_removed_from_repo_2026-10-20/CPC200-CCPA_resources/flash_dumps/CCPA_stripped/` |
+| `mtd2.bin` | `4250029cdf1edac27e47e101fd06aacec7ff2b5b2658ccb78a50cdd9ea1e32ea` | same folder |
+| `rootfs.tar.gz` | `32b48dc174e0b1cbaa2bf5680a99271afc8a75f502cf738e7d5407d2b7ea7800` | same folder |
+
+The same 07-08 archive was also kept at `~/Documents/carlink/carlinkit_misc/ccpa_backups/20260708_042628_vanilla_state/`.
+`mtd0.bin`, `mtd1.bin` and `manifest.txt` stay here (no rootfs). A restore needs the local copies.
 - manifest.txt  : device state at backup time (process list, /script, /usr/sbin, gadget/radios)
 - SHA256SUMS
 
@@ -37,3 +50,4 @@ Device: A15W "carlink", NXP i.MX6UL, kernel 3.14.52, sw 2025.10.15.1127, iAP2 `s
 ## SPI programmer restore (Macronix MX25L12835F, 16MB SOP8)
 Write CPC200-CCPA_full_nor_16MB.bin to chip offset 0x000000 (full-chip erase+program+verify).
 Or per-region: mtd0->0x0, mtd1->0x40000, mtd2->0x380000.
+Both use the local copies above (`CPC200-CCPA_full_nor_16MB.bin`, `mtd2.bin`); only `mtd0.bin`/`mtd1.bin` are in this folder.

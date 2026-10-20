@@ -15,7 +15,7 @@ date (`MFD`), `UUID`, MAC **and WLAN silicon** (Rev A Realtek RTL8822CS, Rev B N
 > the flash backups and hardware runs in `../../custom/kernel_rootfs/` and the 2026-10-19 kernel work are this unit's. It
 > was also observed on a **GM Info 3.7 (gminfo37)** head unit, Feb 2026, and migrated here from that platform's research.
 > This page said both units were IW416 and that Rev A was "the unit documented throughout the rest of this repo".
-> Items not independently confirmed against this repo's own firmware dumps are marked **(observed, not dump-confirmed here)**.
+> Items not independently confirmed against this repo's own firmware dumps are marked **(observed, not dump-confirmed here)**. *[2026-10-20]* The two Rev A full NOR dumps named above, and the 2026.06.07.ncm `mtd2.bin`/full images, are no longer in the repo: they embed device credentials (local copies and sha256: `../../flash_dumps/README.md`). Rev A's 2025.10.15.1127 mtd0/mtd1 bytes stay as `../../flash_dumps/2026.06.07.ncm/on-device_dd/mtd0.bin`/`mtd1.bin`.
 
 ## Observed revisions
 

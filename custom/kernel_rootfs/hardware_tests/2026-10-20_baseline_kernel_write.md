@@ -57,4 +57,4 @@ Next step, read-only first, **without power-cycling the unit**: `cat /tmp/fc.log
   baseline kernel's first boot) or go back (`flashcp -v` of `../backups/20261020_livi_pre-baseline/mtd2_dump1.bin`, verify `c58710c5…`).
 - anything else → rewrite either image from the running LIVI shell and verify before any reboot.
 If the unit was already power-cycled: the outcome depends on what was on mtd2 at the time; recovery is then the SPI image
-`../backups/20261019_IW416_ocbm_baseline_pre-livi/full_16MB_for_programmer.bin` (restores OCBM, not LIVI).
+`../backups/20261019_IW416_ocbm_baseline_pre-livi/full_16MB_for_programmer.bin` (restores OCBM, not LIVI). [2026-10-20: local only, not in this repo; it embeds device credentials. sha256 and location: `../backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt`.]

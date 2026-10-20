@@ -43,7 +43,8 @@ file is `start_main_service.appliance.sh` here. Revert = restore .bak and/or
 Method: delete projection files from the live rw jffs2, reboot, verify NCM+BT+WiFi,
 then snapshot a restore-grade backup (raw mtd0/1/2 + rootfs.tar.gz + SHA256SUMS) to
 `~/Downloads/ccpa_backups/<ts>_<label>/`. Backups + repo `nor_backup/` + SPI
-programmer = full recovery.
+programmer = full recovery. [2026-10-20: `nor_backup/` keeps only `mtd0.bin.gz`/`mtd1.bin.gz`; `full_nor.bin` and
+`mtd2.bin.gz` embed device credentials and are local only, see `../../nor_backup/SHA256SUMS`.]
 
 - **Prep:** `riddleBoxCfg -s BoxIp 192.168.43.1` — pins the AP IP so it survives
   `ARMHiCar` removal (start_bluetooth_wifi.sh:144 used `test -e ARMHiCar` to pick

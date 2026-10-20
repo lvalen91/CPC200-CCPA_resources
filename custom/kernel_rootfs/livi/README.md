@@ -184,7 +184,7 @@ a JFFS2 rootfs, and a uboot that decrypts with this unit's key (`restore.rs:26-7
 steps, written from the same map, are owned by
 `../../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Getting back from LIVI [UNTESTED] and are not
 restated here; the SPI image is `../backups/20261019_IW416_ocbm_baseline_pre-livi/full_16MB_for_programmer.bin` (no
-programmer restore has been run).
+programmer restore has been run). [2026-10-20: local only, not in this repo; it embeds device credentials. sha256 and location: `../backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt`.]
 
 ## 7. What the baseline changes
 

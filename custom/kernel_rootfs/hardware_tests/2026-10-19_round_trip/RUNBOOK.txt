@@ -4,6 +4,8 @@ Round-trip test: stock kernel through the vendor U-Boot's own conversion (prepar
  ../../backups/20261019_IW416_ocbm_baseline_pre-livi/. The owner-local original is unchanged. Since 2026-10-20 the backup's mtd0.bin and
  mtd1.bin ('../mtd1.bin' below) are only in ../../../../flash_dumps/CCPA_stripped/, byte-identical (sha256 e62f62a9... / 738af784...).]
 Files: dryrun.py + dryrun_report.txt (offline plan), flash_erase (stock 25,628 B dynamic, sha256 437e1b7f...), ../ backup (full_16MB_for_programmer.bin = SPI restore image).
+[2026-10-20: the backup's full_16MB_for_programmer.bin and mtd2.bin named in this log are local only, not in this repo (they embed
+ device credentials); sha256 and location: ../../backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt. ../mtd1.bin = ../../../../flash_dumps/CCPA_stripped/mtd1.bin.]
 Basis: LIVI imx6ul-uboot/boot.rs flow, read from source, not executed. Unit: IW416 OCBM baseline, soc i.MX6ULL, glibc 2.20 present.
 
 DRY RUN RESULT (done, offline): plan.unchanged = True; planned mtd1 sha256 == current mtd1 sha256 (738af784df8c536026f6f834c5bb5fb8b747fc03bddc6c12839999411d84d128).
