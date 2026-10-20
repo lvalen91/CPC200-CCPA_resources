@@ -1,7 +1,7 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `2796253` (2026-10-20, revision 2 + the `mfi-probe` fix), placed here as `custom/kernel_rootfs/baseline/`.
-> Path references in this README are re-rooted for this location; the other files are byte-identical to that commit.
+> Copy of ccpa_custom `baseline/` at commit `e0f7448` (2026-10-20, revision 2 + the `mfi-probe` fix; README updated with the radio test), placed here as `custom/kernel_rootfs/baseline/`.
+> Path references in this README are re-rooted for this location; the other files are byte-identical to that commit (unchanged since `2796253`).
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
 A minimal, vanilla image for the **CPC200-CCPA** (i.MX6ULL, 128 MiB RAM, 16 MiB QSPI NOR, HAB
@@ -26,9 +26,13 @@ demand only**. No projection software, no MFi daemon, no web UI. Built on the LI
   (Corrected 2026-10-20: this line said "it has not been flashed".)
 - **This tree after `5e90368`** (ccpa_custom `2796253`): `mfi-probe` fixed (busybox `flock` has no `-w`); **not rebuilt, not
   flashed** — the unit's rootfs still has the broken one (§7.3 OPEN).
-- **UNVERIFIED on hardware**: the radios beyond `radio status` (no `radio up` yet), USB sticks (mount,
-  mdev auto-mount, `usb-update`) and the USB host port, LED behaviours, key-only SSH login and a saved
-  key across a reboot, `persist save`, `mfi-probe` (broken in the flashed image), the MACs of revision 2.
+- **Radios on hardware (2026-10-20, IW416 only)**: `radio up` powered `reg_wlan`, found SDIO 0x02df:0x9159,
+  loaded `mwifiex_sdio` (`phy0`, `mlan0` admin-up, no association tried) and `btnxpuart` (`hci0` UP);
+  `radio down` returned to radios off (§7.4). Three OPEN items from that test are in §7.3.
+- **UNVERIFIED on hardware**: Wi-Fi association/scan/AP and any Bluetooth pairing or traffic (the image has
+  no tools for them, §2.5), RTL8822CS/BS (no such unit), USB sticks (mount, mdev auto-mount, `usb-update`)
+  and the USB host port, LED behaviours, key-only SSH login and a saved key or host key read back across a
+  reboot, `mfi-probe` (broken in the flashed image), the MACs of revision 2.
 
 Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6ul/`.
 
@@ -51,14 +55,17 @@ and 2026-10-20 (owner report of the revision-1 flash, see Status; revision 2 on 
 | partition map (LIVI DTS): uboot 0x30000, env 0x10000, kernel 0x340000, rootfs 0xc60000, customer 0x10000, bootstate 0x10000 | kept unchanged |
 | mtd-utils 1.4.8 `flash_erase` takes BYTE offsets | noted for the vendor-firmware install path |
 | long commands over telnet must survive the session closing (a `flashcp` was SIGHUPed mid-write) | the flash helpers ignore SIGHUP and log to `/run` |
-| macOS `nc` pushing into busybox `nc` over NCM truncated at ~146 KB (3x); a pull from a host Python server worked | helpers PULL (`host:port`); `common/tools/serve_once.py` |
+| macOS `nc` pushing into busybox `nc` over NCM truncated at ~146 KB (3x, 2026-10-19, commands typed by hand); a pull from a host Python server worked. Root cause UNKNOWN (not diagnosed). LIVI's own provisioner does push (`nc -l` on the unit, md5 check and retry, `livi-link-provision` `imx6ul/shell.rs:136-175`), but it was never run here | helpers PULL (`host:port`); `common/tools/serve_once.py`; revision 2 also takes `scp -O` |
+| `flashcp` onto the kernel partition (LIVI map `/dev/mtd2`): revision 1 by hand under `setsid` and revision 2 through `flash-kernel`, both rc=0 and sha256-verified (2026-10-20); the 2026-10-19 LIVI kernel went in by `flash_erase` + `cat` on the vendor map | `flash-kernel` writes with `flashcp` |
 | sysfs nvmem answers a read shorter than the word size (4 B on imx-ocotp) with EINVAL (`drivers/nvmem/core.c` `bin_attr_nvmem_read`): revision 1's `dd bs=1` read nothing, every unit got `OCBM-e3b0c44298fc` (2026-10-20) | `ocbm-identity` reads whole words (B1); revision 2's serial on the unit is unit-specific (§7.4) |
 | BusyBox 1.38.0 `flock` has no `-w` (on the unit, 2026-10-20: `flock: unrecognized option: w`; its options are `-s -x -u -n` and `-c`) | `mfi-probe` polls `flock -n` (50 x 200 ms) |
 
 Found while writing this recipe (from files, not hardware):
 
 - **The stock DTB is inside the update env**: offset 0x800 of the decrypted env (FDT magic, totalsize
-  33,027 B). `norboot` copies 0xf800 B from 0x80800800 to 0x83000000 *before* it reads the kernel, then
+  33,027 B). `norboot` runs `cp 0x80800800 0x83000000 0xf800` (the count is in `cp` units: 4-byte words if this U-Boot's
+  `cp` defaults to `.l` like upstream 2015.04, INFERRED in `kernel_encryption.md` because its help text is
+  stripped, else bytes; the DTB is the first 33,027 B copied either way) *before* it reads the kernel, then
   `bootz 0x80800000 - 0x83000000`. That is why no plain FDT shows up in mtd0 or the kernel image.
   It also means the vendor U-Boot always hands a kernel the *vendor* FDT plus vendor bootargs
   (`norargs`: `console=ttyLogFile0 root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=...`), so the baseline
@@ -74,7 +81,16 @@ Found while writing this recipe (from files, not hardware):
   uses **0x303080** (`../../../documentation/05_Security_Analysis/kernel_encryption.md`).
   `stage_kernel.py` reads each unit's own values; `board.env`'s 0x302fd8 is only the image budget (the
   smaller value fits both) and `flash-kernel`'s probe offset for "something is staged", which a staging
-  at 0x303080 still satisfies.
+  at 0x303080 still satisfies. Precisely (`flash-kernel:99`, `board.env:25` `STAGING_PART_OFFSET`): the
+  probe only refuses an image whose 192 KiB from partition offset 0x302fd8 are all 0xFF. On a 0x303080
+  unit that window holds 196,440 B of the real staging, so a staged head passes; its first 168 B
+  (0x302fd8-0x30307f) are kernel-body space there, so a non-0xFF byte in them would pass the probe with
+  nothing staged (INFERRED from the code; no 0x303080 unit tested). The staged head's correctness rests
+  on `stage_kernel.py`, not on this probe.
+- `stage_kernel.py` checks the update env's first CRC32 (over `env[4:0x800]`, `stage_kernel.py:268`) but
+  not the second one over `env[0:0xFFFC]` stored at `env[0xFFFC:]` (`kernel_encryption.md`); LIVI's
+  `read_env` (`imx6ul-uboot/src/lib.rs:87-120`) does not either. A wrong key already fails the gzip
+  inflate to exactly 64 KiB and the first CRC; the second check is OPEN (§7.3), documented, not added.
 
 ---
 
@@ -298,10 +314,11 @@ card is left. Unknown chip: reported, nothing loaded (the module stays powered u
 
 All firmware is pinned in `common/versions.env` and in every rootfs (sizes §7), plus `regulatory.db`.
 IDs and module names VERIFIED against 7.2.10 (`include/linux/mmc/sdio_ids.h`, the drivers' ID tables,
-`modules.dep`); everything on the board UNVERIFIED. **Bluetooth without the DT node** (the `-none` image
+`modules.dep`); on the board the IW416 row up to `hci0` UP is VERIFIED (2026-10-20, §7.4), the rest UNVERIFIED. **Bluetooth without the DT node** (the `-none` image
 on a BT chip: `btattach`/`hciattach` on `/dev/ttymxc2`) is **UNVERIFIED** and not done by `radio`; BlueZ
 is not in the baseline (`hciup` only switches HCI up/down). Busybox has no `iw`/`wpa_supplicant`: the
-interfaces come up, joining or making a network needs tools the baseline does not carry.
+interfaces come up, joining or making a network needs tools the baseline does not carry. Whether to add
+`iw`, `wpa_supplicant`/`hostapd` and BlueZ tools is an owner decision, pending (§7.3).
 
 ### 2.6 SSH, passwords and the persist archive
 
@@ -424,7 +441,8 @@ libblkid the recipe does not build (§7).
      (`--dry-run` first if in doubt);
    - **from LIVI** (same partition map): what LIVI's own provisioner does, `flashcp img /dev/mtd2 &&
      sha256sum /dev/mtd2`, then `flash_eraseall -q /dev/mtd1` (env), verify, `reboot -f`, all under
-     `setsid`;
+     `setsid` (`flashcp` because LIVI's rescue has no `flash_erase`, `imx6ul/boot.rs:204-231`; the
+     provisioner itself was never run by us: the 2026-10-20 revision-1 write was this sequence by hand);
    - **from the vendor/OCBM system** (vendor map: env inside mtd0, kernel = mtd1): the RUNBOOK's (`../hardware_tests/2026-10-19_round_trip/`)
      LIVI procedure (push the stock-compatible `flash_erase` first, `../tools/flash_erase`; the unit has none),
      `flash_erase /dev/mtd1 0 0; cat img > /dev/mtd1; sha256sum /dev/mtd1`, then
@@ -505,9 +523,12 @@ are kept with the build VM, not in this repo):
   recovery SSH (dropbear, sftp-server, passwd/shadow files) +201,144 B. The same `default` config built
   twice came out 2,384 B apart (2,129,443 in `measure`, 2,127,059 in `kernel`: new build number and
   release minute inside the XZ stream): treat the last ~2.5 KB of any delta as noise.
-- Against revision 1 (§7.2 of ccpa_custom `333b5a4`): its `default` (no USB, no SSH) was 1,753,695 B, its
-  `RECOVERY_USB=1 RECOVERY_EXFAT=1` 1,918,859 B; revision 2's `default-nossh` (the same features plus the
-  new scripts, tar and 64-bit shell arithmetic) is 1,928,299 B. LIVI's image was 3,124,994 B.
+- Against revision 1 (§7.2 of ccpa_custom `333b5a4`; historical): its `default` (no USB, no SSH) was 1,753,695 B in
+  that revision's measure build (the image flashed on 2026-10-20, a later build of the same config, was
+  1,755,383 B: zImage 1,729,528 + DTB 25,855), its `RECOVERY_USB=1 RECOVERY_EXFAT=1` 1,918,859 B; revision
+  2's `default-nossh` (the same features plus the new scripts, tar and 64-bit shell arithmetic) is
+  1,928,299 B. LIVI's image was 3,124,994 B (zImage 3,099,160 + DTB 25,834; its built-in initramfs alone
+  inflates to 1,410,344 B; `../livi/README.md`).
 - The individual effect of the `RD_*` decompressors and of each dropped LIVI component was not
   separated (no LIVI-config build was made).
 - QEMU only: boot time and RAM on the real CCPA remain UNMEASURED.
@@ -630,8 +651,18 @@ proven there is in §7.4; the rest stays here):
 - female port (usbotg1): whether VBUS is switched (gpio6/gpio7 "quick charge"?), its current limit, and
   mainline chipidea host behaviour; gates every USB host feature (§2.3);
 - whether the radio module really is unpowered with `reg_wlan` off on every SKU (polarity from LIVI and
-  the stock DTB; the claim that it powers the module comes from LIVI's comment), and every `radio` step
-  (SDIO enumeration, firmware loads, interfaces, HCI);
+  the stock DTB; the claim that it powers the module comes from LIVI's comment; on the IW416 unit `radio
+  down` left no SDIO card, which shows the card gone, not the rail at 0 V), and the `radio` steps on
+  RTL8822CS/BS (IW416 power, SDIO, drivers, firmware and `hci0` UP VERIFIED 2026-10-20, §7.4);
+- from the IW416 radio test (2026-10-20), for the next rebuild: (a) `dmesg` shows many `Unknown symbol`
+  errors during `radio up` (`mwifiex_sdio`/`btnxpuart` tried before their dependencies, then loaded on
+  retry; end state correct; cause in the load path INFERRED from the log, not traced); (b) `radio up`
+  prints `Wi-Fi: mlan0 up` (admin-up, `radio:151`) while `radio status` prints operstate `down` (no
+  carrier, `radio:86`): reword; (c) no `iw`/`wpa_supplicant`/`hostapd`/BlueZ tools, so association, scan,
+  AP, pairing and BT traffic cannot be tested: owner decision pending;
+- `stage_kernel.py` does not check the update env's second CRC32 (`env[0:0xFFFC]`, §1): add it or keep it
+  documented as unchecked; `flash-kernel`'s staged-head probe at 0x302fd8 is a probe, not a check of the
+  staged head (§1), and no 0x303080 unit has been tested;
 - LED behaviours (the `blue`/`red` class devices exist, §7.4), `mfi-probe` (registers and the
   repeated-start read are what the project's daemons use on this chip, not checked with busybox
   `i2ctransfer`).
@@ -651,9 +682,16 @@ Observed on the unit (record with every hash:
   udhcpd, bootstate cleared); persist: `mtd4` empty, so the build's `ROOT_PASSWORD_HASH` applied; `sftp`
   ls; BusyBox v1.38.0 with 410 applets; MemAvailable ~114 MB; `/dev/i2c-0`, `/dev/i2c-1`; LEDs `blue`
   and `red` present; `radio status` reports the radios off;
+- first rootfs boot: `persist load` found no baseline archive in `mtd4`, `ssh-up` made a host key and saved
+  the archive there (`common/shared/ssh-up:61`), overwriting LIVI's customer data; reading it back after a
+  reboot is untested;
+- `radio up` / `radio down` on the IW416 (record `2026-10-20_baseline_rev2_radio_iw416.md`, next to the
+  record above): `reg_wlan` on, SDIO `0x02df:0x9159`, `mwifiex_sdio` (`phy0`, `mlan0` admin-up, operstate
+  down, no association tried), `btnxpuart` ("FW already running", `hci0` UP with a BD address); `radio
+  down`: only `usb0` and `lo` left, no SDIO card (module `bluetooth` stays loaded); OPEN items in §7.3;
 - found: `mfi-probe` fails on `flock -w` (fixed in the tree, §7.3 OPEN).
-NOT yet tested: USB stick mount, key-only login and a saved key across a reboot, LED behaviours,
-`radio up` (to be recorded as its own entry).
+NOT yet tested: USB stick mount, key-only login and a saved key across a reboot, LED behaviours, Wi-Fi
+association/scan/AP and Bluetooth pairing/traffic (no tools in the image), RTL8822CS/BS.
 
 VERIFIED by the 2026-10-20 builds and tests:
 - every Kconfig symbol of all fragments against 7.2.10 for the variants built (strict check passed, `RD_*`

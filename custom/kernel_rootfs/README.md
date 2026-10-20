@@ -24,24 +24,29 @@ through U-Boot's own staging path; only the 64 KB env block of the U-Boot area i
 | `stage_kernel.py` plan for the LIVI-state dumps | **MEASURED** offline 2026-10-20; superseded: revision 2 was staged from a fresh dump of the revision-1 mtd2 | `baseline/README.md` §7.2, §7.4 |
 | Revision 2 `mfi-probe`: `flock: unrecognized option: w` on the unit; fixed in ccpa_custom `2796253` (poll `flock -n`) | **BROKEN** in the flashed image; fix **not rebuilt or flashed** | same file; `baseline/README.md` §7.3 OPEN |
 | Revision 2 USB sticks (mount, mdev auto-mount, `usb-update`; FAT32 / GPT+ESP / exFAT) and SSH/SCP/SFTP | sticks **MEASURED in QEMU only**; SSH password + SFTP **PROVEN** on the unit | `baseline/README.md` §7.2, §7.4 |
-| Baseline on hardware, not yet exercised: radios (`radio up`), USB sticks and the USB host port, LED behaviours, key-only SSH login and a saved key across a reboot, `mfi-probe` after the fix, revision-2 MACs | **UNVERIFIED** | `baseline/README.md` §7.3 OPEN (hardware) |
-| Rollback LIVI → stock through the rescue system | **UNTESTED** | `livi/README.md` §6 |
+| Revision 2 `radio up`/`radio down` on the IW416: `reg_wlan` power, SDIO `0x02df:0x9159`, `mwifiex_sdio` (`phy0`, `mlan0`), `btnxpuart` (`hci0` UP), back to radios off | **VERIFIED** 2026-10-20 (observed on the unit); OPEN: `Unknown symbol` dmesg noise, "mlan0 up" vs operstate wording, no `iw`/`wpa_supplicant`/BlueZ tools (owner decision pending) | `hardware_tests/2026-10-20_baseline_rev2_radio_iw416.md` |
+| Baseline on hardware, not yet exercised: Wi-Fi association/scan/AP, Bluetooth pairing/traffic, RTL8822CS/BS (no unit), USB sticks and the USB host port, LED behaviours, key-only SSH login and a saved key read back across a reboot, `mfi-probe` after the fix, revision-2 MACs | **UNVERIFIED** | `baseline/README.md` §7.3 OPEN (hardware) |
+| LIVI's own provisioner (`livi-link-provision`), incl. its stock-unit bootstrap | **NEVER RUN**; its sequence was replayed by hand on 2026-10-19 | `livi/README.md` §5 |
+| Rollback LIVI → stock through the rescue system | **UNTESTED**; LIVI's restore needs a LIVI-format backup (`manifest.json`), which we do not have | `livi/README.md` §6 |
 | Restore from the SPI image with a programmer | **UNTESTED** (no programmer on hand) | `backups/20261019_IW416_ocbm_baseline_pre-livi/` |
 
 The bench unit runs the baseline **revision 2** kernel, recovery and rootfs since 2026-10-20 (observed;
-`hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`), its customer MTD empty. Corrected 2026-10-20: this said it
-ran revision 1 with LIVI's squashfs presumably still on its rootfs MTD (and before that, that its state was unknown).
+`hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`); its customer MTD holds the baseline persist archive written
+at the first rootfs boot, which overwrote LIVI's customer data, so no LIVI component is left on the unit. Corrected
+2026-10-20: this said it ran revision 1 with LIVI's squashfs presumably still on its rootfs MTD (and before that, that its
+state was unknown), then that its customer MTD was empty.
 Before staging the next kernel, dump its current `/dev/mtd2` (U-Boot rewrote the head again).
 
 ## What lives where
 
 | Path | Contents |
 |---|---|
-| `baseline/` | Vanilla baseline recipe (mainline 7.2.10 + recovery initramfs in the kernel + small squashfs). A copy of ccpa_custom `baseline/` at `2796253` (revision 2 + the `mfi-probe` fix), with README paths re-rooted. `build.sh`, `common/` (shared with the C2Air baseline), `arm-imx6ul/` (DTS, patches 0001-0004 from LIVI, initramfs helpers `flash-kernel`/`flash-rootfs`, `tools/stage_kernel.py`) |
-| `livi/README.md` | LIVI Link on the CCPA: MTD map, kernel size against the cap, rescue/NCM 10.10.10.1, USB 0525:a4a1, provisioner flow, rootfs, rollback status, GPL attribution and version (9.5.0 / build `168c4922`) |
+| `baseline/` | Vanilla baseline recipe (mainline 7.2.10 + recovery initramfs in the kernel + small squashfs). A copy of ccpa_custom `baseline/` at `e0f7448` (revision 2 + the `mfi-probe` fix; README with the radio test), with README paths re-rooted. `build.sh`, `common/` (shared with the C2Air baseline), `arm-imx6ul/` (DTS, patches 0001-0004 from LIVI, initramfs helpers `flash-kernel`/`flash-rootfs`, `tools/stage_kernel.py`) |
+| `livi/README.md` | LIVI Link on the CCPA: MTD map, kernel (patches, config flow, size breakdown, DTB), rescue/NCM 10.10.10.1, USB 0525:a4a1, rootfs and bundle contents, the provisioner flow incl. how it bootstraps a stock unit and how our by-hand replay deviated, rollback status, exposure and licence notes, GPL attribution and version (9.5.0 / build `168c4922`) |
 | `hardware_tests/2026-10-19_round_trip/` | `RUNBOOK.txt`: env-erase round trip (PASS), LIVI flash (SUCCESS), restore recipe. Also the two offline dry-run reports |
 | `hardware_tests/2026-10-20_baseline_kernel_write.md` | The baseline revision-1 kernel write: the attempt as recorded, and its outcome (owner report: written, recovery booted) |
 | `hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md` | Baseline revision 2 kernel + rootfs written from the revision-1 recovery; both booted (observed); the `mfi-probe` bug; what is not yet tested |
+| `hardware_tests/2026-10-20_baseline_rev2_radio_iw416.md` | Revision 2 `radio up`/`radio down` on the IW416 unit: what came up, the three OPEN findings, what was not tested |
 | `tools/` | `tn.py`, `send.py`, `dryrun.py`, the stock `flash_erase` (ARM); `tools/README.md` says what each does and points to the tools that live elsewhere in the repo |
 | `backups/20261019_IW416_ocbm_baseline_pre-livi/` | IW416 unit before LIVI. The vendor map, each MTD read twice: `mtd2.bin` (its `mtd0.bin`/`mtd1.bin` are byte-identical to `../../flash_dumps/CCPA_stripped/mtd0.bin`/`mtd1.bin` and were dropped here 2026-10-20; `SHA256SUMS` points there), `full_16MB_for_programmer.bin` (SPI image), the recovered stock zImage, `unit_info.txt` (OCOTP words; owner decision to keep), and a rootfs inventory (names/sizes/md5 only) |
 | `backups/20261020_livi_pre-baseline/` | Same unit on LIVI, just before the 2026-10-20 write: `mtd2_dump1.bin` (the identical second read was dropped 2026-10-20), `mtd0_dump.bin`, `SHA256SUMS`, `README.txt` |

@@ -7,7 +7,8 @@ came up in its recovery: NCM at 192.168.50.2, `/proc/cmdline` `console=ttymxc0,1
 gadget 1314:1520. These steps were done by the owner and not observed by this record's author; the commands and outputs
 are not reproduced here. That boot also showed baseline bug B1 (every unit's iSerial `OCBM-e3b0c44298fc`, shared NCM
 MACs), fixed in revision 2 (`../baseline/README.md` §7.3). Not verified on the board with revision 1: the rootfs boot path, SSH,
-radios (revision 2's rootfs and SSH have since booted, below). **The unit's mtd2 is no longer `c58710c5…` nor the staged image** (U-Boot rewrote the head): stage any next
+radios (revision 2's rootfs and SSH have since booted, below; its IW416 radio bring-up is in
+`2026-10-20_baseline_rev2_radio_iw416.md`). **The unit's mtd2 is no longer `c58710c5…` nor the staged image** (U-Boot rewrote the head): stage any next
 kernel from a fresh dump of mtd2 (`../baseline/README.md` §5). That was done the same day: the converted
 revision-1 partition dumped twice as `f584a19b…`, and revision 2 (kernel and rootfs) replaced it, observed on the unit
 (`2026-10-20_baseline_rev2_kernel_rootfs.md`).
