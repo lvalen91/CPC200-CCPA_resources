@@ -103,7 +103,12 @@ the results of doing exactly that on a Realtek RTL8822CS unit on 2026-08-15.
 > set. Delete or overwrite a variant's WLAN files and its radios are gone until it is
 > reflashed. `mtd0` (HAB-signed U-Boot) and `mtd1` (OTPMK-encrypted kernel) are also
 > production-keyed per unit and were verified *different* between two adapters of the same
-> firmware revision.
+> firmware revision. *Corrected 2026-10-19:* the per-unit parts are smaller than that. In `mtd0`
+> they are the two encrypted environments at `0x2D000`/`0x30000`; everything below `0x2D000` (the U-Boot
+> image and its CSF) is the same on two units of one release, and changes only between releases.
+> In `mtd1` they are the DCP-encrypted first 192 KB and the UpgKey staging blocks; the zImage
+> body is plaintext and generic. A replacement kernel can be staged through U-Boot itself (see
+> `documentation/05_Security_Analysis/kernel_encryption.md`).
 >
 > So `ncm_base_install.sh` never branches on a chipset whitelist — an unrecognised variant
 > would fall off the end of one. Nothing WLAN/BT is in any kill list, every deletion is
@@ -142,6 +147,32 @@ That ordering also disarms `check_mfg_mode.sh`, a 2-second polling loop that doe
 
 Nothing is deleted until a cold boot has returned on NCM unaided. Fail that gate and you abort
 with a fully working adapter.
+
+USB storage is one owned mdev hook, `/etc/mdev/usb_mount.sh` (overlay `ccpa/rootfs/etc/mdev/`,
+mirrored as `custom/scripts/etc_mdev_usb_mount.sh`). Both `mdev.conf` sd rules run it on add and
+remove: `sd[a-z] 0:0 666 */etc/mdev/usb_mount.sh` and `sd[a-z][0-9] 0:0 666 */etc/mdev/usb_mount.sh`.
+Add mounts vfat at `/mnt/UPAN` with `-o utf8=1`: a whole disk only when it has no partitions, else
+the first partition that mounts, and nothing when `/mnt/UPAN` is already a mountpoint in
+`/proc/mounts`. Remove unmounts only when the device on `/mnt/UPAN` is the removed one (or, for a
+whole-disk event, one of its partitions), with `umount -l` as the fallback. Events are serialised
+with `flock` on the script itself, because mdev runs one process per uevent here (no
+`/dev/mdev.seq`). Without the lock, two vfat partitions arriving together stacked two mounts on
+`/mnt/UPAN` in 10 of 10 trials on a live unit; with it, 0 of 10. `/script/mount_usb.sh` (the
+boot-time staging helper) mounts through the same hook, so it takes the same lock.
+
+*Changed 2026-10-19 (replaces the note from earlier the same day):* the stock `udisk_insert.sh`
+(partition rule, `@`) and `udisk_hotplug.sh` (whole-disk rule, `*`) are gone. They duplicated the
+mount logic, tested an unquoted glob (`[ ! -d /sys/block/*/$MDEV[0-9] ]`), used `==` under sh,
+had no already-mounted check, and never noticed a failed mount. `bootpath` installs `usb_mount.sh`,
+checks it for `/mnt/UPAN`, `mount -t vfat -o utf8=1` and `umount -l`, and only then rewrites the two
+stock sd rules in `/etc/mdev.conf` (`.pre` kept). The rewrite goes through only if exactly those two
+lines change; on anything else it warns and leaves the stock wiring in place. A post-check confirms
+that every hook a live sd rule names exists and parses, and restores `mdev.conf.pre` if one does not.
+`strip` deletes `udisk_insert.sh`, `udisk_hotplug.sh` and `udisk_remove.sh` (the last one's rule
+ships commented out, and its remove branch rebooted on `/tmp/update_status`). A hook that an active
+rule still names is kept, and the commented `udisk_*.sh` rules are dropped once none is active.
+`audit_scripts.sh` parses the hooks the active rules name, and `busybox_upgrade.sh` parses every
+`/etc/mdev/*.sh`.
 
 ### The radio platform — chipset-agnostic WLAN/BT bring-up
 

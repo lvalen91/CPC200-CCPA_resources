@@ -122,7 +122,7 @@ say "  restored (dangling today, provided by the new binary): $(comm -12 "$RUN_D
 # ------------------------------------------------------------------ 4. parse the boot path
 say "4/8 boot scripts must parse under the NEW shell"
 box 'bad=0
-     for f in /etc/init.d/rcS /etc/mdev/udisk_insert.sh /script/*.sh; do
+     for f in /etc/init.d/rcS /etc/mdev/*.sh /script/*.sh; do   # every mdev hook present (usb_mount.sh, or stock udisk_*.sh)
        [ -f "$f" ] || continue
        /tmp/bb/busybox sh -n "$f" 2>/tmp/bb/err || { echo "  PARSE FAIL $f: $(cat /tmp/bb/err)"; bad=1; }
      done

@@ -77,6 +77,14 @@ programmer = full recovery.
   quickly_update, check_update, smart_copy, module_upgrade, getFuncModule,
   start_mass_storage, update_dtb, update_kernel. Neutralized the two mdev USB-insert
   hooks (`/etc/mdev/udisk_{insert,hotplug}.sh` `# OTA-removed #` the update_box call).
+  *Update 2026-10-19:* both stock hooks are replaced by ONE owned hook, `/etc/mdev/usb_mount.sh`
+  (this dir: `etc_mdev_usb_mount.sh`, the same file as the ocbm overlay `ccpa/rootfs/etc/mdev/usb_mount.sh`).
+  `etc_mdev_udisk_hotplug.sh` is deleted. `ncm_base_install.sh bootpath` points both mdev.conf sd
+  rules at the new hook (`*`, add and remove). `strip` deletes `udisk_insert.sh`, `udisk_hotplug.sh`
+  and `udisk_remove.sh`, keeping any of them that an active rule still names. Behaviour kept: vfat
+  at `/mnt/UPAN` with `-o utf8=1`, `umount -l` on removal. Behaviour added: no mount when already
+  mounted, unmount only for the device actually mounted, `flock`-serialised events, and one console
+  line per decision. Details are in `ocbm/README.md` (USB storage).
 - **Batch 5 — web UI removed** (user: not needed): rm /usr/sbin/boa + /etc/boa
   (incl. cgi-bin/upload.cgi path-traversal surface). boa's `if [ -e /usr/sbin/boa ]`
   launch guard self-skips, so no script edit needed. Listeners now only SSH:22 +

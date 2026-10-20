@@ -570,7 +570,11 @@ echo "--- /etc/inittab ---"; cat /etc/inittab
     [ -f "$OVERLAY/script/$f" ] && push "$OVERLAY/script/$f" "/script/$f.new"
   done
   push "$OVERLAY/etc/init.d/rcS" /etc/init.d/rcS.new
-  push "$OVERLAY/etc/mdev/udisk_insert.sh" /etc/mdev/udisk_insert.sh.new
+  # USB storage: ONE owned mdev hook, /etc/mdev/usb_mount.sh (2026-10-19), replaces the stock
+  # udisk_insert.sh (sd[a-z][0-9], @) and udisk_hotplug.sh (sd[a-z], *). The box side installs it,
+  # checks it, and only then points both mdev.conf sd rules at it (`*`: add and remove). The stock
+  # hooks stay on disk until strip, which deletes them only once no active rule names them.
+  push "$OVERLAY/etc/mdev/usb_mount.sh" /etc/mdev/usb_mount.sh.new
   box '
 set -e
 inst() { n="$1.new"; [ -f "$n" ] || return 0
@@ -597,7 +601,54 @@ for f in /script/start_main_service.sh /script/after_shutdown.sh /script/init_gp
 # draft of this comment did.
 [ -x /script/radio_detect.sh ] && { echo "--- radio platform ---"; sh /script/radio_detect.sh 2>/dev/null | grep -E "CHIP|SDIO_DEVICE|FW_TREE|BT_ATTACH_CMD|WLAN_INSMOD|BACKEND|WIRELESS"; } || true
 inst /etc/init.d/rcS
-mkdir -p /etc/mdev && inst /etc/mdev/udisk_insert.sh
+mkdir -p /etc/mdev
+# USB storage. Not boot-critical, so nothing here may abort this set -e payload before the
+# boot-critical post-checks below: each step warns, and on any doubt mdev.conf stays on the stock
+# hooks (still on disk until strip), so USB storage keeps working either way.
+act() { grep -v "^[[:space:]]*#" "$1" || true; }
+usb_wire() {
+  f=/etc/mdev/usb_mount.sh; MC=/etc/mdev.conf
+  [ -f "$f" ] || { echo "WARN: no $f"; return 1; }
+  for p in /mnt/UPAN "mount -t vfat -o utf8=1" "umount -l"; do
+    grep -qF -- "$p" "$f" || { echo "WARN: $f lacks [$p]"; return 1; }
+  done
+  [ -f "$MC" ] || { echo "WARN: no $MC"; return 1; }
+  sed -e "s#^\(sd\[a-z\][[:space:]].*\)[*@\$]/etc/mdev//*udisk_hotplug\.sh[[:space:]]*\$#\1*/etc/mdev/usb_mount.sh#" \
+      -e "s#^\(sd\[a-z\]\[0-9\][[:space:]].*\)[*@\$]/etc/mdev//*udisk_insert\.sh[[:space:]]*\$#\1*/etc/mdev/usb_mount.sh#" \
+      "$MC" > "$MC.new" || { rm -f "$MC.new"; return 1; }
+  # Accept only the intended edit: one whole-disk and one partition rule on usb_mount.sh, no active
+  # line left on a stock udisk hook, every other active line unchanged.
+  n1=$(act "$MC.new" | grep -c "^sd\[a-z\][[:space:]].*\*/etc/mdev/usb_mount\.sh" || true)
+  n2=$(act "$MC.new" | grep -c "^sd\[a-z\]\[0-9\][[:space:]].*\*/etc/mdev/usb_mount\.sh" || true)
+  n0=$(act "$MC.new" | grep -c "udisk_[a-z]*\.sh" || true)
+  r0=$(act "$MC" | grep -v -e "udisk_[a-z]*\.sh" -e "usb_mount\.sh" || true)
+  r1=$(act "$MC.new" | grep -v -e "udisk_[a-z]*\.sh" -e "usb_mount\.sh" || true)
+  if [ "$n1" != 1 ] || [ "$n2" != 1 ] || [ "$n0" != 0 ] || [ "$r0" != "$r1" ]; then
+    rm -f "$MC.new"; echo "WARN: $MC sd rules are not the stock pair (whole-disk=$n1 partition=$n2 stale=$n0)"; return 1
+  fi
+  if [ "$(cat "$MC")" = "$(cat "$MC.new")" ]; then rm -f "$MC.new"; echo "  $MC already on usb_mount.sh"; return 0; fi
+  [ -f "$MC.pre" ] || cp "$MC" "$MC.pre" || { rm -f "$MC.new"; return 1; }
+  chmod 644 "$MC.new" && mv "$MC.new" "$MC" && echo "  $MC: sd[a-z] + sd[a-z][0-9] -> */etc/mdev/usb_mount.sh"
+}
+inst /etc/mdev/usb_mount.sh || echo "WARN: usb_mount.sh not replaced - unit copy kept"
+usb_wire || echo "WARN: mdev.conf left on the stock udisk hooks - USB storage unchanged"
+# USB storage must survive whichever way it ended up wired: every hook an active sd rule names must
+# exist and parse, and usb_mount.sh must still carry /mnt/UPAN, the vfat mount and the umount -l
+# fallback. Not fatal (USB staging is not the control channel): put mdev.conf.pre back and say so.
+usbbad=
+for h in usb_mount udisk_hotplug udisk_insert; do
+  act /etc/mdev.conf | grep "^sd" | grep -q "/$h\.sh" || continue
+  f=/etc/mdev/$h.sh
+  { [ -f "$f" ] && sh -n "$f" 2>/dev/null; } || { usbbad="$usbbad $f:missing-or-unparsable"; continue; }
+  [ "$h" = usb_mount ] || continue
+  for p in /mnt/UPAN "mount -t vfat -o utf8=1" "umount -l"; do grep -qF -- "$p" "$f" || usbbad="$usbbad $f:lacks[$p]"; done
+done
+if [ -n "$usbbad" ]; then
+  echo "WARN: USB storage hook broken:$usbbad"
+  if [ -f /etc/mdev.conf.pre ]; then
+    cp /etc/mdev.conf.pre /etc/mdev.conf && echo "  restored /etc/mdev.conf from .pre" || echo "  RESTORE FAILED for /etc/mdev.conf"
+  fi
+fi
 # Post-checks. A bad rcS on a unit with no UART wired is a reflash, so each of these reverts
 # from the .pre copy rather than leaving a box that will not come back.
 fail=0
@@ -738,6 +789,39 @@ echo "--- vendor config (/etc) ---"
 for e in $ETC_A; do kill_one "/etc/$e"; done
 if [ "$KEEP_WEB" = 1 ]; then echo "  KEEP /etc/boa + /usr/sbin/boa (--keep-web)"; else kill_one /etc/boa; fi
 if [ "$DEEP" = 1 ]; then for e in $ETC_B; do kill_one "/etc/$e"; done; kill_one /etc/RiddleBoxData; fi
+
+echo "--- stock USB hooks (/etc/mdev) ---"
+# bootpath points both sd rules at the owned /etc/mdev/usb_mount.sh. The stock hooks it replaced
+# (udisk_insert.sh, udisk_hotplug.sh) and udisk_remove.sh (shipped with its rule commented out; its
+# remove branch rebooted on /tmp/update_status, whose writers are all in SCRIPT_A) are deleted only
+# when NO active mdev.conf line still names them: a unit whose mdev.conf bootpath could not rewire
+# keeps its stock hooks, and with them working USB storage.
+MC=/etc/mdev.conf
+for h in udisk_insert udisk_hotplug udisk_remove; do
+  if [ -f "$MC" ] && grep -v '^[[:space:]]*#' "$MC" | grep -q "/$h\.sh"; then
+    echo "  KEEP /etc/mdev/$h.sh (an ACTIVE mdev.conf rule still calls it - rerun bootpath)"
+  else
+    kill_one "/etc/mdev/$h.sh"
+  fi
+done
+# Then drop the commented stock rules naming those hooks (#sd[a-z] ... $/etc/mdev/udisk_remove.sh),
+# once no active rule names any of them. Only comment lines may change: compare the active rule
+# set before and after, and leave the file alone on any difference.
+UC='^[[:space:]]*#.*udisk_[a-z]*\.sh'
+if [ -f "$MC" ] && grep -q "$UC" "$MC" && ! grep -v '^[[:space:]]*#' "$MC" | grep -q 'udisk_[a-z]*\.sh'; then
+  if [ "$DRY" = 1 ]; then
+    echo "  WOULD DROP from $MC:"; grep -n "$UC" "$MC" | sed 's/^/      /'
+  else
+    [ -f "$MC.pre" ] || cp "$MC" "$MC.pre"
+    grep -v "$UC" "$MC" > "$MC.new"
+    if [ "$(grep -v '^[[:space:]]*#' "$MC")" = "$(grep -v '^[[:space:]]*#' "$MC.new")" ]; then
+      { chmod 644 "$MC.new" && mv "$MC.new" "$MC" && echo "  dropped the commented udisk_*.sh rules from $MC"; } \
+        || { rm -f "$MC.new"; echo "  FAILED to rewrite $MC - left as is"; }
+    else
+      rm -f "$MC.new"; echo "  KEEP $MC (edit would change an active rule - left as is)"
+    fi
+  fi
+fi
 
 echo "=== free after: $(df -k / | tail -1 | awk '{print $4}') KB ==="
 echo "--- still running (should be: init, dropbear, telnetd, udhcpd, radios, early_console) ---"
