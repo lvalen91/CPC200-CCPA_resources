@@ -984,11 +984,21 @@ phase_baselinediff() {
   #
   # Everything else that differs is signal. EXTRA = still to remove; MISSING = the baseline had
   # something this box does not (usually the owned scripts, installed by `strip`).
-  local base_tar="$REPO/ccpa/backup/base/rootfs.tar.gz"
-  [ -f "$base_tar" ] || { warn "no baseline snapshot at $base_tar — skipping"; return 0; }
-  say "=== baselinediff — this box vs the 07-08 vanilla rootfs (WLAN/BT + identity excluded) ==="
-
-  tar tzf "$base_tar" 2>/dev/null | sed 's|^\./||' | grep -v '/$' | sort > "$RUN_DIR/baseline.files"
+  # Only the file LIST is used. rootfs.tar.gz left the repo on 2026-10-20 (it embeds device
+  # credentials; kept local, see ccpa/backup/base/README.md); rootfs.files.txt is its listing,
+  # produced by the same pipeline as below, so the result is identical. A local tarball, if
+  # present, still wins.
+  local base_dir="$REPO/ccpa/backup/base"
+  local base_tar="$base_dir/rootfs.tar.gz" base_list="$base_dir/rootfs.files.txt"
+  if [ -f "$base_tar" ]; then
+    say "=== baselinediff — this box vs the 07-08 vanilla rootfs (WLAN/BT + identity excluded) ==="
+    tar tzf "$base_tar" 2>/dev/null | sed 's|^\./||' | grep -v '/$' | sort > "$RUN_DIR/baseline.files"
+  elif [ -f "$base_list" ]; then
+    say "=== baselinediff — this box vs the 07-08 vanilla rootfs (WLAN/BT + identity excluded) ==="
+    sort "$base_list" > "$RUN_DIR/baseline.files"
+  else
+    warn "no baseline snapshot at $base_tar or $base_list — skipping"; return 0
+  fi
   # -type f OR -type l: /bin and /sbin are ~200 symlinks to busybox and the tar listing counts
   # them, so enumerating only regular files here reports the entire busybox applet set as
   # "missing from this box".
