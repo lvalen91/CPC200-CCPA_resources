@@ -37,7 +37,15 @@ rd() {
 }
 
 exec 9> /tmp/carplay_mfi.lock
-flock -w 10 9 || { say "the MFi lock is busy (another MFi user holds /tmp/carplay_mfi.lock)"; exit 1; }
+# Wait up to ~10 s for the lock. BusyBox flock has no -w (1.38.0 on the IW416 unit, 2026-10-20:
+# "flock: unrecognized option: w"), so poll -n: 50 tries 200 ms apart. The lock belongs to fd 9's open
+# file, which this shell keeps, so it stays held after flock exits until mfi-probe does.
+_n=0
+until flock -n 9; do
+    _n=$((_n + 1))
+    [ "$_n" -lt 50 ] || { say "the MFi lock is busy (another MFi user holds /tmp/carplay_mfi.lock)"; exit 1; }
+    usleep 200000
+done
 
 if ver=$(rd 0x00 1); then
     say "DeviceVersion (reg 0x00) = $ver at $ADDR on /dev/i2c-$BUS"

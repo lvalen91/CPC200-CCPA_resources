@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `5e90368` (2026-10-20, revision 2), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `2796253` (2026-10-20, revision 2 + the `mfi-probe` fix), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; the other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -12,18 +12,23 @@ demand only**. No projection software, no MFi daemon, no web UI. Built on the LI
 (https://github.com/f-io/LIVI, GPL-3.0-or-later; analysis in `../livi/README.md`), changed where listed below.
 
 **Status (2026-10-20, revision 2).**
-- **Revision 1 (ccpa_custom commit `333b5a4`) is on hardware.** Owner report, 2026-10-20 (`../hardware_tests/2026-10-20_baseline_kernel_write.md`): its kernel (`default`
+- **Revision 1 (ccpa_custom commit `333b5a4`) ran on hardware.** Owner report, 2026-10-20 (`../hardware_tests/2026-10-20_baseline_kernel_write.md`): its kernel (`default`
   variant of that revision, no USB) was staged for the IW416 bench unit and flashed: `flashcp` rc=0, sha256
   verified, env erased, reboot; U-Boot converted the staged head and **the recovery came up** on NCM at
   192.168.50.2, `/proc/cmdline` `console=ttymxc0,115200 rdinit=/init panic=10`, the gadget enumerated as
   **1314:1520**. The same boot exposed bug B1 (§7.3): every unit had the serial `OCBM-e3b0c44298fc`
   and the same MACs. (Corrected 2026-10-20: this line said "never flashed or run on a device".)
-- **Revision 2 (this tree)** fixes B1-B8 and adds recovery SSH, recovery USB (now the default) and the
-  on-demand radio, LED and MFi tools. It is built (clean, §7), passes the host self-test
-  (`common/tools/selftest.sh`) and QEMU smoke tests (§7.2); **it has not been flashed.**
-- **UNVERIFIED on hardware** (both revisions): the rootfs boot path (switch_root, rcS, mdev, persist),
-  SSH on the board, the USB host port, the radios, the LEDs, mfi-probe, the real OCOTP identity of
-  revision 2.
+- **Revision 2 (ccpa_custom commit `5e90368`)** fixes B1-B8 and adds recovery SSH, recovery USB (now the default) and
+  the on-demand radio, LED and MFi tools. Built (clean, §7), host self-test (`common/tools/selftest.sh`)
+  and QEMU smoke tests (§7.2), and **PROVEN-BOOTING on one IW416 unit, 2026-10-20**: kernel + recovery
+  + rootfs written over revision 1 from its recovery, both boots observed (§7.4; record in
+  `../hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`).
+  (Corrected 2026-10-20: this line said "it has not been flashed".)
+- **This tree after `5e90368`** (ccpa_custom `2796253`): `mfi-probe` fixed (busybox `flock` has no `-w`); **not rebuilt, not
+  flashed** — the unit's rootfs still has the broken one (§7.3 OPEN).
+- **UNVERIFIED on hardware**: the radios beyond `radio status` (no `radio up` yet), USB sticks (mount,
+  mdev auto-mount, `usb-update`) and the USB host port, LED behaviours, key-only SSH login and a saved
+  key across a reboot, `persist save`, `mfi-probe` (broken in the flashed image), the MACs of revision 2.
 
 Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6ul/`.
 
@@ -32,7 +37,7 @@ Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6
 ## 1. Proven facts this recipe stands on
 
 Hardware-verified 2026-10-19 on the IW416 unit (`../hardware_tests/2026-10-19_round_trip/RUNBOOK.txt`; backup `../backups/20261019_IW416_ocbm_baseline_pre-livi/`),
-and 2026-10-20 (owner report of the revision-1 flash, see Status):
+and 2026-10-20 (owner report of the revision-1 flash, see Status; revision 2 on the same unit, §7.4):
 
 | Fact | Consequence here |
 |---|---|
@@ -47,7 +52,8 @@ and 2026-10-20 (owner report of the revision-1 flash, see Status):
 | mtd-utils 1.4.8 `flash_erase` takes BYTE offsets | noted for the vendor-firmware install path |
 | long commands over telnet must survive the session closing (a `flashcp` was SIGHUPed mid-write) | the flash helpers ignore SIGHUP and log to `/run` |
 | macOS `nc` pushing into busybox `nc` over NCM truncated at ~146 KB (3x); a pull from a host Python server worked | helpers PULL (`host:port`); `common/tools/serve_once.py` |
-| sysfs nvmem answers a read shorter than the word size (4 B on imx-ocotp) with EINVAL (`drivers/nvmem/core.c` `bin_attr_nvmem_read`): revision 1's `dd bs=1` read nothing, every unit got `OCBM-e3b0c44298fc` (2026-10-20) | `ocbm-identity` reads whole words (B1) |
+| sysfs nvmem answers a read shorter than the word size (4 B on imx-ocotp) with EINVAL (`drivers/nvmem/core.c` `bin_attr_nvmem_read`): revision 1's `dd bs=1` read nothing, every unit got `OCBM-e3b0c44298fc` (2026-10-20) | `ocbm-identity` reads whole words (B1); revision 2's serial on the unit is unit-specific (§7.4) |
+| BusyBox 1.38.0 `flock` has no `-w` (on the unit, 2026-10-20: `flock: unrecognized option: w`; its options are `-s -x -u -n` and `-c`) | `mfi-probe` polls `flock -n` (50 x 200 ms) |
 
 Found while writing this recipe (from files, not hardware):
 
@@ -259,7 +265,8 @@ UNTESTED, not built).
   per ccpa_custom `ccpa/carplayd/src/main.rs`) and the certificate length (reg 0x30, 2 B BE), with the access the
   project's daemons use (register write + repeated-start read, 5 tries 5 ms apart,
   ccpa_custom `crates/vendor/mfi-i2c-local/src/lib.rs`) under `/tmp/carplay_mfi.lock`. No control register, no
-  challenge, no signing. UNVERIFIED on the board.
+  challenge, no signing. UNVERIFIED on the board: in the flashed revision-2 rootfs it fails at its lock step
+  (`flock: unrecognized option: w`); the tree's fix (poll `flock -n` up to ~10 s) is not rebuilt yet.
 - **Radios**: `radio up|down|status`, `radio-up`, `radio-down` (§2.5).
 - **Passwords and keys**: `passwd` (wrapper in `/usr/sbin`: busybox passwd through the `/etc/shadow` →
   `/run/etc/shadow` link, then `persist save`), `persist add-key FILE`.
@@ -586,8 +593,8 @@ shell (logs kept with the build VM):
   `../backups/20261019_IW416_ocbm_baseline_pre-livi/unit_info.txt`, not printed) and `ccpa-baseline-iw416.zimg`:
   update env decrypts (gzip + CRC OK, 15 variables), kernel_len 0x302fd8, staging partition offset
   0x302fd8, appended DTB at 0x200fb8 (25,964 B), headroom 1,030,836 B, head unchanged, body 2,917,106 B
-  and staging 195,830 B differ. That plan is **stale for the unit today**: it now runs revision 1, whose
-  head U-Boot rewrote; `flash-kernel` would refuse it (exit 4). Re-dump `mtd2` first (§5 step 2).
+  and staging 195,830 B differ. That plan went stale when the unit took revision 1 (U-Boot rewrote the
+  head); for revision 2, `mtd2` was re-dumped and re-staged on 2026-10-20 (§7.4).
 
 Revision 1's tests (QEMU boot of `default` and `RECOVERY_USB=1` to the recovery shell, `/run`
 nosuid,nodev, `mount -o move`, `reboot`; `usb-update` finding a vfat bundle; `stage_kernel.py` against the
@@ -597,7 +604,7 @@ IW416 unit's stock `mtd0.bin`/`mtd1.bin` refusing an image 1 B over the cap) are
 
 | ID | Was | Now | Regression check |
 |---|---|---|---|
-| B1 | `ocbm-identity` hashed `dd bs=1 skip=4 count=8` of the sysfs nvmem file; sysfs refuses sub-word reads, so every unit hashed nothing (CONFIRMED ON HARDWARE: `OCBM-e3b0c44298fc`, shared MACs) | one `dd bs=4` read of two words into a private file, length/zero/empty-hash checks, hash and hex from that file | self-test sysfs-like `dd`, QEMU real sysfs (0 vs 8 bytes) |
+| B1 | `ocbm-identity` hashed `dd bs=1 skip=4 count=8` of the sysfs nvmem file; sysfs refuses sub-word reads, so every unit hashed nothing (CONFIRMED ON HARDWARE: `OCBM-e3b0c44298fc`, shared MACs) | one `dd bs=4` read of two words into a private file, length/zero/empty-hash checks, hash and hex from that file | self-test sysfs-like `dd`, QEMU real sysfs (0 vs 8 bytes); on the unit 2026-10-20 the serial is unit-specific (§7.4) |
 | B2 | `ssh-up` ran `dropbear -s`: harmless with PASSWORD_AUTH 0 (2026.94 accepts and ignores it), it would disable password logins with 1 | no `-s/-g/-t/-w/-B`; `ssh-up` exits 0 iff dropbear runs, falls back (new/ephemeral key, `-R`); rcS prints the reason when bootstate stays set | selftest call-site check; QEMU and chroot logins |
 | B3 | after a successful install a stick's (or file's) `kernel-part.img`, staged before it, failed the head check on every recovery boot and usb-update printed "DO NOT POWER OFF" | "already installed" (all but the head equal) = exit 3, nothing written; refusals = exit 4 "nothing written"; usb-update logs 3/4 only; DO NOT POWER OFF only after a started write | selftest stand-in MTDs (3, 4, 0) |
 | B4 | `stage_kernel.py` only reported a missing appended DTB | refuses it (and a truncated one): the vendor FDT would take over, no console | self-test cases; real zImage refused |
@@ -612,19 +619,41 @@ IW416 unit's stock `mtd0.bin`/`mtd1.bin` refusing an image 1 B over the cap) are
 | — | `AUTHORIZED_KEYS` required | optional (password login) | build |
 | — | `radio-iw416.dtsi` called mwifiex `driver_mode=2` "uap0 next to the station" | 2 = uAP only, 0x3 = AP + station (mwifiex `main.c`) | — |
 
-OPEN (hardware; nothing below has run on the board):
-- revision 2 as a whole: the identity (iSerial/MACs from the real OCOTP), recovery SSH over NCM, the
-  rootfs boot path (`switch_root`, rcS, `mdev -d`, `persist` on the real `customer` MTD, bootstate
-  clearing), the `/dev/mtdNro` read path, the restored `kernel.modprobe`;
+OPEN (hardware; corrected 2026-10-20: this list said nothing had run on the board. What revision 2 has
+proven there is in §7.4; the rest stays here):
+- `mfi-probe` lock fix (`flock -n` poll instead of `flock -w`, which BusyBox 1.38.0 lacks): in the tree
+  after `5e90368` (ccpa_custom `2796253`), **needs a rootfs rebuild** (`build.sh rootfs`) and a `flash-rootfs`; not yet rebuilt
+  or flashed, so the unit's `mfi-probe` still fails. The chip reads themselves are untested;
+- revision 2 parts not yet exercised: the MACs, key-only SSH login and a saved host/authorized key
+  across a reboot (`persist save` on the real `customer` MTD), `mdev -d` USB auto-mount and `usb-update`,
+  the `/dev/mtdNro` read path, the restored `kernel.modprobe`;
 - female port (usbotg1): whether VBUS is switched (gpio6/gpio7 "quick charge"?), its current limit, and
   mainline chipidea host behaviour; gates every USB host feature (§2.3);
 - whether the radio module really is unpowered with `reg_wlan` off on every SKU (polarity from LIVI and
   the stock DTB; the claim that it powers the module comes from LIVI's comment), and every `radio` step
   (SDIO enumeration, firmware loads, interfaces, HCI);
-- LEDs, `mfi-probe` (registers and the repeated-start read are what the project's daemons use on this
-  chip, not checked with busybox `i2ctransfer`);
-- the stock vendor U-Boot with revision 2's larger image: 2,127,059-2,127,140 B, ~372 KB more than revision
-  1's 1,755,383 B that booted, 1.03 MB under the cap (LIVI's 3,124,994 B, 32,982 B under it, booted too).
+- LED behaviours (the `blue`/`red` class devices exist, §7.4), `mfi-probe` (registers and the
+  repeated-start read are what the project's daemons use on this chip, not checked with busybox
+  `i2ctransfer`).
+- (Closed 2026-10-20, §7.4: the stock vendor U-Boot boots revision 2's larger kernel image, 1.03 MB under
+  the cap.)
+
+### 7.4 Hardware: revision 2 on the IW416 bench unit (2026-10-20)
+
+Observed on the unit (record with every hash:
+`../hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`):
+- from revision 1's recovery: `mtd2` dumped twice, identical; `stage_kernel.py` head unchanged, headroom
+  1,030,836 B; `flash-kernel <host>:5611 <sha256>` with `NO_REBOOT=1` wrote and verified `mtd2`, erased
+  env, U-Boot unchanged; reboot: **revision-2 recovery up in ~28 s** at 192.168.50.2, USB serial
+  unit-specific (B1 fixed; revision 1 had `OCBM-e3b0c44298fc`), dropbear 2026.94 password login;
+- `scp -O rootfs.img` (2,560,000 B, sha256 checked on the unit), `flash-rootfs` wrote and verified `mtd3`,
+  cleared bootstate; reboot: **rootfs booted**, rcS finished (NCM 192.168.50.2, ssh/scp/sftp, `mdev -d`,
+  udhcpd, bootstate cleared); persist: `mtd4` empty, so the build's `ROOT_PASSWORD_HASH` applied; `sftp`
+  ls; BusyBox v1.38.0 with 410 applets; MemAvailable ~114 MB; `/dev/i2c-0`, `/dev/i2c-1`; LEDs `blue`
+  and `red` present; `radio status` reports the radios off;
+- found: `mfi-probe` fails on `flock -w` (fixed in the tree, §7.3 OPEN).
+NOT yet tested: USB stick mount, key-only login and a saved key across a reboot, LED behaviours,
+`radio up` (to be recorded as its own entry).
 
 VERIFIED by the 2026-10-20 builds and tests:
 - every Kconfig symbol of all fragments against 7.2.10 for the variants built (strict check passed, `RD_*`

@@ -1,16 +1,19 @@
 # 2026-10-20 — baseline kernel partition write on the LIVI unit: COMPLETED, baseline recovery booted (owner report)
 
 **Outcome (owner report, 2026-10-20; corrected in place, this record said OPEN):** the write completed, `flashcp` rc=0,
-`sha256sum /dev/mtd2` matched the staged image, the env block (`/dev/mtd1`) was erased, the unit was rebooted, U-Boot
+the readback `sha256sum /dev/mtd2` = `6bf47a40411ea71a4fe0abd72d58b45d5bb3542ea11bebbf847240f42f995754` = the staged image, the env block (`/dev/mtd1`) was erased, the unit was rebooted, U-Boot
 converted the staged head, and the baseline **revision 1** kernel (ccpa_custom `333b5a4`, `default` image, 1,755,383 B)
 came up in its recovery: NCM at 192.168.50.2, `/proc/cmdline` `console=ttymxc0,115200 rdinit=/init panic=10`, USB
 gadget 1314:1520. These steps were done by the owner and not observed by this record's author; the commands and outputs
 are not reproduced here. That boot also showed baseline bug B1 (every unit's iSerial `OCBM-e3b0c44298fc`, shared NCM
-MACs), fixed in revision 2 (`../baseline/README.md` §7.3). Not verified on the board: the rootfs boot path, SSH,
-radios. **The unit's mtd2 is no longer `c58710c5…` nor the staged image** (U-Boot rewrote the head): stage any next
-kernel from a fresh dump of mtd2 (`../baseline/README.md` §5).
+MACs), fixed in revision 2 (`../baseline/README.md` §7.3). Not verified on the board with revision 1: the rootfs boot path, SSH,
+radios (revision 2's rootfs and SSH have since booted, below). **The unit's mtd2 is no longer `c58710c5…` nor the staged image** (U-Boot rewrote the head): stage any next
+kernel from a fresh dump of mtd2 (`../baseline/README.md` §5). That was done the same day: the converted
+revision-1 partition dumped twice as `f584a19b…`, and revision 2 (kernel and rootfs) replaced it, observed on the unit
+(`2026-10-20_baseline_rev2_kernel_rootfs.md`).
 
-The record of the attempt as it stood before the outcome was known follows, unchanged.
+The record of the attempt as it stood before the outcome was known follows, unchanged except that its "State of the
+unit" heading said OPEN.
 
 Unit: the IW416 bench adapter of `../backups/20261019_IW416_ocbm_baseline_pre-livi/`, running LIVI Link 9.5.0
 `imx6ul_iw416` since 2026-10-19 (`2026-10-19_round_trip/RUNBOOK.txt`, "LIVI FLASH"). Times are local (UTC-8), UTC in brackets.
@@ -29,7 +32,7 @@ Owner instruction: "test on board". No SPI programmer on hand.
 
 Not done: `/tmp/fc.log` never read; `/dev/mtd2` not re-hashed; env (`/dev/mtd1`) **not** erased; no reboot.
 
-## State of the unit — OPEN
+## State of the unit at the time (was OPEN; resolved 2026-10-20, see Outcome)
 
 The `flashcp` may not have started, may have finished, or may have stopped part-way. Under `setsid` it would not have
 been stopped by the telnet session closing (the reason it was run that way; see the 2026-10-19 SIGHUP note in the RUNBOOK).
