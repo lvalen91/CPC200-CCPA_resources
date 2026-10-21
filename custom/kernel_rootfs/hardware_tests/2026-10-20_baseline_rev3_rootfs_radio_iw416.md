@@ -70,3 +70,23 @@ NCM with the new `/etc/baseline-release`.
 down`)", then "`btmgmt find` (BR/EDR and LE), at most 15 s", then a device table with many LE devices (none recorded
 here). **B18 VERIFIED on hardware.** `radio down` clean; 0 `Unknown symbol` dmesg lines. Revision 3 to revision 4
 differs only by the `bt-scan` change (and the rootfs build stamp). Still untested: see "Not tested" above, minus B18.
+
+## Revision 5 (2026-10-20/21): kernel with the usbotg1 VBUS enable
+
+Kernel-only rebuild (ccpa_custom `4d706ab`, `../baseline/README.md` §7.0b): the DT gives usbotg1 a `vbus-supply`
+(fixed regulator on GPIO1_IO07, on from boot). Before the flash, with the revision-2 kernel and the revision-4 rootfs,
+driving GPIO1_IO07 high by sysfs made the female port enumerate a FAT32 stick (sda1); GPIO1_IO06 did nothing.
+
+Staged with `stage_kernel.py` from two identical dumps of the old kernel partition (sha256
+`58b20d776149fcb295fa42a278a29c5f7ada7499fb89f4201e166b6a1bc503d8`; head unchanged) and the `-iw416` image
+(2,130,329 B, sha256 `3b79c5b62925482ff6a4b6d210d3e51e6a3746e5e9e99af79427e26ad4f25fdc`); planned partition sha256
+`35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e`. From recovery: `NO_REBOOT=1 flash-kernel
+<host>:<port> <sha256>` wrote and verified mtd2, erased the env, left U-Boot unchanged (sha256 `c60054ca…` before
+and after); reboot. The unit came back in recovery at its NCM address with the new build stamp;
+`/sys/class/regulator` shows `usb_otg1_vbus`; **the stick enumerated at boot with no manual GPIO** (3.9 GB disk, one
+partition: **port VBUS VERIFIED on hardware**). Recovery auto-mounted it read-write, so a stick's contents are at risk
+in recovery (remount read-only by hand if it must not change).
+
+The kernel partition now holds `35dfb1a5…c871e` (revision 2's kernel `2d43437b…` and revision 1's are superseded);
+the rootfs is still revision 4 (`cbfd4d39…513d`). Not yet done: booting the rootfs with a stick plugged in (check
+`usb-mount`/mdev auto-mount); the port's current limit is unmeasured.

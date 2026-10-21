@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `754c876` (2026-10-20, revision 4 = revision 3 + the B18 `bt-scan` fix, in the image on the unit; README with the revision-3 and revision-4 hardware results; sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `8bb1a3a` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -12,7 +12,7 @@ demand only**, with station Wi-Fi and Bluetooth CLI tools (revision 3). No proje
 daemon, no web UI. Built on the LIVI Link recipe
 (https://github.com/f-io/LIVI, GPL-3.0-or-later; analysis in `../livi/README.md`), changed where listed below.
 
-**Status (2026-10-20, revision 3).**
+**Status (2026-10-20, revision 5).**
 - **Revision 1 (ccpa_custom commit `333b5a4`) ran on hardware.** Observed in-session, 2026-10-20 (`../hardware_tests/2026-10-20_baseline_kernel_write.md`): its kernel (`default`
   variant of that revision, no USB) was staged for the IW416 bench unit and flashed: `flashcp` rc=0
   ("Verifying 3328/3328"), `/dev/mtd2` sha256 = the staged image, env (`/dev/mtd1`) erased with
@@ -47,6 +47,12 @@ daemon, no web UI. Built on the LIVI Link recipe
   the only change is `bt-scan` (B18: `btmgmt le on` before `btmgmt find`, BR/EDR-only retry of a refused find).
   Kernel not rebuilt or reflashed. **Runs on the IW416 unit since 2026-10-20** (rootfs sha256 `cbfd4d39…513d`);
   B18 VERIFIED on hardware. (Updated 2026-10-20: this bullet said the fix was "not in an image".)
+- **Revision 5 (2026-10-20, §7.0b)**: a KERNEL-only rebuild; the only change is the DT: usbotg1 gets
+  `vbus-supply` = a fixed regulator on GPIO1_IO07 (active high, on from boot, recovery included), the female
+  port's VBUS enable MEASURED on the IW416 unit (§1). Kernel config and the 41 modules byte-identical to
+  revision 3's; rootfs unchanged (revision 4's). Built, QEMU-booted, then **flashed to the IW416 unit and VERIFIED on
+  hardware** (2026-10-20/21, §7.0b): the stick enumerated at boot in recovery with no manual GPIO. The unit's
+  kernel partition now holds sha256 `35dfb1a5…c871e`; revision 2's kernel is superseded.
 - **Radios on hardware (2026-10-20, IW416 only)**: revision 2: `radio up` powered `reg_wlan`, found SDIO
   0x02df:0x9159, loaded `mwifiex_sdio` (`phy0`, `mlan0` admin-up) and `btnxpuart` (`hci0` UP); `radio down`
   returned to radios off (§7.4). Revision 3 (§7.5): the same with **0 `Unknown symbol` lines** (B10) and the
@@ -58,7 +64,8 @@ daemon, no web UI. Built on the LIVI Link recipe
 - **UNVERIFIED on hardware**: Wi-Fi association (`wifi-connect`, WPA2-PSK and open) and DHCP over Wi-Fi;
   any Bluetooth pairing or traffic; AP mode (`MWIFIEX_DRIVER_MODE`; no `hostapd`); WPA3 (not built, §2.5);
   `hcitool scan`; RTL8822CS/BS (no such unit); USB sticks (mount, mdev
-  auto-mount, `usb-update`) and the USB host port; LED behaviours; key-only SSH login and a host key reused
+  auto-mount, `usb-update`; boot-time enumeration in recovery is VERIFIED with revision 5, §7.0b, but the rootfs
+  path with a stick plugged in has not run); the port's current limit; LED behaviours; key-only SSH login and a host key reused
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
 
@@ -88,6 +95,7 @@ and 2026-10-20 (the revision-1 flash, observed in-session, see Status; revision 
 | sysfs nvmem answers a read shorter than the word size (4 B on imx-ocotp) with EINVAL (`drivers/nvmem/core.c` `bin_attr_nvmem_read`): revision 1's `dd bs=1` read nothing, every unit got `OCBM-e3b0c44298fc` (2026-10-20) | `ocbm-identity` reads whole words (B1); revision 2's serial on the unit is unit-specific (§7.4) |
 | BusyBox 1.38.0 `flock` has no `-w` (on the unit, 2026-10-20: `flock: unrecognized option: w`; its options are `-s -x -u -n` and `-c`) | `mfi-probe` polls `flock -n` (50 x 200 ms) |
 | `radio up` on the unit logged many `Unknown symbol` lines for `mwifiex_sdio` and `btnxpuart`, then loaded them (2026-10-20). Cause, VERIFIED from BusyBox 1.38.0 source (`modutils/modprobe-small.c` `fileAction`) and reproduced in QEMU: the rootfs `modprobe` is MODPROBE_SMALL (the defconfig default), whose first lookup insmods the requested module as soon as it finds it, before its dependencies, then loads those and retries (QEMU, revision-3 rootfs: `modprobe mwifiex_sdio` 70 lines, `modprobe btnxpuart` 2) | `radio` loads each module after its dependencies from `modules.dep` with `insmod` (`radio-lib.sh` `mod_load`, B10): 0 lines in QEMU for every radio module, and 0 in `radio up` on the IW416 unit (revision 3, §7.5) |
+| The female port's VBUS enable is **GPIO1_IO07** (2026-10-20, revision-2 kernel without vbus-supply, revision-4 rootfs): no stick on usbotg1 (ci_hdrc.0, host) until sysfs gpio7 (gpiochip0 = 209c000.gpio = GPIO1) is driven high; then the port connects and sda1 (vfat) enumerates at once; back to input, the stick drops. GPIO1_IO06 high: no effect. The vendor's `init_gpio.sh` "quick charge" pins are sysfs gpio6/gpio7 on its 3.14 kernel, the same pins if bank 1 starts at 0 there (INFERRED) | revision 5: usbotg1 `vbus-supply` = `reg_usb_otg1_vbus` (regulator-fixed, GPIO1_IO07 active high, boot-on + always-on, pad mux only), `dts/imx6ull-ccpa-usbhost.dtsi`; **revision 5 VERIFIED on the unit** 2026-10-20/21 (§7.0b) |
 
 Found while writing this recipe (from files, not hardware):
 
@@ -102,7 +110,8 @@ Found while writing this recipe (from files, not hardware):
   `kernel/base.fragment`), and `stage_kernel.py` refuses an image without a complete appended DTB (B4).
 - The stock DTB's `wlreg_on` regulator (GPIO1_IO05, enable-active-low) confirms LIVI's `reg_wlan` polarity.
 - USB, the vendor boot log AND the stock DTB agree (details in `dts/imx6ull-ccpa-usbhost.dtsi`): both
-  controllers `dr_mode = "otg"`, `disable-over-current`, **no vbus-supply**, no USB pinctrl, OTG1_ID pad
+  controllers `dr_mode = "otg"`, `disable-over-current`, **no vbus-supply** (the VBUS enable is GPIO1_IO07,
+  outside the DT: MEASURED, table above), no USB pinctrl, OTG1_ID pad
   not muxed; at boot ci_hdrc.0 read `fsm->id = 0` → `a_host`, and a USB stick enumerated (sda1, vfat).
 - The NCM CFW gadget enumerates **0x1314:0x1520**, class 239/2/1 (on-box sysfs reads,
   ccpa_custom `scratchpad/ocbm_2026090*/trial.txt` line 4).
@@ -287,7 +296,7 @@ One file, read by `common/shared/net-up` in both the recovery initramfs and the 
 
 | Variable (default) | Kernel | DT | Recovery |
 |---|---|---|---|
-| `RECOVERY_USB=1` (default) | USB host + EHCI + chipidea host + SCSI/sd/usb-storage + vfat + NLS + MBR/GPT built in (forces `USB_HOST=1 USB_VFAT_BUILTIN=1`) | `usbotg1 { dr_mode = "host"; disable-over-current; }`, no vbus-supply | `usb-mount` one-shot + `usb-update` |
+| `RECOVERY_USB=1` (default) | USB host + EHCI + chipidea host + SCSI/sd/usb-storage + vfat + NLS + MBR/GPT built in (forces `USB_HOST=1 USB_VFAT_BUILTIN=1`) | `usbotg1 { dr_mode = "host"; disable-over-current; vbus-supply = <&reg_usb_otg1_vbus>; }` (GPIO1_IO07, always on; revision 5) | `usb-mount` one-shot + `usb-update` |
 | `RECOVERY_EXFAT=1` (default) | + exFAT built in (recovery has no modules) | — | reads exFAT too |
 | `RECOVERY_SSH=1` (default) | — | — | dropbear + sftp-server in the cpio |
 | `RECOVERY_USB=0 USB_HOST=1` | USB host built in; storage, vfat, exFAT, NLS codepages as rootfs modules | same | no USB |
@@ -298,11 +307,12 @@ Variant (= kernel config) names: `default` (RECOVERY_USB=1, EXFAT=1, SSH=1), `re
 and exFAT are the default.** Measured cost (§7): USB storage + vfat **+147,044 B**, exFAT **+23,792 B**,
 recovery SSH **+201,144 B**; the default image is 2,127,059 B with 1,030,917 B spare under the cap.
 The added init step is one background call (`usb-update`), no daemon.
-**Gating unknowns for any USB host variant** (hardware, OPEN): whether VBUS on the female port is
-switched (by the GPIOs `init_gpio.sh` calls "quick charge", gpio6/gpio7 on the vendor kernel) and its
-current limit. First hardware test (documented, not run): boot with a stick plugged in, check `dmesg`
-for enumeration and `/run/usb-update.log`; if nothing enumerates, repeat with gpio6/gpio7 driven
-(exported via sysfs) high and low. Wired-CarPlay role swapping (dr_mode otg + the vendor's
+**VBUS on the female port is switched by GPIO1_IO07** (MEASURED 2026-10-20, §1; sysfs gpio7 on mainline,
+INFERRED to be the gpio7 `init_gpio.sh` calls "quick charge"; GPIO1_IO06 did nothing). Up to revision 4 nothing drove it, so no
+stick enumerated; revision 5 holds it high from the regulator's probe in every USB host build
+(`reg_usb_otg1_vbus`, `dts/imx6ull-ccpa-usbhost.dtsi`). Revision 5 is VERIFIED on the unit
+(§7.0b: stick enumerated at boot in recovery, no manual GPIO). OPEN: the port's current limit, and the rootfs path
+(boot the rootfs with a stick plugged in, check mdev auto-mount and `/run/usb-update.log`). Wired-CarPlay role swapping (dr_mode otg + the vendor's
 a_suspend_req_inf) stays out; mainline chipidea would need `USB_OTG_FSM`/role-switch support for it.
 `dts/stock-usb-reference.dtsi` restates the stock USB nodes in mainline labels (reference only,
 UNTESTED, not built).
@@ -569,7 +579,7 @@ libblkid the recipe does not build (§7).
    `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image. The unit's files are in
    `../backups/<unit>/` (for the IW416 unit, `mtd1.bin` is `../../../flash_dumps/CCPA_stripped/mtd1.bin`).
 6. **Revision 3 on a unit that runs revision 2: the rootfs only** (the kernel config is unchanged and the
-   41 modules are byte-identical, §7.0, so the revision-2 kernel stays). `flash-rootfs` exists only in the
+   41 modules are byte-identical, §7.0, so the revision-2 kernel stayed; the unit has run revision 5's since 2026-10-21, §7.0b). `flash-rootfs` exists only in the
    recovery, and the rootfs MTD must not be written from the rootfs it runs, so: (a) into recovery from the
    running rootfs, `ssh root@192.168.50.2 reboot-recovery` (sets the bootstate mark, `reboot`; the next boot
    stays in recovery; WORKED on the IW416 unit 2026-10-20, recovery up in ~30 s, §7.5), or on the UART press Enter within 1 s of "switching in 1 s"
@@ -614,20 +624,60 @@ libblkid the recipe does not build (§7).
 
 ## 7. OPEN ITEMS / MEASUREMENTS / VERIFICATION
 
+### 7.0b Revision 5 (2026-10-20): kernel-only rebuild, usbotg1 VBUS enable (flashed and VERIFIED on the IW416 unit)
+
+Rev 5 = rev 4 sources + `dts/imx6ull-ccpa-usbhost.dtsi`: `reg_usb_otg1_vbus` (regulator-fixed, `gpio1 7`
+active high, `regulator-boot-on` + `regulator-always-on`, pinctrl group muxing GPIO1_IO07 to GPIO with
+`IMX_NO_PAD_CTL`, i.e. the pad settings as measured) and `vbus-supply` on usbotg1 (§1, §2.3). No other pin
+or GPIO consumer touches GPIO1_IO07 (the four DTBs: pad 0x78/0x304 in that group only; gpio1 consumers
+2, 5, 7, 9). Built in the `ccpa-build` VM Debian chroot, `build.sh kernel` only (`TOP=/work/build3`, `JOBS=4`,
+`arm-linux-gnueabihf-`); dtc: no warnings (kbuild and a standalone dtc 1.7.2 pass with default checks,
+byte-identical DTBs). `.config` byte-identical to revision 3's, the 41 modules byte-identical (sha256),
+initramfs cpio 864,768 B as before; rootfs not rebuilt (revision 4's stays).
+
+| image (zImage 2,103,992 B + DTB) | DTB | total | spare under 3,157,976 | sha256 |
+|---|---:|---:|---:|---|
+| `-iw416` | 26,337 | 2,130,329 | 1,027,647 | `3b79c5b62925482ff6a4b6d210d3e51e6a3746e5e9e99af79427e26ad4f25fdc` |
+| `-none` = `-rtl8822bs` | 26,256 | 2,130,248 | 1,027,728 | `d9bc8f90505e8c17828c8d2e314881e0e9eac963801553d6e5ee8cb858dba12b` |
+| `-rtl8822cs` | 26,312 | 2,130,304 | 1,027,672 | `c8830310d9cfa0263f1261f54b1a0702d01af5812c0419dabe2577fc9bf6ef98` |
+
+Against revision 3: DTB +373 B (`-iw416`), zImage +3,152 B with no code rebuilt (only the initramfs, whose
+file mtimes and release stamp changed, and the version object): XZ noise (§7). Decompiled `-iw416` DTB:
+`regulator-usb-otg1-vbus` (`gpio = <&gpio1 7 0>`, enable-active-high, boot-on, always-on) and
+`usb@2184000` `vbus-supply` → it. QEMU `mcimx6ul-evk`, `-iw416` image: recovery shell reached in 2.3 s;
+`/sys/class/regulator`: `usb_otg1_vbus enabled` (bound to `reg-fixed-voltage`), `wlan disabled`; ci_hdrc.0
+EHCI host started; `flash-rootfs`/`flash-kernel --dry-run` usage paths as in revision 3. Copies, logs and
+the harness are kept with the build VM, not in this repo.
+
+**Flashed and verified on the IW416 unit (2026-10-20/21).** Before the flash (revision-2 kernel, revision-4
+rootfs): driving GPIO1_IO07 high by sysfs made the female port enumerate a FAT32 stick (sda1); GPIO1_IO06 did
+nothing (§1). The `-iw416` image above (2,130,329 B) was staged with `stage_kernel.py` from two identical dumps
+of the old kernel partition (sha256 `58b20d776149fcb295fa42a278a29c5f7ada7499fb89f4201e166b6a1bc503d8`, head
+unchanged); planned partition sha256 `35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e`. From
+recovery on the unit: `NO_REBOOT=1 flash-kernel <host>:<port> <sha256>` wrote and verified mtd2, erased the env,
+left U-Boot unchanged (sha256 `c60054ca…` before and after); reboot. The unit returned in recovery at its NCM
+address with the new build stamp; `/sys/class/regulator` lists `usb_otg1_vbus`; **the stick enumerated at boot
+with no manual GPIO** (3.9 GB disk, one partition) and the recovery auto-mounted it **read-write**, so a stick's
+contents are at risk in recovery (remount read-only by hand if it must not change). The kernel partition now
+holds `35dfb1a5…c871e`; revision 2's kernel is superseded. Rootfs on the unit stays revision 4 (`cbfd4d39…513d`).
+Record: `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`
+("Revision 5"). NOT yet done: booting the rootfs with a stick plugged in (`usb-mount`/mdev auto-mount); the
+port's current limit is unmeasured.
+
 ### 7.0a Revision 4 (2026-10-20): rootfs-only rebuild with the B18 `bt-scan` fix, flashed and verified
 
 Rev 4 = rev 3 sources at ccpa_custom `9dc14d8`; the only difference is `bt-scan` (and the rootfs build stamp).
 Built in the `ccpa-build` VM Debian chroot, `build.sh rootfs` only (`TOP=/work/build3`); the kernel was not
-rebuilt or reflashed (the kernel partition keeps revision 2's image). `rootfs.img` 3,506,176 B (same size as
+rebuilt or reflashed (the kernel partition kept revision 2's image until revision 5). `rootfs.img` 3,506,176 B (same size as
 revision 3; 9,469,952 B free), sha256 `cbfd4d3943a1352ff2ef279f4800ed5efb2def933a2d1f884f425fd4705e513d`; the image's
-`usr/sbin/bt-scan` equals the tree file. Copy: `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev4/default/rootfs.img`.
+`usr/sbin/bt-scan` equals the tree file. The image is kept with the build VM, not in this repo.
 Flashed on the IW416 unit from recovery (`reboot-recovery`, `scp -O` to `/tmp`, `flash-rootfs`: wrote and
 verified mtd3, bootstate cleared, rc=0; reboot): the unit returned at its NCM address with the new
 `/etc/baseline-release`. Hardware: `radio up` then `bt-scan` reported that LE was off (settings "powered
 br/edr") and enabled it (`btmgmt le on`, on until `radio down`), then ran `btmgmt find` (BR/EDR and LE, at most
 15 s) and printed a device table (many LE devices; none recorded here): **B18 VERIFIED on hardware**.
-`radio down` clean, 0 `Unknown symbol` dmesg lines. Record: CPC200-CCPA_resources
-`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md` ("Revision 4 follow-up").
+`radio down` clean, 0 `Unknown symbol` dmesg lines. Record:
+`../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md` ("Revision 4 follow-up").
 
 ### 7.0 Revision 3 (2026-10-20): measured, tested, changed
 
@@ -649,7 +699,7 @@ sha256: **`rootfs.img` `98fa6312a53d9f19f4a3282a93bddee5e01e2b0971d75bbc9da361b3
 NOT needed on a revision-2 unit: `-iw416` `d0030180fd02fa305d55c58ec7119a7011ed781a888016ccb2e0acd456d8181a`,
 `-none`/`-rtl8822bs` `0a257d32c2899925f0346c561307a9dae8a183e1a8b563e14ad702b9953d6874`, `-rtl8822cs`
 `268c99dc1bf2dfa5eec49c94629df6bace5caa3d07c46aa1e7116e4ac99894f7` (revision 2's `-iw416`, the one the unit
-runs: `2d43437ba38ad19bc94313cf576e2b95b91bbb91e28094498cdaa99c2c345c17`). Tool sizes: §2.5 (7 binaries,
+ran until revision 5: `2d43437ba38ad19bc94313cf576e2b95b91bbb91e28094498cdaa99c2c345c17`). Tool sizes: §2.5 (7 binaries,
 2,024,692 B uncompressed; `hciup` 66,796 B as before).
 
 Tests (logs kept with the build VM):
@@ -890,8 +940,9 @@ proven there is in §7.4, revision 3 in §7.5; the rest stays here; revision 3 u
   WORKED 2026-10-20, §7.5.)
 - `radio`'s `driver_mode` fix (§2.5: `mwifiex driver_mode=<n>` before `mwifiex_sdio`): in the revision-3
   image (B14), on the unit since 2026-10-20 (§7.5); AP mode itself is UNVERIFIED (no `hostapd`, wpa_supplicant without AP mode);
-- female port (usbotg1): whether VBUS is switched (gpio6/gpio7 "quick charge"?), its current limit, and
-  mainline chipidea host behaviour; gates every USB host feature (§2.3);
+- female port (usbotg1): its current limit, and mainline chipidea host behaviour beyond enumeration; the
+  VBUS enable is GPIO1_IO07 (MEASURED 2026-10-20, §1; in the DT since revision 5, VERIFIED on the unit, §7.0b);
+  (corrected 2026-10-20: this item asked whether VBUS is switched at all);
 - whether the radio module really is unpowered with `reg_wlan` off on every SKU (polarity from LIVI and
   the stock DTB; the claim that it powers the module comes from LIVI's comment; on the IW416 unit `radio
   down` left no SDIO card, which shows the card gone, not the rail at 0 V), and the `radio` steps on
@@ -940,7 +991,7 @@ station and CLI tools, §2.5; flashed later, §7.5), RTL8822CS/BS.
 
 Observed on the unit (record:
 `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`). Rootfs only; the
-kernel stays revision 2's `-iw416` (`2d43437b…`, §7.0):
+kernel was revision 2's `-iw416` (`2d43437b…`, §7.0; replaced by revision 5, §7.0b):
 - from the revision-2 rootfs, `reboot-recovery`: **recovery up in ~30 s** (`/etc/baseline/recovery` present,
   `/proc/cmdline` with `panic=10`);
 - `scp -O rootfs.img` (3,506,176 B, sha256 `98fa6312…9273d7` checked on the unit); `flash-rootfs` under

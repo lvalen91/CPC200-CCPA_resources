@@ -12,18 +12,54 @@
  *    "2184000.usb supply vbus not found, using dummy regulator" (same for 2184200.usb); ci_hdrc.0 ran the
  *    OTG state machine, "fsm->id = 0" at 0.29 s -> a_host at 3.11 s, a USB stick enumerated at 3.34 s
  *    (sda1, vfat, /mnt/UPAN). The ID pin reads 0 (host) at boot.
- * Hence dr_mode "host" (no ID pin needed, and host-only creates no second UDC), NO vbus-supply,
- * disable-over-current: all as the vendor. Never "otg"/"peripheral" here while the kernel has a UDC
- * driver: a second UDC would appear, and the NCM gadget must stay on usbotg2 (net-up selects the UDC
- * by NCM_UDC_MATCH in board.env, so it would not silently move, but nothing needs it).
- * UNVERIFIED: whether the GPIOs init_gpio.sh calls "quick charge" (sysfs gpio6/gpio7 on the vendor
- * 3.14 kernel, i.e. GPIO1_IO06/IO07 if bank 1 started at 0 there) gate VBUS; the port's current limit;
- * mainline chipidea host behaviour on this board. Wired-CarPlay role swapping (dr_mode "otg" plus the
- * vendor's a_suspend_req_inf use) is out of the baseline; mainline chipidea would need USB_OTG_FSM /
+ * Hence dr_mode "host" (no ID pin needed, and host-only creates no second UDC) and disable-over-current,
+ * as the vendor. Never "otg"/"peripheral" here while the kernel has a UDC driver: a second UDC would
+ * appear, and the NCM gadget must stay on usbotg2 (net-up selects the UDC by NCM_UDC_MATCH in board.env,
+ * so it would not silently move, but nothing needs it).
+ *
+ * VBUS enable = GPIO1_IO07, MEASURED 2026-10-20 on the IW416 unit (revision-2 kernel, revision-4 rootfs,
+ * this file without the regulator): no stick enumerated on usbotg1 (ci_hdrc.0, host) until sysfs gpio7
+ * (gpiochip0 = 209c000.gpio = GPIO1) was driven high; the port then connected and sda1 (vfat) enumerated
+ * at once; back to input, the stick dropped. GPIO1_IO06 high did nothing. The stock DTB does not describe
+ * it; the vendor's init_gpio.sh drives sysfs gpio6/gpio7 ("quick charge"), the same pins if bank 1
+ * starts at 0 on the vendor 3.14 kernel too (INFERRED; on mainline it does, measured). Hence
+ * reg_usb_otg1_vbus below, on from its probe (boot-on: the GPIO is requested high, no low glitch;
+ * always-on: chipidea's port-power calls never switch it off), in recovery and rootfs alike, and only in
+ * USB host builds. Its pinctrl sets the mux only (IMX_NO_PAD_CTL, bit 31): the pad keeps the electrical
+ * settings it had when measured (the boot loader's; the revision-2 kernel never touched the pad).
+ * VERIFIED on the unit (revision 5, 2026-10-20/21): the stick enumerates at boot with no manual GPIO.
+ * UNVERIFIED: the port's current limit; mainline chipidea host
+ * behaviour beyond enumeration. Wired-CarPlay role swapping (dr_mode "otg" plus the vendor's
+ * a_suspend_req_inf use) is out of the baseline; mainline chipidea would need USB_OTG_FSM /
  * role-switch support for it.
  */
+/ {
+	reg_usb_otg1_vbus: regulator-usb-otg1-vbus {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_usb_otg1_vbus>;
+		regulator-name = "usb_otg1_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+};
+
+&iomuxc {
+	/* Mux only (0x80000000 = IMX_NO_PAD_CTL): pad settings as measured, see above. */
+	pinctrl_usb_otg1_vbus: usbotg1vbusgrp {
+		fsl,pins = <
+			MX6UL_PAD_GPIO1_IO07__GPIO1_IO07	0x80000000
+		>;
+	};
+};
+
 &usbotg1 {
 	dr_mode = "host";
 	disable-over-current;
+	vbus-supply = <&reg_usb_otg1_vbus>;
 	status = "okay";
 };
