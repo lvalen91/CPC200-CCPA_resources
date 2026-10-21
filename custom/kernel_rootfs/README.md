@@ -44,11 +44,49 @@ Corrected 2026-10-20: this said it ran revision 2's rootfs and that the archive 
 that its state was unknown), then that its customer MTD was empty, then that "no LIVI component is left".
 Before staging the next kernel, dump its current `/dev/mtd2` (U-Boot rewrote the head again).
 
+## Handoff (2026-10-20/21)
+
+**Done** (each row traces to the Status table above)
+
+| Area | Result |
+|---|---|
+| Stock U-Boot/kernel update path | documented and reproduced: UpgKey staging, env-erase conversion (`../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Writing a kernel; `hardware_tests/2026-10-19_round_trip/RUNBOOK.txt`) |
+| LIVI | kernel/rootfs analysed (`livi/README.md`), flashed once, then replaced by the baseline |
+| Own vanilla baseline | mainline 7.2.10 kernel with the recovery initramfs inside + squashfs rootfs, revisions 1-5 (`baseline/README.md`), flashed on the IW416 bench unit |
+| Hardware-verified | recovery SSH/telnet over NCM, rootfs boot, persist, radio up/down, Wi-Fi scan, `bt-scan` (B18), `mfi-probe`, USB host port (needs GPIO1_IO07 high = DT regulator, rev 5), stick auto-mount FAT32/exFAT x MBR/GPT |
+| Docs | corrected in place (corrections are marked inline) |
+
+**State**
+
+- Unit: kernel rev 5 (partition sha256 `35dfb1a5…c871e`) + rootfs rev 4 (`cbfd4d39…513d`); U-Boot untouched (mtd0 full sha256 in `baseline/README.md` §7.0b); radios off (`radio down` is the default state).
+- Artefacts: `ccpa-baseline-build/20261020/rev2` .. `rev5` on the owner's build volume, not in git (map: `baseline/README.md` §7).
+- Build recipe: `baseline/build.sh` in the `ccpa-build` Lima VM Debian chroot (`baseline/README.md` §4, §7.0b).
+- Git: all commits local, nothing pushed (this repo is ahead of origin; ccpa_custom has no remote). `baseline/` here is a mirror of ccpa_custom `baseline/`: re-sync it after any change there. `~/Downloads/github/ocbm` is a stale mirror, left alone on purpose.
+
+**How to continue** (procedures live in `baseline/README.md`, not copied)
+
+| Task | Where |
+|---|---|
+| Rootfs only | `ssh root@192.168.50.2 reboot-recovery`, `scp -O rootfs.img`, `flash-rootfs <img> <sha256>`, `reboot` (§5 step 6) |
+| Kernel | `stage_kernel.py` from a FRESH dump of mtd2 (U-Boot rewrites the head), `flash-kernel`, then `flash_eraseall -q /dev/mtd5` to clear bootstate if recovery was entered via `reboot-recovery`, then `reboot` (§5 steps 2-3, §7.0b) |
+| Recovery vs rootfs | recovery is up when `/etc/baseline/recovery` exists (§5 step 6a); a rootfs panic reboots into recovery (§6) |
+| Brick window | a power cut or bad write between the start of the mtd1 write and the end of the env erase leaves a unit only a SPI programmer recovers; preconditions and abort gate in `kernel_compilation.md` § Writing a kernel; long writes under `setsid` |
+| Rule | only the HAB-signed U-Boot is never modified or written; only its 64 KB env block is erased (ccpa_custom `CLAUDE.md`) |
+
+**Remaining / open**
+
+- Untested on hardware: `wifi-connect` association + DHCP, Bluetooth pairing/traffic, AP mode, LED behaviours, key-only SSH and host-key reuse across a reboot, the 1 s UART-Enter window, RTL8822CS/BS units (and BT attach without a DT node), GPT with an EFI system partition, GPT backup at the true disk end, unpartitioned stick, exFAT hot-plug, `usb-update` from a stick.
+- USB port current is an owner-stated ASSUMPTION (5 V, 100-500 mA), not measured.
+- Open hardening: `flash-kernel` should clear bootstate (needs a recovery-kernel change); stricter staged-head probe for units staging at 0x303080 (`baseline/README.md` §1); recovery/rootfs auto-mount sticks read-write (a read-only default is undecided); LIVI provisioner failure modes, nc-push truncation cause, WDOG1 and the 74HC595 expander (`livi/README.md`), the second reset after `heweiencrypt` (unmeasured, `RUNBOOK.txt`).
+- Docs: `documentation/_index/claims/*.json` carry no revision-5 facts (the checker reported 475 pre-existing problems on 2026-10-19, `documentation/_index/README.md`); OCBM (an alternative version on this baseline) has not been started.
+- Credentials: files in the published repos hold device credentials/keys; rotation is the owner's call and history is not scrubbed (`backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt`; ccpa_custom `docs/ops/04_OPEN_ITEMS.md` "Settled"). Pre-strip safety bundles of both repos sit in `/tmp` and still hold the old history.
+- Push decisions: the owner said no push while work continues.
+
 ## What lives where
 
 | Path | Contents |
 |---|---|
-| `baseline/` | Vanilla baseline recipe (mainline 7.2.10 + recovery initramfs in the kernel + small squashfs). A copy of ccpa_custom `baseline/` at `f2a974b` (revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit; README with the revision-3, -4 and -5 hardware results), with README paths re-rooted. `build.sh`, `common/` (shared with the C2Air baseline), `arm-imx6ul/` (DTS, patches 0001-0004 from LIVI, initramfs helpers `flash-kernel`/`flash-rootfs`, `tools/stage_kernel.py`) |
+| `baseline/` | Vanilla baseline recipe (mainline 7.2.10 + recovery initramfs in the kernel + small squashfs). A copy of ccpa_custom `baseline/` at `a793690` (revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit; README with the revision-3, -4 and -5 hardware results), with README paths re-rooted. `build.sh`, `common/` (shared with the C2Air baseline), `arm-imx6ul/` (DTS, patches 0001-0004 from LIVI, initramfs helpers `flash-kernel`/`flash-rootfs`, `tools/stage_kernel.py`) |
 | `livi/README.md` | LIVI Link on the CCPA: MTD map, kernel (patches, config flow, size breakdown, DTB), rescue/NCM 10.10.10.1, USB 0525:a4a1, rootfs and bundle contents, the provisioner flow incl. how it bootstraps a stock unit and how our by-hand replay deviated, rollback status, exposure and licence notes, GPL attribution and version (9.5.0 / build `168c4922`) |
 | `hardware_tests/2026-10-19_round_trip/` | `RUNBOOK.txt`: env-erase round trip (PASS), LIVI flash (SUCCESS), restore recipe. Also the two offline dry-run reports |
 | `hardware_tests/2026-10-20_baseline_kernel_write.md` | The baseline revision-1 kernel write: the attempt as recorded, and its outcome (observed in-session: written, env erased, recovery booted) |

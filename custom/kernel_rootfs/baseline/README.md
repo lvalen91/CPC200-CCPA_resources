@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `f2a974b` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `a793690` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths except the §7 artefact map. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -68,6 +68,14 @@ daemon, no web UI. Built on the LIVI Link recipe
   100-500 mA, not measured, §7.0b); `flash-kernel` clearing the bootstate mark (open item, §7.0b); LED behaviours; key-only SSH login and a host key reused
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
+
+**Handoff (2026-10-20/21).** What is done, the unit's current state and how to continue are in `../README.md` § Handoff
+(not repeated here). Procedures stay where they are: rootfs-only flash §5 step 6, kernel flash §5 steps 2-3 plus the
+bootstate trap §7.0b, artefact map §7. Remaining work, same list as there:
+- Untested on hardware: `wifi-connect` association + DHCP, Bluetooth pairing/traffic, AP mode, LEDs, key-only SSH and host-key reuse across a reboot, the 1 s UART-Enter window, RTL8822CS/BS units (and BT attach without a DT node), GPT with an ESP, GPT backup at the true disk end, unpartitioned stick, exFAT hot-plug, `usb-update` from a stick.
+- Port current is an owner-stated ASSUMPTION (5 V, 100-500 mA), not measured (§7.0b).
+- Open hardening: `flash-kernel` should clear bootstate (needs a recovery-kernel change, §7.0b); stricter staged-head probe for 0x303080 units (§1); recovery/rootfs auto-mount sticks read-write (a read-only default is undecided).
+- Outside this tree: LIVI provisioner failure modes, nc-push truncation cause, WDOG1, 74HC595 expander, second reset after `heweiencrypt` (all in `../livi/README.md` and `../hardware_tests/2026-10-19_round_trip/RUNBOOK.txt`); ledger/claims re-sync; OCBM on this baseline; credential exposure and push decisions (owner's).
 
 Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6ul/`.
 
@@ -581,7 +589,7 @@ libblkid the recipe does not build (§7).
    `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image. The unit's files are in
    `../backups/<unit>/` (for the IW416 unit, `mtd1.bin` is `../../../flash_dumps/CCPA_stripped/mtd1.bin`).
 6. **Revision 3 on a unit that runs revision 2: the rootfs only** (the kernel config is unchanged and the
-   41 modules are byte-identical, §7.0, so the revision-2 kernel stayed; the unit has run revision 5's since 2026-10-21, §7.0b). `flash-rootfs` exists only in the
+   41 modules are byte-identical, §7.0, so the revision-2 kernel stayed; the unit has run revision 5's since 2026-10-20/21, §7.0b). `flash-rootfs` exists only in the
    recovery, and the rootfs MTD must not be written from the rootfs it runs, so: (a) into recovery from the
    running rootfs, `ssh root@192.168.50.2 reboot-recovery` (sets the bootstate mark, `reboot`; the next boot
    stays in recovery; WORKED on the IW416 unit 2026-10-20, recovery up in ~30 s, §7.5), or on the UART press Enter within 1 s of "switching in 1 s"
