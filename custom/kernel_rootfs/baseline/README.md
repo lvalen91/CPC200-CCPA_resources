@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `8bb1a3a` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `5edfaa5` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -63,9 +63,9 @@ daemon, no web UI. Built on the LIVI Link recipe
   the script, devices found).
 - **UNVERIFIED on hardware**: Wi-Fi association (`wifi-connect`, WPA2-PSK and open) and DHCP over Wi-Fi;
   any Bluetooth pairing or traffic; AP mode (`MWIFIEX_DRIVER_MODE`; no `hostapd`); WPA3 (not built, §2.5);
-  `hcitool scan`; RTL8822CS/BS (no such unit); USB sticks (mount, mdev
-  auto-mount, `usb-update`; boot-time enumeration in recovery is VERIFIED with revision 5, §7.0b, but the rootfs
-  path with a stick plugged in has not run); the port's current limit; LED behaviours; key-only SSH login and a host key reused
+  `hcitool scan`; RTL8822CS/BS (no such unit); USB `usb-update` from a stick, and exFAT, GPT and EFI sticks (FAT32/MBR enumeration in recovery and
+  rootfs auto-mount via mdev are VERIFIED, §7.0b); the port's real current limit (design ASSUMPTION, owner-stated, 5 V
+  100-500 mA, not measured, §7.0b); `flash-kernel` clearing the bootstate mark (open item, §7.0b); LED behaviours; key-only SSH login and a host key reused
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
 
@@ -311,8 +311,9 @@ The added init step is one background call (`usb-update`), no daemon.
 INFERRED to be the gpio7 `init_gpio.sh` calls "quick charge"; GPIO1_IO06 did nothing). Up to revision 4 nothing drove it, so no
 stick enumerated; revision 5 holds it high from the regulator's probe in every USB host build
 (`reg_usb_otg1_vbus`, `dts/imx6ull-ccpa-usbhost.dtsi`). Revision 5 is VERIFIED on the unit
-(§7.0b: stick enumerated at boot in recovery, no manual GPIO). OPEN: the port's current limit, and the rootfs path
-(boot the rootfs with a stick plugged in, check mdev auto-mount and `/run/usb-update.log`). Wired-CarPlay role swapping (dr_mode otg + the vendor's
+(§7.0b: stick enumerated at boot in recovery, no manual GPIO). The rootfs path is VERIFIED too (2026-10-21: FAT32 stick auto-mounted read-write at /mnt/usb by the mdev `usb-mount`
+rule). The port's current capability is an owner-stated design ASSUMPTION, not a measurement: 5 V, 100-500 mA (the
+USB 2.0 minimum for data transfer and for an iPhone to connect for CarPlay); the real limit remains unmeasured. Wired-CarPlay role swapping (dr_mode otg + the vendor's
 a_suspend_req_inf) stays out; mainline chipidea would need `USB_OTG_FSM`/role-switch support for it.
 `dts/stock-usb-reference.dtsi` restates the stock USB nodes in mainline labels (reference only,
 UNTESTED, not built).
@@ -559,7 +560,8 @@ libblkid the recipe does not build (§7).
    `flash-kernel` refuses a stale staging (exit 4, nothing written).
 3. Write the kernel partition and erase env:
    - **from our recovery** (revision 1 or 2): `flash-kernel <kernel-part.img|host:port|/mnt/usb/...> <sha256>`
-     (`--dry-run` first if in doubt);
+     (`--dry-run` first if in doubt). `flash-kernel` does NOT clear the bootstate mark: if recovery was entered with
+     `reboot-recovery`, run `flash_eraseall -q /dev/mtd5` before the final `reboot`, or the next boot stays in recovery (§7.0b);
    - **from LIVI** (same partition map): what LIVI's own provisioner does, `flashcp img /dev/mtd2 &&
      sha256sum /dev/mtd2`, then `flash_eraseall -q /dev/mtd1` (env), verify, `reboot -f`, all under
      `setsid` (`flashcp` because LIVI's rescue has no `flash_erase`, `imx6ul/boot.rs:204-231`; the
@@ -661,8 +663,17 @@ with no manual GPIO** (3.9 GB disk, one partition) and the recovery auto-mounted
 contents are at risk in recovery (remount read-only by hand if it must not change). The kernel partition now
 holds `35dfb1a5…c871e`; revision 2's kernel is superseded. Rootfs on the unit stays revision 4 (`cbfd4d39…513d`).
 Record: `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`
-("Revision 5"). NOT yet done: booting the rootfs with a stick plugged in (`usb-mount`/mdev auto-mount); the
-port's current limit is unmeasured.
+("Revision 5"). Rootfs follow-up (2026-10-21, kernel revision 5 + rootfs revision 4, FAT32 stick, MBR,
+3.75 GiB, one partition, plugged in at boot): the stick enumerated at 1.1 s (usb 1-1, high-speed), sda1 appeared at 2.4 s,
+mdev ran `usb-mount`: "/dev/sda1 (fat32, partition 1, mbr:0b) mounted read-write at /mnt/usb"; the contents listed
+(19 top-level entries); 0 `Unknown symbol` dmesg lines. It mounts READ-WRITE by default (the owner remounted it
+read-only by hand; nothing was written). **Rootfs mdev auto-mount of FAT32 VERIFIED on hardware**, in recovery and in the
+rootfs. Still untested: exFAT, GPT and EFI sticks; LEDs; Wi-Fi association. Port current: ASSUMPTION (owner-stated, NOT measured): the port is treated as 5 V, 100-500 mA, the USB 2.0 minimum for data transfer and for an iPhone to connect for CarPlay; the real limit remains unmeasured.
+**Boot-loop guard trap:** after the kernel flash the guard still held the mark set by the preceding `reboot-recovery`,
+so the first plain `reboot` stayed in recovery until `flash_eraseall -q /dev/mtd5` (bootstate) cleared it.
+`flash-rootfs` clears the mark, `flash-kernel` does not (it never touches bootstate): after a kernel flash made from
+recovery that was entered via `reboot-recovery`, run `flash_eraseall -q /dev/mtd5` before the `reboot`. OPEN: make
+`flash-kernel` clear it.
 
 ### 7.0a Revision 4 (2026-10-20): rootfs-only rebuild with the B18 `bt-scan` fix, flashed and verified
 
@@ -934,13 +945,13 @@ proven there is in §7.4, revision 3 in §7.5; the rest stays here; revision 3 u
   length 945 B; the revision-2 `flock -w` failure is gone with B13.)
 - revision 2 parts not yet exercised: the MACs, key-only SSH login and a host key reused across a reboot
   (the archive `persist save` wrote to the real `customer` MTD on revision 2's first boot WAS read back
-  after reboots, `persist: loaded from mtd4`, §7.5; the host key in it was not compared), `mdev -d` USB
-  auto-mount and `usb-update`, the `/dev/mtdNro` read path, the restored `kernel.modprobe`, the 1 s
+  after reboots, `persist: loaded from mtd4`, §7.5; the host key in it was not compared), `usb-update` (mdev USB
+  auto-mount of FAT32 is VERIFIED on the unit, 2026-10-21, §7.0b), the `/dev/mtdNro` read path, the restored `kernel.modprobe`, the 1 s
   UART-Enter window into recovery (`arm-imx6ul/initramfs/init:56-63`). (`reboot-recovery` from the rootfs
   WORKED 2026-10-20, §7.5.)
 - `radio`'s `driver_mode` fix (§2.5: `mwifiex driver_mode=<n>` before `mwifiex_sdio`): in the revision-3
   image (B14), on the unit since 2026-10-20 (§7.5); AP mode itself is UNVERIFIED (no `hostapd`, wpa_supplicant without AP mode);
-- female port (usbotg1): its current limit, and mainline chipidea host behaviour beyond enumeration; the
+- female port (usbotg1): its real current limit (UNMEASURED; design ASSUMPTION, owner-stated: 5 V, 100-500 mA, §7.0b), and mainline chipidea host behaviour beyond enumeration and FAT32 auto-mount; the
   VBUS enable is GPIO1_IO07 (MEASURED 2026-10-20, §1; in the DT since revision 5, VERIFIED on the unit, §7.0b);
   (corrected 2026-10-20: this item asked whether VBUS is switched at all);
 - whether the radio module really is unpowered with `reg_wlan` off on every SKU (polarity from LIVI and

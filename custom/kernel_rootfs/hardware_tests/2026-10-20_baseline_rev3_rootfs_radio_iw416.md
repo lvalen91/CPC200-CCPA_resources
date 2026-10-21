@@ -53,7 +53,7 @@ across reboots, dependency-ordered module loads (B10), the interface wording (B1
 ## Not tested
 
 Wi-Fi association (`wifi-connect`) and DHCP over Wi-Fi; Bluetooth pairing or traffic; AP mode
-(`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks (no `/dev/sd*`: no stick plugged); LED behaviours; key-only SSH
+(`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks beyond FAT32/MBR (exFAT, GPT, EFI untested; FAT32 since verified, Revision 5 below); LED behaviours; key-only SSH
 login; host-key reuse from the persist archive; the 1 s UART-Enter window into recovery; (B18's `bt-scan`: superseded by revision 4, tested below);
 RTL8822CS/BS (no such unit).
 
@@ -88,5 +88,20 @@ partition: **port VBUS VERIFIED on hardware**). Recovery auto-mounted it read-wr
 in recovery (remount read-only by hand if it must not change).
 
 The kernel partition now holds `35dfb1a5…c871e` (revision 2's kernel `2d43437b…` and revision 1's are superseded);
-the rootfs is still revision 4 (`cbfd4d39…513d`). Not yet done: booting the rootfs with a stick plugged in (check
-`usb-mount`/mdev auto-mount); the port's current limit is unmeasured.
+the rootfs is still revision 4 (`cbfd4d39…513d`). 
+
+### Rootfs follow-up (2026-10-21, IW416 unit, kernel revision 5 + rootfs revision 4)
+
+Booted with a FAT32 stick (MBR, 3.75 GiB, one partition) plugged in: the stick enumerated at 1.1 s (usb 1-1,
+high-speed), sda1 appeared at 2.4 s, mdev ran `usb-mount`: "usb-mount: /dev/sda1 (fat32, partition 1, mbr:0b) mounted
+read-write at /mnt/usb"; the contents listed (19 top-level entries); no `Unknown symbol` dmesg lines. It mounts
+read-write by default (the owner remounted it read-only by hand; nothing was written). **Rootfs mdev auto-mount of
+FAT32 VERIFIED on hardware**, in recovery (earlier) and in the rootfs.
+
+Boot-loop guard trap: after the kernel flash the guard still held the mark from the preceding `reboot-recovery`, so
+the first plain `reboot` stayed in recovery until `flash_eraseall -q /dev/mtd5` cleared bootstate. `flash-rootfs`
+clears it; `flash-kernel` does not (open item, documented in `../baseline/README.md` §7.0b).
+
+Port current: ASSUMPTION (owner-stated design requirement, NOT measured): 5 V, 100-500 mA, the USB 2.0 minimum for
+data transfer and for an iPhone to connect for CarPlay. The real limit remains unmeasured. Still untested: exFAT,
+GPT and EFI sticks, bootstate clearing in `flash-kernel`, LEDs, Wi-Fi association.
