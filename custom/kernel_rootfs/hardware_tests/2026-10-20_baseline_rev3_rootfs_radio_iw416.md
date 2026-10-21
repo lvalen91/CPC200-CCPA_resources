@@ -53,7 +53,7 @@ across reboots, dependency-ordered module loads (B10), the interface wording (B1
 ## Not tested
 
 Wi-Fi association (`wifi-connect`) and DHCP over Wi-Fi; Bluetooth pairing or traffic; AP mode
-(`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks beyond FAT32/MBR (exFAT, GPT, EFI untested; FAT32 since verified, Revision 5 below); LED behaviours; key-only SSH
+(`MWIFIEX_DRIVER_MODE`); `hcitool scan`; USB sticks: GPT with an EFI system partition, GPT with the backup header at the true disk end, unpartitioned (superfloppy) sticks, hot-plug of exFAT sticks and `usb-update` from a stick (FAT32/exFAT x MBR/GPT single-partition since verified, Revision 5 below); LED behaviours; key-only SSH
 login; host-key reuse from the persist archive; the 1 s UART-Enter window into recovery; (B18's `bt-scan`: superseded by revision 4, tested below);
 RTL8822CS/BS (no such unit).
 
@@ -103,5 +103,8 @@ the first plain `reboot` stayed in recovery until `flash_eraseall -q /dev/mtd5` 
 clears it; `flash-kernel` does not (open item, documented in `../baseline/README.md` §7.0b).
 
 Port current: ASSUMPTION (owner-stated design requirement, NOT measured): 5 V, 100-500 mA, the USB 2.0 minimum for
-data transfer and for an iPhone to connect for CarPlay. The real limit remains unmeasured. Still untested: exFAT,
-GPT and EFI sticks, bootstate clearing in `flash-kernel`, LEDs, Wi-Fi association.
+data transfer and for an iPhone to connect for CarPlay. The real limit remains unmeasured. Still untested: bootstate clearing in `flash-kernel`, LEDs, Wi-Fi association.
+
+### USB stick layout matrix (2026-10-21, same unit and images)
+
+Layout matrix (2026-10-21, kernel revision 5 + rootfs revision 4, IW416 unit, one 64 GB stick overwritten with four 200 MB single-partition images built on the Mac with hdiutil: FAT32/MBR (0x0b), FAT32/GPT, exFAT/MBR (0x07), exFAT/GPT; the GPT images carry one basic-data partition, a2a0d0eb-e5b9-3344-87c0-68b6b72699c7, NO EFI system partition, and their backup header sits at the image end, not the disk end). Per layout: image written from the host over nc to /dev/sda, readback sha256 of the first 200 MB matched, `blockdev --rereadpt`, partition node appeared, `usb-mount` classified it correctly (fat32 mbr:0b, fat32 gpt:a2a0..., exfat mbr:07, exfat gpt:a2a0...) and mounted it read-write (vfat resp. exfat kernel driver), an 8 MiB random write + drop_caches + read-back sha256 MATCHED, and `usb-mount -u` was clean. **FAT32 and exFAT x MBR and GPT (single data partition) VERIFIED on hardware.** Also: hot-plug of the 64 GB FAT32 stick auto-mounted via mdev; a `--rereadpt` also triggered an mdev auto-mount; throughput (rough, includes sha): 32 MiB write 8.6 MB/s then 20 MB/s, 32 MiB read-back ~5 s. NOT tested: GPT with an EFI system partition ahead of the data partition, GPT with the backup header at the true disk end, an unpartitioned (superfloppy) stick, hot-plug of exFAT sticks (only rereadpt-triggered mdev), `usb-update` from a stick, RTL units.

@@ -1,6 +1,6 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `5edfaa5` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
+> Copy of ccpa_custom `baseline/` at commit `ca110e4` (2026-10-21, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
 > Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
@@ -63,8 +63,8 @@ daemon, no web UI. Built on the LIVI Link recipe
   the script, devices found).
 - **UNVERIFIED on hardware**: Wi-Fi association (`wifi-connect`, WPA2-PSK and open) and DHCP over Wi-Fi;
   any Bluetooth pairing or traffic; AP mode (`MWIFIEX_DRIVER_MODE`; no `hostapd`); WPA3 (not built, §2.5);
-  `hcitool scan`; RTL8822CS/BS (no such unit); USB `usb-update` from a stick, and exFAT, GPT and EFI sticks (FAT32/MBR enumeration in recovery and
-  rootfs auto-mount via mdev are VERIFIED, §7.0b); the port's real current limit (design ASSUMPTION, owner-stated, 5 V
+  `hcitool scan`; RTL8822CS/BS (no such unit); USB `usb-update` from a stick; GPT with an EFI system partition, GPT with the backup header at the true disk end, unpartitioned (superfloppy) sticks and
+  hot-plug of exFAT sticks (FAT32/MBR enumeration in recovery, and rootfs mount, write and read-back of FAT32 and exFAT on MBR and GPT single-partition sticks, are VERIFIED, §7.0b); the port's real current limit (design ASSUMPTION, owner-stated, 5 V
   100-500 mA, not measured, §7.0b); `flash-kernel` clearing the bootstate mark (open item, §7.0b); LED behaviours; key-only SSH login and a host key reused
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
@@ -312,7 +312,7 @@ INFERRED to be the gpio7 `init_gpio.sh` calls "quick charge"; GPIO1_IO06 did not
 stick enumerated; revision 5 holds it high from the regulator's probe in every USB host build
 (`reg_usb_otg1_vbus`, `dts/imx6ull-ccpa-usbhost.dtsi`). Revision 5 is VERIFIED on the unit
 (§7.0b: stick enumerated at boot in recovery, no manual GPIO). The rootfs path is VERIFIED too (2026-10-21: FAT32 stick auto-mounted read-write at /mnt/usb by the mdev `usb-mount`
-rule). The port's current capability is an owner-stated design ASSUMPTION, not a measurement: 5 V, 100-500 mA (the
+rule; FAT32 and exFAT on MBR and GPT single-partition sticks, §7.0b). The port's current capability is an owner-stated design ASSUMPTION, not a measurement: 5 V, 100-500 mA (the
 USB 2.0 minimum for data transfer and for an iPhone to connect for CarPlay); the real limit remains unmeasured. Wired-CarPlay role swapping (dr_mode otg + the vendor's
 a_suspend_req_inf) stays out; mainline chipidea would need `USB_OTG_FSM`/role-switch support for it.
 `dts/stock-usb-reference.dtsi` restates the stock USB nodes in mainline labels (reference only,
@@ -668,7 +668,7 @@ Record: `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`
 mdev ran `usb-mount`: "/dev/sda1 (fat32, partition 1, mbr:0b) mounted read-write at /mnt/usb"; the contents listed
 (19 top-level entries); 0 `Unknown symbol` dmesg lines. It mounts READ-WRITE by default (the owner remounted it
 read-only by hand; nothing was written). **Rootfs mdev auto-mount of FAT32 VERIFIED on hardware**, in recovery and in the
-rootfs. Still untested: exFAT, GPT and EFI sticks; LEDs; Wi-Fi association. Port current: ASSUMPTION (owner-stated, NOT measured): the port is treated as 5 V, 100-500 mA, the USB 2.0 minimum for data transfer and for an iPhone to connect for CarPlay; the real limit remains unmeasured.
+rootfs. Layout matrix (2026-10-21, kernel revision 5 + rootfs revision 4, IW416 unit, one 64 GB stick overwritten with four 200 MB single-partition images built on the Mac with hdiutil: FAT32/MBR (0x0b), FAT32/GPT, exFAT/MBR (0x07), exFAT/GPT; the GPT images carry one basic-data partition, a2a0d0eb-e5b9-3344-87c0-68b6b72699c7, NO EFI system partition, and their backup header sits at the image end, not the disk end). Per layout: image written from the host over nc to /dev/sda, readback sha256 of the first 200 MB matched, `blockdev --rereadpt`, partition node appeared, `usb-mount` classified it correctly (fat32 mbr:0b, fat32 gpt:a2a0..., exfat mbr:07, exfat gpt:a2a0...) and mounted it read-write (vfat resp. exfat kernel driver), an 8 MiB random write + drop_caches + read-back sha256 MATCHED, and `usb-mount -u` was clean. **FAT32 and exFAT x MBR and GPT (single data partition) VERIFIED on hardware.** Also: hot-plug of the 64 GB FAT32 stick auto-mounted via mdev; a `--rereadpt` also triggered an mdev auto-mount; throughput (rough, includes sha): 32 MiB write 8.6 MB/s then 20 MB/s, 32 MiB read-back ~5 s. NOT tested: GPT with an EFI system partition ahead of the data partition, GPT with the backup header at the true disk end, an unpartitioned (superfloppy) stick, hot-plug of exFAT sticks (only rereadpt-triggered mdev), `usb-update` from a stick, RTL units. Still untested elsewhere: LEDs; Wi-Fi association. Port current: ASSUMPTION (owner-stated, NOT measured): the port is treated as 5 V, 100-500 mA, the USB 2.0 minimum for data transfer and for an iPhone to connect for CarPlay; the real limit remains unmeasured.
 **Boot-loop guard trap:** after the kernel flash the guard still held the mark set by the preceding `reboot-recovery`,
 so the first plain `reboot` stayed in recovery until `flash_eraseall -q /dev/mtd5` (bootstate) cleared it.
 `flash-rootfs` clears the mark, `flash-kernel` does not (it never touches bootstate): after a kernel flash made from
