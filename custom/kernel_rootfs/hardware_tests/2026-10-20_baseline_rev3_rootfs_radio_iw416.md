@@ -79,8 +79,8 @@ driving GPIO1_IO07 high by sysfs made the female port enumerate a FAT32 stick (s
 
 Staged with `stage_kernel.py` from two identical dumps of the old kernel partition (sha256
 `58b20d776149fcb295fa42a278a29c5f7ada7499fb89f4201e166b6a1bc503d8`; head unchanged) and the `-iw416` image
-(2,130,329 B, sha256 `3b79c5b62925482ff6a4b6d210d3e51e6a3746e5e9e99af79427e26ad4f25fdc`); planned partition sha256
-`35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e`. From recovery: `NO_REBOOT=1 flash-kernel
+(2,130,329 B, sha256 `3b79c5b62925482ff6a4b6d210d3e51e6a3746e5e9e99af79427e26ad4f25fdc`); staged partition sha256
+`35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e` (the value now on the unit; the write was verified). From recovery: `NO_REBOOT=1 flash-kernel
 <host>:<port> <sha256>` wrote and verified mtd2, erased the env, left U-Boot unchanged (sha256 `c60054ca…` before
 and after); reboot. The unit came back in recovery at its NCM address with the new build stamp;
 `/sys/class/regulator` shows `usb_otg1_vbus`; **the stick enumerated at boot with no manual GPIO** (3.9 GB disk, one

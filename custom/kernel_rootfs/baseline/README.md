@@ -1,7 +1,7 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `ca110e4` (2026-10-21, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
-> Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths. The other files are byte-identical to that commit.
+> Copy of ccpa_custom `baseline/` at commit `f2a974b` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
+> Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths except the §7 artefact map. The other files are byte-identical to that commit.
 > The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
 
 A minimal, vanilla image for the **CPC200-CCPA** (i.MX6ULL, 128 MiB RAM, 16 MiB QSPI NOR, HAB
@@ -626,6 +626,14 @@ libblkid the recipe does not build (§7).
 
 ## 7. OPEN ITEMS / MEASUREMENTS / VERIFICATION
 
+**Artefact map (owner-local, NOT in git; added 2026-10-20).** Build outputs, QEMU logs and test harnesses of the
+2026-10-20 session are under `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/` (point-in-time location,
+check live): `rev2/` (`default`, `default-nossh`, `nousb`, `recovery-usb-vfat`, `logs`), `rev3/` (`default`, `logs`,
+`test-harness`), `rev4/default/` (the rootfs-only image, `rootfs.img` sha256 `cbfd4d39…513d`), `rev5/` (`default` = the
+kernel images, `logs`, `test-harness`). The top-level `default/`, `recovery-usb/`, `recovery-usb-exfat/`, `usb-host/`
+and `logs/` beside them are earlier or variant trial builds and are not mapped to a revision here. What is on the
+unit is only what §7.0a/§7.0b say (rootfs revision 4 `cbfd4d39…513d`, kernel revision 5 `35dfb1a5…c871e`).
+
 ### 7.0b Revision 5 (2026-10-20): kernel-only rebuild, usbotg1 VBUS enable (flashed and VERIFIED on the IW416 unit)
 
 Rev 5 = rev 4 sources + `dts/imx6ull-ccpa-usbhost.dtsi`: `reg_usb_otg1_vbus` (regulator-fixed, `gpio1 7`
@@ -655,9 +663,9 @@ the harness are kept with the build VM, not in this repo.
 rootfs): driving GPIO1_IO07 high by sysfs made the female port enumerate a FAT32 stick (sda1); GPIO1_IO06 did
 nothing (§1). The `-iw416` image above (2,130,329 B) was staged with `stage_kernel.py` from two identical dumps
 of the old kernel partition (sha256 `58b20d776149fcb295fa42a278a29c5f7ada7499fb89f4201e166b6a1bc503d8`, head
-unchanged); planned partition sha256 `35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e`. From
+unchanged); staged partition sha256 `35dfb1a55292f079bbae397ef59e771ede05edddbfbc0b5e2f750204f17c871e` (the value now on the unit; the write was verified). From
 recovery on the unit: `NO_REBOOT=1 flash-kernel <host>:<port> <sha256>` wrote and verified mtd2, erased the env,
-left U-Boot unchanged (sha256 `c60054ca…` before and after); reboot. The unit returned in recovery at its NCM
+left U-Boot unchanged (mtd0 sha256 `c60054cafb6083761c64bceb96095d6731b86db57983558b8db9810d66807bca` before and after); reboot. The unit returned in recovery at its NCM
 address with the new build stamp; `/sys/class/regulator` lists `usb_otg1_vbus`; **the stick enumerated at boot
 with no manual GPIO** (3.9 GB disk, one partition) and the recovery auto-mounted it **read-write**, so a stick's
 contents are at risk in recovery (remount read-only by hand if it must not change). The kernel partition now
