@@ -1,6 +1,7 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 Copied unchanged from LIVI scripts/livi-link/arm/imx6ul/kernel-patches/0002-usb-chipidea-imx6ul-gadget-does-not-wait-for-bsv.patch
 (https://github.com/f-io/LIVI, GPL-3.0-or-later; the patched files are GPL-2.0 kernel sources).
+Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
 This text before the first --- line is ignored by patch(1).
 
 --- a/drivers/usb/chipidea/ci_hdrc_imx.c

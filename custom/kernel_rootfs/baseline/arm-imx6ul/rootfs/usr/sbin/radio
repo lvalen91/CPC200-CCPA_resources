@@ -1,5 +1,9 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/rootfs/usr/bin/livi-radio (GPL-3.0-or-later).
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-20: rewritten as an on-demand up/down/status tool that identifies the chip by its
+# SDIO id; LIVI's boot-time start, wlan0 MAC keeping and btd/accessoryd handling are not carried.
 # radio up|down|status (also as radio-up / radio-down): the Wi-Fi/BT module ON DEMAND. Nothing runs this
 # at boot; the radios stay off until it is called (README §2.5).
 #
@@ -33,7 +37,11 @@ HOST=${RADIO_MMC_HOST:-2190000.mmc}
 HOSTDRV=$SYS/bus/platform/drivers/sdhci-esdhc-imx
 FW=/lib/firmware
 # Unload order for `down` (absent ones are skipped; repeated until nothing more unloads).
-MODS="btnxpuart hci_uart btrtl btintel btbcm btmtk mwifiex_sdio mwifiex rtw88_8822cs rtw88_8822bs rtw88_sdio
+# The Bluetooth core (CONFIG_BT=m, radio-modules.fragment) is a module too: rfcomm (bt-proto-3, loaded
+# by the kernel on demand) and bluetooth itself, then the helpers bluetooth pulls in (ecdh_generic, ecc).
+# They come after the chip and hci_uart drivers that depend on them and are skipped when absent or built
+# in; a helper still used by another module stays loaded and rmmod fails quietly.
+MODS="btnxpuart hci_uart btrtl btintel btbcm btmtk rfcomm bluetooth ecdh_generic ecc mwifiex_sdio mwifiex rtw88_8822cs rtw88_8822bs rtw88_sdio
 rtw88_8822c rtw88_8822b rtw88_core mac80211 cfg80211 sdhci_esdhc_imx sdhci_pltfm sdhci cqhci mmc_core"
 
 say() { echo "radio: $*"; }
@@ -86,7 +94,7 @@ status() {
     ids=$(sdio_ids)
     say "SDIO functions: ${ids:-none}"
     m=
-    for x in $MODS bluetooth; do loaded "$x" && m="$m $x"; done
+    for x in $MODS; do loaded "$x" && m="$m $x"; done
     say "radio modules loaded:${m:- none}"
     for i in $(wifs); do
         say "wireless interface $i: $(ifstate "$i"), $(cat "$SYS/class/net/$i/address")"

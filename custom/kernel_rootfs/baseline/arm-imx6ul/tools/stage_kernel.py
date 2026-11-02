@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the changes against LIVI are stated in this header.
 #
 # Derived from LIVI (https://github.com/f-io/LIVI, GPL-3.0-or-later), local copy:
 #   native/livi-link/crates/imx6ul-uboot/src/lib.rs          (read_env, layout, kernel_partition, tests)

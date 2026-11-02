@@ -1,4 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the changes against LIVI are stated in this header.
 # BusyBox 1.38.0 for the RECOVERY initramfs: allnoconfig plus exactly these CONFIG_ symbols (build.sh
 # fails if one does not stick). Derived from RESCUE_APPLETS in LIVI scripts/livi-link/arm/imx6ul/board.sh
 # (https://github.com/f-io/LIVI, GPL-3.0-or-later). Changes: no brctl/vi/awk/sed/grep/xxd/pkill/

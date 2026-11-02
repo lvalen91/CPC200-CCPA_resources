@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
+// Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+// Modified 2026-10-19: the changes against LIVI are stated below.
 /* Derived from LIVI scripts/livi-link/arm/imx6ul/imx6ull-rtl8822bs.dtsi (https://github.com/f-io/LIVI;
  * project GPL-3.0-or-later, upstream SPDX tag GPL-2.0 kept). Realtek RTL8822BS: rtw88 drives Wi-Fi over
  * SDIO. LIVI: "btrtl knows the 8822B over USB only", so no Bluetooth node. */

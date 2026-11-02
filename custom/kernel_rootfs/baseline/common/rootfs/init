@@ -1,5 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the changes against LIVI are stated in this header.
 # Derived from LIVI scripts/livi-link/common/rootfs/init (https://github.com/f-io/LIVI,
 # GPL-3.0-or-later). Changes: /dev and /run arrive moved from the recovery initramfs (mounted here
 # only if they did not), /tmp is a tmpfs, the modprobe helper path is restored. PID-1 shim: pseudo

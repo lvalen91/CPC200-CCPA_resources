@@ -1,5 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the changes against LIVI are stated in this header.
 # Flow derived from LIVI write_rootfs() (native/livi-link/crates/livi-link-provision/src/dongle/arm/
 # imx6ul/boot.rs, GPL-3.0-or-later): size and 4 KiB checks, flashcp, read back with dd | sha256sum,
 # clear bootstate. Changes: runs on the unit (recovery) instead of from the host, refuses without the

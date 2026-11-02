@@ -8,6 +8,12 @@ carry LIVI material: kernel patches 0001-0004 unchanged (a header added) and fil
 `flash-rootfs`, `initramfs/init`, `tools/stage_kernel.py`, `dts/radio-*.dtsi` and others), each with a header naming its
 LIVI source (`../baseline/README.md` §8). *(Corrected 2026-10-20: this said nothing of LIVI is copied into this repository.)*
 
+Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+
+That line is the attribution LIVI's NOTICE asks for under GPL-3.0 section 7(b) (f-io/LIVI commit 7d652dc1,
+2026-10-28), in the Appropriate Legal Notices and documentation of works based on LIVI. It is carried here, in
+`../baseline/` (README §8 and each derived file's header), in `../tools/dryrun.py` and in the repository README.
+
 Version analysed: LIVI **9.5.0**, firmware `imx6ul_iw416` **build `168c4922`** (`assets/livi-link/imx6ul_iw416/firmware.json`:
 file `livi-link-imx6ull.lfwb`, 5,058,338 B, sha256 `8c55db5e89c6f187…`). `build` is `git rev-parse --short=8 HEAD` of the
 LIVI tree that built it (`scripts/livi-link/version.sh:4`), so `168c4922` is a LIVI commit. The source read for this note was a

@@ -1,5 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19 (and 2026-10-30: ocbm mode): the changes against LIVI are stated in this header.
 # Derived from LIVI scripts/livi-link/common/initramfs/net-up (https://github.com/f-io/LIVI,
 # GPL-3.0-or-later). Changes: identity from /etc/baseline/usb-ids.conf and ocbm-identity, no bridge,
 # the interface name is read back from configfs instead of assumed, per-unit fixed MACs, a one-address
@@ -7,8 +9,11 @@
 #
 #   net-up [ncm]   USB NCM on the UDC; on success prints the network interface name on stdout
 #   net-up acm     a shell on ttyGS0 (recovery initramfs only: unauthenticated)
-#   net-up ocbm    refused: needs FunctionFS + ocbmd, not part of the baseline
-# The UDC has a small endpoint budget, so one function at a time; net-down first to switch.
+#   net-up ocbm    OCBM accessory (rootfs only, revision 6): FunctionFS function ffs.ocbm, served by
+#                  ocbm-accessory, which provides /dev/usb_accessory for ocbmd (started from $OCBMD or
+#                  the first `ocbmd` on PATH, else by hand); prints usb_accessory. README §2.8.
+# One function at a time (the OCBM host apps take the FIRST interface with a bulk pair, so OCBM is a
+# pure accessory device like the stock one, never a composite with NCM); net-down first to switch.
 MODE=${1:-ncm}
 C=/etc/baseline
 . "$C/usb-ids.conf"
@@ -23,8 +28,13 @@ case $MODE in
     acm)
         [ -e "$C/recovery" ] || { log "acm shell is recovery-only (unauthenticated)"; exit 1; }
         VID=$USB_ACM_VID PID=$USB_ACM_PID F=acm.GS0 ;;
-    ocbm) log "OCBM mode ($USB_VID:$USB_OCBM_PID) needs FunctionFS and ocbmd, not in the baseline"; exit 1 ;;
-    *) log "usage: net-up [ncm|acm]"; exit 1 ;;
+    ocbm)
+        [ -e "$C/recovery" ] && { log "OCBM mode is rootfs-only (recovery has no ocbm-accessory)"; exit 1; }
+        command -v ocbm-accessory > /dev/null 2>&1 || { log "no ocbm-accessory in this image"; exit 1; }
+        # (no /proc/filesystems check: f_fs registers "functionfs" only once an ffs.* function exists,
+        # drivers/usb/gadget/function/f_fs.c _ffs_alloc_dev -> functionfs_init; the mkdir below tells)
+        VID=$USB_VID PID=$USB_OCBM_PID F=ffs.ocbm ;;
+    *) log "usage: net-up [ncm|acm|ocbm]"; exit 1 ;;
 esac
 
 [ -d /sys/kernel/config/usb_gadget ] || { log "no /sys/kernel/config/usb_gadget (configfs not mounted?)"; exit 1; }
@@ -32,6 +42,10 @@ esac
 if [ -d "$G" ]; then
     if [ "$MODE" = ncm ] && [ -e "$G/functions/ncm.usb0/ifname" ]; then
         cat "$G/functions/ncm.usb0/ifname"
+        exit 0
+    fi
+    if [ "$MODE" = ocbm ] && [ -d "$G/functions/ffs.ocbm" ] && [ -L /dev/usb_accessory ]; then
+        echo usb_accessory
         exit 0
     fi
     log "a gadget is already up, net-down first"
@@ -62,7 +76,13 @@ serial=
 [ -r "$R/serial" ] && read -r serial < "$R/serial"
 [ -n "$serial" ] || serial=$USB_SERIAL_FALLBACK
 
-mkdir -p "$G/strings/0x409" "$G/configs/c.1/strings/0x409" "$G/functions/$F" || { log "configfs mkdir failed"; exit 1; }
+if ! mkdir -p "$G/strings/0x409" "$G/configs/c.1/strings/0x409" "$G/functions/$F"; then
+    hint=
+    [ "$MODE" = ocbm ] && hint=" (a kernel without FunctionFS? CONFIG_USB_CONFIGFS_F_FS, kernel revision 6)"
+    log "configfs mkdir failed$hint"
+    rmdir "$G/configs/c.1/strings/0x409" "$G/configs/c.1" "$G/strings/0x409" "$G" 2> /dev/null
+    exit 1
+fi
 echo "$VID" > "$G/idVendor"
 echo "$PID" > "$G/idProduct"
 echo 0x0200 > "$G/bcdUSB"
@@ -78,6 +98,26 @@ if [ "$MODE" = ncm ]; then
         fi
     done
 fi
+if [ "$MODE" = ocbm ]; then
+    # A pure accessory device: class at the interface (0xFF/0xFF/0x00 in ocbm-accessory's descriptors),
+    # as the stock g_android_accessory gadget (ccpa/rootfs/script/ocbm_boot.sh).
+    for a in bDeviceClass bDeviceSubClass bDeviceProtocol; do echo 0x00 > "$G/$a"; done
+    # functionfs instance name = the part after "ffs."; the descriptors must be written (ocbm-accessory
+    # does that, ep1/ep2 appear) BEFORE the UDC is bound, or the bind fails.
+    FFS=${OCBM_FFS_DIR:-$R/ffs}
+    mkdir -p "$FFS" /run/log
+    mountpoint -q "$FFS" 2> /dev/null || mount -t functionfs ocbm "$FFS" \
+        || { log "mount -t functionfs failed (dmesg)"; net-down > /dev/null 2>&1; exit 1; }
+    OCBMD=${OCBMD:-$(command -v ocbmd 2> /dev/null || true)}
+    set --
+    [ -n "$OCBMD" ] && set -- -- "$OCBMD"
+    # OCBM_ACCESSORY_OPTS: diagnostics, e.g. "-v -v" (trace every transfer) or "-r 16384" (README §2.8)
+    # shellcheck disable=SC2086
+    ocbm-accessory ${OCBM_ACCESSORY_OPTS:-} -f "$FFS" -p /run/ocbm-accessory.pid -l /run/log/ocbmd.log "$@" 2>> /run/log/ocbm-accessory.log &
+    n=0
+    while [ ! -e "$FFS/ep1" ] && [ "$n" -lt 30 ]; do n=$((n + 1)); sleep 0.1; done
+    [ -e "$FFS/ep1" ] || { log "ocbm-accessory wrote no descriptors (/run/log/ocbm-accessory.log)"; net-down > /dev/null 2>&1; exit 1; }
+fi
 echo "$USB_MANUFACTURER" > "$G/strings/0x409/manufacturer"
 echo "$USB_PRODUCT" > "$G/strings/0x409/product"
 echo "$serial" > "$G/strings/0x409/serialnumber"
@@ -89,6 +129,11 @@ if ! echo "$UDC" > "$G/UDC" 2>/dev/null; then
     exit 1
 fi
 
+if [ "$MODE" = ocbm ]; then
+    log "$UDC bound as OCBM accessory $VID:$PID, /dev/usb_accessory -> $(readlink /dev/usb_accessory 2> /dev/null), ocbmd: ${OCBMD:-none, start it by hand} (logs: /run/log/ocbm-accessory.log, /run/log/ocbmd.log)"
+    echo usb_accessory
+    exit 0
+fi
 if [ "$MODE" = acm ]; then
     ( while [ -c /dev/ttyGS0 ]; do setsid cttyhack sh < /dev/ttyGS0 > /dev/ttyGS0 2>&1; sleep 1; done ) &
     echo $! > /run/acm-shell.pid

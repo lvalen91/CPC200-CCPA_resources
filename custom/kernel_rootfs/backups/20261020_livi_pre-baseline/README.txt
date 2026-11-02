@@ -10,10 +10,15 @@ mtd3 rootfs 0xc60000 | mtd4 customer 0x10000 | mtd5 bootstate 0x10000.
 Method: on the unit `setsid sh -c 'dd if=/dev/mtdN bs=64k | nc 10.10.10.100 <port>'`, host `nc -l 10.10.10.100 <port> > file`
 (host socket on the LIVI NCM interface; the unit was reached with tools/tn.py, BOUND_IF=<iface>).
 
-Files (sha256 in SHA256SUMS, re-verified after the copy into this repo):
+Files (sha256 in SHA256SUMS; mtd0_dump.bin re-verified after the copy into this repo, mtd2_dump1.bin is local only):
   mtd2_dump1.bin  3,407,872 B  kernel partition (LIVI kernel, DCP head written by U-Boot), read 1
-                  Read 2 (mtd2_dump2.bin) matched read 1 byte for byte (sha256 c58710c5...) and was dropped from this
-                  repo copy on 2026-10-20 as identical. The unit's own `sha256sum /dev/mtd2` printed the same hash before the dumps.
+                  NOT stored in this repo. mtd2_dump1.bin was removed from the unpushed history 2026-10-28; the
+                  identical mtd2_dump2.bin remains in commits 8836cca..9746e9f (no history rewrite). It is a GPL binary, the
+                  kernel built by LIVI 9.5.0, firmware imx6ul_iw416 build 168c4922 (https://github.com/f-io/LIVI).
+                  sha256 c58710c59ab9cf03d6bfab77faa3838351b6d40d68c896ab71bc7c77c3fbf713; kept only at the
+                  owner-local original carlinkit_misc/ccpa_backups/20261020_livi_pre-baseline/.
+                  Read 2 (mtd2_dump2.bin) matched read 1 byte for byte (sha256 c58710c5...) and was dropped from the
+                  working tree on 2026-10-20 as identical (still reachable in history, see above). The unit's own `sha256sum /dev/mtd2` printed the same hash before the dumps.
   mtd0_dump.bin     196,608 B  LIVI 'uboot' partition = flash 0x0-0x2FFFF; sha256 equals the first 0x30000 B of the
                   2026-10-19 stock mtd0.bin (../../../../flash_dumps/CCPA_stripped/mtd0.bin, the same bytes as that backup's;
                   c60054ca..., re-verified 2026-10-20): U-Boot + update block unchanged since 2026-10-19.
@@ -28,6 +33,7 @@ NOT copied (build artefact, kept only at the owner-local original carlinkit_misc
                   the baseline kernel partition staged from mtd2_dump1.bin + mtd0_dump.bin by
                   ../../baseline/arm-imx6ul/tools/stage_kernel.py (zImage+DTB 1,755,383 B, sha256 2c922b87c7268e01...).
 
-Restore this LIVI state: from a rescue/recovery shell on the same unit, `flashcp -v mtd2_dump1.bin /dev/mtd2`, check
+Restore this LIVI state (mtd2_dump1.bin from the owner-local copy): from a rescue/recovery shell on the same unit,
+`flashcp -v mtd2_dump1.bin /dev/mtd2`, check
 `sha256sum /dev/mtd2` == c58710c5..., then reboot. An env erase is not needed: the head in this dump is already U-Boot's
 own DCP output for this chip (INFERRED from the format in documentation/05_Security_Analysis/kernel_encryption.md). UNTESTED.

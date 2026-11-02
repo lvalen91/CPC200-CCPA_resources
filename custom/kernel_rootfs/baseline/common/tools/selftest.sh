@@ -17,6 +17,12 @@
 #      load order, interface wording, the radio-down messages, wifi-connect's /run-only config and dry
 #      run, the scan tables, bt-scan's LE enable and BR/EDR-only retry; nothing in the boot path starts a
 #      radio                                                                           [B10, B11, B15-B18]
+#   9. ocbm-accessory (needs cc and python3): the FunctionFS <-> pty relay behind `net-up ocbm`, in its
+#      test mode (a datagram socket stands in for the bulk endpoints): raw pty, byte-exact both ways,
+#      the ZLP rule, 1 MiB duplex, respawn, DISABLE hang-up, refusal to replace a real node    [revision 6]
+#  10. ocbm-overlay against a stand-in 'rootfs' MTD: write refusals (sha256, payload/header mismatch, a
+#      squashfs reaching into the region) leave flash unchanged, write + read-back, "already there", load
+#      unpacks and verifies, a damaged payload and an erased region are not loaded           [revision 8]
 set -u
 HERE=$(cd "$(dirname "$0")/../.." && pwd)
 W=${1:-$(mktemp -d /tmp/baseline-selftest.XXXXXX)}
@@ -546,6 +552,101 @@ boot=$(cd "$HERE" && grep -nE '(^|[;&|[:space:]])(radio|radio-up|wifi-connect|wi
     common/rootfs/init common/rootfs/etc/init.d/rcS common/rootfs/etc/inittab arm-imx6ul/rootfs/etc/baseline/board-rcS.sh \
     common/rootfs/etc/mdev.conf 2> /dev/null | grep -v ':[[:space:]]*#' || true)
 [ -z "$boot" ] && pass "radios OFF at boot: no radio/Wi-Fi/BT tool or module load in init, rcS, inittab, mdev.conf" || fail "boot path starts a radio" "$boot"
+
+echo "9. ocbm-accessory"
+if have cc && have python3; then
+    if cc -O2 -Wall -Wextra -pthread -o "$W/ocbm-accessory" "$HERE/common/ocbm-accessory/ocbm-accessory.c" > "$W/oa-cc.out" 2>&1; then
+        pass "ocbm-accessory.c compiles natively (cc -Wall -Wextra: $(grep -c 'warning:' "$W/oa-cc.out" || true) warnings)"
+        if python3 -I "$HERE/common/tools/ocbm-accessory-test.py" "$W/ocbm-accessory" "$W/oa" > "$W/oa.out" 2>&1; then
+            grep -E ' ok$| FAIL$' "$W/oa.out"
+        else
+            grep -E ' ok$| FAIL$' "$W/oa.out"
+            fail "ocbm-accessory-test.py (relay.log, child.log in $W/oa)" "$(grep -vE ' ok$' "$W/oa.out" | tail -n 12)"
+        fi
+    else
+        fail "ocbm-accessory.c native compile" "$(cat "$W/oa-cc.out")"
+    fi
+else
+    echo "  cc or python3 not installed, skipped"
+fi
+
+echo "10. ocbm-overlay against a stand-in 'rootfs' MTD (revision 8)"
+O=$W/ovl
+rm -rf "$O"
+mkdir -p "$O/sys/mtd3" "$O/dev" "$O/run" "$O/log" "$O/pay/bin" "$O/pay/etc"
+echo rootfs > "$O/sys/mtd3/name"
+echo 12976128 > "$O/sys/mtd3/size"
+echo 65536 > "$O/sys/mtd3/erasesize"
+truncate -s 12976128 "$O/dev/mtd3"
+# a squashfs superblock stand-in: magic hsqs, bytes_used (le64 at 40) = 3534100 (revision 7's)
+printf 'hsqs' | dd of="$O/dev/mtd3" conv=notrunc 2> /dev/null
+printf '\024\355\065\000\000\000\000\000' | dd of="$O/dev/mtd3" bs=1 seek=40 conv=notrunc 2> /dev/null
+cat > "$O/erase.sh" << 'EOS'
+#!/bin/sh
+# DEV OFFSET BLOCKS: what flash_erase does, on a plain file
+head -c $(($3 * 65536)) /dev/zero | tr '\000' '\377' | dd of="$1" bs=65536 seek=$(($2 / 65536)) conv=notrunc 2> /dev/null
+EOS
+chmod +x "$O/erase.sh"
+printf '#!/bin/sh\necho launched\n' > "$O/pay/bin/ocbmd-launch"
+chmod 755 "$O/pay/bin/ocbmd-launch"
+echo ocbm-test > "$O/pay/etc/marker"
+mkimg() { # mkimg OUT [corrupt]: an overlay image (the tools/ocbm_overlay.sh format) of $O/pay
+    (cd "$O/pay" && tar -cf - bin etc) | gzip -9 -n > "$O/p.tgz"
+    _b=$(wc -c < "$O/p.tgz")
+    _s=$(sha256sum < "$O/p.tgz" | cut -d' ' -f1)
+    printf 'OCBM-OVERLAY 1\npayload_bytes=%s\npayload_sha256=%s\nversion=selftest %s\n' "$_b" "$_s" "${2:-ok}" > "$O/h"
+    { cat "$O/h"; head -c $((4096 - $(wc -c < "$O/h"))) /dev/zero; cat "$O/p.tgz"; } > "$1"
+    [ "${2:-}" = corrupt ] && printf 'X' | dd of="$1" bs=1 seek=5000 conv=notrunc 2> /dev/null
+    return 0
+}
+ovl() { # ovl ARGS...: ocbm-overlay with every stand-in; output in $W/ovl.out, status returned
+    MTD_SH="$HERE/common/shared/mtd.sh" MTD_SYS=$O/sys MTD_DEV=$O/dev OCBM_RUN=$O/run OCBM_OVERLAY_DIR=$O/opt \
+        OCBM_OVERLAY_LOG=$O/log/ovl.log OCBM_OVERLAY_NOMOUNT=1 FLASH_ERASE=$O/erase.sh \
+        sh "$HERE/common/rootfs/usr/sbin/ocbm-overlay" "$@" > "$W/ovl.out" 2>&1
+}
+mkimg "$O/good.img"
+GSHA=$(sha256sum < "$O/good.img" | cut -d' ' -f1)
+ovl check "$O/good.img" && pass "check: a well-formed image is valid" || fail "check good" "$(cat "$W/ovl.out")"
+ovl load; rc=$?
+[ "$rc" = 1 ] && grep -q 'no overlay in the region' "$W/ovl.out" && pass "load on an empty region: exit 1, 'no overlay'" || fail "load empty (exit $rc)" "$(cat "$W/ovl.out")"
+ovl write "$O/good.img" 0000; rc=$?
+[ "$rc" = 4 ] && pass "write with a wrong sha256: exit 4 (refused)" || fail "write wrong sha (exit $rc)" "$(cat "$W/ovl.out")"
+before=$(sha256sum < "$O/dev/mtd3")
+mkimg "$O/bad.img" corrupt
+ovl write "$O/bad.img" "$(sha256sum < "$O/bad.img" | cut -d' ' -f1)"; rc=$?
+[ "$rc" = 4 ] && [ "$(sha256sum < "$O/dev/mtd3")" = "$before" ] && pass "write of an image whose payload does not match its header: exit 4, MTD unchanged" \
+    || fail "write corrupt (exit $rc)" "$(cat "$W/ovl.out")"
+ovl write "$O/good.img" "$GSHA"; rc=$?
+[ "$rc" = 0 ] && cmp -s "$O/good.img" "$(dd if="$O/dev/mtd3" bs=4096 skip=2048 2> /dev/null | head -c "$(wc -c < "$O/good.img")" > "$O/rb"; echo "$O/rb")" \
+    && [ "$(head -c 4 "$O/dev/mtd3")" = hsqs ] && pass "write: exit 0, the image read back at rootfs+0x800000, the squashfs start untouched" \
+    || fail "write good (exit $rc)" "$(cat "$W/ovl.out")"
+ovl write "$O/good.img" "$GSHA"; rc=$?
+[ "$rc" = 3 ] && pass "write of the same image again: exit 3 (already there)" || fail "write again (exit $rc)" "$(cat "$W/ovl.out")"
+ovl load; rc=$?
+[ "$rc" = 0 ] && [ "$(cat "$O/opt/etc/marker" 2> /dev/null)" = ocbm-test ] && [ -x "$O/opt/bin/ocbmd-launch" ] \
+    && grep -q '^state=loaded' "$O/run/overlay.state" && pass "load: payload verified and unpacked, state=loaded" || fail "load (exit $rc)" "$(cat "$W/ovl.out")"
+printf 'Y' | dd of="$O/dev/mtd3" bs=1 seek=$((8388608 + 4096 + 100)) conv=notrunc 2> /dev/null
+rm -f "$O/run/overlay.state"
+ovl load; rc=$?
+[ "$rc" = 1 ] && grep -q '^state=bad' "$O/run/overlay.state" && pass "load of a damaged payload in flash: exit 1, state=bad (the boot falls back to NCM)" \
+    || fail "load damaged (exit $rc)" "$(cat "$W/ovl.out")"
+ovl erase; rc=$?
+ovl load; rc2=$?
+[ "$rc" = 0 ] && [ "$rc2" = 1 ] && grep -q '^state=none' "$O/run/overlay.state" && pass "erase: exit 0, then no overlay (the escape hatch from the rootfs)" \
+    || fail "erase (exit $rc, load $rc2)" "$(cat "$W/ovl.out")"
+# a squashfs reaching into the region: bytes_used = 0x800001
+printf '\001\000\200\000' | dd of="$O/dev/mtd3" bs=1 seek=40 conv=notrunc 2> /dev/null
+ovl write "$O/good.img" "$GSHA"; rc=$?
+[ "$rc" = 4 ] && grep -q 'reaches into the overlay region' "$W/ovl.out" && pass "write beside a squashfs that reaches into the region: exit 4" \
+    || fail "write past squashfs (exit $rc)" "$(cat "$W/ovl.out")"
+grep -q 'OVERLAY_OFFSET' "$HERE/build.sh" && pass "build.sh refuses a rootfs.img past OVERLAY_OFFSET" || fail "build.sh overlay size guard missing"
+# rcS must not read `usb-mode boot` through a command substitution: the daemons it starts (dropbear -E keeps
+# its stdio) would hold the pipe and rcS would never clear bootstate (hardware, 2026-10-30)
+grep -q 'usb-mode boot > ' "$HERE/common/rootfs/etc/init.d/rcS" && ! grep -q '$(usb-mode boot' "$HERE/common/rootfs/etc/init.d/rcS" \
+    && pass "rcS takes usb-mode boot's message from a file, not a \$(...) pipe a daemon could hold" || fail "rcS reads usb-mode boot through a pipe"
+# a long-lived child must never inherit a caller's stdout from ocbm_up/to_ncm
+[ "$(grep -c 'ssh-up .* > /dev/null' "$HERE/common/rootfs/usr/sbin/usb-mode")" -ge 2 ] \
+    && pass "usb-mode starts dropbear with stdout on /dev/null" || fail "usb-mode lets dropbear inherit stdout"
 
 echo "selftest: $([ "$fails" = 0 ] && echo PASS || echo "FAIL ($fails)") (work dir $W)"
 [ "$fails" = 0 ]

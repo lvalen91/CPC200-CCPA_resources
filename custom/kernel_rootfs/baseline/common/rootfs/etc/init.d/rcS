@@ -1,10 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the changes against LIVI are stated in this header.
 # Baseline rootfs boot. The bootstate handling is LIVI's (scripts/livi-link/common/rootfs/etc/init.d/rcS,
 # https://github.com/f-io/LIVI, GPL-3.0-or-later): clear the mark the initramfs set once the ways in
 # are up. Everything else differs: no radio at boot (radio-up), no MFi bridge (mfi-probe reads the
 # chip), no web UI, no telnetd; NCM + SSH (root, public key or password) and the UART shell (inittab)
-# are the ways in; mdev mounts USB sticks at /mnt/usb.
+# are the ways in; mdev mounts USB sticks at /mnt/usb. Revision 8 (2026-10-30): with a valid OCBM
+# overlay in flash the USB way in is the OCBM accessory instead (usb-mode boot), NCM the fallback.
 #
 # The network part runs in the background so a missing UDC never delays the UART shell, which
 # busybox init starts only after this script returns. Every reason the ways in are not up is printed
@@ -35,15 +38,29 @@ fi
     persist load
     ok=
     why=
-    if IF=$(net-up ncm 2> /run/log/net-up.log); then
-        if ssh-up "$NCM_DEV_IP" 2> /run/log/ssh-up.log; then
-            ok=1
-            con "NCM $IF $NCM_DEV_IP, ssh/scp/sftp root@$NCM_DEV_IP (key or password), host gets $NCM_HOST_IP"
-        else
-            why="SSH: $(tail -n 2 /run/log/ssh-up.log | tr '\n' ' ')(/run/log/dropbear.log)"
-        fi
+    # Revision 8: OCBM is the boot default when a valid OCBM overlay is in flash and `usb-mode default`
+    # is not `ncm` (README §2.8, §7.0e). Its ways in are the OCBM accessory with ocbmd staying up (the host
+    # app's console and SSH through CH_IP) and the UART; they clear bootstate exactly as NCM + SSH do. If
+    # OCBM does not come up, this boot falls back to NCM below, unchanged from revision 7.
+    # The message goes through a FILE, never a command substitution: `usb-mode boot` starts daemons
+    # (the relay, dropbear on 127.0.0.1), and one that keeps an inherited stdout open would hold a
+    # $(...) pipe forever, so rcS would never reach the bootstate clear (seen on the unit, 2026-10-30).
+    if usb-mode boot > /run/baseline/usb-mode.msg 2>> /run/log/usb-mode.log; then
+        ok=1
+        con "$(cat /run/baseline/usb-mode.msg)"
     else
-        why="NCM: $(tail -n 2 /run/log/net-up.log | tr '\n' ' ')"
+        msg=$(cat /run/baseline/usb-mode.msg 2> /dev/null)
+        [ -n "$msg" ] && con "$msg"
+        if IF=$(net-up ncm 2> /run/log/net-up.log); then
+            if ssh-up "$NCM_DEV_IP" 2> /run/log/ssh-up.log; then
+                ok=1
+                con "NCM $IF $NCM_DEV_IP, ssh/scp/sftp root@$NCM_DEV_IP (key or password), host gets $NCM_HOST_IP"
+            else
+                why="SSH: $(tail -n 2 /run/log/ssh-up.log | tr '\n' ' ')(/run/log/dropbear.log)"
+            fi
+        else
+            why="NCM: $(tail -n 2 /run/log/net-up.log | tr '\n' ' ')"
+        fi
     fi
     N=$(mtd_num bootstate)
     if [ -n "$ok" ] && [ -n "$N" ]; then

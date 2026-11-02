@@ -6,7 +6,7 @@ The Carlinkit CPC200-CCPA (A15W) firmware update images (`.img` files) are AES-1
 
 **Target device:** Carlinkit A15W (CPC200-CCPA)
 **Encryption:** AES-128-CBC
-**Key:** `AutoPlay9uPT4n17`
+**Key:** `AutoPlay9uPT4n17` (vendor-public key, same on all A15W units, not a unit credential)
 **IV:** Same as key
 
 ## Prerequisites

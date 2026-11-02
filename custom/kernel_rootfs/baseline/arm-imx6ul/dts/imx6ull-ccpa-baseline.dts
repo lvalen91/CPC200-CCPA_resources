@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
+// Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+// Modified 2026-10-19/20: the changes against LIVI are stated below.
 /*
  * Derived from LIVI scripts/livi-link/arm/imx6ul/imx6ull.dts (https://github.com/f-io/LIVI; the LIVI
  * project is GPL-3.0-or-later, this file's upstream SPDX tag is GPL-2.0 and is kept as is).

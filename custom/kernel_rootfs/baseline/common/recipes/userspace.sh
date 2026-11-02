@@ -180,6 +180,19 @@ build_hciup() {
     assert_static "$UOUT/usr/sbin/hciup"
 }
 
+# ocbm-accessory: serves /dev/usb_accessory (ocbmd's device node) over FunctionFS + a raw pty
+# (common/ocbm-accessory/ocbm-accessory.c), for `net-up ocbm` (README §2.8). One file, static, like
+# hciup; also compiled by the rootfs step when the userspace step predates it (revision 6).
+build_ocbm_accessory() {
+    : "${TARGET_CC:=$UBUILD/musl-sysroot/bin/musl-gcc}"
+    note "ocbm-accessory (common/ocbm-accessory/ocbm-accessory.c), static"
+    x mkdir -p "$UBUILD/ocbm-accessory" "$UOUT/usr/sbin"
+    x "$TARGET_CC" -static -Os -Wall -Wextra -pthread -o "$UBUILD/ocbm-accessory/ocbm-accessory" \
+        "$HERE/common/ocbm-accessory/ocbm-accessory.c"
+    x "${CROSS_COMPILE}strip" -o "$UOUT/usr/sbin/ocbm-accessory" "$UBUILD/ocbm-accessory/ocbm-accessory"
+    assert_static "$UOUT/usr/sbin/ocbm-accessory"
+}
+
 # ----------------------------------------------------------------- radio tools (RADIO_TOOLS=1)
 # Libraries only these tools use go to their own prefix, never into the musl sysroot.
 RADIO_SYSROOT=${UBUILD:-}/radio-sysroot
@@ -229,6 +242,25 @@ build_wpa_supplicant() {
     # The configuration that was built (no SAE, no D-Bus) is part of the record.
     xsh "grep -q -- '-DCONFIG_DRIVER_NL80211' '$UBUILD/wpa_supplicant.log' && ! grep -q -- '-DCONFIG_CTRL_IFACE_DBUS' '$UBUILD/wpa_supplicant.log'" \
         || die "wpa_supplicant was not built as configured (nl80211 on, D-Bus off): $UBUILD/wpa_supplicant.log"
+}
+
+# hostapd (revision 8): the box's own access point on the radio's Wi-Fi interface (WPA2-PSK, nl80211, internal
+# crypto, no RADIUS/VLAN/D-Bus): common/hostapd/hostapd.config, the configuration of the static hostapd that ran
+# AP-ENABLED on mlan0 of the IW416 unit on 2026-10-30. Same libnl and the same build shape as wpa_supplicant.
+build_hostapd() {
+    : "${TARGET_CC:=$UBUILD/musl-sysroot/bin/musl-gcc}" # also called from the rootfs step (an older userspace tree)
+    _s=$UBUILD/hostapd-$HOSTAPD_VER
+    note "hostapd $HOSTAPD_VER, static, nl80211, internal crypto"
+    untar "$SRC/hostapd-$HOSTAPD_VER.tar.gz" "$_s"
+    x cp "$HERE/common/hostapd/hostapd.config" "$_s/hostapd/.config"
+    xsh "printf '%s\\n' 'LIBS += -L$RADIO_SYSROOT/lib' >> '$_s/hostapd/.config'"
+    xsh "cd '$_s/hostapd' && CFLAGS='-MMD -Os -Wall' LDFLAGS=-static EXTRALIBS='-lnl-3' \
+         make -j$JOBS CC='$TARGET_CC' LIBNL_INC='$RADIO_SYSROOT/include/libnl3' V=1 hostapd > '$UBUILD/hostapd.log' 2>&1"
+    x mkdir -p "$UOUT/usr/sbin"
+    x "${CROSS_COMPILE}strip" -o "$UOUT/usr/sbin/hostapd" "$_s/hostapd/hostapd"
+    assert_static "$UOUT/usr/sbin/hostapd"
+    xsh "grep -q -- '-DCONFIG_DRIVER_NL80211' '$UBUILD/hostapd.log' && ! grep -q -- '-DCONFIG_CTRL_IFACE_DBUS' '$UBUILD/hostapd.log'" \
+        || die "hostapd was not built as configured (nl80211 on, D-Bus off): $UBUILD/hostapd.log"
 }
 
 # ncurses: only libtinfo (termcap/terminfo functions readline needs), no terminfo database on the unit:

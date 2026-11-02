@@ -1,4 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from LIVI scripts/livi-link/common/busybox.sed (GPL-3.0-or-later).
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: a defconfig fragment instead of a sed script; the changes are stated below.
 # BusyBox 1.38.0 for the baseline ROOTFS: `make defconfig`, then these lines win (build.sh replaces each
 # symbol's line, runs oldconfig, and fails if a value did not stick). Goal: every applet that can build
 # static and can work on the board; out only what cannot work there:

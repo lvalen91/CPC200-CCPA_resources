@@ -1,5 +1,8 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: one script for the i.MX6ULL baseline; pinned, sha256-checked tarballs, recovery
+# initramfs built into the kernel, squashfs rootfs, --dry-run, config values checked after every merge.
 # baseline/build.sh: the vanilla CCPA baseline (mainline kernel + recovery initramfs + squashfs rootfs).
 # Structure derived from LIVI scripts/livi-link/arm/imx6ul/build.sh, common/kernel.sh,
 # common/build-rootfs.sh and arm/build-userspace.sh (https://github.com/f-io/LIVI, GPL-3.0-or-later).
@@ -9,7 +12,7 @@
 #
 # steps (default: fetch userspace kernel rootfs)
 #   fetch      pinned tarballs (common/versions.env) into $TOP/src, each sha256-checked
-#   userspace  musl, BusyBox full + recovery, dropbear, sftp-server, flash_erase, hciup [, exfatprogs]
+#   userspace  musl, BusyBox full + recovery, dropbear, sftp-server, flash_erase, hciup, ocbm-accessory [, exfatprogs]
 #              [, RADIO_TOOLS: libnl, iw, wpa_supplicant/wpa_cli/wpa_passphrase, ncurses, readline, BlueZ
 #              btmgmt/hciconfig/hcitool]
 #   kernel     linux + board patches + DTS + recovery initramfs: ONE zImage per kernel config, and one
@@ -28,8 +31,9 @@
 #   USB_HOST=0        usbotg1 as host for the rootfs; storage stack as rootfs modules (when RECOVERY_USB=0)
 #   USB_VFAT_BUILTIN=0 storage stack + vfat built into the kernel instead
 #   RADIO_MODULES=1   Wi-Fi/BT drivers as rootfs modules (never loaded at boot)  RADIO_FW=1  their firmware
-#   RADIO_TOOLS=1     iw, wpa_supplicant + wpa_cli, btmgmt, hciconfig, hcitool and the wifi-connect /
-#                     wifi-scan / bt-scan helpers in the rootfs (never started at boot; 0 with RADIO_MODULES=0)
+#   RADIO_TOOLS=1     iw, wpa_supplicant + wpa_cli, btmgmt, hciconfig, hcitool, hostapd (revision 8) and the
+#                     wifi-connect / wifi-scan / bt-scan helpers in the rootfs (never started at boot; 0 with
+#                     RADIO_MODULES=0)
 #   RADIO_DT=all      all|none|iw416|rtl8822cs|rtl8822bs: which per-radio images the kernel step writes
 #                     (the Bluetooth serdev node in the appended DTB; the zImage is the same for all)
 #   MTD_UTILS=1       static flash_erase in the rootfs (needs MTD_UTILS_SHA256 pinned first)
@@ -132,7 +136,10 @@ export KBUILD_BUILD_USER=baseline KBUILD_BUILD_HOST=ccpa LOCALVERSION=
 # Applets the recovery scripts call; the recovery BusyBox must provide each (checked on its busybox.links).
 # RADIO_TOOLS=1: the binaries the rootfs step copies from $UOUT (paths relative to it and to the rootfs).
 RADIO_TOOL_BINS="usr/sbin/iw usr/sbin/wpa_supplicant usr/sbin/wpa_cli usr/sbin/wpa_passphrase usr/bin/btmgmt
-usr/bin/hciconfig usr/bin/hcitool"
+usr/bin/hciconfig usr/bin/hcitool usr/sbin/hostapd"
+# Revision 8: the names the OCBM overlay's programs have in the stock OCBM layout (/usr/sbin/<daemon>); the
+# rootfs carries only these symlinks into /opt/ocbm/bin, dangling until an overlay is loaded (README §7.0e).
+OCBM_OVERLAY_LINKS="ocbmd btd carplayd"
 
 RECOVERY_NEEDS="sh cat dd echo printf test hexdump ifconfig kill ln ls mkdir mount umount mv chmod nc ps rm rmdir
 setsid cttyhack sha256sum sleep stty switch_root sync telnetd udhcpd wc flashcp flash_eraseall reboot dmesg rx
@@ -201,6 +208,7 @@ step_fetch() {
         fetch_pinned libnl "$LIBNL_URL" "$LIBNL_SHA256" "libnl-$LIBNL_VER.tar.gz"
         fetch_pinned iw "$IW_URL" "$IW_SHA256" "iw-$IW_VER.tar.xz"
         fetch_pinned wpa_supplicant "$WPA_SUPPLICANT_URL" "$WPA_SUPPLICANT_SHA256" "wpa_supplicant-$WPA_SUPPLICANT_VER.tar.gz"
+        fetch_pinned hostapd "$HOSTAPD_URL" "$HOSTAPD_SHA256" "hostapd-$HOSTAPD_VER.tar.gz"
         fetch_pinned bluez "$BLUEZ_URL" "$BLUEZ_SHA256" "bluez-$BLUEZ_VER.tar.xz"
         fetch_pinned ncurses "$NCURSES_URL" "$NCURSES_SHA256" "ncurses-$NCURSES_VER.tar.gz"
         fetch_pinned readline "$READLINE_URL" "$READLINE_SHA256" "readline-$READLINE_VER.tar.gz"
@@ -446,10 +454,12 @@ step_userspace() {
     build_sftp_server
     [ "$MTD_UTILS" = 1 ] && build_mtd_utils
     [ "$RADIO_MODULES" = 1 ] && build_hciup
+    build_ocbm_accessory
     if [ "$RADIO_TOOLS" = 1 ]; then
         build_libnl
         build_iw
         build_wpa_supplicant
+        build_hostapd
         build_ncurses
         build_readline
         build_bluez_tools
@@ -474,6 +484,7 @@ step_rootfs() {
         [ "$RADIO_MODULES" != 1 ] || [ -x "$UOUT/usr/sbin/hciup" ] || die "no hciup at $UOUT/usr/sbin, run the userspace step"
         if [ "$RADIO_TOOLS" = 1 ]; then
             for b in $RADIO_TOOL_BINS; do
+                [ "$b" = usr/sbin/hostapd ] && continue # built by this step when missing (revision 8)
                 [ -x "$UOUT/$b" ] || die "RADIO_TOOLS=1 needs $UOUT/$b, run the userspace step"
             done
         fi
@@ -509,7 +520,13 @@ step_rootfs() {
     x cp "$UOUT/usr/libexec/sftp-server" "$W/usr/libexec/sftp-server"
     [ "$MTD_UTILS" = 1 ] && x cp "$UOUT/usr/sbin/flash_erase" "$W/usr/sbin/flash_erase"
     [ "$RADIO_MODULES" = 1 ] && x cp "$UOUT/usr/sbin/hciup" "$W/usr/sbin/hciup"
+    # revision 6: a userspace tree built before ocbm-accessory existed gets it compiled here (one
+    # file against the musl sysroot of that tree) instead of a full userspace rebuild
+    [ "$DRY" = 1 ] || [ -x "$UOUT/usr/sbin/ocbm-accessory" ] || build_ocbm_accessory
+    x cp "$UOUT/usr/sbin/ocbm-accessory" "$W/usr/sbin/ocbm-accessory"
     if [ "$RADIO_TOOLS" = 1 ]; then
+        # revision 8: hostapd joins the radio tools; an older userspace tree gets it built here
+        [ "$DRY" = 1 ] || [ -x "$UOUT/usr/sbin/hostapd" ] || build_hostapd
         for b in $RADIO_TOOL_BINS; do x cp "$UOUT/$b" "$W/$b"; done
     fi
     if [ "$EXFATPROGS" = 1 ]; then
@@ -530,6 +547,11 @@ step_rootfs() {
     x cp "$HERE/common/shared/mtd.sh" "$W/lib/baseline/mtd.sh"
     x cp "$HERE/$BOARD/board.env" "$HERE/common/usb-ids.conf" "$HERE/common/ncm.conf" "$W/etc/baseline/"
     x cp "$OUTV/release" "$W/etc/baseline-release"
+    # Revision 8: the OCBM overlay's mount point and the stock layout's names into it (/script, /usr/sbin/<daemon>).
+    # Only names: no OCBM program is in this image (ocbm-overlay, README §7.0e).
+    x mkdir -p "$W/opt/ocbm"
+    x ln -s /opt/ocbm/script "$W/script"
+    for b in $OCBM_OVERLAY_LINKS; do x ln -s "/opt/ocbm/bin/$b" "$W/usr/sbin/$b"; done
     if [ "$DRY" = 1 ]; then
         printf '+ write %s/etc/baseline/shadow.default (root:ROOT_PASSWORD_HASH), dev-password marker if the default\n' "$W"
     else
@@ -541,7 +563,8 @@ step_rootfs() {
         x chmod 0600 "$W/etc/baseline/authorized_keys"
     fi
     x chmod 0700 "$W/root"
-    xsh "chmod 0755 '$W/init' '$W/etc/init.d/rcS' '$W'/usr/sbin/*"
+    # -type f: the busybox applet links need nothing, and the OCBM overlay links dangle in the image
+    xsh "chmod 0755 '$W/init' '$W/etc/init.d/rcS' && find '$W/usr/sbin' -type f -exec chmod 0755 {} +"
     [ "$RADIO_TOOLS" = 1 ] && x chmod 0755 "$W/etc/baseline/udhcpc.sh"
     note "kernel modules of variant $V (radio + storage; nothing loads them at boot)"
     xsh "cp -R '$OUTV/modules/lib/modules/.' '$W/lib/modules/' && rm -f '$W'/lib/modules/*/build '$W'/lib/modules/*/source"
@@ -564,15 +587,18 @@ step_rootfs() {
     x rm -f "$IMGR"
     x mksquashfs "$W" "$IMGR" -comp xz -no-progress -all-root -no-xattrs -noappend
     if [ "$DRY" = 1 ]; then
-        printf '+ check: size(rootfs.img) <= %s B (0xc60000) and a multiple of 4096\n' "$ROOTFS_PART_SIZE"
+        printf '+ check: size(rootfs.img) <= %s B (0xc60000), <= %s B (the OCBM overlay region, board.env) and a multiple of 4096\n' "$ROOTFS_PART_SIZE" "${OVERLAY_OFFSET:-$ROOTFS_PART_SIZE}"
         printf '+ write %s.sha256\n' "$IMGR"
         return 0
     fi
     size=$(($(wc -c < "$IMGR")))
     [ "$size" -le "$ROOTFS_PART_SIZE" ] || die "rootfs is $size B, the partition $ROOTFS_PART_SIZE B"
+    # revision 8: the end of the partition is the OCBM overlay region; a squashfs reaching into it would
+    # overwrite the overlay at the next flash-rootfs (and ocbm-overlay refuses to write beside it)
+    [ "$size" -le "${OVERLAY_OFFSET:-$ROOTFS_PART_SIZE}" ] || die "rootfs is $size B, past the OCBM overlay region at $OVERLAY_OFFSET (board.env)"
     [ $((size % 4096)) -eq 0 ] || die "rootfs is $size B, not a multiple of 4 KiB (flash-rootfs refuses that)"
     sha256sum "$IMGR" | sed "s|  .*|  rootfs.img|" > "$IMGR.sha256"
-    log "rootfs $size B of $ROOTFS_PART_SIZE B ($((ROOTFS_PART_SIZE - size)) B free), sha256 $(cut -d' ' -f1 "$IMGR.sha256")"
+    log "rootfs $size B of $ROOTFS_PART_SIZE B ($((ROOTFS_PART_SIZE - size)) B free; $((${OVERLAY_OFFSET:-$ROOTFS_PART_SIZE} - size)) B below the OCBM overlay region), sha256 $(cut -d' ' -f1 "$IMGR.sha256")"
     if [ "$RADIO_TOOLS" = 1 ]; then
         sizes=
         for b in $RADIO_TOOL_BINS; do sizes="$sizes ${b##*/} $(($(wc -c < "$UOUT/$b")))"; done

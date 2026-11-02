@@ -1,8 +1,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19 (and 2026-10-30: two respawn entries for OCBM): the changes against LIVI are stated in this header.
 # Derived from LIVI scripts/livi-link/common/rootfs/etc/inittab (GPL-3.0-or-later). Change: the console
 # shell goes through cttyhack (job control on the real tty) and is a login shell (reads /etc/profile).
 # The UART shell is unauthenticated: physical access to the pads is the credential.
 ::sysinit:/etc/init.d/rcS
 ::respawn:/bin/cttyhack /bin/sh -l
+# Revision 8: the OCBM relay's watchdog and the OCBM overlay's long-running service (both idle unless OCBM
+# is in use; README §7.0e). Their output goes to /run/log, never to the console.
+::respawn:/usr/sbin/usb-mode watch
+::respawn:/usr/sbin/ocbm-overlay service
 ::ctrlaltdel:/sbin/reboot
 ::shutdown:/bin/umount -a -r

@@ -1,4 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: the readback and erase steps are shell functions shared by the on-unit
+# flash helpers.
 # Shared by flash-rootfs and flash-kernel (installed as /lib/baseline/flash-lib.sh in the recovery
 # initramfs). The verify-by-readback (dd | sha256sum) and erase-only-after-verify steps follow LIVI's
 # provisioner (native/livi-link/crates/livi-link-provision/src/dongle/arm/imx6ul/boot.rs, GPL-3.0-or-later).

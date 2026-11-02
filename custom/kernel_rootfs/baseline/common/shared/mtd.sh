@@ -1,4 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: partitions found by DT label; the bootstate marker as shell functions shared
+# by init, the flash helpers and rcS.
 # Sourced by the recovery init, its flash helpers and the rootfs rcS (installed as /lib/baseline/mtd.sh).
 # MTD partitions are found by their DT label, never by number. The bootstate logic follows LIVI
 # (scripts/livi-link/common/initramfs/init and common/rootfs/etc/init.d/rcS, GPL-3.0-or-later):

@@ -1,0 +1,220 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# usb-mode: which function the host-facing USB port (usbotg2) serves, now and at boot (README §2.8, §7.0e).
+#   status            the gadget's function, PID, UDC state, relay and ocbmd pids, the boot default, the overlay
+#   ncm               NCM 192.168.50.2 + DHCP + dropbear (net-up ncm, ssh-up), until the next boot
+#   ocbm [OCBMD]      OCBM accessory 0x1314:0x2d00 (net-up ocbm): ocbm-accessory serves /dev/usb_accessory over
+#                     FunctionFS and runs OCBMD (argument, $OCBMD, else the OCBM overlay's bin/ocbmd-launch,
+#                     loaded on demand, else the first `ocbmd` on PATH); dropbear on 127.0.0.1:22 for the OCBM
+#                     CH_IP channel. Until the next boot.
+#   default [ncm|ocbm]  print / persist the BOOT default (file `usb-mode` in the persist archive on the
+#                     'customer' MTD). Unset or `ocbm`: the box boots into OCBM whenever a valid OCBM overlay is
+#                     in flash (ocbm-overlay), else NCM. `ncm` is the ESCAPE HATCH: the next boots are revision
+#                     7's NCM boot and the overlay is not even loaded.
+#   boot              rcS only: bring the boot default up; exit 0 when the OCBM way in is up, 1 when rcS must
+#                     bring NCM up instead (the line on stdout says why)
+#   watch             init ::respawn: entry: restarts the OCBM accessory when its relay died while OCBM is the
+#                     wanted mode (the relay itself respawns ocbmd)
+# One function at a time: switching takes the other one down, so an SSH session over NCM that switches to OCBM
+# is cut off (the switch still completes: SIGHUP is ignored). The way back: the UART shell, the OCBM console
+# (`ocbm-host console`) or SSH through OCBM CH_IP to 127.0.0.1:22, `usb-mode ncm`; or ocbmd's MGMT_ENTER_NCM
+# from the host app, which persists `default ncm` and reboots.
+. /etc/baseline/ncm.conf
+G=/sys/kernel/config/usb_gadget/baseline
+R=${OCBM_RUN:-/run/ocbm}
+WANT=$R/usb-mode.want
+LOCK=$R/usb-mode.lock
+PERSIST=/run/persist/usb-mode
+OVL=${OCBM_OVERLAY_DIR:-/opt/ocbm}
+mkdir -p "$R" /run/log
+say() { echo "usb-mode: $*" >&2; }
+
+lock_take() { # reclaimable: a holder that died leaves no permanent lock
+    _n=0
+    while ! mkdir "$LOCK" 2> /dev/null; do
+        _h=$(cat "$LOCK/pid" 2> /dev/null)
+        if [ -n "$_h" ] && [ ! -d "/proc/$_h" ]; then rm -rf "$LOCK"; continue; fi
+        _n=$((_n + 1))
+        [ "$_n" -ge "${1:-120}" ] && { say "another usb-mode switch is running (pid ${_h:-?})"; return 1; }
+        sleep 0.5
+    done
+    echo $$ > "$LOCK/pid"
+}
+lock_drop() { rm -rf "$LOCK"; }
+
+default_mode() { # the persisted boot default; anything but "ncm" is ocbm
+    _d=$(cat "$PERSIST" 2> /dev/null)
+    [ "$_d" = ncm ] && echo ncm || echo ocbm
+}
+
+ocbmd_cmd() { # what the relay spawns: $1, $OCBMD, the overlay's launcher (loaded on demand), `ocbmd`
+    if [ -n "${1:-}" ]; then echo "$1"; return 0; fi
+    if [ -n "${OCBMD:-}" ]; then echo "$OCBMD"; return 0; fi
+    if ocbm-overlay start > /dev/null 2>&1 && [ -x "$OVL/bin/ocbmd-launch" ]; then echo "$OVL/bin/ocbmd-launch"; return 0; fi
+    command -v ocbmd 2> /dev/null
+}
+
+status() {
+    if [ -d "$G" ]; then
+        fns=$(ls "$G/functions" 2> /dev/null | tr '\n' ' ')
+        udc=$(cat "$G/UDC" 2> /dev/null)
+        st=
+        [ -n "$udc" ] && st=$(cat "/sys/class/udc/$udc/state" 2> /dev/null)
+        echo "gadget: ${fns:-no function }idProduct=$(cat "$G/idProduct" 2> /dev/null) UDC=${udc:-unbound} ${st:+state=$st}"
+    else
+        echo "gadget: down"
+    fi
+    if [ -r /run/ocbm-accessory.pid ]; then
+        echo "ocbm-accessory: pid $(cat /run/ocbm-accessory.pid), /dev/usb_accessory -> $(readlink /dev/usb_accessory 2> /dev/null || echo missing)"
+    fi
+    p=$(pidof ocbmd 2> /dev/null)
+    [ -n "$p" ] && echo "ocbmd: pid $p"
+    echo "wanted now: $(cat "$WANT" 2> /dev/null || echo unset); boot default: $(default_mode)$([ -s "$PERSIST" ] || echo ' (not set: OCBM when an overlay is valid)')"
+    ocbm-overlay status 2> /dev/null
+    return 0
+}
+
+warn_ncm_session() {
+    case ${SSH_CONNECTION:-} in
+        "$NCM_HOST_IP "*) say "this SSH session runs over NCM and will drop now; the switch completes anyway" ;;
+    esac
+}
+
+# ocbm_up OCBMD: the accessory, the relay, ocbmd staying up; 0 = the OCBM way in is up.
+ocbm_up() {
+    [ -n "$1" ] && [ -x "$1" ] || { say "no ocbmd to run (no valid OCBM overlay, no OCBMD)"; return 1; }
+    OCBMD=$1 net-up ocbm > /dev/null || return 1
+    # The relay spawns ocbmd at once. Up = the same pid on three samples a second apart (a binary that
+    # dies at start is respawned by the relay with a new pid, or not at all after three fast failures).
+    p1=$(pidof ocbmd)
+    sleep 1
+    p2=$(pidof ocbmd)
+    sleep 1
+    p3=$(pidof ocbmd)
+    if [ -z "$p1" ] || [ "$p1" != "$p2" ] || [ "$p2" != "$p3" ]; then
+        say "ocbmd does not stay up (pids: '${p1}' '${p2}' '${p3}'; /run/log/ocbm-accessory.log, /tmp/box.log)"
+        return 1
+    fi
+    # SSH for the OCBM CH_IP channel (ocbm-host ip 1314 2d00 127.0.0.1:22); not a condition for "up"
+    # stdout to /dev/null: dropbear -E keeps its stdio, and a caller's pipe must never be held open by it
+    ssh-up 127.0.0.1 > /dev/null 2>> /run/log/ssh-up.log || say "dropbear on 127.0.0.1 did not start (/run/log/ssh-up.log)"
+    return 0
+}
+
+to_ncm() {
+    echo ncm > "$WANT"
+    net-down
+    IF=$(net-up ncm) || return 1
+    ssh-up "$NCM_DEV_IP" > /dev/null || return 1
+    say "NCM $IF $NCM_DEV_IP, ssh root@$NCM_DEV_IP"
+}
+
+to_ocbm() { # $1 = OCBMD (resolved)
+    echo ocbm > "$WANT"
+    net-down
+    if ! ocbm_up "$1"; then
+        echo ncm > "$WANT"
+        net-down
+        return 1
+    fi
+}
+
+case ${1:-status} in
+    status) status ;;
+    ncm)
+        trap '' HUP
+        warn_ncm_session
+        lock_take || exit 1
+        to_ncm
+        rc=$?
+        lock_drop
+        status
+        exit $rc ;;
+    ocbm)
+        trap '' HUP
+        if [ -n "${2:-}" ]; then
+            [ -x "$2" ] || { say "$2 is not executable"; exit 2; }
+        fi
+        cmd=$(ocbmd_cmd "${2:-}")
+        [ -n "$cmd" ] || { say "no ocbmd: no valid OCBM overlay (ocbm-overlay status) and none given"; exit 1; }
+        warn_ncm_session
+        lock_take || exit 1
+        to_ocbm "$cmd"
+        rc=$?
+        lock_drop
+        [ "$rc" = 0 ] || say "OCBM did not come up; the gadget is down: usb-mode ncm"
+        status
+        exit $rc ;;
+    default)
+        case ${2:-} in
+            "") echo "boot default: $(default_mode)$([ -s "$PERSIST" ] || echo ' (not set: OCBM when an overlay is valid)')" ;;
+            ncm | ocbm)
+                mkdir -p "${PERSIST%/*}"
+                echo "$2" > "$PERSIST.new" && mv "$PERSIST.new" "$PERSIST" || exit 1
+                persist save > /dev/null || { say "the persist archive was NOT saved: the boot default is unchanged on flash"; exit 1; }
+                say "boot default: $2 (saved in the persist archive; takes effect at the next boot)" ;;
+            *) echo "usage: usb-mode default [ncm|ocbm]" >&2; exit 2 ;;
+        esac ;;
+    boot)
+        # rcS (after `persist load`). Exit 0 = OCBM up; 1 = rcS brings NCM up (stdout says why).
+        lock_take || exit 1
+        if [ "$(default_mode)" = ncm ]; then
+            : > "$R/overlay.none"
+            echo ncm > "$WANT"
+            lock_drop
+            echo "boot default is NCM (usb-mode default ncm): OCBM overlay not loaded"
+            exit 1
+        fi
+        if ! ocbm-overlay start 2>> /run/log/usb-mode.log; then
+            : > "$R/overlay.none"
+            echo ncm > "$WANT"
+            lock_drop
+            echo "no valid OCBM overlay ($(sed -n 's/^reason=//p' "$R/overlay.state" 2> /dev/null)): NCM"
+            exit 1
+        fi
+        ver=$(sed -n 's/^version=//p' "$R/overlay.state" 2> /dev/null)
+        if to_ocbm "$OVL/bin/ocbmd-launch" 2>> /run/log/usb-mode.log; then
+            lock_drop
+            echo "OCBM accessory 0x1314:0x2d00 up, ocbmd pid $(pidof ocbmd) (overlay '$ver'); ways in: UART, OCBM console, ssh through OCBM CH_IP to 127.0.0.1:22; leave with usb-mode ncm / usb-mode default ncm"
+            exit 0
+        fi
+        lock_drop
+        echo "OCBM did not come up (overlay '$ver': $(tail -n 1 /run/log/usb-mode.log 2> /dev/null)); falling back to NCM for this boot"
+        exit 1 ;;
+    watch)
+        # init respawns this; never act while a switch holds the lock, never faster than 5 s
+        exec >> /run/log/usb-mode.log 2>&1
+        sleep 10
+        fails=0
+        while :; do
+            sleep 5
+            [ "$(cat "$WANT" 2> /dev/null)" = ocbm ] || continue
+            if [ -r /run/ocbm-accessory.pid ] && kill -0 "$(cat /run/ocbm-accessory.pid)" 2> /dev/null; then
+                fails=0
+                continue
+            fi
+            lock_take 1 > /dev/null 2>&1 || continue
+            # re-check under the lock: a switch may have finished meanwhile
+            if [ "$(cat "$WANT" 2> /dev/null)" = ocbm ] && ! { [ -r /run/ocbm-accessory.pid ] && kill -0 "$(cat /run/ocbm-accessory.pid)" 2> /dev/null; }; then
+                echo "$(date '+%F %T') usb-mode watch: OCBM wanted but ocbm-accessory is gone; restarting it"
+                cmd=$(ocbmd_cmd)
+                if [ -n "$cmd" ] && to_ocbm "$cmd"; then
+                    fails=0
+                    echo "$(date '+%F %T') usb-mode watch: OCBM accessory restarted"
+                else
+                    fails=$((fails + 1))
+                    if [ "$fails" -ge 3 ]; then
+                        # never leave the port without a function: NCM for the rest of this boot
+                        echo "$(date '+%F %T') usb-mode watch: restart #$fails failed; NCM for the rest of this boot"
+                        to_ncm
+                        fails=0
+                    else
+                        echo ocbm > "$WANT" # to_ocbm set ncm on failure; retry
+                        echo "$(date '+%F %T') usb-mode watch: restart #$fails failed; retrying"
+                    fi
+                fi
+            fi
+            lock_drop
+        done ;;
+    *) echo "usage: usb-mode [status|ncm|ocbm [OCBMD]|default [ncm|ocbm]]" >&2; exit 2 ;;
+esac

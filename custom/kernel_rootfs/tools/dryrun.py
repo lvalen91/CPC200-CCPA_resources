@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Python port of f-io/LIVI imx6ul kernel staging plan (Rust): native/livi-link/crates/imx6ul-uboot/src/lib.rs
+# and native/livi-link/crates/livi-link-provision/src/dongle/arm/imx6ul/boot.rs (https://github.com/f-io/LIVI,
+# GPL-3.0-or-later), read at 9.5.0.
+# Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+# Modified 2026-10-19/20: ported to Python as an offline dry run against flash backups (AES through openssl,
+# files only, nothing written to a unit).
 """Offline dry run of LIVI's `imx6ul kernel <zImage>` plan against a flash backup. Reads files only."""
 import sys,subprocess,struct,zlib,hashlib
 ERASE=0x10000; UPDATE=0x20000; ENVB=0x30000; KERNEL=0x40000; HEAD=3*ERASE; LOAD=0x80800000; MAGIC=0x016f2818

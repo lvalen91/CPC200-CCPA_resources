@@ -1,0 +1,253 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ocbm-overlay: the OCBM overlay region of the 'rootfs' MTD (revision 8, README §2.8, §7.0e).
+#
+# This GPL rootfs carries no OCBM daemon: ocbmd, btd and carplayd are the repository's own (Unlicense) Rust
+# programs, built outside this recipe. They arrive as ONE separately built image in the last OVERLAY_SIZE
+# bytes of the 'rootfs' MTD (board.env OVERLAY_OFFSET/OVERLAY_SIZE: 0x800000, 0x460000), behind the
+# squashfs, which reads only up to its own bytes_used. This script is the whole interface between the two:
+#
+#   image   a 4096-byte header, then the payload (a gzip'd ustar archive). The header is four text lines,
+#           the rest of the 4096 bytes NUL:
+#               OCBM-OVERLAY 1
+#               payload_bytes=<n>
+#               payload_sha256=<64 lowercase hex>
+#               version=<one line of text>
+#           built by the repository's tools/ocbm_overlay.sh (outside baseline/).
+#   loaded  the payload read from flash hashes to payload_sha256 and is unpacked into a tmpfs at /opt/ocbm
+#           (RAM: the flash copy is never executed, a damaged one is never used). The archive must hold
+#           bin/ocbmd-launch (the command ocbm-accessory spawns per pty generation); etc/rc.ocbm is optional
+#           (`rc.ocbm start`: once, before the accessory comes up, bounded to 30 s; `rc.ocbm service`: the
+#           long-running part, run by init through `ocbm-overlay service`; `rc.ocbm stop`).
+#
+#   ocbm-overlay [status]           header, payload check, loaded state
+#   ocbm-overlay load               verify + unpack into /opt/ocbm (idempotent); 0 loaded, 1 no valid overlay
+#   ocbm-overlay start              load, then `rc.ocbm start` once
+#   ocbm-overlay service            the init ::respawn: entry: `rc.ocbm service` once started, else idle
+#   ocbm-overlay check IMG          validate an image file (header + payload sha256); no flash access
+#   ocbm-overlay write IMG SHA256   write IMG (sha256 of the whole file = SHA256) into the region, verify it
+#   ocbm-overlay erase              erase the region's first block: no valid overlay, the next boot is NCM
+# write/erase exit as the flash helpers do: 0 written and verified, 2 usage, 3 already there (nothing
+# written), 4 refused before anything was written, 1 failed after the write started (the region is then
+# invalid, so the next boot is NCM: write again). Writing from the running rootfs is safe because the region
+# is disjoint from the squashfs it runs from (checked: its bytes_used must end at or before OVERLAY_OFFSET);
+# the squashfs itself is still written only from recovery (flash-rootfs).
+#
+# Self-test stand-ins (common/tools/selftest.sh): MTD_SYS/MTD_DEV (mtd.sh), OCBM_OVERLAY_DIR, OCBM_RUN,
+# OCBM_OVERLAY_LOG, MTD_SH, FLASH_ERASE (a command taking DEVICE OFFSET BLOCKS), OCBM_OVERLAY_NOMOUNT=1.
+set -u
+. "${MTD_SH:-/lib/baseline/mtd.sh}"
+[ -r /etc/baseline/board.env ] && . /etc/baseline/board.env
+: "${OVERLAY_OFFSET:=8388608}" "${OVERLAY_SIZE:=4587520}" "${ERASE_SIZE:=65536}"
+HDR=4096
+MAGIC='OCBM-OVERLAY 1'
+DIR=${OCBM_OVERLAY_DIR:-/opt/ocbm}
+RUN=${OCBM_RUN:-/run/ocbm}
+LOG=${OCBM_OVERLAY_LOG:-/run/log/ocbm-overlay.log}
+STATE=$RUN/overlay.state
+ME=ocbm-overlay
+mkdir -p "$RUN" "${LOG%/*}" 2> /dev/null
+say() { echo "$ME: $*" >&2; echo "$(date '+%F %T') $ME: $*" >> "$LOG" 2> /dev/null; }
+STARTED=
+die() { # die STATUS MESSAGE
+    say "$2"
+    [ "$1" = 4 ] && say "REFUSED: nothing written"
+    [ "$1" = 1 ] && [ -n "$STARTED" ] && say "FAILED after the write started: the region holds no valid overlay, the next boot is NCM; write again"
+    exit "$1"
+}
+
+mtd_dev() { _n=$(mtd_num rootfs) || return 1; echo "$MTD_DEV/mtd$_n"; }
+
+# hdr_parse FILE: the first 4096 bytes of FILE as a header; sets H_BYTES H_SHA H_VER; 1 if it is none.
+hdr_parse() {
+    H_BYTES=''; H_SHA=''; H_VER=''
+    _h=$RUN/overlay.hdr.$$
+    dd if="$1" bs=$HDR count=1 2> /dev/null | head -n 4 > "$_h" 2> /dev/null
+    if [ "$(sed -n 1p "$_h")" != "$MAGIC" ]; then rm -f "$_h"; return 1; fi
+    H_BYTES=$(sed -n 's/^payload_bytes=\([0-9][0-9]*\)$/\1/p' "$_h")
+    H_SHA=$(sed -n 's/^payload_sha256=\([0-9a-f]\{64\}\)$/\1/p' "$_h")
+    H_VER=$(sed -n 's/^version=//p' "$_h" | tr -cd ' -~' | cut -c1-120)
+    rm -f "$_h"
+    [ -n "$H_BYTES" ] && [ -n "$H_SHA" ] || return 1
+    [ "$H_BYTES" -ge 1 ] && [ "$H_BYTES" -le $((OVERLAY_SIZE - HDR)) ]
+}
+
+# region_read DEV OFFSET LEN: LEN bytes of DEV from byte OFFSET (OFFSET a multiple of 4096) on stdout.
+region_read() {
+    dd if="$1" bs=4096 skip=$(($2 / 4096)) count=$((($3 + 4095) / 4096)) 2> /dev/null | head -c "$3"
+}
+
+# region_header DEV: the region's header block on stdout.
+region_header() { dd if="$1" bs=4096 skip=$((OVERLAY_OFFSET / 4096)) count=1 2> /dev/null; }
+
+# check_image IMG: a well-formed image whose payload matches its header; sets H_*.
+check_image() {
+    hdr_parse "$1" || { say "$1: no overlay header ('$MAGIC', payload_bytes, payload_sha256)"; return 1; }
+    _sz=$(($(wc -c < "$1")))
+    [ "$_sz" -eq $((HDR + H_BYTES)) ] || { say "$1: $_sz B, the header says $((HDR + H_BYTES)) B"; return 1; }
+    [ "$_sz" -le "$OVERLAY_SIZE" ] || { say "$1: $_sz B does not fit the region ($OVERLAY_SIZE B)"; return 1; }
+    _got=$(dd if="$1" bs=$HDR skip=1 2> /dev/null | sha256sum | cut -d' ' -f1)
+    [ "$_got" = "$H_SHA" ] || { say "$1: payload sha256 $_got, the header says $H_SHA"; return 1; }
+}
+
+state_get() { sed -n "s/^$1=//p" "$STATE" 2> /dev/null; }
+
+do_load() {
+    [ "$(state_get state)" = loaded ] && [ -x "$DIR/bin/ocbmd-launch" ] && return 0
+    D=$(mtd_dev) || { say "no 'rootfs' MTD"; return 1; }
+    _hb=$RUN/overlay.hdrblock
+    region_header "$D" > "$_hb"
+    if ! hdr_parse "$_hb"; then
+        rm -f "$_hb"
+        printf 'state=none\nreason=no overlay header at rootfs+0x%x\n' "$OVERLAY_OFFSET" > "$STATE"
+        say "no overlay in the region (rootfs+0x$(printf %x "$OVERLAY_OFFSET")): erased or never written"
+        return 1
+    fi
+    rm -f "$_hb"
+    _p=$RUN/overlay.payload
+    region_read "$D" $((OVERLAY_OFFSET + HDR)) "$H_BYTES" > "$_p"
+    _got=$(sha256sum < "$_p" | cut -d' ' -f1)
+    if [ "$_got" != "$H_SHA" ]; then
+        rm -f "$_p"
+        printf 'state=bad\nreason=payload sha256 %s, header %s\nversion=%s\n' "$_got" "$H_SHA" "$H_VER" > "$STATE"
+        say "overlay '$H_VER' REJECTED: payload sha256 $_got, the header says $H_SHA (partial write, or the rootfs grew into the region)"
+        return 1
+    fi
+    if [ "${OCBM_OVERLAY_NOMOUNT:-0}" != 1 ]; then
+        mountpoint -q "$DIR" && umount "$DIR" 2> /dev/null
+        mount -t tmpfs -o mode=0755,size=48m ocbm-overlay "$DIR" || { rm -f "$_p"; say "cannot mount a tmpfs at $DIR"; return 1; }
+    else
+        rm -rf "$DIR" && mkdir -p "$DIR"
+    fi
+    if ! gunzip -c "$_p" | tar -xf - -C "$DIR"; then
+        rm -f "$_p"
+        printf 'state=bad\nreason=unpack failed\nversion=%s\n' "$H_VER" > "$STATE"
+        say "overlay '$H_VER': the payload does not unpack (gunzip | tar)"
+        return 1
+    fi
+    rm -f "$_p"
+    if [ ! -x "$DIR/bin/ocbmd-launch" ]; then
+        printf 'state=bad\nreason=no bin/ocbmd-launch\nversion=%s\n' "$H_VER" > "$STATE"
+        say "overlay '$H_VER' has no bin/ocbmd-launch: not an OCBM overlay"
+        return 1
+    fi
+    printf 'state=loaded\nversion=%s\npayload_sha256=%s\npayload_bytes=%s\nused_kib=%s\n' \
+        "$H_VER" "$H_SHA" "$H_BYTES" "$(du -sk "$DIR" | cut -f1)" > "$STATE"
+    say "loaded '$H_VER' (payload $H_BYTES B, sha256 $H_SHA) into $DIR"
+    return 0
+}
+
+do_start() {
+    do_load || return 1
+    [ -e "$RUN/overlay.started" ] && return 0
+    if [ -x "$DIR/etc/rc.ocbm" ]; then
+        timeout 30 "$DIR/etc/rc.ocbm" start >> "$LOG" 2>&1
+        _rc=$?
+        [ "$_rc" = 0 ] || say "rc.ocbm start exited $_rc (continuing: ocbmd does not depend on it)"
+    fi
+    : > "$RUN/overlay.started"
+    return 0
+}
+
+# flash_erase_range DEV OFFSET BLOCKS
+flash_erase_range() {
+    if [ -n "${FLASH_ERASE:-}" ]; then $FLASH_ERASE "$1" "$2" "$3"; else flash_erase -q "$1" "$2" "$3"; fi
+}
+
+region_guard() { # the device, its geometry, and the running squashfs ending before the region
+    D=$(mtd_dev) || die 4 "no 'rootfs' MTD"
+    _n=${D##*/mtd}
+    _psz=$(mtd_attr "$_n" size)
+    _esz=$(mtd_attr "$_n" erasesize)
+    [ "$_esz" = "$ERASE_SIZE" ] || die 4 "rootfs MTD erase size '${_esz}', expected $ERASE_SIZE"
+    [ $((OVERLAY_OFFSET % ERASE_SIZE)) -eq 0 ] || die 4 "OVERLAY_OFFSET is not erase-block aligned"
+    [ -n "$_psz" ] && [ $((OVERLAY_OFFSET + OVERLAY_SIZE)) -le "$_psz" ] \
+        || die 4 "the region (0x$(printf %x "$OVERLAY_OFFSET") + $OVERLAY_SIZE B) does not fit the rootfs MTD (${_psz:-?} B)"
+    # squashfs superblock: magic "hsqs" at 0, bytes_used (le64) at 40
+    _mag=$(hexdump -v -n 4 -e '4/1 "%02x"' "$D" 2> /dev/null)
+    if [ "$_mag" = 68737173 ]; then
+        _used=$(hexdump -v -s 40 -n 4 -e '1/4 "%u"' "$D" 2> /dev/null)
+        _hi=$(hexdump -v -s 44 -n 4 -e '1/4 "%u"' "$D" 2> /dev/null)
+        [ "${_hi:-1}" = 0 ] && [ -n "$_used" ] || die 4 "cannot read the squashfs bytes_used"
+        [ $(((_used + ERASE_SIZE - 1) / ERASE_SIZE * ERASE_SIZE)) -le "$OVERLAY_OFFSET" ] \
+            || die 4 "the rootfs squashfs ($_used B) reaches into the overlay region at 0x$(printf %x "$OVERLAY_OFFSET")"
+    else
+        die 4 "no squashfs at the start of the rootfs MTD (magic $_mag): refusing to write beside an unknown image"
+    fi
+}
+
+do_write() {
+    IMG=${1:-}
+    SHA=${2:-}
+    [ -n "$IMG" ] && [ -n "$SHA" ] || die 2 "usage: ocbm-overlay write IMG SHA256"
+    [ -e /etc/baseline/recovery ] && die 4 "recovery: write the overlay from the rootfs (README §7.0e)"
+    [ -r "$IMG" ] || die 4 "cannot read $IMG"
+    _got=$(sha256sum < "$IMG" | cut -d' ' -f1)
+    [ "$_got" = "$SHA" ] || die 4 "$IMG has sha256 $_got, not $SHA"
+    check_image "$IMG" || die 4 "$IMG is not a valid overlay image"
+    region_guard
+    _sz=$(($(wc -c < "$IMG")))
+    if [ "$(region_read "$D" "$OVERLAY_OFFSET" "$_sz" | sha256sum | cut -d' ' -f1)" = "$SHA" ]; then
+        say "the region already holds this image ('$H_VER'), nothing written"
+        exit 3
+    fi
+    _blocks=$(((_sz + ERASE_SIZE - 1) / ERASE_SIZE))
+    trap '' HUP PIPE
+    say "writing $_sz B ('$H_VER') to $D at 0x$(printf %x "$OVERLAY_OFFSET") ($_blocks erase blocks)"
+    STARTED=1
+    flash_erase_range "$D" "$OVERLAY_OFFSET" "$_blocks" || die 1 "erase failed"
+    dd if="$IMG" of="$D" bs=4096 seek=$((OVERLAY_OFFSET / 4096)) conv=notrunc 2> /dev/null || die 1 "write failed"
+    _rb=$(region_read "$D" "$OVERLAY_OFFSET" "$_sz" | sha256sum | cut -d' ' -f1)
+    [ "$_rb" = "$SHA" ] || die 1 "read-back sha256 $_rb, expected $SHA"
+    say "wrote and verified '$H_VER' ($_sz B, sha256 $SHA); the next boot loads it"
+    exit 0
+}
+
+do_erase() {
+    [ -e /etc/baseline/recovery ] && die 4 "recovery: no rootfs tools here"
+    D=$(mtd_dev) || die 4 "no 'rootfs' MTD"
+    region_guard
+    trap '' HUP PIPE
+    STARTED=1
+    flash_erase_range "$D" "$OVERLAY_OFFSET" 1 || die 1 "erase failed"
+    say "erased the overlay header block: no valid overlay from the next boot (OCBM does not start, NCM does)"
+    exit 0
+}
+
+do_status() {
+    D=$(mtd_dev) || { echo "overlay: no 'rootfs' MTD"; return 0; }
+    _hb=$RUN/overlay.hdrblock
+    region_header "$D" > "$_hb"
+    if hdr_parse "$_hb"; then
+        _got=$(region_read "$D" $((OVERLAY_OFFSET + HDR)) "$H_BYTES" | sha256sum | cut -d' ' -f1)
+        _ok=MISMATCH
+        [ "$_got" = "$H_SHA" ] && _ok=ok
+        echo "overlay in flash: '$H_VER', payload $H_BYTES B, sha256 $H_SHA ($_ok)"
+    else
+        echo "overlay in flash: none (rootfs+0x$(printf %x "$OVERLAY_OFFSET"))"
+    fi
+    rm -f "$_hb"
+    echo "overlay in RAM: $(state_get state || true)${DIR:+ at $DIR} $(state_get version) $(state_get reason)$([ -e "$RUN/overlay.started" ] && echo ', started')"
+}
+
+case ${1:-status} in
+    status) do_status ;;
+    load) do_load ;;
+    start) do_start ;;
+    service)
+        exec >> "$LOG" 2>&1
+        while [ ! -e "$RUN/overlay.started" ]; do
+            [ -e "$RUN/overlay.none" ] && { sleep 600; exit 0; }
+            sleep 2
+        done
+        [ -x "$DIR/etc/rc.ocbm" ] || { sleep 600; exit 0; }
+        sleep 2 # init respawns this at once when it exits: never faster than this
+        exec "$DIR/etc/rc.ocbm" service ;;
+    check)
+        [ -n "${2:-}" ] || die 2 "usage: ocbm-overlay check IMG"
+        check_image "$2" || exit 1
+        echo "$2: valid overlay '$H_VER', payload $H_BYTES B, sha256 $H_SHA" ;;
+    write) shift; do_write "$@" ;;
+    erase) do_erase ;;
+    *) echo "usage: ocbm-overlay [status|load|start|service|check IMG|write IMG SHA256|erase]" >&2; exit 2 ;;
+esac

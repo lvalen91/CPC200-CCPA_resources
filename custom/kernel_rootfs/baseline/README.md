@@ -1,19 +1,16 @@
 # Vanilla CCPA baseline image (recipe)
 
-> Copy of ccpa_custom `baseline/` at commit `a793690` (2026-10-20, revision 5 = revision 4 + the usbotg1 VBUS-enable kernel, flashed and verified on the unit, rootfs USB stick auto-mount verified, FAT32/exFAT x MBR/GPT stick matrix verified; README with the revision-3, revision-4 and revision-5 hardware results; rootfs sources unchanged since `9dc14d8`), placed here as `custom/kernel_rootfs/baseline/`.
-> Path references in this README are re-rooted for this location; beyond that, this copy rewrites §5 step 5 to point at `kernel_compilation.md` and drops the owner-local `/Volumes` build/test log paths except the §7 artefact map. The other files are byte-identical to that commit.
-> The recipe's working copy stays in ccpa_custom. Index: `../README.md`.
-
 A minimal, vanilla image for the **CPC200-CCPA** (i.MX6ULL, 128 MiB RAM, 16 MiB QSPI NOR, HAB
 closed, vendor U-Boot kept): mainline Linux with a **recovery initramfs built into the kernel** (UART,
 telnet and SSH/SCP/SFTP over USB NCM, USB-stick flashing), and a **small busybox squashfs rootfs** for a
 dev board / IoT box: SSH, USB auto-mount, LEDs, I2C tools for the MFi chip, Wi-Fi/BT brought up **on
 demand only**, with station Wi-Fi and Bluetooth CLI tools (revision 3). No projection software, no MFi
 daemon, no web UI. Built on the LIVI Link recipe
-(https://github.com/f-io/LIVI, GPL-3.0-or-later; analysis in `../livi/README.md`), changed where listed below.
+(https://github.com/f-io/LIVI, GPL-3.0-or-later; read at version 9.5.0, later upstream versions exist),
+changed where listed below. Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
 
 **Status (2026-10-20, revision 5).**
-- **Revision 1 (ccpa_custom commit `333b5a4`) ran on hardware.** Observed in-session, 2026-10-20 (`../hardware_tests/2026-10-20_baseline_kernel_write.md`): its kernel (`default`
+- **Revision 1 (commit `333b5a4`) ran on hardware.** Observed in-session, 2026-10-20: its kernel (`default`
   variant of that revision, no USB) was staged for the IW416 bench unit and flashed: `flashcp` rc=0
   ("Verifying 3328/3328"), `/dev/mtd2` sha256 = the staged image, env (`/dev/mtd1`) erased with
   `flash_eraseall -q` (rc=0, read back all 0xFF), `mtd0` unchanged, reboot; U-Boot converted the staged head and
@@ -24,23 +21,23 @@ daemon, no web UI. Built on the LIVI Link recipe
   `OCBM-e3b0c44298fc` (observed), the hash of an empty input, so every unit gets it; the MACs come from the
   same hash, so they are shared too (INFERRED, not read). (Corrected 2026-10-20: this line said "never flashed
   or run on a device", then called the run an owner report.)
-- **Revision 2 (ccpa_custom commit `5e90368`)** fixes B1-B9 and adds recovery SSH, recovery USB (now the default) and
+- **Revision 2 (commit `5e90368`)** fixes B1-B9 and adds recovery SSH, recovery USB (now the default) and
   the on-demand radio, LED and MFi tools. Built (clean, §7), host self-test (`common/tools/selftest.sh`)
   and QEMU smoke tests (§7.2), and **PROVEN-BOOTING on one IW416 unit, 2026-10-20**: kernel + recovery
   + rootfs written over revision 1 from its recovery, both boots observed (§7.4; record in
-  `../hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`).
+  CPC200-CCPA_resources `custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`).
   (Corrected 2026-10-20: this line said "it has not been flashed".)
 - **Revision 3 (this tree)**: a ROOTFS-ONLY revision. Radio tools: `iw`, `wpa_supplicant`/`wpa_cli`/
   `wpa_passphrase`, BlueZ `btmgmt`/`hciconfig`/`hcitool` (no bluetoothd, no D-Bus, no GLib) and the helpers
   `wifi-connect`, `wifi-scan`, `bt-scan` (§2.5); `radio` loads every module after its dependencies (B10, the
   `Unknown symbol` burst) and words interface state the same way in `up` and `status` (B11); the
-  `mfi-probe` lock fix and `radio`'s `driver_mode` fix (ccpa_custom commits `2796253`, `672624c`) are now IN THE IMAGE
+  `mfi-probe` lock fix and `radio`'s `driver_mode` fix (commits `2796253`, `672624c`) are now IN THE IMAGE
   (B13, B14); `stage_kernel.py` checks the update env's second CRC (B12). Built, host self-test, ARM chroot
   (qemu-user) and QEMU tests incl. a boot of the real rootfs image through recovery's `switch_root` (§7.0).
   **The kernel config is unchanged and all 41 modules are byte-identical to revision 2's**, so a unit on
   revision 2 keeps its kernel and takes only the new rootfs (§5 step 6). **The revision-3 rootfs runs on the
   IW416 unit since 2026-10-20** (rootfs only, over revision 2, kernel unchanged; §7.5; record in
-  `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`).
+  CPC200-CCPA_resources `custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`).
   (Updated 2026-10-20: this line said "Not flashed; nothing of revision 3 has run on hardware", and before
   revision 3 that the two fixes were in the tree only, not rebuilt.)
 - **Revision 4 (2026-10-20, §7.0a)**: a rootfs-only rebuild of the revision-3 sources at ccpa_custom `9dc14d8`;
@@ -53,6 +50,46 @@ daemon, no web UI. Built on the LIVI Link recipe
   revision 3's; rootfs unchanged (revision 4's). Built, QEMU-booted, then **flashed to the IW416 unit and VERIFIED on
   hardware** (2026-10-20/21, §7.0b): the stick enumerated at boot in recovery with no manual GPIO. The unit's
   kernel partition now holds sha256 `35dfb1a5…c871e`; revision 2's kernel is superseded.
+- **Revision 6 (2026-10-30, §7.0c): OCBM mode.** Kernel + rootfs. Kernel: `CONFIG_USB_CONFIGFS_F_FS=y` (FunctionFS) is
+  the ONLY `.config` change against revision 5 (the 41 modules stay byte-identical, so a unit may take the kernel
+  alone for the module tree, but the mode needs the rootfs too). Rootfs: `ocbm-accessory` (static C, §2.8) serves
+  ocbmd's `/dev/usb_accessory` over FunctionFS + a raw pty, `net-up ocbm` builds the accessory gadget
+  (0x1314:0x2d00, the stock OCBM identity), `usb-mode [ncm|ocbm|status]` switches at runtime; ocbmd itself is
+  staged on the unit (`/tmp`), not in the image. Built in the `ccpa-build` VM from this tree, host self-test
+  PASS (131 checks incl. the 13 of the new relay harness), and **RAM-trialled on the IW416 unit under the
+  revision-5 kernel** with a test-only `usb_f_fs.ko` built from that kernel's own tree: the unit's USB host (the
+  GM bench radio) enumerated the accessory (0x2d00, class 0, one 0xFF/0xFF interface, bulk 0x81/0x01 at 512),
+  ocbmd opened the link, and `usb-mode ncm` brought NCM back. **FLASHED to the IW416 unit the same day (kernel + rootfs,
+  §7.0c) and the OCBM link PROVEN end-to-end over USB** against the GM radio's `gm_ccpa` host app: claim, HELLO/HELLO_ACK
+  (4 ms), CH_MFI certificate 945 B + RSA-1024 signature 128 B from the chip, MGMT_INFO, CT_SETTIME applied (clock 1970 →
+  2026), SUBSCRIBE/HOST_PRESENT, 1 Hz heartbeats, CH_LOG, CH_FILE pulls with content, CT_STOP and re-link. Then
+  `ocbm-host` on a Mac: everything passed EXCEPT the 512-multiple case — `echo … 496` (one full 512-byte packet per frame)
+  got `0 bytes … mismatches=2` with revision 6's relay; fixed in revision 7 (next bullet). The kernel partition was written
+  as `5d982485…70ba` and, after U-Boot's head conversion at the first boot (§5), reads `3462874a…7efb` (read back
+  2026-10-30 from recovery, booting `#3 … 15:41:05 UTC`). Revisions 5/4 are superseded. (Updated 2026-10-30: this bullet
+  first said "NOT flashed", then "UNVERIFIED over USB: ECHO/RTT (the 512-multiple ZLP case), CH_CONSOLE, CH_FILE push".)
+- **Revision 7 (2026-10-30, §7.0d): rootfs-only, the relay's host → device fix.** Revision 6's kernel and every rootfs
+  file except three: `ocbm-accessory` reads one wMaxPacketSize packet per FunctionFS read (§2.8), `net-up` passes
+  `OCBM_ACCESSORY_OPTS`, the release stamp. Self-test PASS. **FLASHED to the IW416 unit and VERIFIED over USB from the
+  flashed image** with `ocbm-host` on a Mac: ECHO at every frame size that is a multiple of 512 B up to 64 KiB and their
+  neighbours (395 runs, `mismatches=0` in all), RTT, MFI, CONSOLE, FILE push + pull (md5-equal), IP, SESSION, and a
+  13-minute soak (§7.0d). The unit runs rootfs `ecdfcd13…bbd6` (`20261030T1714Z`) on the revision-6 kernel.
+- **Revision 8 (2026-10-30, §7.0e): OCBM is the boot default.** Rootfs-only (revision 6's kernel stays): `usb-mode
+  boot|default|watch`, the `ocbm-overlay` loader, `hostapd`, the relay's first read waits for ENABLE. The OCBM programs
+  (ocbmd, btd, carplayd) and the stock supervisor + radio seam are NOT in this GPL image: they are a separately built
+  **OCBM overlay** (`tools/ocbm_overlay.sh`) in the rootfs MTD's last 0x460000 B, sha256-checked and unpacked into RAM
+  at boot (§2.8). **FLASHED and VERIFIED on the IW416 unit**: rootfs `a5435446…96c1` (`20261030T2035Z`) + overlay
+  `63c36a68…2bef`; every hands-off boot comes up as the accessory 0x1314:0x2d00 with ocbmd and clears bootstate, the GM
+  radio app links by itself (claim, HELLO_ACK, SETTIME, MFi 945 + 128 B, SUBSCRIBE, HOST_PRESENT, heartbeat) and its
+  SUBSCRIBE brings Bluetooth up and starts `btd` (`BOX_HEALTH 0x51 [HCI|btd|rootfs-ok]`); 8 consecutive hands-off
+  reboots; escape hatch `usb-mode default ncm` VERIFIED. A first build (`793d2cb4…`) hung rcS before the
+  bootstate clear and was replaced the same day (§7.0e).
+- **OCBM overlay `20261031T0111Z` (2026-10-30, §7.0f): wireless liveness.** Overlay-only (rootfs and kernel unchanged):
+  the supervisor restarts a lost Bluetooth stack (btd dead, or hci0 powered off under it) while a host app is
+  present, sees its own bring-up wrapper (BusyBox `pgrep -f` reads only the first 1 KiB of a command line), and
+  the bond saver writes flash within 3 s of a pairing. **FLASHED and VERIFIED**: overlay `c416d0e3…f350` replaces
+  `63c36a68…2bef`; every fault healed with one `btd`; 4 hands-off reboots; 10-minute soak. *(Updated 2026-10-30:
+  the overlay on the unit was `63c36a68…2bef` until this write.)*
 - **Radios on hardware (2026-10-20, IW416 only)**: revision 2: `radio up` powered `reg_wlan`, found SDIO
   0x02df:0x9159, loaded `mwifiex_sdio` (`phy0`, `mlan0` admin-up) and `btnxpuart` (`hci0` UP); `radio down`
   returned to radios off (§7.4). Revision 3 (§7.5): the same with **0 `Unknown symbol` lines** (B10) and the
@@ -69,13 +106,13 @@ daemon, no web UI. Built on the LIVI Link recipe
   across a reboot (the persist archive itself is read back across reboots, §7.5); the MACs of revision 2;
   the 1 s UART-Enter window into recovery. (`reboot-recovery` from the rootfs WORKED 2026-10-20, §7.5.)
 
-**Handoff (2026-10-20/21).** What is done, the unit's current state and how to continue are in `../README.md` § Handoff
-(not repeated here). Procedures stay where they are: rootfs-only flash §5 step 6, kernel flash §5 steps 2-3 plus the
-bootstate trap §7.0b, artefact map §7. Remaining work, same list as there:
+**Handoff (2026-10-20/21).** What is done, the unit's current state and how to continue are in CPC200-CCPA_resources
+`custom/kernel_rootfs/README.md` § Handoff (not repeated here). Procedures stay where they are: rootfs-only flash §5 step 6,
+kernel flash §5 steps 2-3 plus the bootstate trap §7.0b, artefact map §7. Remaining work, same list as there:
 - Untested on hardware: `wifi-connect` association + DHCP, Bluetooth pairing/traffic, AP mode, LEDs, key-only SSH and host-key reuse across a reboot, the 1 s UART-Enter window, RTL8822CS/BS units (and BT attach without a DT node), GPT with an ESP, GPT backup at the true disk end, unpartitioned stick, exFAT hot-plug, `usb-update` from a stick.
 - Port current is an owner-stated ASSUMPTION (5 V, 100-500 mA), not measured (§7.0b).
 - Open hardening: `flash-kernel` should clear bootstate (needs a recovery-kernel change, §7.0b); stricter staged-head probe for 0x303080 units (§1); recovery/rootfs auto-mount sticks read-write (a read-only default is undecided).
-- Outside this tree: LIVI provisioner failure modes, nc-push truncation cause, WDOG1, 74HC595 expander, second reset after `heweiencrypt` (all in `../livi/README.md` and `../hardware_tests/2026-10-19_round_trip/RUNBOOK.txt`); ledger/claims re-sync; OCBM on this baseline; credential exposure and push decisions (owner's).
+- Outside this tree: LIVI provisioner failure modes, nc-push truncation cause, WDOG1, 74HC595 expander, second reset after `heweiencrypt` (all in the resources repo `livi/README.md` and `RUNBOOK.txt`); ledger/claims re-sync; credential exposure and push decisions (owner's). OCBM on this baseline: revision 6's kernel + revision 8's rootfs + the OCBM overlay (§2.8, §7.0c-§7.0e) are on the unit; OCBM is the boot default and the GM radio app links and wakes Bluetooth by itself; left (§7.0e, §7.0f): a fresh iPhone pairing over the baseline (a bonded iPhone's reconnect, 0x5703 handoff and wireless CarPlay video in the GM bridge role were measured 2026-10-30, §7.0f), HFP SCO setup on the baseline backend, MGMT_ENTER_NCM from a host end to end, the UART banner still printing the NCM address in OCBM mode. (Updated 2026-10-30: this said "left: ECHO/CONSOLE/FILE-push over USB with `ocbm-host`", then "left: ocbmd in the image, a persisted boot mode, a bench Wi-Fi AP helper".)
 
 Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6ul/`.
 
@@ -83,7 +120,7 @@ Shared with the parallel C2Air (riscv) baseline: `common/`. CCPA-only: `arm-imx6
 
 ## 1. Proven facts this recipe stands on
 
-Hardware-verified 2026-10-19 on the IW416 unit (`../hardware_tests/2026-10-19_round_trip/RUNBOOK.txt`; backup `../backups/20261019_IW416_ocbm_baseline_pre-livi/`),
+Hardware-verified 2026-10-19 on the IW416 unit (`carlinkit_misc/ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/round_trip/RUNBOOK.txt`),
 and 2026-10-20 (the revision-1 flash, observed in-session, see Status; revision 2 on the same unit, §7.4):
 
 | Fact | Consequence here |
@@ -92,7 +129,7 @@ and 2026-10-20 (the revision-1 flash, observed in-session, see Status; revision 
 | first three 64 KiB blocks are DCP-encrypted per chip, the rest is a plain zImage | a new kernel keeps the current encrypted head and stages the new head |
 | staging: new head AES-128-CBC at kernel+0x302fd8, key‖IV = ASCII hex of OCOTP CFG0,CFG1,MAC0,MAC1 (key = first 16 chars, IV = last 16), CBC restarted with that IV per 64 KiB block | `arm-imx6ul/tools/stage_kernel.py` (host) |
 | erase the 64 KiB env block (flash 0x30000) and reboot: U-Boot runs `heweiencrypt` (staging → 0x40000/50000/60000) and rewrites env | `flash-kernel` (recovery) |
-| `heweiencrypt` rewrites ONLY the three head blocks: after LIVI's install the partition's body and staging equal LIVI's plan, the head differs (`../backups/20261020_livi_pre-baseline/README.txt`) | `flash-kernel` recognises "already installed" (§2.2) |
+| `heweiencrypt` rewrites ONLY the three head blocks: after LIVI's install the partition's body and staging equal LIVI's plan, the head differs (`backups/20261020_livi_pre-baseline/README.txt` in CPC200-CCPA_resources) | `flash-kernel` recognises "already installed" (§2.2) |
 | encrypted update env at mtd0+0x20000 | read by `stage_kernel.py` to get the unit's own layout |
 | LIVI's mainline 7.2.10 kernel + squashfs booted this way (2026-10-19); the baseline's own kernel booted to its recovery this way (2026-10-20) | kernel pin 7.2.10, LIVI's 4 board patches, LIVI's partition map |
 | partition map (LIVI DTS): uboot 0x30000, env 0x10000, kernel 0x340000, rootfs 0xc60000, customer 0x10000, bootstate 0x10000 | kept unchanged |
@@ -122,9 +159,9 @@ Found while writing this recipe (from files, not hardware):
   outside the DT: MEASURED, table above), no USB pinctrl, OTG1_ID pad
   not muxed; at boot ci_hdrc.0 read `fsm->id = 0` → `a_host`, and a USB stick enumerated (sda1, vfat).
 - The NCM CFW gadget enumerates **0x1314:0x1520**, class 239/2/1 (on-box sysfs reads,
-  ccpa_custom `scratchpad/ocbm_2026090*/trial.txt` line 4).
+  `scratchpad/ocbm_2026090*/trial.txt` line 4).
 - The `kernel_len`/staging offset 0x302fd8 is the 2025.10.15.1127 U-Boot env's; build 2025.02.25.1521
-  uses **0x303080** (`../../../documentation/05_Security_Analysis/kernel_encryption.md`).
+  uses **0x303080** (CPC200-CCPA_resources `documentation/05_Security_Analysis/kernel_encryption.md`).
   `stage_kernel.py` reads each unit's own values; `board.env`'s 0x302fd8 is only the image budget (the
   smaller value fits both) and `flash-kernel`'s probe offset for "something is staged", which a staging
   at 0x303080 still satisfies. Precisely (`flash-kernel:99`, `board.env:25` `STAGING_PART_OFFSET`): the
@@ -180,7 +217,7 @@ power on -> vendor HAB U-Boot (untouched) -> reads 0x302fd8 B @0x40000, decrypts
   host or a chip driver: their aliases are only `of:` (48) and `sdio:` (12), for `btnxpuart`, `hci_uart`,
   `mwifiex_sdio`, `rtw88_8822bs`/`cs` and `sdhci_esdhc_imx` (VERIFIED in the revision-2 default rootfs's
   `modules.alias`, 2026-10-20; corrected the same day: this listed `fs-*`/`nls_*` and `platform:`/`serdev:`). No chipset is named in
-  the DT unless the image is a radio one (§2.5), per ccpa_custom CLAUDE.md "never hardcode a chipset".
+  the DT unless the image is a radio one (§2.5), per CLAUDE.md "never hardcode a chipset".
 - **MFi**: only `/dev/i2c-1`, address 0x11 (the `&i2c2` controller on the UART5 pads, numbered 1 by
   the imx6ul.dtsi aliases); `mfi-probe` reads it (§2.4). No bridge daemon.
 - **Rootfs** (§2.4): static musl BusyBox 1.38.0 (defconfig + nearly everything, 410 applets), dropbear
@@ -199,7 +236,7 @@ One file, read by `common/shared/net-up` in both the recovery initramfs and the 
 | Mode | VID:PID | Function | In the baseline |
 |---|---|---|---|
 | NCM (default) | 0x1314:0x1520, class 0xef/2/1 | `ncm.usb0` | yes (enumerated on hardware 2026-10-20) |
-| OCBM | 0x1314:0x2d00 | FunctionFS + ocbmd | ID listed only; `net-up ocbm` refuses |
+| OCBM | 0x1314:0x2d00, class 0 (interface 0xFF/0xFF/0x00) | `ffs.ocbm` (FunctionFS) served by `ocbm-accessory`, which provides `/dev/usb_accessory` for ocbmd (§2.8) | rootfs, revision 6; `net-up ocbm` / `usb-mode ocbm` (on the IW416 unit since 2026-10-30, OCBM link proven, §7.0c). **Revision 8: the boot default** whenever a valid OCBM overlay is in flash (§2.8, §7.0e); NCM is then the fallback and the escape hatch (`usb-mode default ncm`). *(Corrected 2026-10-30: up to revision 5 this row and `net-up` said "FunctionFS + ocbmd" and "refuses". ocbmd opens ONE read-write accessory node and cannot use FunctionFS's endpoint files itself, so the mode needs the relay; it existed nowhere before revision 6.)* |
 | ACM debug | 0x1d6b:0x0104 | `acm.GS0` | recovery only (unauthenticated shell) |
 
 - Strings: iManufacturer **"Magic Communication Tec."**, iProduct **"Auto Box"** (the stock
@@ -227,13 +264,13 @@ One file, read by `common/shared/net-up` in both the recovery initramfs and the 
   compatibility with the existing host apps and shared tooling. The clean alternative is a
   pid.codes allocation under VID 0x1209; with the single `usb-ids.conf` that is a one-file change.
 - Consequence of 0x1314:0x1520: apps that speak the Carlinkit protocol match it (carlink_native filters
-  0x1520/0x1521, ccpa_custom `ccpa/rootfs/script/ocbm_boot.sh:44-47`; the macOS app lists 0x1520 as legacy,
+  0x1520/0x1521, `ccpa/rootfs/script/ocbm_boot.sh:44-47`; the macOS app lists 0x1520 as legacy,
   `USBDeviceManager.swift:53-55`). The stock NCM CFW had the same identity; how those apps behave
   against a pure NCM gadget is UNVERIFIED. `riddle_default.conf` lists USBPID 1521
-  (`../../docs/README.md:366-367`); that is the vendor's default config, not
+  (`CPC200-CCPA_resources/custom/docs/README.md:366-367`); that is the vendor's default config, not
   what the NCM CFW gadget was read enumerating.
 - Not in the baseline (OCBM-phase item, provenance UNVERIFIED): the phone-facing gadget in
-  ccpa_custom `tools/projection_up.sh:49-50` uses 0x08e4:0x01c0 with the same strings.
+  `tools/projection_up.sh:49-50` uses 0x08e4:0x01c0 with the same strings.
 
 ### 2.2 Recovery (inside the kernel image): only what recovers the box
 
@@ -279,8 +316,8 @@ One file, read by `common/shared/net-up` in both the recovery initramfs and the 
   encrypted head in front of the new body: no bootable kernel, no USB, **SPI programmer needed**
   (`full_16MB_for_programmer.bin` of that unit; the IW416 unit's is kept outside git, in
   `carlinkit_misc/ccpa_backups/20261019_IW416_ocbm_baseline_pre-livi/`, because it embeds device credentials;
-  its sha256 and why it left:
-  `../backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt`). LIVI's dry-run report estimates that window at
+  its sha256 and why it left: CPC200-CCPA_resources
+  `custom/kernel_rootfs/backups/20261019_IW416_ocbm_baseline_pre-livi/README.txt`). LIVI's dry-run report estimates that window at
   22-54 s, an estimate with no source given; on 2026-10-19 the erase + write of LIVI's kernel took ~20 s
   (RUNBOOK, Stage 1), the env erase came after it. A *failed* write with power still on is recoverable: recovery keeps running from RAM, retry
   or `--restore`.
@@ -330,6 +367,10 @@ UNTESTED, not built).
 
 - **BusyBox** full (410 applets) incl. the i2c tools (`i2cdetect i2cget i2cset i2cdump i2ctransfer`),
   `mdev`, `passwd` (sha512-crypt by default, `full.fragment`), MTD/UBI tools, `modprobe`/`depmod`.
+  **Gotcha (measured 2026-10-30, §7.0f): `pgrep -f`/`pkill -f` see only the first 1 KiB of a command line**
+  (`PROCPS_BUFSIZE`; a `sh -c` whose marker sat behind 1,500 bytes was invisible to `pgrep -f`), while `grep -l PAT
+  /proc/[0-9]*/cmdline` reads all of it, NULs included. Long `sh -c` wrappers are found with the latter. The
+  interactive shell's line editor takes at most 1,024 bytes per line: a longer line typed on the UART is dropped.
 - **SSH**: dropbear on 192.168.50.2:22 (`common/shared/ssh-up`, §2.6), SCP and SFTP.
 - **USB sticks**: `mdev -d` (netlink, started by rcS; its start-up scan catches a stick that is already
   plugged in) runs `usb-mount --mdev` for every whole-disk `sd[a-z]` add/remove (`etc/mdev.conf`): the
@@ -339,9 +380,9 @@ UNTESTED, not built).
   modular builds rcS first loads the storage stack (`usb-mount --modules`).
 - **LEDs** (§2.7): `led [red|blue on|off|blink|heartbeat]`.
 - **MFi coprocessor**: `mfi-probe` (read-only): DeviceVersion (reg 0x00, 1 B; 0x03 on the IW416 unit
-  per ccpa_custom `ccpa/carplayd/src/main.rs`) and the certificate length (reg 0x30, 2 B BE), with the access the
+  per `ccpa/carplayd/src/main.rs`) and the certificate length (reg 0x30, 2 B BE), with the access the
   project's daemons use (register write + repeated-start read, 5 tries 5 ms apart,
-  ccpa_custom `crates/vendor/mfi-i2c-local/src/lib.rs`) under `/tmp/carplay_mfi.lock`. No control register, no
+  `crates/vendor/mfi-i2c-local/src/lib.rs`) under `/tmp/carplay_mfi.lock`. No control register, no
   challenge, no signing. The lock step polls `flock -n` up to ~10 s (BusyBox has no `flock -w`): in the
   revision-3 image (B13; in an ARM chroot it waited for a lock held 2 s and gave up after 11 s on one held
   14 s); the revision-2 rootfs failed there (`flock: unrecognized option: w`). **VERIFIED on the IW416 unit
@@ -353,6 +394,9 @@ UNTESTED, not built).
   `/run/etc/shadow` link, then `persist save`), `persist add-key FILE`.
 - **Persist archive** (`persist`, §2.6) on the `customer` MTD; `reboot-recovery` sets the bootstate
   marker and reboots into recovery.
+- **USB mode and the OCBM overlay** (revision 8, §2.8): `usb-mode [status|ncm|ocbm|default [ncm|ocbm]]`,
+  `ocbm-overlay [status|load|start|check|write|erase]`; `/opt/ocbm` (the overlay's RAM mount point), `/script` and
+  `/usr/sbin/{ocbmd,btd,carplayd}` as links into it. No OCBM program is in the image.
 
 ### 2.5 Radios on demand: ONE rootfs and ONE kernel config for every radio
 
@@ -398,6 +442,7 @@ there is no wireless interface or HCI device.
 | Tool | Source | For | Bytes (stripped) |
 |---|---|---|---:|
 | `iw` | iw 6.17 on libnl 3.12.0 | nl80211: scan, link, dev/phy info, regulatory | 339,016 |
+| `hostapd` (revision 8) | hostapd 2.12 on libnl 3.12.0 (`common/hostapd/hostapd.config`) | the box's own access point: AP mode over nl80211, WPA2-PSK (CCMP), internal crypto; started only by the OCBM overlay's radio seam when a host app asks for the box AP | 596,256 |
 | `wpa_supplicant`, `wpa_cli`, `wpa_passphrase` | wpa_supplicant 2.12 (`common/wpa_supplicant/wpa_supplicant.config`) | station: WPA2-PSK, WPA-PSK, open; nl80211 driver; internal crypto; control socket in `/run/wpa_supplicant` | 662,032 / 133,312 / 67,136 |
 | `btmgmt` | BlueZ 5.87, readline 8.3 (+ patches 001-006), ncurses 6.6 libtinfo | the kernel's Bluetooth management socket (info, power, find, pair, ...) without bluetoothd | 425,340 |
 | `hciconfig`, `hcitool` | BlueZ 5.87 `--enable-deprecated` | raw HCI: device info, inquiry (`scan`), `lescan` | 198,072 / 199,784 |
@@ -424,7 +469,8 @@ there is no wireless interface or HCI device.
   controller without LE, or an LE that does not come on, gets a BR/EDR-only find (`-l`: exit 1); an
   interleaved find still refused (0x0b, or 0x0c Not Supported) is retried with `-b`. Each find prints its
   mode ("BR/EDR and LE", "LE only", "BR/EDR only"); exit 1 when discovery did not start.
-- **Not provided, and why.** WPA3-SAE (and OWE, DPP): wpa_supplicant 2.12 implements the elliptic-curve
+- **Not provided, and why.** *(Corrected 2026-10-30: AP mode, listed below as not built, is in revision 8:
+  `hostapd`, WPA2-PSK only.)* WPA3-SAE (and OWE, DPP): wpa_supplicant 2.12 implements the elliptic-curve
   primitives (`crypto_ec_*`) only in `src/crypto/crypto_openssl.c` and `crypto_wolfssl.c`; the internal crypto
   has none, so SAE would need a static OpenSSL or wolfSSL: not cheap, not built. Whether the IW416 firmware
   and mwifiex could do SAE at all is UNKNOWN. Also not built: 802.1X/EAP, WPS, P2P, AP mode (no `hostapd`;
@@ -479,6 +525,166 @@ there is no wireless interface or HCI device.
 | rootfs, NCM + SSH up | heartbeat | off |
 | rootfs, a way in not up (reason on the console, `/run/baseline/rcS.log`) | heartbeat | on |
 
+### 2.8 OCBM mode (revision 6, 2026-10-30; relay host → device fix in revision 7; the boot default since revision 8): `usb-mode`
+
+**What ocbmd needs and what the kernel has.** `ccpa/ocbmd` (`ACC_DEV`, `main.rs`) opens ONE read-write node,
+`/dev/usb_accessory`, sets it `O_NONBLOCK`, polls it for `POLLIN`/`POLLOUT` on its single-threaded loop, and
+exits for respawn on `EOF`/`EIO`/`POLLHUP` ("USB transport gone"). On the stock firmware that node is the
+Android accessory gadget function (`g_android_accessory`); mainline has no such function. The only mainline way
+to a vendor bulk interface from userspace is **FunctionFS** (`CONFIG_USB_CONFIGFS_F_FS`, in `base.fragment`
+since revision 6), which gives *three* files instead of one: `ep0` (descriptors, events, control) and one
+file per endpoint, each one-way, with blocking I/O and **no `poll()`** (`drivers/usb/gadget/function/f_fs.c`:
+`ffs_epfile_operations` has no `.poll`, so `poll()` reports it always ready, and a read with nothing from the
+host would park ocbmd's whole loop). Repointing `ACC_DEV` at an endpoint file therefore cannot work, and making
+ocbmd itself FunctionFS-native would mean a reader thread and split fds through its queue/drain code — not a
+contained change.
+
+**Design: a pty behind the node, one static C relay.** `common/ocbm-accessory/ocbm-accessory.c` (installed as
+`/usr/sbin/ocbm-accessory`, 66,704 B static musl) owns `ep0`, `ep1` (bulk IN) and `ep2` (bulk OUT) of a
+FunctionFS mount and the **master of a Unix98 pty**; `/dev/usb_accessory` is a symlink to the pty **slave**,
+set **raw** (`cfmakeraw`, `IXON|IXOFF|IXANY` off, `VMIN 1`, `VTIME 0`) before ocbmd starts, so every byte
+value passes unchanged. Two threads pump bytes: host → slave (one FunctionFS read, up to 16,384 B, per USB
+transfer) and slave → host (what the pty has, coalesced up to 16,384 B, one USB transfer each). ocbmd gets what
+it is written for: real `poll()` readiness, non-blocking reads and writes with backpressure (the pty's 64 KiB
+flow control), and a **hang-up when the USB function is disabled** (the relay closes the master: ocbmd sees
+`POLLHUP`/EOF and takes its exit-for-respawn path, exactly the stock accessory fd's teardown behaviour). The
+relay also **starts and respawns ocbmd** (a fresh pty per generation, like `/script/run_ocbmd.sh` on the stock
+firmware; `-k` keeps ocbmd across a USB disable). Why not the alternatives: a socket is not `open(2)`-able by
+path; a FIFO is one-way; a CUSE device would need FUSE in the kernel and a FUSE implementation in the relay.
+
+**Frame boundaries do not need to survive the relay, short packets do.** OCBM frames are self-delimiting
+(16-byte header with magic and length; `crates/ocbm-proto` `Reassembler` on both ends is a byte-stream
+reassembler, fed from arbitrary read sizes by ocbmd `main.rs` and `host/ocbm-host` alike), so the pty's
+re-chunking is harmless. What the hosts DO depend on is that every device → host transfer **ends in a short
+packet**: `ocbm-host` reads 16,384 B with a 100 ms timeout and drops a transfer that times out, and the stock
+firmware had to set `accZLP=Y` for the same reason (`ccpa/rootfs/script/ocbm_boot.sh`). FunctionFS adds no ZLP
+on its own (`f_fs.c` sets `req->zero` only on ep0), so the relay writes **a zero-length request after any
+transfer whose length is a multiple of wMaxPacketSize** (read per `ENABLE` through
+`FUNCTIONFS_ENDPOINT_DESC`, 512 at high speed) when no more bytes are already waiting (a 16,384-B chunk
+with more pending is continued by the next chunk; a ZLP mid-frame would only cost the host one extra
+completion, never bytes). **Host → device: one wMaxPacketSize packet per FunctionFS read** (512 B at high speed; `-r N`
+overrides; since revision 7 — revision 6's image read 16,384 B per request and has the defect below). A UDC
+completes an OUT request only on a short packet or a full buffer, and the hosts send a frame as one transfer
+with no ZLP; with a 16 KiB request a lone 512-byte frame (`ocbm-host echo … 496`: 496 + the 16-byte header) sat
+in the controller until the next transfer, and the request/response ECHO got nothing back (MEASURED on the IW416
+unit 2026-10-30: `0 bytes … mismatches=2`; relay trace: no `OUT 512 B` line; the two held frames surfaced as one
+`OUT 1046 B` read when the next frame arrived). The stock `acc_read` queued min(read size, 16 KiB) against
+ocbmd's 64 KiB reads, so the stock firmware had the same property — it was never exercised there. With
+one-packet requests every packet completes the read; cost: one read per 512 B, measured at 24.8 Mbps each way
+on `echo … 16384` and 65536-byte RTT p50 40 ms vs 17 ms before (device → host is unchanged, it stays coalesced);
+`OCBM_ACCESSORY_OPTS="-r 16384"` reproduces the old behaviour, `"-v -v"` traces every transfer to
+`/run/log/ocbm-accessory.log` (§7.0c).
+
+**Gadget composition: a pure accessory device, never NCM + OCBM.** Both OCBM hosts take the FIRST interface
+that carries a bulk IN + OUT pair (`host/ocbm-host/src/main.rs` `open`; the macOS app's
+`IOUSBFindInterfaceRequest` with don't-care filters, `USBDeviceManager.swift`), so a composite would hand them
+NCM's data interface. The stock OCBM gadget is a pure accessory too (`ocbm_boot.sh`: class 0/0/0 at the device,
+0xFF at the interface, PID 0x2d00). Hence one function at a time: `usb-mode ocbm` takes NCM down (an SSH session
+over NCM that issues it is cut; the switch completes, `SIGHUP` ignored) and `usb-mode ncm` brings NCM, DHCP and
+dropbear back. **Since revision 8 the boot default is OCBM whenever a valid OCBM overlay is in flash** (below);
+`usb-mode ncm|ocbm` switches until the next boot. *(Corrected 2026-10-30: up to revision 7 this read "The default at
+boot stays NCM; OCBM is RAM-selected and a reboot reverts it".)* The order in
+`net-up ocbm`: `mkdir functions/ffs.ocbm` → `mount -t functionfs ocbm /run/ocbm/ffs` → start `ocbm-accessory`
+(it writes the descriptors; `ep1`/`ep2` appear, waited for) → link the function → bind the UDC; `net-down`
+reverses it (unbind, stop the relay — which hangs ocbmd up and waits for it —, unmount, remove). `f_fs`
+registers the `functionfs` filesystem type only once an `ffs.*` instance exists (`_ffs_alloc_dev` →
+`functionfs_init`), so `/proc/filesystems` says nothing before the `mkdir`; a kernel without the function fails
+that `mkdir`, and `net-up` says so.
+
+**What runs over it, and what does not.** ocbmd is NOT in this GPL image (a Rust program of the Unlicense tree,
+outside this recipe); since revision 8 it comes from the **OCBM overlay** (below), and by hand it can still be staged
+(`usb-mode ocbm /tmp/ocbmd`, or `OCBMD=... net-up ocbm`; without one the relay still serves the node and a hand-started
+ocbmd attaches). The channels that need only the box itself all work — VERIFIED over USB 2026-10-30 against `ocbm-host` on a Mac and
+the GM radio's `gm_ccpa` app (§7.0c), and again from the flashed revision-7 image (§7.0d): HELLO/HELLO_ACK, ECHO (every
+frame size that is a multiple of 512 B up to 64 KiB and its neighbours, 395 runs, `mismatches=0`; revision 6's relay
+failed the 512-byte one, see above), RTT (64 B p50 0.57 ms, 65536 B p50 39 ms, 0 timeouts),
+**SETTIME** (the baseline boots at 1970 with no RTC; the host's `CT_SETTIME` on every connection sets the clock),
+**MFI** (the chip at `/dev/i2c-1` 0x11: 945-byte certificate, 128-byte RSA signature, under `/tmp/carplay_mfi.lock`
+like `mfi-probe`), **CONSOLE** (a root shell on `/dev/ptmx`), **FILE** push and pull (1 MiB, CRC-checked, byte-exact,
+16/40 Mbps), **LOG** streaming, **IP** (TCP to a box-local port), MGMT_INFO, SUBSCRIBE/HOST_PRESENT/heartbeats, CT_STOP;
+since revision 8 also **MGMT_ENTER_NCM** (persists `usb-mode default ncm`, then reboots; below). With the full
+overlay the **session supervisor** runs too (`tools/session_supervisor.sh`, unmodified): a host SUBSCRIBE brings the
+radios up through the radio seam's `baseline` backend (`radio up`), applies the app's `wifi_ssid`/`wifi_pass` to
+`/etc/hostapd.conf` for the 0x5703 handoff, raises the box's own AP (`hostapd` + `udhcpd` on 192.168.43.0/24) only when
+the app does not push `wifi_ap: false`, and starts `btd`; a host that goes away takes the radios down (results:
+§7.0e). **Not supported** on this baseline, and why: `iap2d` / wired CarPlay (needs the Android
+`/dev/android_iap2` + `/sys/class/android_usb` gadget nodes on the phone port, which mainline has not; the phone port
+`usbotg1` is a HOST port here, §2.3; the stock `projection_up.sh` therefore exits 2, "box misconfigured", and the
+supervisor neither arms nor escalates); the supervisor's escalation ladder (phone_reset, ocbmd restart, reboot: it
+recovers a wired session, and its ocbmd restart would start a second ocbmd beside the relay's; inhibited by the overlay,
+`/tmp/no_escalate`); `aa-bridge` (not in the overlay: wired Android Auto pumps over a host app's CH_IP and the GM app
+has no Android Auto head unit; `/dev/bus/usb` on the host port exists, untried); WPA3/SAE on the box AP (hostapd is
+built with internal crypto, §2.5); HFP SCO setup after `btd`'s controller reset (`radio_hal.sh sco_on` has no mapping
+for the baseline backend: exit 3, call audio over SCO not restored). CH_ETH (`ocbm-host bridge`) has no NCM netdev to
+bridge in OCBM mode. `ocbmd` reads the Wi-Fi MAC for its identity line from the first `/sys/class/net/*/phy80211`
+interface since 2026-10-30 (`mlan0` here, `wlan0` on Realtek; it hard-coded `wlan0` before), so the field is empty
+until the radios are up. *(Corrected 2026-10-30: up to revision 7 this paragraph said ocbmd had to be staged in `/tmp`,
+that the supervisor, `/script/*`, `carplayd` and `hostapd` were absent and `btd` untried, and that MGMT_ENTER_NCM fails.)*
+
+**Revision 8: OCBM at boot, from a separate overlay.** Owner goal (2026-10-30): the box boots into OCBM and the host
+app links and initializes it with no manual step.
+- **Licence boundary.** This image stays GPL-only and buildable from this recipe and its pinned sources; the OCBM
+  programs (ocbmd, btd, carplayd: this repository's Unlicense Rust, linking crates under their own licences) and the
+  stock OCBM scripts travel as ONE separately built image, the **OCBM overlay** (`tools/ocbm_overlay.sh`, outside
+  `baseline/`). The rootfs carries only a generic loader (`ocbm-overlay`), a mount point (`/opt/ocbm`) and the stock
+  layout's names into it as symlinks (`/script` → `/opt/ocbm/script`, `/usr/sbin/{ocbmd,btd,carplayd}` →
+  `/opt/ocbm/bin/…`; dangling without an overlay). The two are an aggregate on one flash chip, never linked.
+- **Where.** There is no spare MTD (§1: the six partitions fill the 16 MiB) and the kernel has no loop device
+  (`CONFIG_BLK_DEV` off), so a second squashfs could not be mounted from an offset without a kernel change. The
+  overlay therefore lives in the **last 0x460000 B of the `rootfs` MTD** (rootfs+0x800000, `board.env`
+  `OVERLAY_OFFSET`/`OVERLAY_SIZE`): the squashfs reads only up to its own `bytes_used`, `flash-rootfs` writes only the
+  image's length, and `build.sh` refuses a `rootfs.img` larger than 0x800000 (revision 8's is 3,854,336 B). The cost:
+  the GPL rootfs may grow to 8 MiB, not 12.4.
+- **Format and check.** A 4096-byte text header (`OCBM-OVERLAY 1`, `payload_bytes`, `payload_sha256`, `version`), then
+  a gzip'd ustar archive. At boot `ocbm-overlay load` reads the payload from flash into RAM, refuses it unless its
+  sha256 equals the header's, and unpacks it into a 48 MiB tmpfs at `/opt/ocbm` (3.1 MiB for the full set): nothing
+  runs from flash, and a half-written, overgrown or damaged overlay is never used (the boot is NCM instead). The
+  archive must hold `bin/ocbmd-launch` (what the relay spawns); its `etc/rc.ocbm` is optional (`start`: once, bounded
+  to 30 s; `service`: the long-running part, run by init).
+- **Boot sequence** (rcS, after `persist load`): `usb-mode boot` → the persisted default is not `ncm` →
+  `ocbm-overlay start` (verify, unpack, `rc.ocbm start`: a RAM copy of `/etc` bind-mounted over it, because the stock
+  scripts and daemons write `/etc/hostapd.conf`, `/etc/carplay/`, `/etc/carplay_peers.bin`; the bond and peer stores
+  restored from the persist archive; the radio descriptor) → `net-up ocbm` with `OCBMD=/opt/ocbm/bin/ocbmd-launch`
+  (the relay, the accessory 0x1314:0x2d00 bound to the UDC) → **up** = ocbmd keeps one pid over three samples a second
+  apart → dropbear on 127.0.0.1:22 (SSH through OCBM CH_IP) → rcS clears bootstate exactly as after NCM + SSH (the ways
+  in are the OCBM link and the UART). Anything failing on that path is printed on the console and the same boot falls
+  back to NCM + SSH, unchanged from revision 7, so a broken overlay can neither keep the unit from clearing
+  bootstate on a good rootfs nor clear it on a broken one. init then runs `ocbm-overlay service` (→ `rc.ocbm service`:
+  the session supervisor and the pairing-state saver) and `usb-mode watch`, which restarts the accessory if the relay
+  dies while OCBM is wanted (NCM after three failed restarts). The relay respawns ocbmd itself (a fresh pty per
+  generation, §2.8 above); nothing else may start one.
+- **Liveness of the wireless stack** (overlay `20261031T0111Z`, §7.0f). The radios come up on the host app's SUBSCRIBE
+  and go down when it leaves; in between the supervisor restarts Bluetooth itself when `btd` has died or hci0 is not
+  `UP RUNNING` under it for 5 s (not while a wired iPhone, Android Auto, CT_RADIO or a teardown owns the radios),
+  30 s backoff doubling to 300 s. The GM app does NOT subscribe while its CarPlay session is still live (that session
+  runs phone → vehicle hotspot → app and survives a box reboot), so after a box-only reboot during a live session the
+  box's radios stay off (measured); when the app subscribes again after that session ends was not measured. The
+  pairing-state saver puts a new bond on flash within 3 s (flash writes ≥ 15 s apart).
+- **Escape hatches, all independent of the overlay's code:** `usb-mode default ncm` (UART, the OCBM console, SSH
+  through CH_IP) persists the NCM default in the persist archive: the next boots are revision 7's NCM boot and the
+  overlay is not even loaded (`usb-mode default ocbm` undoes it); the host app's **MGMT_ENTER_NCM** does the same and
+  reboots (ocbmd runs `OCBM_ENTER_NCM_CMD`, exported by `ocbmd-launch`, instead of writing the stock `/script/ncm_only`);
+  `usb-mode ncm` for the running boot; `ocbm-overlay erase` (no valid overlay → NCM); and recovery, untouched:
+  `reboot-recovery`, the UART Enter window, the bootstate mark, `flash-rootfs` (e.g. revision 7's image, which ignores
+  the region). The UART root shell is init's first respawn entry in every mode.
+- **Writing an overlay** (any USB mode, from the rootfs): get the image into `/tmp` (UART: `uart_xmodem_send.py` into
+  the rootfs's `rx`, ~10 KB/s, then `head -c <size>` off the 1 KiB padding; NCM: `scp -O`), then `ocbm-overlay write
+  /tmp/<img> <sha256>`: it refuses (exit 4, nothing written) a wrong sha256, a payload that does not match its header, an
+  image larger than the region, a rootfs MTD whose squashfs reaches 0x800000, and writes only `flash_erase` +
+  `dd` + read-back inside the region; exit 3 = already there. Writing beside the running squashfs is safe for that
+  reason; the squashfs itself is still written from recovery only. The next boot loads it.
+
+**Tests.** `common/tools/ocbm-accessory-test.py` (selftest step 9, needs `cc` and `python3`) runs the relay in
+`-T` test mode, where an AF_UNIX datagram socket stands in for the two endpoint files (one datagram = one USB
+transfer, an empty one = a ZLP) and a Python stand-in for ocbmd opens the link: raw line discipline and no
+controlling tty; 1024 + 5 + 16,384 B host → device byte-exact incl. CR/LF/ETX/XON/XOFF; device → host 1024 B
+ends in a ZLP, 100 B does not, 70,000 B arrives complete with every ZLP after a 512-multiple; 1 MiB duplex echo
+byte-exact; child exit → new generation; `SIGUSR1` (= DISABLE) hangs the child up and drops device bytes,
+`SIGUSR2` (= ENABLE) resumes; a regular file at the node path is refused; and, since the datagrams the host side
+sends are USB *packets* (≤ 512 B, no ZLP, as libusb/IOKit send a transfer), a lone 512-byte packet is delivered and
+echoed within 1 s with the default read, while `-r 16384` holds it until a short packet follows — the hardware hang
+reproduced in loopback. Hardware: §7.0c.
+
 ---
 
 ## 3. Directory map
@@ -486,6 +692,8 @@ there is no wireless interface or HCI device.
 ```
 baseline/
   README.md                this file
+  LICENSE                  GPL-3.0 text (the licence of baseline/ as a whole)
+  COPYING-GPL-2.0          GPL-2.0 text (dts/ and the patch diff bodies)
   build.sh                 POSIX sh; --dry-run prints every step; real builds on Linux only
   common/                  shared with the C2Air baseline
     versions.env           version + sha256 pins (where each came from)
@@ -494,17 +702,23 @@ baseline/
     busybox/recovery.applets  recovery BusyBox: allnoconfig + these
     dropbear/localoptions.h   key + password server, sftp path
     hciup/hciup.c          HCI up/down/info for radio's Bluetooth (static, musl)
+    ocbm-accessory/ocbm-accessory.c   /dev/usb_accessory for ocbmd over FunctionFS + a raw pty (static, musl; §2.8)
+    hostapd/hostapd.config  the box AP's hostapd build configuration (revision 8)
     wpa_supplicant/wpa_supplicant.config   station-only build configuration (what is in, why no WPA3)
-    recipes/userspace.sh   musl, BusyBox x2, dropbear, sftp-server, flash_erase, hciup, exfatprogs; radio
+    recipes/userspace.sh   musl, BusyBox x2, dropbear, sftp-server, flash_erase, hciup, ocbm-accessory, exfatprogs; radio
                            tools: libnl, iw, wpa_supplicant, ncurses, readline, BlueZ btmgmt/hciconfig/hcitool
     shared/                used by recovery AND rootfs: net-up net-down ocbm-identity ocbm-banner mtd.sh
                            usb-mount ssh-up persist
     rootfs/                skeleton: init, etc/{inittab,init.d/rcS,profile,passwd,group,shells,hostname,
-                           mdev.conf}, usr/sbin/{passwd,led,reboot-recovery}
+                           mdev.conf}, usr/sbin/{passwd,led,reboot-recovery,usb-mode,ocbm-overlay}
     tools/serve_once.py    host: one-shot raw TCP file server for the helpers' host:port pulls
     tools/selftest.sh      host: regression checks (syntax, dropbear options, usb-mount plans,
                            flash helpers on stand-in MTDs, password hash, stage_kernel self-test, radio
-                           helpers on a stand-in sysfs with stub tools)
+                           helpers on a stand-in sysfs with stub tools, the ocbm-accessory harness, ocbm-overlay on
+                           a stand-in rootfs MTD)
+    tools/ocbm-accessory-test.py   host: the relay in test mode against a datagram-socket stand-in (§2.8)
+    tools/uart_xmodem_send.py      host: XMODEM-1K/CRC sender for the recovery's `rx` (a file into recovery over the
+                                   UART when no network host is on the cable; ~10 KB/s; --check verifies the sha256)
   arm-imx6ul/              CCPA only
     board.env              toolchain prefix, flash facts (0x302fd8/0x303080 note), chip-ID source, UDC
                            match, LEDs, MFi bus/address, radio MMC host
@@ -529,7 +743,7 @@ Real builds need a Linux host (the Lima VM): `make gcc ${CROSS_COMPILE}gcc ${CRO
 bzip2 patch bc flex bison perl file awk sed grep mksquashfs depmod` (`build.sh`, the tool check after
 sourcing `board.env`), plus `pkg-config` for mtd-utils and iw/libnl and `tic`/`infocmp` (Debian
 `ncurses-bin`, generate ncurses' built-in terminal entries) for `RADIO_TOOLS=1`. Output goes to
-`TOP=/tmp/ccpa-baseline-build` (the script refuses anything under `~/Documents`, per ccpa_custom CLAUDE.md). No
+`TOP=/tmp/ccpa-baseline-build` (the script refuses anything under `~/Documents`, per CLAUDE.md). No
 toolchain is downloaded by the script. The measured build used a Debian trixie arm64 chroot inside the
 Alpine `ccpa-build` VM (`apt install gcc-arm-linux-gnueabihf make bc bison flex libssl-dev libelf-dev
 squashfs-tools cpio xz-utils bzip2 device-tree-compiler python3 curl file patch perl kmod pkgconf
@@ -541,7 +755,7 @@ LIVI's Fedora name). That compiler emits Thumb-2 by default, which is why `ARM_T
 ```
 sh baseline/build.sh --dry-run                     # prints every step, touches nothing
 sh baseline/build.sh fetch                         # pinned tarballs, sha256-checked
-sh baseline/build.sh userspace                     # musl, BusyBox full+recovery, dropbear, sftp-server, flash_erase, hciup,
+sh baseline/build.sh userspace                     # musl, BusyBox full+recovery, dropbear, sftp-server, flash_erase, hciup, ocbm-accessory,
                                                    # RADIO_TOOLS: libnl, iw, wpa_supplicant, ncurses, readline, BlueZ tools
 sh baseline/build.sh measure                       # kernels nousb, recovery-usb-vfat, default-nossh, default; cap check
 sh baseline/build.sh kernel                        # the chosen variant, one image per radio DTB
@@ -557,8 +771,7 @@ libblkid the recipe does not build (§7).
 ## 5. Install flow (per unit; host tool first, then the unit)
 
 1. Back up the unit (all MTDs, read twice, identical sha256) and keep its `unit_info.txt` (the four
-   OCOTP words) with the backup, never in the ccpa_custom repo. (This docs repo carries the IW416 unit's backup including its
-   `unit_info.txt`, `../backups/20261019_IW416_ocbm_baseline_pre-livi/`, by owner decision 2026-10-20.)
+   OCOTP words) with the backup, never in the repo.
 2. Host: `python3 -I arm-imx6ul/tools/stage_kernel.py --mtd0 <uboot dump> --mtd1 <current kernel dump>
    --zimage $TOP/out/<variant>/ccpa-baseline-<radio>.zimg --unit-info <unit_info.txt> --out kernel-part.img`.
    It decrypts the unit's update env with the unit's key (wrong key → refused), takes the layout from
@@ -574,20 +787,21 @@ libblkid the recipe does not build (§7).
      sha256sum /dev/mtd2`, then `flash_eraseall -q /dev/mtd1` (env), verify, `reboot -f`, all under
      `setsid` (`flashcp` because LIVI's rescue has no `flash_erase`, `imx6ul/boot.rs:204-231`; the
      provisioner itself was never run by us: the 2026-10-20 revision-1 write was this sequence by hand);
-   - **from the vendor/OCBM system** (vendor map: env inside mtd0, kernel = mtd1): the RUNBOOK's (`../hardware_tests/2026-10-19_round_trip/`)
-     LIVI procedure (push the stock-compatible `flash_erase` first, `../tools/flash_erase`; the unit has none),
+   - **from the vendor/OCBM system** (vendor map: env inside mtd0, kernel = mtd1): the RUNBOOK's
+     LIVI procedure (push the stock-compatible `flash_erase` first, the unit has none),
      `flash_erase /dev/mtd1 0 0; cat img > /dev/mtd1; sha256sum /dev/mtd1`, then
      `flash_erase /dev/mtd0 196608 1` (byte offset, mtd-utils 1.4.8), reboot.
 4. The new kernel boots into recovery (unless the rootfs MTD already holds a baseline squashfs). There:
    `flash-rootfs <host>:5611 <sha256>` with `python3 -I common/tools/serve_once.py rootfs.img` on the
    host, or (revision 2) `scp -O rootfs.img root@192.168.50.2:/tmp/` then `flash-rootfs /tmp/rootfs.img
-   <sha256>`, or a stick (`/mnt/usb/rootfs.img`, or the `ccpa-baseline/` bundle); then `reboot`.
-5. Back to stock (UNTESTED): the steps (rootfs split and write first, kernel last, env erase, abort gate) are
-   owned by `../../../documentation/01_Firmware_Architecture/kernel_compilation.md` § Getting back from LIVI;
-   this recovery uses the same map. Run from here instead of LIVI's rescue, two things differ: `flash-rootfs`
-   refuses JFFS2, so the stock `mtd2.bin` parts are written by hand with `flashcp`; the kernel step can be
-   `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image. The unit's files are in
-   `../backups/<unit>/` (for the IW416 unit, `mtd1.bin` is `../../../flash_dumps/CCPA_stripped/mtd1.bin`).
+   <sha256>`, or a stick (`/mnt/usb/rootfs.img`, or the `ccpa-baseline/` bundle); or, when the USB host on
+   the cable is not a computer (2026-10-30: the GM radio) and only the UART reaches recovery, `python3 -I
+   common/tools/uart_xmodem_send.py /dev/cu.usbserial-XXXX rootfs.img /tmp/rootfs.img --check` into the
+   recovery's `rx` (XMODEM-1K/CRC, ~10 KB/s: a 3.5 MB rootfs in ~6 min; the receiver pads to 1 KiB, a squashfs
+   is already a multiple); then `reboot`.
+5. Back to stock (UNTESTED): from recovery, flashcp the unit's `mtd2.bin` split into its first 0xc60000
+   B (rootfs), next 0x10000 (customer), last 0x10000 (bootstate) — `flash-rootfs` refuses JFFS2, so this
+   is manual — then `flash-kernel --restore mtd1.bin <sha256>`. Or the SPI programmer image.
 6. **Revision 3 on a unit that runs revision 2: the rootfs only** (the kernel config is unchanged and the
    41 modules are byte-identical, §7.0, so the revision-2 kernel stayed; the unit has run revision 5's since 2026-10-20/21, §7.0b). `flash-rootfs` exists only in the
    recovery, and the rootfs MTD must not be written from the rootfs it runs, so: (a) into recovery from the
@@ -601,6 +815,10 @@ libblkid the recipe does not build (§7).
    reboot` (flash-rootfs cleared the bootstate mark, so the new rootfs boots). Password `baseline` unless it
    was changed with `passwd` (recovery reads the archived hash). Steps (a)-(d) ran on the IW416 unit 2026-10-20 (`flash-rootfs`
    under `setsid`, rc=0; §7.5).
+7. **The OCBM overlay (revision 8, §2.8)**, after the rootfs: `tools/ocbm_overlay.sh` on the host (outside this recipe)
+   builds the image; on the unit, from the running rootfs in any USB mode, `ocbm-overlay write /tmp/<img> <sha256>`
+   (UART: `uart_xmodem_send.py` into the rootfs's `rx`, then `head -c <size>` off the XMODEM padding). The next boot
+   is OCBM. Without an overlay a revision-8 rootfs boots exactly like revision 7 (NCM).
 
 ---
 
@@ -625,7 +843,7 @@ libblkid the recipe does not build (§7).
 | rescue BusyBox: brctl, vi, awk, sed, grep, xxd, pkill, killall, ... | owner's list + what the scripts call | smaller recovery |
 | full BusyBox 1.36.1 defconfig, minus VT/console tools and tc | 1.38.0 defconfig + MTD/UBI tools, minus only what cannot build/work (PAM, SELinux, NFS/CIFS mount, tc, hwclock); VT tools kept | owner: as many applets as build static |
 | module load order file, no modprobe | `make modules_install` + depmod; `radio` inserts each module after its dependencies from `modules.dep` (B10); BusyBox modprobe only for the kernel's own requests (`kernel.modprobe`); `mdev -d` for sd* only, no modalias rule | radio modules are loaded on demand only; MODPROBE_SMALL tries a module before its dependencies (§1) |
-| livid, its web UI, mfid, btd, accessoryd | none | owner: none at boot |
+| livid, its web UI, mfid, btd, accessoryd | none in the image; since revision 8 the separate OCBM overlay brings ocbmd (at boot) and btd/carplayd (on a host app's SUBSCRIBE), §2.8 | owner: none at boot (2026-10-20); OCBM as the boot default (owner, 2026-10-30) |
 | kernel-patches 0005/0006 (mwifiex rate reporting) | not carried | radio is not part of the boot; 0001-0004 carried unchanged |
 | customer MTD: livid settings | persist tar (SSH host key, keys, root's hash) | stable host key and password with a read-only rootfs |
 | allnoconfig, then `scripts/config` enables, then `olddefconfig` (so `PINCTRL_IMX6UL`, `NVMEM_SYSFS`, `ARM_THUMB` arrive through their Kconfig defaults) | all three named in `base.fragment` | our `merge_config.sh -n` feeds the fragment into the allnoconfig pass, which answers every visible prompt not named with n, and `olddefconfig` keeps it (INFERRED from both flows; the review found `imx6ul-pinctrl` in LIVI's shipped Image). Without them: every pinctrl-0 consumer keeps deferring (`drivers/pinctrl/devicetree.c`, MODULES=y; QEMU: gpio-mxc -517, no console), no nvmem file for the chip ID, Thumb userland refused with ENOEXEC (QEMU 2026-10-20). (Corrected 2026-10-20: this row said LIVI's config lacks the three symbols.) |
@@ -640,7 +858,494 @@ check live): `rev2/` (`default`, `default-nossh`, `nousb`, `recovery-usb-vfat`, 
 `test-harness`), `rev4/default/` (the rootfs-only image, `rootfs.img` sha256 `cbfd4d39…513d`), `rev5/` (`default` = the
 kernel images, `logs`, `test-harness`). The top-level `default/`, `recovery-usb/`, `recovery-usb-exfat/`, `usb-host/`
 and `logs/` beside them are earlier or variant trial builds and are not mapped to a revision here. What is on the
-unit is only what §7.0a/§7.0b say (rootfs revision 4 `cbfd4d39…513d`, kernel revision 5 `35dfb1a5…c871e`).
+unit is only what §7.0c-§7.0f say (rootfs revision 8 `a5435446…96c1` + the OCBM overlay `c416d0e3…f350` at rootfs+0x800000,
+kernel revision 6 written as `5d982485…70ba`, reads `3462874a…7efb` after U-Boot's conversion). (Corrected 2026-10-30: this
+said rootfs revision 4 `cbfd4d39…513d`, kernel revision 5 `35dfb1a5…c871e`, true until the revision-6 flash; then rootfs
+revision 7 `ecdfcd13…bbd6`, true until the revision-8 flash; then overlay `63c36a68…2bef`, true until the §7.0f write.)
+Revision 6 (2026-10-30): `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261030/rev6/` (the four `.zimg` + `.sha256`,
+`rootfs.img` + `.sha256`, `kernel.config`, `rev5.config`, `ocbm-accessory`, the test-only `usb_f_fs-test-rev5.ko`, `logs/`:
+kernel and rootfs build logs, the full self-test log, the module build log); its kernel is on the unit, its rootfs was
+superseded by revision 7. Revision 7 (2026-10-30): `…/20261030/rev7/` (`rootfs.img` + `.sha256`, `ocbm-accessory`, `logs/`:
+`build7-rootfs.log`, `selftest7full.log`); superseded by revision 8. Revision 8 (2026-10-30): `…/20261030/rev8/` (`rootfs.img`
++ `.sha256` = the flashed `a5435446…`, `build1/` = the superseded `793d2cb4…`, `ocbm-accessory`, `hostapd`, the OCBM overlay
+images `ocbm-overlay-full-20261030T2119Z.img` (on the unit) and `ocbm-overlay-minimal-20261030T2013Z.img` (+ `.sha256`), `logs/`:
+`build8-rootfs.log`, `selftest8b.log`, `selftest8c.log`, `hostapd.log`, `qemu-rootfs8.log`); on the unit (§7.0e). Overlay
+images are rebuilt by `tools/ocbm_overlay.sh` into `~/.cache/carlink-artifacts/ocbm-overlay/`.
+
+### 7.0f OCBM overlay `20261031T0111Z` (2026-10-30): wireless liveness; overlay-only; FLASHED and VERIFIED on the IW416 unit
+
+**Why.** A stress test of the §7.0e overlay the same day left the box's Bluetooth dead while the host app stayed
+present, three ways, each silent until the app reconnected: `kill -9` of `btd` (never restarted: every `wireless_up`
+caller is an edge); `hciconfig hci0 down` under a running `btd` (its reconnect loop then failed `Host is unreachable`
+every 60 s for good; nothing re-powers the controller); two restart requests inside one bring-up (two `btd`, the second
+looping on SDP `Address in use`).
+
+**What changed (overlay only;** rootfs, kernel and the three binaries are byte-identical to `63c36a68…`'s).
+- `tools/session_supervisor.sh` `wireless_running()`: `grep -qs '[/]usr/sbin/btd' /proc/[0-9]*/cmdline`, not `pgrep -f
+  /usr/sbin/btd`. BusyBox `pgrep -f` reads the first 1 KiB of a command line only (§2.4); `wireless_up`'s bring-up
+  wrapper (`setsid sh -c`) is 4,204 B and names `/usr/sbin/btd` at byte 4,157 (measured on the unit), so through its
+  whole radio phase it read as "not running" and a second edge started a second wrapper. Measured on the unit: in that
+  phase `pgrep -f` did not list the wrapper's pid, `grep -l` did. The bracket keeps grep (and the teardown shells, whose
+  text carries `[/]usr/sbin/btd`) from matching itself. Both teardown blocks first `kill` every pid whose command line
+  holds the path (a wrapper still in its radio phase included), then run the old `pkill`s; `pkill_selfmatch_check.py`
+  checks the `grep` form too.
+- Same file, main loop, **liveness**: with the host present, wireless enabled, no CT_RADIO inhibit, no teardown or
+  deferred bring-up in flight, no Android Auto hold and no wired iPhone owning the box (A2, or Hot-Handover's preempt):
+  `btd` missing, or hci0 not `UP RUNNING` under a running `btd`, for 5 consecutive ticks → `wireless_down` + the 4 s
+  deferred bring-up (the Restart-wireless path); next attempt no sooner than 30 s, doubling to 300 s, back to 30 s after
+  120 s healthy. A bare `hciconfig hci0 up` is not enough: the controller comes back with class 0x000000 and an EIR
+  without the iAP2 UUID, so `btd`'s own bring-up has to run again.
+- `ccpa/rootfs/script/radio_hal.sh` `do_bt_on`: an adapter `hciconfig` reads DOWN (the teardown's end state) skips the
+  "already converged" probe, which can only miss there (5 name reads 2 s apart, ~8 s), and goes straight to the
+  power-up. The wrapper now reaches `btd` ~1.5 s after it starts.
+- `ccpa/overlay/etc/rc.ocbm` state saver: polls every 3 s (was 15 s), flash writes at least 15 s apart. `btd` replaces
+  the bond store atomically and only on a pairing or a forget, and the saver writes only on a content change, so the
+  poll adds no writes; the 15 s floor holds a misbehaving writer to the old poll's rate.
+
+**Build and host tests.** `tools/ocbm_overlay.sh --full`: **1,685,594 B, sha256
+`c416d0e3b0c99355e48fef4a001dcef64e11c569e95548fd0339d7c26d7bf350`**, version `full 20261031T0111Z 267853c-dirty
+ocbmd-md5=a02350d0b8eb`, payload 1,681,498 B (26 erase blocks, as before). `sh -n` of the four scripts,
+`pkill_selfmatch_check.py`, a stubbed run of the saver (first change written at once, a second inside the gap held to
+it, unchanged content never, a forget written), `docs_check.py`. No Rust change. Not run: `selftest.sh` (needs the Linux
+build host; nothing under `baseline/` changed).
+
+**RAM trial** (the three scripts swapped into `/opt/ocbm`, supervisor respawned by init) on the box as the stress test
+had left it, hci0 DOWN under a running `btd` with CarPlay video running on the GM app: `[sup] wireless stack lost while
+the host is present (hci0 not UP RUNNING under a running btd, 5s) -> restarting it (next retry no sooner than 30s)` →
+`btd` discoverable 1.4 s after the bring-up started → the phone reconnected (RFCOMM, iAP2, WIFI_HANDOFF) → `UP RUNNING
+PSCAN ISCAN`, class 0x200408. The video on the app did not stop (frame counter 146,400 → 146,700 across the restart):
+in the bridge role it runs phone → vehicle hotspot → app. `kill -9 btd` healed in 21 s; the saver put a synthetic
+25-byte record on flash within 1 s and its removal 15 s later (2 writes; the real bond back byte-exact in the file and
+the archive).
+
+**Before the write**, read back over the UART: mtd0 `c60054ca…7bca`, mtd2 `3462874a…7efb`, mtd3 [0, 3,854,336)
+`a5435446…96c1`, overlay `63c36a68…2bef` (the 26 blocks the write covers = `ocbm-overlay-full-20261030T2119Z.img` + 0xFF,
+`fa6ef383…7438`; the image and the hashes are in `carlinkit_misc/ccpa_backups/20261030_IW416_pre-overlay-0111Z/`); no
+transfer or write in flight on the unit or the Mac. **Flashed:** `uart_xmodem_send.py` 1,685,594 B in 155 s, 0
+retries, sha256 matched on the unit; `ocbm-overlay write`: `writing 1685594 B … (26 erase blocks)`, `wrote and
+verified`. Read back: `overlay in flash: 'full 20261031T0111Z …' … (ok)`, `c416d0e3…`; mtd0, mtd2, the rootfs prefix and
+the region's untouched last 44 blocks unchanged; mtd5 0xFF.
+
+**Hardware results** (flashed overlay; GM radio app; an iPhone bonded earlier that day; times from `reboot`).
+- **4 hands-off reboots**, rcS `OCBM accessory 0x1314:0x2d00 up … (overlay 'full 20261031T0111Z …')` at +22.9 s each.
+  Cycle 1, app left running with CarPlay live: the app re-claimed at +14.9 s WITHOUT CT_SUBSCRIBE (its own rule while a
+  session is live), the video ran through the box reboot, the box's radios stayed off. Cycles 2-4, app force-stopped
+  first: USB attach relaunched it at +14.2 s, claim +16.0, SUBSCRIBE +17.8-17.9, CarPlay live (the phone dialled the app
+  back over the hotspot) +19.3-19.4, **first video frame +21.9-22.1**, `btd` discoverable +31.0, **Bluetooth
+  auto-connect +36.5-37.0** (bond restored by `rc.ocbm` at boot), WIFI_HANDOFF +39.4-39.5. No liveness restart during
+  any bring-up.
+- **Faults**, each with CarPlay live: `kill -9 btd` → `(btd not running, 5s) -> restarting it`, healed (`btd`, hci0 `UP
+  RUNNING`, handoff) in 23 s; `hciconfig hci0 down` → healed in 23 s, class 0x200408 and `de ca fa de de ca de af de ca
+  ca` back in the EIR; `kill -9` of an idle `btd` (before the phone linked) → healed in 43 s, 18 s of it the backoff
+  (the third restart within ~70 s); two restart requests 8 s apart, and one fired into the wrapper's radio phase → one
+  `btd`, no new `Address in use`. The kernel logs `Bluetooth: hci0: Opcode 0x0c1a failed: -22` when a teardown sets the
+  scan mode of an adapter that is already down: harmless.
+- **Soak**, 10 min 15 s after cycle 4 with CarPlay live: one `btd` pid throughout, hci0 `UP RUNNING`, no supervisor
+  event, 0 `Address in use`, 0 flash writes by the saver; on the app 0 session ends, frames 2,700 → 16,200 in 611 s.
+
+**Not done.** B6 (the `bt_mac` placeholder: mainline has no `/sys/class/bluetooth/hci0/address`, so `bt_driver.rs`
+falls back to `02:00:00:00:00:00` and MGMT_INFO's `bt_mac` is empty; HCIGETDEVINFO would fix it, but iOS accepts the
+placeholder and changing the identity risks the bond, so it waits for a session that re-verifies pairing). A fresh
+iPhone pairing; a power-off cold boot. **Rollback:** push `ocbm-overlay-full-20261030T2119Z.img` (rev8 dir or the
+backup dir) and `ocbm-overlay write /tmp/<img> 63c36a68d51d19b09d69133368132b276c3ad254e5f4d9c25a1bd9b585ba2bef`; or
+`usb-mode default ncm`.
+
+### 7.0e Revision 8 (2026-10-30): OCBM as the boot default, the OCBM overlay; rootfs-only; FLASHED and VERIFIED on the IW416 unit
+
+Owner goal: "install OCBM fully on the box, so that it defaults to OCBM and the app should then communicate and
+initialize it automatically for its use case". Design and rationale: §2.8 ("Revision 8").
+
+**What changed (this tree).** GPL side (`baseline/`): `arm-imx6ul/board.env` (`OVERLAY_OFFSET` 0x800000,
+`OVERLAY_SIZE` 0x460000); `common/rootfs/usr/sbin/ocbm-overlay` (new: load/start/service/check/write/erase);
+`common/rootfs/usr/sbin/usb-mode` (`default`, `boot`, `watch`, a switch lock); `common/rootfs/etc/init.d/rcS` (OCBM first,
+NCM the fallback; the message through a file); `common/rootfs/etc/inittab` (two respawn entries); `build.sh` (`/opt/ocbm`,
+`/script` and the `/usr/sbin/{ocbmd,btd,carplayd}` links, the 0x800000 size guard, `hostapd` in `RADIO_TOOL_BINS`);
+`common/recipes/userspace.sh` `build_hostapd` + `common/versions.env` (hostapd 2.12, sha256 `f4350256…eabd`, a fresh
+w1.fi fetch matched it) + `common/hostapd/hostapd.config`; `common/ocbm-accessory/ocbm-accessory.c` (the host → device
+pump issues no FunctionFS read before ENABLE and sizes it from that ENABLE's wMaxPacketSize; ep2 `O_NONBLOCK`, which in
+`f_fs.c` 7.2.10 only affects the wait for an enabled endpoint, so a read racing a DISABLE fails instead of parking with
+the old size: the revision-7 open item; test mode unchanged); `common/tools/selftest.sh` step 10 + two rcS checks.
+Overlay side (this repository, Unlicense): `ccpa/overlay/{bin/ocbmd-launch,etc/rc.ocbm,etc/hostapd.conf,etc/udhcpd.conf}`,
+`tools/ocbm_overlay.sh`, `tools/pkill_selfmatch_check.py`; `ccpa/ocbmd` (MGMT_ENTER_NCM runs `OCBM_ENTER_NCM_CMD` when set,
+and its log line no longer says "rebooting" when it does not; BOX_HEALTH's rootfs headroom is measured on `/etc`, below);
+`crates/box-common` `net::wlan_iface()`, used by `btd`'s `av.rs` (`RX_IFACE`) and `box_identity.rs`, and the same rule in
+`iap2-core` `message.rs` (`device_suffix`); `ccpa/rootfs/script/radio_detect.sh` + `radio_hal.sh` (backend `baseline`,
+the AP layer factored into `ap_layer_up`); `ccpa/rootfs/script/radio_ap_up.sh` (`hostapd -B <conf>`); 
+`tools/session_supervisor.sh` (two teardown comments, below). Kernel not rebuilt (revision 6's).
+
+**Build.** `ccpa-build` VM chroot, `TOP=/work/build3`, `build.sh fetch rootfs` (the relay rebuilt from source: the
+userspace tree held revision 7's). `rootfs.img` **3,854,336 B, sha256 `a5435446f800711d5b656704d7237c931e30f51f8ba851fe5a68727ed21696c1`**,
+release `20261030T2035Z`; 4,534,272 B below the overlay region. Against revision 7 (`unsquashfs` + `diff -r`): `board.env`,
+`baseline-release`, `rcS`, `inittab`, `usb-mode`, `ocbm-accessory` (66,704 B, `30916a81…ccb6`) differ; new `ocbm-overlay`,
+`hostapd` (596,256 B), `/opt/ocbm`, the `/script` and three `/usr/sbin` links. Host self-test PASS, 157 `ok` lines
+(`selftest8c.log`). Overlay (`tools/ocbm_overlay.sh --full`): **1,683,792 B, sha256
+`63c36a68d51d19b09d69133368132b276c3ad254e5f4d9c25a1bd9b585ba2bef`**, version `full 20261030T2119Z 267853c-dirty
+ocbmd-md5=a02350d0b8eb`, payload 1,679,696 B, 3,144 KiB unpacked: `ocbmd` (md5 `a02350d0…`), `btd`, `carplayd`,
+`ocbmd-launch`, `rc.ocbm`, the AP templates, `session_supervisor.sh`, `projection_up.sh`, `radio_detect.sh`, `radio_hal.sh`,
+`radio_ap_up.sh`, `MANIFEST`. A `--minimal` image (ocbmd only, 248,847 B, `67859718…2498`) was the Stage-A checkpoint.
+
+**QEMU** (`mcimx6ul-evk`, the revision-3 phram test kernel; the rootfs at the phram MTD, the overlay at +0x800000): the
+overlay loads (sha256 checked, unpacked, `rc.ocbm start`: `/etc` a RAM copy), the radio descriptor reads `RADIO_BACKEND=baseline`,
+the supervisor starts IDLE (full) or `rc.ocbm service` idles (minimal); QEMU has no UDC, so `usb-mode boot` printed "OCBM did
+not come up (… no UDC after 60 s); falling back to NCM" and the NCM fallback failed the same way (`qemu-rootfs8*.log`).
+
+**Before the write.** Flash read back over the UART: mtd3 [0, 3,534,848) `ecdfcd13…bbd6` (revision 7), mtd0 `c60054ca…7bca`,
+mtd2 `3462874a…7efb`, mtd5 all 0xFF. What revision 8 overwrites beyond revision 7's image: mtd3 [0x35f000, 0x3b0000)
+(331,776 B, leftover of an earlier rootfs: dumped over the UART, `19d91a0e…cc52`) and the overlay region (old data, byte-equal
+to the stock jffs2 tail already in `20261019_IW416_ocbm_baseline_pre-livi/mtd2.bin`); both recorded in
+`carlinkit_misc/ccpa_backups/20261030_IW416_pre-rev8/` (README.txt, SHA256SUMS), outside the repo.
+
+**Flashed (2026-10-30).** `reboot-recovery`; `uart_xmodem_send.py` 3,854,336 B in 348.7 s, 0 retries, sha256 matched on the
+unit; `flash-rootfs /tmp/rootfs.img <sha256>`: `wrote and verified mtd3`, `bootstate cleared`, rc 0; read back mtd3
+`a5435446…`, mtd0 `c60054ca…` (unchanged), mtd2 `3462874a…` (unchanged), mtd5 0xFF. First boot without an overlay: `rcS: no
+valid OCBM overlay (no overlay header at rootfs+0x800000): NCM` — revision 7's behaviour. Overlays then went in from the
+running rootfs: `rx` + `ocbm-overlay write` (`writing 248847 B … (4 erase blocks)`, `wrote and verified`; the full one 26
+blocks); the squashfs prefix read back unchanged after each. U-Boot (mtd0) was never written; the kernel not touched.
+
+**A defect the hardware found: the first build (`793d2cb4…334e`) hung rcS before the bootstate clear.** rcS read
+`msg=$(usb-mode boot)`, and `usb-mode boot` starts dropbear on 127.0.0.1 with `-E`, which keeps its stdio: dropbear held the
+command-substitution pipe, so rcS waited forever and the mark stayed set (`hexdump` of mtd5 read the mark; killing that
+dropbear released rcS, which printed its line and cleared bootstate). The dead-man would have sent the next boot to
+recovery, as designed. Fixed in the flashed build: the message goes through `/run/baseline/usb-mode.msg`, `usb-mode` starts
+dropbear with stdout on /dev/null, and selftest step 10 checks both. `793d2cb4…` was replaced from recovery the same hour.
+
+**Hardware results (IW416 unit, GM radio as the USB host, the radio clock within 11 s of the Mac).**
+- **Boot, hands-off after `reboot`** (UART only; console lines): `rootfs ccpa-baseline … 20261030T2035Z on mtd3, switching in
+  1 s`, FunctionFS `file system registered / read descriptors / read strings` at 11.1 s, `rcS: OCBM accessory 0x1314:0x2d00 up,
+  ocbmd pid 205 (overlay '…'); ways in: UART, OCBM console, ssh through OCBM CH_IP to 127.0.0.1:22; leave with usb-mode ncm /
+  usb-mode default ncm`, `rcS: bootstate cleared` (rcS.log), mtd5 0xFF.
+- **The radio app links by itself** (`android.car.usb.handler`, user 10, `NETPROBE`), every boot: `USB ATTACH TRAMPOLINE
+  0x1314:0x2d00 — permission held=true` → `claimed interface 0 (class 0xff) IN=0x81 OUT=0x01 mps=512` → `<< CT_HELLO_ACK v1
+  caps=0x0000003f [CONSOLE|ECHO|MFI|IP|FILE|ETH] mode=PROJECTION` → `<< CT_SETTIME ack status=0 (applied)` → `cert: 945 bytes`
+  → `sign: 128 bytes (matches RSA-1024)` (~1.7 s) → MGMT_INFO → `>> CT_SUBSCRIBE (128B config)` → `<< SESSION_EVENT
+  HOST_PRESENT` → `heartbeat started at 1000ms` → `CT_LOG_CTL on` (ocbmd's lines now reach the app: `ocbmd-launch` logs to
+  `/tmp/box.log`). First claim at box uptime ~13 s.
+- **Reboots: 9 hands-off OCBM boots of the flashed rootfs, the last 8 consecutive** (after the escape-hatch NCM boot below;
+  all with a full overlay: `704644a4…` once, then cycles 1-7 on `a45a46ea…` (1-4), `454850d5…` (5), `63c36a68…` (6-7), the
+  Stage-B fixes below). Every one: OCBM up, rcS's line, the app linked; every next boot reached the rootfs again (a mark left
+  set would have kept it in recovery; mtd5 read 0xFF where checked). From cycle 1 (ocbmd with the `/etc` headroom fix)
+  `BOX_HEALTH 0x51 [HCI|btd|rootfs-ok]` 13-16 s after HOST_PRESENT. Evidence (UART captures, app logs) kept locally, not in
+  the repo (the UART banner prints the chip ID).
+- **Stage B, the GM bridge role** (the app pushes `wireless: true`, `pairing: just_works`, `wifi_ap: false` + the vehicle
+  hotspot SSID/passphrase): supervisor `0x5703 credentials <- host app: ssid='…' channel='stock' pass=set` → `CLEAN bring-up of
+  wireless stack (… wifi_ap=0 …)` → `[radio_hal] backend=baseline -> radio up` (`NXP IW416: mwifiex_sdio`, `mlan0 …
+  00:50:43:…`, `hci0: UP`) → `BT name=ccpa-fe01` → `btd`: `HCI bring-up OK dev=hci0 name=CarLink-fe01`, SSP Just-Works
+  agent, SDP `Wireless iAPv2` + `Hands-Free` + `Headset`, `discoverable as "CarLink-fe01" -- waiting for pairing`, `hci0 UP
+  RUNNING PSCAN ISCAN`. `projection_up.sh` exits 2 ("BOX MISCONFIGURATION — not arming, not escalating": no `iap2d`, by
+  design). The app's own supervisor goes `idle -> armed` and stays. A re-link (`--es run ocbm_link`: CT_STOP + re-SUBSCRIBE):
+  teardown `[radio_hal] wifi AP down`, `BT hci0 powered down (attach left in place)`, then `hci0 was only powered down - up and
+  responsive, no reset needed`, `btd` again, `BOX_HEALTH 0x53 [HCI|SSP|btd|rootfs-ok]`; MGMT_INFO then carries
+  `"wifi_mac":"00:50:43:…","name":"CarLink-fe01","ssp":true,"hci_up":true`.
+- **The box AP** (the `wifi_ap: true` path, the seam's verb by hand): `radio_hal.sh wifi_ap_on` → `AP up: ssid=ccpa-fe01
+  ip=192.168.43.1 ch=36 if=mlan0 dhcp=yes`, `iw`: `type AP`, `channel 36 (5180 MHz)`, `country US: DFS-FCC`, hostapd + udhcpd
+  running; `carplayd` started as `btd` starts it (`RX_IFACE=mlan0 RX_ADDR=192.168.43.1`): `[rx] … iface=mlan0
+  adv_addr=192.168.43.1`, `advertised _airplay._tcp 'CarPlay' :5000`, `:::5000 LISTEN`; `wifi_ap_off` → `wifi AP down`, nothing
+  left running. No client joined (the Mac's Wi-Fi was left alone).
+- **Pairing state across a reboot** (a synthetic 25-byte bond record, removed afterwards): saved within 15 s into the persist
+  archive (`tar -tvf /dev/mtd4`: `./ocbm/bt_link_keys` 25 B, `./usb-mode`); next boot `[rc.ocbm] restored 1 Bluetooth bond(s)`,
+  `btd` `LOAD_LINK_KEYS(count=1): ok`; deleted → dropped from the archive → next boot `LOAD_LINK_KEYS(count=0)`.
+- **Escape hatch**: `usb-mode default ncm` (`boot default: ncm (saved in the persist archive …)`) → reboot → `rcS: boot default
+  is NCM (usb-mode default ncm): OCBM overlay not loaded`, `rcS: NCM usb0 192.168.50.2 …`, no `/opt/ocbm` or `/etc` mount, the
+  radio's `dumpsys usb` product 5408 (0x1520); `usb-mode default ocbm` → OCBM again.
+- **Supervision**: `kill` ocbmd → relay `generation 1 ended (… killed by signal 15)`, `generation 2 … started`, the app
+  re-linked on the same enumeration; `kill` the relay → `usb-mode watch: OCBM wanted but ocbm-accessory is gone; restarting
+  it` → `OCBM accessory restarted` (~5 s), the app re-claimed and re-linked (`BOX_HEALTH 0x53`).
+
+**Stage-B defects found on the unit and fixed before the final overlay.** (1) The GM app requires `HCI|rootfs-ok` and called a
+healthy box "missing rootfs-ok": ocbmd measured headroom on `/`, the read-only squashfs (0 free by design); it now measures
+`/etc`, where those writes go (the rootfs on stock, so unchanged there; the RAM copy here: `rootfs_free_kb 62108`). (2) `btd`
+named the controller `CarLink-73ca` (the SoC serial) while the seam named it `ccpa-fe01`: `wlan0` was hard-coded in
+`box_identity.rs`, `message.rs` and (`RX_IFACE`) `av.rs`; all enumerate the interface now (CLAUDE.md radio rule 3). (3) **The
+supervisor's radio teardown killed itself** (stock code since 2026-09-03): its detached `sh -c` block carried the comment
+`# btmon bench lever`, so its own `pkill -f "[b]tmon"` matched its own argv; it died after SIGTERMing `btd`, never ran `-9`,
+`wifi_ap_off` or `bt_off` (no `/tmp/wlan_off.log`), and the next presence edge returned silently while `btd` was still
+exiting — Bluetooth stayed down after an app re-link. Comment reworded; `tools/pkill_selfmatch_check.py` (run by
+`ocbm_overlay.sh`) refuses the pattern; on the HEAD supervisor it reports both blocks. Whether busybox on the stock firmware
+matches the full command line the same way was not checked there. (4) `radio_ap_up.sh` started `hostapd /etc/hostapd.conf -B`:
+musl's getopt does not permute, hostapd read `-B` as a config file (`Could not open configuration file '-B'`); now `hostapd -B
+<conf>`.
+
+**What cannot run on this baseline, and why** (also §2.8): wired CarPlay (`iap2d` needs the vendor Android gadget's
+`/dev/android_iap2` and `/sys/class/android_usb`, which mainline has not, and the phone port is a host port); the supervisor's
+escalation ladder (inhibited: it recovers wired sessions and its ocbmd restart would race the relay); HFP SCO setup after
+`btd`'s controller reset (`radio_hal.sh sco_on` has no baseline mapping: `no SCO mapping for this unit -- HFP call audio will not
+work`); WPA3 on the box AP. `aa-bridge` is not in the overlay (wired Android Auto needs a host app with an AA head unit).
+
+**Not verified.** An iPhone against the baseline (pairing, iAP2 over Bluetooth, the 0x5703 handoff to the vehicle hotspot,
+wireless CarPlay); a real phone's bond across a reboot *(updated 2026-10-30: all but a FRESH pairing measured since, with a
+phone bonded earlier the same day: bond restored at boot, Bluetooth auto-connect, iAP2, the handoff and CarPlay video on the GM
+app, §7.0f)*; MGMT_ENTER_NCM from a host (the GM app has no such verb, no Mac on the
+cable; the command it runs, `usb-mode default ncm`, was verified); the relay's first-read fix on a full-speed host (none here);
+`ocbm-overlay erase` on hardware (selftest only); a power-off cold boot (every boot here was `reboot`). Cosmetic: the UART
+banner (`ocbm-banner`, shared with recovery) still prints the NCM address in OCBM mode.
+
+**Rollback.** Overlay only: `usb-mode default ncm` (or `ocbm-overlay erase`) → revision 7 behaviour on revision 8. Rootfs:
+from recovery, `flash-rootfs` of revision 7's `rootfs.img` (`…/20261030/rev7/`, `ecdfcd13…bbd6`; it ignores the overlay region).
+Region bytes: `carlinkit_misc/ccpa_backups/20261030_IW416_pre-rev8/` and the 2026-10-19 `mtd2.bin`.
+
+### 7.0d Revision 7 (2026-10-30): rootfs-only, the relay's host → device read fix; built, self-tested, FLASHED and VERIFIED over USB on the IW416 unit
+
+Rev 7 = rev 6 + `common/ocbm-accessory/ocbm-accessory.c` (host → device: one wMaxPacketSize packet per FunctionFS read
+by default, `-r N` overrides, `-v -v` traces every transfer; the defect and the reasoning are in §2.8),
+`common/shared/net-up` (passes `OCBM_ACCESSORY_OPTS` to the relay), `common/tools/ocbm-accessory-test.py` (cases 8 and
+8b: a lone 512-byte host packet is delivered with the default read and held with `-r 16384`). Kernel not rebuilt:
+revision 6's, already on the unit. Built in the `ccpa-build` VM chroot (`TOP=/work/build3`, `build.sh rootfs`).
+
+**Rootfs.** `rootfs.img` 3,534,848 B (revision 6's size), sha256
+`ecdfcd134d29b3d0d403474fb5391705d7346c6700fc563d4f3e4f5ac1c4bbd6`, release stamp `20261030T1714Z`. The two images
+unpacked and compared (`unsquashfs`, `diff -r`): exactly three files differ — `etc/baseline-release`, `usr/sbin/net-up`
+(the `OCBM_ACCESSORY_OPTS` line) and `usr/sbin/ocbm-accessory` (66,704 B, sha256
+`18f1094c65b5ba3c05f7b2b35e1e124d21b1b35db6f1ba31cffda80566669b42` = `rev7/ocbm-accessory`; revision 6's `e2c96f3a…6891`).
+The packed `net-up`, `net-down` and `usb-mode` are byte-equal to this tree's. **Host self-test**
+(`logs/selftest7full.log`): PASS, 142 `ok` lines (revision 6's log: 134), step 9 with the two new cases.
+
+**Before the image (RAM).** The fix was first validated on the wire with a relay built separately from the same source
+and run from `/tmp` under revision 6's image (§7.0c, the `ocbm-host` paragraph). That was not the image's binary; the
+flashed one is verified below.
+
+**Flashed (2026-10-30).** `reboot-recovery` from the revision-6 rootfs (recovery banner: "the last rootfs boot did not
+clear bootstate", the mark it sets); `rootfs.img` into recovery (planned over the UART with `uart_xmodem_send.py`; the
+transport is not in the unit's log) and `flash-rootfs` with its sha256. The on-unit `/run/flash-rootfs.log`: one earlier `REFUSED: cannot read
+/tmp/rootfs.img (a file, or host:port of a one-shot server) (nothing written)`, then `writing 3534848 B to mtd3`, `wrote
+and verified mtd3`, `bootstate cleared`, `done; 'reboot' boots the new rootfs`. The session that ran this ended before
+recording it, so it was re-checked from the same recovery shell before the reboot: `dd if=/dev/mtd3 bs=4096 count=863 |
+sha256sum` = `ecdfcd13…bbd6`; mtd0 (U-Boot) `c60054ca…7bca`, unchanged; mtd2 `3462874a…7efb` (the revision-6 kernel
+after U-Boot's conversion); mtd5 (bootstate) all `0xFF`. `reboot`: `rootfs ccpa-baseline … 20261030T1714Z on mtd3,
+switching in 1 s`, `rcS: NCM usb0 192.168.50.2, ssh/scp/sftp …`; on the unit `/etc/baseline-release` ends in
+`20261030T1714Z`, `uname -v` `#3 PREEMPT Fri Oct 30 15:41:05 UTC 2026`, `sha256sum /usr/sbin/ocbm-accessory` =
+`18f1094c…9b42`, bootstate erased by rcS, `usb-mode status`: `gadget: ncm.usb0 idProduct=0x1520 UDC=ci_hdrc.1
+state=configured`. **The default stays NCM.**
+
+**OCBM over USB from a Mac, the image's own relay (no `OCBM_ACCESSORY_OPTS`).** ocbmd (451,968 B, md5
+`9b10e872…342da`, this tree's build) pushed over the UART (`tools/uart_push.sh`, md5 matched) to `/tmp/ocbm/`; `usb-mode
+ocbm /tmp/ocbm/ocbmd`: `net-up: ci_hdrc.1 bound as OCBM accessory 0x1314:0x2d00, /dev/usb_accessory -> /dev/pts/0`, relay
+`descriptors written`, `generation 1`, `BIND`, `ENABLE (host configured the device, wMaxPacketSize 512)`, UDC
+`configured`. `target/release/ocbm-host`:
+- `hello`: `HELLO_ACK: box v1 caps=0x0000003f mode=0`, `box clock set to …`.
+- `echo 1314 2d00 3 N`: 496 → `2077248 bytes in 3.00s => 11.1 Mbps …, mismatches=0`; 1008 → 3,310,272 B, 17.6 Mbps;
+  512 → 1,870,848 B, 10.0; 500 → 1,857,000 B, 9.9; 1 → 5,311 B; all `mismatches=0`.
+- Size sweep, 1 s per size, 395 runs: payload 512k − 16 for k = 1…128 (frames of exactly k × 512 B, up to 65,536 B),
+  512k − 17 and 512k − 15, plus 2, 15, 16, 17, 511, 513, 1023, 1025, 16384, 65520, 65536 → **395/395 `mismatches=0`**, none
+  with 0 bytes, 643,022,895 payload bytes; frames of 16 KiB and up 26-27 Mbps each way.
+- `rtt 1314 2d00 5`: 64 B p50 0.57 ms, p99 0.67, max 1.01; 4096 B p50 3.04; 16384 B p50 10.06; 65536 B p50 38.66, p99
+  39.90 ms; `timeouts=0`.
+- `mfi`: `MFI cert: 945 bytes first8=308203ad06092a86`, `MFI sign: 128-byte signature`.
+- `console`, a command piped in, Ctrl-] after: the root shell answered `CONSOLE_OK kernel=7.2.10 uid=0
+  rel=20261030T1714Z relay=18f1094c65b5ba3c`.
+- `push` then `pull` of random files of 1,048,576 B (16.5 / 39.5 Mbps), 524,288 B and 1,000,003 B: md5 equal on the Mac, on
+  the box (`md5sum` over the UART) and in the pulled copy; `cmp` identical.
+- `ip 1314 2d00 127.0.0.1:22` (a second dropbear started on the loopback in RAM; the NCM one has no interface in OCBM
+  mode): `SSH-2.0-dropbear_2026.94`, `514 bytes received`.
+- `session 1314 2d00 6`: `SUBSCRIBE (no config)` → `box event: HOST_PRESENT` → `STOP sent — clean exit`.
+- `ncm`: `ENTER_NCM refused by the box (status 1) — /script/ncm_only was not armed`, exit 1; uptime continuous and the
+  gadget still `ffs.ocbm … configured` (no reboot, as the code says: ocbmd reboots only after its write of
+  `/script/ncm_only` succeeds). ocbmd's own log line reads `flag armed=false; rebooting into NCM` although it does not
+  reboot (`ccpa/ocbmd/src/main.rs`, the `MGMT_ENTER_NCM` arm: wording only).
+- **Soak, 780 s back to back** (five `ocbm-host` runs, every one exit 0): `echo … 300 496` → `200238176 bytes in
+  300.00s => 10.7 Mbps …, mismatches=0` (403,706 single-packet frames each way); `echo … 180 4096` → 237,993,984 B, 21.2
+  Mbps, `mismatches=0`; `rtt … 45` → 64 B n=76,401 p50 0.59 ms p99 0.69 max 1.17, 4096 B p99 3.45, 16384 B p99 11.16,
+  65536 B n=1,131 p50 39.65 p99 41.49 max 42.98 ms, `timeouts=0` at every size; `echo … 60 65536` → 98,500,608 B, 26.3
+  Mbps, `mismatches=0`; `echo … 60 1008` → 63,360,864 B, 16.9 Mbps, `mismatches=0`. Afterwards the relay log still held
+  only its four start lines (descriptors, `generation 1`, `BIND`, `ENABLE`: no DISABLE, no new generation across 400+
+  host opens), ocbmd's log no error/EOF/respawn line and `dropped=av:0,lo:0,log:0,input:0`, box load 2.15.
+
+Not run: `bridge` (no NCM netdev in OCBM mode), the A/V modes (no producers on this baseline), the bench Wi-Fi AP (the
+Mac is not on it).
+
+**Rollback** (recovery, rootfs only): `flash-rootfs` of revision 6's `rootfs.img` (`…/20261030/rev6/`,
+`2aec5eea…9d3c`) — same kernel; it brings back the 512-byte defect.
+
+**Open after revision 7.** Those of revision 6 except the verification items: ocbmd in the image or on a data
+partition, a persisted OCBM-at-boot default, a bench Wi-Fi AP helper. The ocbmd ENTER_NCM log wording above. A relay
+edge on non-high-speed hosts (code reading, not observed): the host → device pump starts before `ENABLE` and sizes each
+read from the last known wMaxPacketSize, so the FIRST read after an `ENABLE` uses the previous value (512 at start); on a
+full-speed host (64-byte packets) a first frame of exactly 64·n ≤ 448 B would wait for the next transfer. Every OCBM host
+so far is high-speed and opens with a HELLO of 22-25 B, so it has not mattered. *(Updated 2026-10-30: all of these are
+addressed in revision 8, §7.0e — ocbmd from the OCBM overlay in the rootfs MTD's last 0x460000 B, OCBM as the persisted
+boot default, `hostapd` + the overlay's AP layer, the ENTER_NCM wording, and the relay's first read, which now waits
+for ENABLE.)*
+
+### 7.0c Revision 6 (2026-10-30): OCBM mode — kernel (FunctionFS) + rootfs (ocbm-accessory, usb-mode); built, self-tested, RAM-trialled, FLASHED and the OCBM link PROVEN on the IW416 unit
+
+Rev 6 = rev 5 sources + this tree's 2026-10-30 changes: `kernel/base.fragment` `CONFIG_USB_CONFIGFS_F_FS=y`;
+`common/ocbm-accessory/ocbm-accessory.c` (+ `recipes/userspace.sh` `build_ocbm_accessory`, called by the userspace
+step and by the rootfs step when the userspace tree predates it); `common/shared/net-up` (`ocbm` mode) and `net-down`
+(its teardown); `common/rootfs/usr/sbin/usb-mode`; `common/usb-ids.conf` (comment only, the IDs are unchanged);
+`common/tools/ocbm-accessory-test.py` + selftest step 9; this README. Design and rationale: §2.8. Built in the
+`ccpa-build` VM Debian chroot from a copy of this tree (`TOP=/work/build3`, `JOBS=4`, `arm-linux-gnueabihf-`), `build.sh
+kernel` then `build.sh rootfs`; the userspace tree is revision 3's (the relay was compiled into it by the rootfs step).
+
+**Kernel.** `.config` against revision 5's (`rev5.config` beside the artefacts): `+CONFIG_USB_F_FS=y`,
+`+CONFIG_USB_CONFIGFS_F_FS=y`, and the two `# CONFIG_UDMABUF / CONFIG_DMABUF_DEBUG is not set` lines that appear once
+`DMA_SHARED_BUFFER` (selected by `USB_F_FS`) exists — nothing else. zImage 2,117,568 B (revision 5: 2,103,992; +13,576 B of
+f_fs + dma-buf core). **All 41 modules byte-identical to revision 5's** (`cmp` over the module tree), so the kernel can
+be taken alone by a unit that keeps an older rootfs — but OCBM mode needs the revision-6 rootfs.
+
+| image (zImage 2,117,568 B + DTB) | total | spare under 3,157,976 | sha256 |
+|---|---:|---:|---|
+| `-iw416` | 2,143,905 | 1,014,071 | `746ce8a0cb7034a2f149fbf00504704b8728e1510856f88ffe9ac51b106ed0d6` |
+| `-none` = `-rtl8822bs` | 2,143,824 | 1,014,152 | `288e88db3c891517e0ca7c19e1127b6429099c729c205b5b36b7a8b166b4b2e4` |
+| `-rtl8822cs` | 2,143,880 | 1,014,096 | `343e54b08631208eb2fb61d91c5207fa3a44190160f7d675ece87784f6898e53` |
+
+**Rootfs.** `rootfs.img` 3,534,848 B (revision 4: 3,506,176), sha256
+`2aec5eeae2aefdfb72d681195d4ce51b52c5b9888b446dbdee6b048dd1049d3c`, release stamp `20261030T1541Z`. Adds
+`usr/sbin/ocbm-accessory` (66,704 B, musl-gcc static, sha256 `e2c96f3a…6891`; built from the source before two
+`#ifndef SOCK_CLOEXEC`/`MSG_NOSIGNAL` fallback defines were added for macOS lint — both are defined on Linux, so the
+binary is unaffected), `usr/sbin/usb-mode`, and the new
+`net-up`/`net-down` (the packed copies hash equal to the tree files). Everything else as revision 4.
+
+**Host self-test** (`selftest.sh`, Debian chroot): **PASS, 131 checks**, the 13 of step 9 included (duplex echo 17.9 MB/s
+through the pty on the build VM). Two relay defects were found by the harness before any hardware and fixed: (1) the
+relay opened the slave only to set termios and closed it again, which marks the master `TTY_OTHER_CLOSED` until the
+child reopens the slave, and the pump read the resulting `EIO` as "ocbmd exited" — it now holds a slave fd for the whole
+generation; (2) no defect, a harness sequencing gap (ENABLE sent while the stand-in was still writing).
+
+**Hardware, RAM only (2026-10-30, IW416 unit, revision-5 kernel + revision-4 rootfs, nothing flashed, no reboot).**
+A test-only `usb_f_fs.ko` (36,444 B, sha256 `499c0cc1…27b4`) was built out-of-tree from the revision-5 kernel's own object
+tree (`/work/build3/kbuild/default`, same `.config` and compiler) from `f_fs.c` with its dma-buf import/export paths
+compiled out (that kernel has no `DMA_SHARED_BUFFER`; `logs/build.log`), vermagic `7.2.10 preempt mod_unload ARMv7 p2v8`,
+all 102 undefined symbols present in that kernel's `Module.symvers`. The module, the relay (zig `arm-linux-musleabihf`
+build of the same source), ocbmd and the three scripts were staged in `/tmp/ocbm6` (md5 verified both sides), then:
+`insmod` → `usb_f_fs 28672 0 - Live (O)`, taint O only, no other kernel message; `PATH=/tmp/ocbm6:$PATH usb-mode ocbm
+/tmp/ocbm6/ocbmd` → `net-up: ci_hdrc.1 bound as OCBM accessory 0x1314:0x2d00, /dev/usb_accessory -> /dev/pts/0`,
+relay log `functionfs /run/ocbm/ffs: descriptors written, ep1 (bulk IN) and ep2 (bulk OUT) open`, `BIND`,
+`ENABLE (host configured the device, wMaxPacketSize 512)`, UDC `configured`, `high-speed`, dmesg `file system
+registered / read descriptors / read strings`, ocbmd `start pid=… version=0.1.0` holding the link. **The unit's USB host
+is the GM bench radio** (the Macs hold only the UART): its `dumpsys usb` listed the device as vendor 0x1314 product 0x2d00,
+class/subclass/protocol 0/0/0, manufacturer "Magic Communication Tec.", product "Auto Box", the unit's own `OCBM-…`
+serial, configuration "ocbm", interface 0 class 255/255/0, endpoints 0x81 bulk 512 and 0x01 bulk 512 — the stock
+accessory shape. `usb-mode ncm` → `net-up: ci_hdrc.1 bound, usb0 192.168.50.2, DHCP hands out 192.168.50.100`, dropbear
+up, and the radio re-enumerated 0x1520; the relay logged `generation 1 ended (USB disable)` and ocbmd `accessory EOF on
+read — USB transport gone; exiting for respawn` — the designed teardown path. **No OCBM frame has crossed USB**: the radio
+has no OCBM host app installed (only stale permission records) and no Mac is on the cable, so HELLO/HELLO_ACK, the
+512-multiple ZLP case (`ocbm-host echo 1314 2d00 3 496`), RTT, MFI and CONSOLE were UNVERIFIED over USB at that point.
+The test module was unloaded afterwards (the taint flag stayed until the flash reboot below).
+
+**Flashed and verified on the IW416 unit (2026-10-30, later the same day; owner's go).** As run, with one deviation from
+the procedure text below (the kernel was written from the running rootfs, not from recovery — see step 3):
+1. Dumps over the bench Wi-Fi: mtd2 twice, both `f9744897…863b` (NOT the §7.0b value, see step 1 of the procedure), mtd0
+   `c60054ca…7bca` (unchanged since §7.0b). Kept with the unit's backups outside the repo
+   (`carlinkit_misc/ccpa_backups/20261030_IW416_pre-rev6/`, with `SHA256SUMS`).
+2. `stage_kernel.py` → `kernel-part-rev6.img` 3,407,872 B, planned sha256
+   `5d9824858e07979e1492af3332286b66307d8dc69bb3c25954c7392956bb70ba`; "head [0,0x30000) of the plan == head of the current
+   kernel dump: True"; differing bytes 2,131,904 (body 1,936,134, staging 195,770), headroom 1,014,071. Before writing, the
+   `-iw416` image was booted in QEMU `mcimx6ul-evk` (recovery shell in 2.2 s, stamp `20261030T1541Z`; `mkdir
+   functions/ffs.t` in configfs succeeded = the FunctionFS function is in the kernel).
+3. The unit's USB host is the GM radio, so recovery is UART-only (no NCM to a computer); the 3.4 MB image therefore went
+   over Wi-Fi into the RUNNING ROOTFS and `flash-kernel` ran there: a copy of `arm-imx6ul/initramfs/flash-kernel` with its
+   `. /lib/baseline/flash-lib.sh` line pointed at a `/tmp` copy of `flash-lib.sh` (everything else it sources or calls —
+   `mtd.sh`, `board.env`, `flashcp`, `flash_eraseall` — is in the rootfs; the script has no recovery-only gate). `--dry-run`:
+   "would write 3407872 B to mtd2, verify, erase env (mtd1), check uboot (mtd0)", rc 0. Then, under `setsid`, `NO_REBOOT=1
+   flash-kernel /tmp/kernel-part-rev6.img 5d98…`: `wrote and verified mtd2`, `env erased, U-Boot unchanged`, rc 0 (about
+   60 s); read back: mtd2 `5d982485…70ba`, mtd1 `71189f7f…9063` (64 KiB of 0xFF), mtd0 `c60054ca…7bca`. Writing the kernel
+   partition from the rootfs is safe for the same reason it is from recovery (neither runs from mtd2); the rootfs MTD still
+   has to be written from recovery.
+4. `reboot-recovery`. UART: `Linux version 7.2.10 … #3 PREEMPT Fri Oct 30 15:41:05 UTC 2026`, recovery banner
+   `20261030T1541Z`, "the last rootfs boot did not clear bootstate" (the mark `reboot-recovery` set — intended). U-Boot's
+   head conversion itself printed nothing on the UART (its console is silent); the kernel booted from the converted head.
+5. `rootfs.img` into recovery over the UART with `common/tools/uart_xmodem_send.py … --check` (the recovery's `rx`):
+   3,534,848 B in 319.2 s, 0 retries, sha256 verified on the unit. `flash-rootfs /tmp/rootfs.img 2aec…`: `wrote and verified
+   mtd3`, `bootstate cleared`, rc 0. `reboot`.
+6. Boot: `rootfs ccpa-baseline … 20261030T1541Z on mtd3, switching in 1 s`, `rcS: NCM usb0 192.168.50.2, ssh/scp/sftp …`;
+   `/etc/baseline-release` = `20261030T1541Z`; `/usr/sbin/ocbm-accessory` 66,704 B and `usb-mode` present; bootstate cleared
+   by rcS; `usb-mode status`: `gadget: ncm.usb0 idProduct=0x1520 UDC=ci_hdrc.1 state=configured`. **The default stays NCM.**
+7. Bench Wi-Fi (RAM, redone after every reboot; not part of the image): `radio up`, a static `hostapd` pushed by XMODEM
+   (1,089,420 B, 96.9 s, 0 retries), `mlan0: AP-ENABLED`, `udhcpd`, a second dropbear on the AP address, the bench key in
+   `/run/ssh/authorized_keys`. Note: `ssh-up` (run by `usb-mode ncm`) REWRITES `/run/ssh/authorized_keys` from the image's
+   and the persist archive's keys, which drops a key added only in RAM — re-add it, or `persist add-key` it.
+8. ocbmd (451,968 B, this tree's build with `wifi_mac()`) staged in `/tmp` over Wi-Fi; `usb-mode ocbm /tmp/ocbmd`:
+   `ci_hdrc.1 bound as OCBM accessory 0x1314:0x2d00, /dev/usb_accessory -> /dev/pts/0`, relay `BIND`, `ENABLE (… wMaxPacketSize
+   512)`, UDC `configured` `high-speed`. No test module this time: the FunctionFS function is the flashed kernel's.
+
+**OCBM link proven end-to-end over USB (2026-10-30).** Host = the GM bench radio (gminfo37, Android 12) running the repo's
+`host/gm_ccpa` app (`android.car.usb.handler` 4.0+a793690-dirty.37c7d9aa, installed for user 10 that day with `adb install
+--user 10 -g -r -i com.android.vending`, persistent USB grant written with its `UsbGrant` helper while the accessory was
+attached; the app needs vehicle-hotspot credentials saved before it links, entered on its dialog). Radio logcat (`NETPROBE`):
+`[usb ] claimed interface 0 (class 0xff) IN=0x81 OUT=0x01 mps=512` → `>> CT_HELLO (v1)` → `<< CT_HELLO_ACK v1 caps=0x0000003f
+[CONSOLE|ECHO|MFI|IP|FILE|ETH] mode=PROJECTION` (`EXPECTED-MET ocbm-hello-ack in 4ms`) → `>> CH_MFI copy_certificate` → `cert:
+945 bytes (matches the expected 945)`, first 16 `30 82 03 ad 06 09 2a 86 48 86 f7 0d 01 07 02 a0` (95 ms) → `>> CH_MFI
+create_signature (20B digest)` → `sign: 128 bytes (matches RSA-1024)` (1,655 ms: the genuine coprocessor on `/dev/i2c-1`) →
+`MGMT_INFO {"wifi_mac":"00:50:43:…" (the `mlan0` MAC: `wifi_mac()` VERIFIED), "name":"CarLink-fe01", "hci_up":true,
+"wlan_ap":true, …}` → `>> CT_SETTIME 1793378772` → `<< CT_SETTIME ack status=0 (applied)` (box `date`: 1970 → `Fri Oct 30
+16:46:26 UTC 2026`) → `<< SESSION_EVENT HOST_PRESENT` (36 ms) → `heartbeat started at 1000ms (box watchdog is 10000ms)` →
+`CT_LOG_CTL on` (CH_LOG; the baseline has none of the stock `/tmp/*.log` files, so the tailer reports them absent). Box
+`/run/log/ocbmd.log`: `HELLO nonce=0xe53c9e79 caps=0x3f label="gm-ccpa head unit (bridge role)"`, `SUBSCRIBE (128 B config)`,
+`host PRESENT`, `health hi=106 audio=0 video=0 … dropped=av:0,lo:0,log:0,input:0`, `log stream ENABLED`. Session end from the
+app (`run=ocbm_stop`): four `CH_FILE pull` round trips (first `OPEN_FAILED`, the files do not exist here; with files created on
+the box they arrived complete — `wlan.log` 2 lines, `wlan_off.log` 40, `supervisor.log` 26, `ocbm_boot.log` 4, content as
+written) → `>> CT_STOP` → box `session: STOP — host closed`, `host GONE`. Two re-links followed (HELLO, MFi, SETTIME again),
+all on ONE relay generation: the radio never deconfigures the device, so there is no DISABLE and ocbmd runs on across host
+sessions, as on the stock firmware. The relay logged nothing but `BIND`/`ENABLE`.
+
+**`ocbm-host` over USB from a Mac (2026-10-30, later: the owner moved the data cable to the Mac; box power-cycled,
+RAM state redone, `usb-mode ocbm /tmp/ocbm/ocbmd`).** First pass with the revision-6 image's relay: `hello` (HELLO_ACK,
+SETTIME applied), `rtt` (64 B p50 0.71 ms, 65536 B p50 17.4 ms, timeouts 0), `mfi` (945 + 128 B), `echo … 512` (528-byte
+frames) 10.1 Mbps PASS — and **`echo … 496` FAIL: `0 bytes in 4.09s, mismatches=2`**. Diagnosis (§2.8): 496 + 16 = 512 =
+one full high-speed packet; the relay's 16 KiB FunctionFS read never completed on it. Confirmed on the wire with the
+rebuilt relay's `-r 16384 -v -v` (the old request size, traced): `echo … 496` → `0 bytes`, `echo … 512` → 7.6 Mbps, trace
+with `OUT 22/25 B` (HELLO) and `OUT 528 B` lines but no `OUT 512 B`; the two held frames surfaced as `OUT 1046 B` when the
+next frame arrived. Fix: one wMaxPacketSize packet per read (default). Same unit, same session, relay restarted from
+`/tmp` (RAM): `echo … 496` **1,527,184 B in 3.00 s, 8.1 Mbps, mismatches=0**; `1008` 10.9 Mbps, `512` 6.1, `500` 6.0,
+`1` 3,653 B — all `mismatches=0`; trace counters for that run: `OUT 512 B` ×27,920, `IN 512 B + ZLP` ×3,079, `IN 1024 B +
+ZLP` ×2,034, `OUT 17 B`/`IN 17 B` ×3,653, `ZLP write FAILED` ×0. Without tracing: `rtt` 64 B p50 0.61 ms / 4096 B 3.12 /
+16384 B 10.44 / 65536 B 40.0 ms (timeouts 0), `echo … 16384` 24.8 Mbps each way, `echo … 496` 10.2 Mbps. Then the rest of
+the list: **CH_CONSOLE** `ocbm-host console`: `[ocbmd] CONSOLE attached (root)`, a command typed through the pipe answered
+`CONSOLE_OK kernel=7.2.10 uid=0`; **CH_FILE** `push` 1 MiB random → `1048576 bytes, crc32=0x8bbe5974, 0.52s (16.2 Mbps)`,
+`pull` back `0.21s (40.5 Mbps)`, `cmp` byte-exact; **CH_IP** `ip 1314 2d00 192.168.43.1:22` → `OPEN(tcp) conn 1`,
+`SSH-2.0-dropbear_2026.94`, 514 bytes (the box-local Wi-Fi dropbear); `session 6`: SUBSCRIBE → `HOST_PRESENT` → clean STOP.
+**Soak**: `echo … 180 4096` → `223,567,872 bytes in 180.00s => 19.9 Mbps, mismatches=0`; `rtt … 60` → 119,669 samples,
+`timeouts=0` (64 B p99 1.13 ms max 10.95; 65536 B p99 45.7 ms); `echo … 60 496` → `37,369,632 bytes, 10.0 Mbps,
+mismatches=0`; relay log: no line beyond BIND/ENABLE; ocbmd `dropped=av:0,lo:0,log:0,input:0`; box load ~2.2. Not run:
+`ocbm-host ncm` (run on revision 7, §7.0d: the box REFUSES it with status 1 and does not reboot — ocbmd reboots only after
+its write of `/script/ncm_only` succeeds, and the read-only squashfs has no `/script`; use `usb-mode ncm`; corrected
+2026-10-30, this said MGMT_ENTER_NCM "reboots the unit"), `bridge` (no NCM netdev in OCBM mode), the A/V modes (no A/V
+producers on this baseline). Benign log
+noise: each `usb-mode ncm` produces one ocbmd `open /dev/usb_accessory: No such file` (DISABLE respawns ocbmd a few ms
+before the relay's own SIGTERM unlinks the node).
+
+**Flash procedure (revision 6 = kernel + rootfs; owner's go first; run on 2026-10-30 as recorded above — corrected
+2026-10-30, this heading said "nothing below has run").** A rootfs-only revision (7, §7.0d) is steps 3, 5 and 6.
+1. Dump the unit's kernel partition twice (`dd if=/dev/mtd2`, identical sha256) and keep it with its `unit_info.txt`
+   (never in the repo): it is the rollback image. Its sha256 is NOT the staged image's (`35dfb1a5…c871e` was the value
+   WRITTEN in §7.0b): U-Boot's `heweiencrypt` rewrote the head on the first boot, so the partition reads differently
+   afterwards — on 2026-10-30 `f9744897e42a111dab0eea5979aaed00b341f39c001542d6d42bb53bd1ca863b`, both dumps. (Corrected
+   2026-10-30: this step said "expected `35dfb1a5…c871e`"; §1 and §5 step 2 already say re-dump after any install.)
+2. Host: `python3 -I arm-imx6ul/tools/stage_kernel.py --mtd0 <mtd0 dump> --mtd1 <that dump> --zimage
+   .../rev6/ccpa-baseline-iw416.zimg --unit-info <unit_info.txt> --out kernel-part-rev6.img` (expect the
+   `746ce8a0…0d6` image, head unchanged, a `differing regions` plan); note the printed sha256.
+3. `ssh root@192.168.50.2 reboot-recovery` (sets the bootstate mark); recovery up when `test -e /etc/baseline/recovery`.
+4. Recovery: `NO_REBOOT=1 flash-kernel <host>:<port> <sha256>` (serve with `common/tools/serve_once.py`) or `scp -O` +
+   `flash-kernel /tmp/kernel-part-rev6.img <sha256>`: it writes and verifies mtd2, erases the env block (mtd1); mtd0
+   (U-Boot) is never written (§5 step 3). When no computer is on the NCM cable (the unit on a radio), the same script can
+   be run from the running rootfs with its `flash-lib.sh` line redirected to a `/tmp` copy, the image coming in over
+   Wi-Fi — what was done on 2026-10-30 (record above); then steps 3 and 5 follow.
+5. Same recovery session: `scp -O rev6/rootfs.img root@192.168.50.2:/tmp/` — or, UART-only, `python3 -I
+   common/tools/uart_xmodem_send.py <port> rev6/rootfs.img /tmp/rootfs.img --check` (leave a second between UART tools:
+   two pushes started back-to-back after `uart_cmd.sh` failed their handshake on 2026-10-30) — then `flash-rootfs
+   /tmp/rootfs.img 2aec5eeae2aefdfb72d681195d4ce51b52c5b9888b446dbdee6b048dd1049d3c` (exit 0; it clears the bootstate mark
+   — the `flash-kernel` step does not, §7.0b trap; if the rootfs step is skipped, `flash_eraseall -q /dev/mtd5` by hand).
+6. `reboot`. U-Boot converts the staged head (one extra reset is normal), the rootfs comes up in NCM mode as before:
+   `/etc/baseline-release` ends in `20261030T1541Z`, `uname -v` shows the new build date, `usb-mode status` prints
+   `gadget: ncm.usb0 …`.
+7. Rollback: kernel `flash-kernel --restore <step-1 dump> <its sha256>` from recovery (env erase + reboot as in §5), rootfs
+   `flash-rootfs` of revision 4's image (`…/20261020/rev4/default/rootfs.img`, `cbfd4d39…513d`).
+
+**First OCBM test after the flash** (the unit on a Mac's USB, or any libusb host): `scp -O
+target/armv7-unknown-linux-musleabihf/release/ocbmd root@192.168.50.2:/tmp/` → over the UART or Wi-Fi (the NCM
+session will drop) `usb-mode ocbm /tmp/ocbmd` → on the Mac `ocbm-host hello` (HELLO → HELLO_ACK and the clock push:
+`date` on the unit leaves 1970), `ocbm-host echo 1314 2d00 3 496` (512-byte frames: the ZLP path), `ocbm-host rtt 1314
+2d00 3`, `ocbm-host mfi`, `ocbm-host console` → `usb-mode ncm` restores NCM. Logs: `/run/log/ocbm-accessory.log`,
+`/run/log/ocbmd.log`. Expected failure modes and what they would mean: `hello` times out with the relay showing `ENABLE`
+and ocbmd `start` → bytes do not cross the pty/endpoints (relay bug); `echo … 496` alone fails → the ZLP write is not
+reaching the wire (f_fs zero-length request); `device 1314 not found` → the host is not on the cable (as on 2026-10-30).
+
+**Open after revision 6.** A bench Wi-Fi AP in the image or at least a `wifi-ap` helper (today: the 2026-10-30 RAM procedure above); the
+radio app's hotspot gate (it refuses to link until credentials are saved; `--es ssid/--es pass` for one run). A persisted OCBM-at-boot default (a `usb-mode` file in the persist archive, applied by rcS
+AFTER NCM + SSH have cleared the bootstate mark — never instead of them: an OCBM-only boot would otherwise keep the unit
+in recovery); ocbmd in the image or on a data partition (today staged in `/tmp` each boot); the stale OCBM claims in
+other documents (fixed 2026-10-30 where found: `docs/ops/00_BUILD_AND_DEPLOY.md`, `docs/ops/04_OPEN_ITEMS.md`,
+`docs/wireless/01_BT_AND_RADIO.md`, `CLAUDE.md`; the corrections ledger is historical by its own header and was not
+appended to).
 
 ### 7.0b Revision 5 (2026-10-20): kernel-only rebuild, usbotg1 VBUS enable (flashed and VERIFIED on the IW416 unit)
 
@@ -665,7 +1370,7 @@ file mtimes and release stamp changed, and the version object): XZ noise (§7). 
 `usb@2184000` `vbus-supply` → it. QEMU `mcimx6ul-evk`, `-iw416` image: recovery shell reached in 2.3 s;
 `/sys/class/regulator`: `usb_otg1_vbus enabled` (bound to `reg-fixed-voltage`), `wlan disabled`; ci_hdrc.0
 EHCI host started; `flash-rootfs`/`flash-kernel --dry-run` usage paths as in revision 3. Copies, logs and
-the harness are kept with the build VM, not in this repo.
+the harness: `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev5/`.
 
 **Flashed and verified on the IW416 unit (2026-10-20/21).** Before the flash (revision-2 kernel, revision-4
 rootfs): driving GPIO1_IO07 high by sysfs made the female port enumerate a FAT32 stick (sda1); GPIO1_IO06 did
@@ -678,7 +1383,7 @@ address with the new build stamp; `/sys/class/regulator` lists `usb_otg1_vbus`; 
 with no manual GPIO** (3.9 GB disk, one partition) and the recovery auto-mounted it **read-write**, so a stick's
 contents are at risk in recovery (remount read-only by hand if it must not change). The kernel partition now
 holds `35dfb1a5…c871e`; revision 2's kernel is superseded. Rootfs on the unit stays revision 4 (`cbfd4d39…513d`).
-Record: `../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`
+Record: CPC200-CCPA_resources `custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`
 ("Revision 5"). Rootfs follow-up (2026-10-21, kernel revision 5 + rootfs revision 4, FAT32 stick, MBR,
 3.75 GiB, one partition, plugged in at boot): the stick enumerated at 1.1 s (usb 1-1, high-speed), sda1 appeared at 2.4 s,
 mdev ran `usb-mount`: "/dev/sda1 (fat32, partition 1, mbr:0b) mounted read-write at /mnt/usb"; the contents listed
@@ -697,14 +1402,14 @@ Rev 4 = rev 3 sources at ccpa_custom `9dc14d8`; the only difference is `bt-scan`
 Built in the `ccpa-build` VM Debian chroot, `build.sh rootfs` only (`TOP=/work/build3`); the kernel was not
 rebuilt or reflashed (the kernel partition kept revision 2's image until revision 5). `rootfs.img` 3,506,176 B (same size as
 revision 3; 9,469,952 B free), sha256 `cbfd4d3943a1352ff2ef279f4800ed5efb2def933a2d1f884f425fd4705e513d`; the image's
-`usr/sbin/bt-scan` equals the tree file. The image is kept with the build VM, not in this repo.
+`usr/sbin/bt-scan` equals the tree file. Copy: `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev4/default/rootfs.img`.
 Flashed on the IW416 unit from recovery (`reboot-recovery`, `scp -O` to `/tmp`, `flash-rootfs`: wrote and
 verified mtd3, bootstate cleared, rc=0; reboot): the unit returned at its NCM address with the new
 `/etc/baseline-release`. Hardware: `radio up` then `bt-scan` reported that LE was off (settings "powered
 br/edr") and enabled it (`btmgmt le on`, on until `radio down`), then ran `btmgmt find` (BR/EDR and LE, at most
 15 s) and printed a device table (many LE devices; none recorded here): **B18 VERIFIED on hardware**.
-`radio down` clean, 0 `Unknown symbol` dmesg lines. Record:
-`../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md` ("Revision 4 follow-up").
+`radio down` clean, 0 `Unknown symbol` dmesg lines. Record: CPC200-CCPA_resources
+`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md` ("Revision 4 follow-up").
 
 ### 7.0 Revision 3 (2026-10-20): measured, tested, changed
 
@@ -712,7 +1417,7 @@ Built from a clean `$TOP` (`/work/build3` in the Debian chroot of the `ccpa-buil
 tarballs copied in, the new ones fetched by `build.sh fetch`, every sha256 checked), gcc 14.2.0
 `arm-linux-gnueabihf-`, `JOBS=4`: `fetch userspace`, then `kernel rootfs`; the `rootfs` step was re-run
 twice after script edits (the image below is the last); `measure` was not re-run (kernel config
-unchanged). Images, logs and the test harness are kept with the build VM, not in this repo.
+unchanged). Images, logs, test harness: `/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev3/`.
 
 | | revision 2 | revision 3 |
 |---|---:|---:|
@@ -729,7 +1434,7 @@ NOT needed on a revision-2 unit: `-iw416` `d0030180fd02fa305d55c58ec7119a7011ed7
 ran until revision 5: `2d43437ba38ad19bc94313cf576e2b95b91bbb91e28094498cdaa99c2c345c17`). Tool sizes: §2.5 (7 binaries,
 2,024,692 B uncompressed; `hciup` 66,796 B as before).
 
-Tests (logs kept with the build VM):
+Tests (logs in `.../rev3/logs/`):
 - **Host self-test** (`common/tools/selftest.sh`): Debian chroot **118 checks PASS** (helpers under dash);
   Alpine VM host 74 PASS (helpers under BusyBox ash with BusyBox tools; stick images, openssl, shellcheck
   skipped there). shellcheck: 0 errors, 87 warnings (86 SC2034 for the sourced env/conf/lib files, 1 SC2154
@@ -803,8 +1508,8 @@ AFTER revision 3 (in the revision-4 image, flashed on the unit 2026-10-20, §7.0
 MEASURED 2026-10-20, revision 2 (clean build from an empty `$TOP` except the pinned tarballs, linux
 7.2.10 + patches 0001-0004, gcc 14.2.0 `arm-linux-gnueabihf-`, `RADIO_MODULES=1 RADIO_FW=1`:
 `fetch userspace measure kernel rootfs`, run time and `JOBS` unrecorded; the rootfs was rebuilt from the final
-tree after two comment/style fixes in `radio` (the rootfs tests below ran on that final image); build logs, images and test logs
-are kept with the build VM, not in this repo):
+tree after two comment/style fixes in `radio` (the rootfs tests below ran on that final image); build logs, images and test logs in
+`/Volumes/stuff/virtual-machines/ccpa-baseline-build/20261020/rev2/`):
 
 | Kernel image (zImage + appended DTB, cap 0x302fd8 = 3,157,976 B) | zImage | DTB | total | spare |
 |---|---:|---:|---:|---:|
@@ -833,12 +1538,12 @@ are kept with the build VM, not in this repo):
   recovery SSH (dropbear, sftp-server, passwd/shadow files) +201,144 B. The same `default` config built
   twice came out 2,384 B apart (2,129,443 in `measure`, 2,127,059 in `kernel`: new build number and
   release minute inside the XZ stream): treat the last ~2.5 KB of any delta as noise.
-- Against revision 1 (§7.2 of ccpa_custom `333b5a4`; historical): its `default` (no USB, no SSH) was 1,753,695 B in
+- Against revision 1 (§7.2 of that commit; historical): its `default` (no USB, no SSH) was 1,753,695 B in
   that revision's measure build (the image flashed on 2026-10-20, a later build of the same config, was
   1,755,383 B: zImage 1,729,528 + DTB 25,855), its `RECOVERY_USB=1 RECOVERY_EXFAT=1` 1,918,859 B; revision
   2's `default-nossh` (the same features plus the new scripts, tar and 64-bit shell arithmetic) is
   1,928,299 B. LIVI's image was 3,124,994 B (zImage 3,099,160 + DTB 25,834; its built-in initramfs alone
-  inflates to 1,410,344 B; `../livi/README.md`).
+  inflates to 1,410,344 B; LIVI analysis in CPC200-CCPA_resources `custom/kernel_rootfs/livi/`).
 - The individual effect of the `RD_*` decompressors and of each dropped LIVI component was not
   separated (no LIVI-config build was made).
 - QEMU only: boot time and RAM on the real CCPA remain UNMEASURED.
@@ -889,7 +1594,7 @@ flash-rootfs no magic 4, wrong sha256 4, already on flash 3; `DEV_PASSWORD_HASH`
 
 QEMU `-M mcimx6ul-evk -m 128M -kernel <image>` (appended DTB, no `-dtb`; QEMU models an i.MX6UL, not the
 ULL), one emulated USB stick on usbotg1 (`-device usb-storage,bus=usb-bus.0`), harness feeding the UART
-shell (logs kept with the build VM):
+shell; logs in `.../20261020/rev2/logs/`:
 - `-none` + FAT32 stick (MBR): recovery reached; `usb-update` mounted `/dev/sda1` **vfat rw,noatime** at
   `/mnt/usb`, found the bundle, `flash-rootfs` refused (no MTD in QEMU: exit 4 "nothing written"), logged
   only, nothing on the console, no reboot; again by hand with the stick still in: same, calm; write to the
@@ -920,8 +1625,8 @@ shell (logs kept with the build VM):
   write), OCOTP (reads zero), the LEDs', `reg_wlan`'s and the radio module's real pins, the vendor U-Boot
   path and its `heweiencrypt` staging.
 - `stage_kernel.py` (report only, no `--out`) for the IW416 unit's LIVI-state dumps
-  (`../backups/20261020_livi_pre-baseline/mtd0_dump.bin`, `mtd2_dump1.bin`; fuse words from
-  `../backups/20261019_IW416_ocbm_baseline_pre-livi/unit_info.txt`, not printed) and `ccpa-baseline-iw416.zimg`:
+  (`ccpa_backups/20261020_livi_pre-baseline/mtd0_dump.bin`, `mtd2_dump1.bin`; fuse words from
+  `20261019_IW416_ocbm_baseline_pre-livi/unit_info.txt`, not printed) and `ccpa-baseline-iw416.zimg`:
   update env decrypts (gzip + CRC OK, 15 variables), kernel_len 0x302fd8, staging partition offset
   0x302fd8, appended DTB at 0x200fb8 (25,964 B), headroom 1,030,836 B, head unchanged, body 2,917,106 B
   and staging 195,830 B differ. That plan went stale when the unit took revision 1 (U-Boot rewrote the
@@ -929,7 +1634,7 @@ shell (logs kept with the build VM):
 
 Revision 1's tests (QEMU boot of `default` and `RECOVERY_USB=1` to the recovery shell, `/run`
 nosuid,nodev, `mount -o move`, `reboot`; `usb-update` finding a vfat bundle; `stage_kernel.py` against the
-IW416 unit's stock `mtd0.bin`/`mtd1.bin` refusing an image 1 B over the cap) are in ccpa_custom commit `333b5a4`.
+IW416 unit's stock `mtd0.bin`/`mtd1.bin` refusing an image 1 B over the cap) are in commit `333b5a4`.
 
 ### 7.3 CHANGES in revision 2 (2026-10-20)
 
@@ -990,8 +1695,8 @@ proven there is in §7.4, revision 3 in §7.5; the rest stays here; revision 3 u
 
 ### 7.4 Hardware: revision 2 on the IW416 bench unit (2026-10-20)
 
-Observed on the unit (record with every hash:
-`../hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`):
+Observed on the unit (record with every hash: CPC200-CCPA_resources
+`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev2_kernel_rootfs.md`):
 - from revision 1's recovery: `mtd2` dumped twice, identical; `stage_kernel.py` head unchanged, headroom
   1,030,836 B; `flash-kernel <host>:5611 <sha256>` with `NO_REBOOT=1` wrote and verified `mtd2`, erased
   env, U-Boot unchanged; reboot: **revision-2 recovery up within 28 s** (the first ping poll, 28 s after the reboot command, answered) at 192.168.50.2, USB serial
@@ -1016,8 +1721,8 @@ station and CLI tools, §2.5; flashed later, §7.5), RTL8822CS/BS.
 
 ### 7.5 Hardware: revision 3 rootfs on the IW416 bench unit (2026-10-20)
 
-Observed on the unit (record:
-`../hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`). Rootfs only; the
+Observed on the unit (record: CPC200-CCPA_resources
+`custom/kernel_rootfs/hardware_tests/2026-10-20_baseline_rev3_rootfs_radio_iw416.md`). Rootfs only; the
 kernel was revision 2's `-iw416` (`2d43437b…`, §7.0; replaced by revision 5, §7.0b):
 - from the revision-2 rootfs, `reboot-recovery`: **recovery up in ~30 s** (`/etc/baseline/recovery` present,
   `/proc/cmdline` with `panic=10`);
@@ -1070,7 +1775,7 @@ UNVERIFIED (from reading, never executed):
   all by `--plan` on an image (no test stick with a FAT logical partition was booted);
 - that the macOS NCM driver uses the gadget's `host_addr` for the host interface (the single-address
   DHCP pool assumes a stable host MAC; a second client id waits at most `NCM_LEASE` = 600 s);
-- the C2Air session is described to this recipe as glibc/Andes userspace, but that session's
+- the C2Air session is described to this recipe as glibc/Andes userspace, but its
   `docs/userspace-spec.md` says static musl via zig cc and warns to build BusyBox with the vendor GCC;
   `common/` assumes neither (recipes take `TARGET_CC`).
 
@@ -1081,24 +1786,69 @@ the next boot in recovery once; `persist save` overwrites LIVI's `customer` data
 read-write and pulled without `usb-mount -u` is left with its FAT dirty bit set; the dev default password
 admits anyone on the USB link until it is changed.
 
-Project rule note: ccpa_custom's CLAUDE.md (updated 2026-10-20, owner decision) now says the HAB-signed U-Boot is
+Project rule note: CLAUDE.md (updated 2026-10-20, owner decision) now says the HAB-signed U-Boot is
 never modified or written, while the kernel is replaceable: this baseline replaces the **kernel** by
 the vendor U-Boot's own staging mechanism, as LIVI does; U-Boot itself is never written (only its
 64 KB env block is erased).
+
+### 7.6 Live probe 2026-10-28 (connected CCPA, baseline image rootfs boot)
+
+Read-only probe of the connected unit booted from the baseline image. Source: the owner's probe session of
+2026-10-28; no log file is kept in this tree, so each value below is as reported and not re-derivable here
+except where a source file is named.
+
+| Item | Observed |
+|---|---|
+| Kernel | Linux 7.2.10, built 2026-10-21, hostname `ccpa-baseline`; release string `ccpa-baseline default linux-7.2.10 busybox-1.38.0 dropbear-2026.94` |
+| Device tree | model `CPC200-CCPA vanilla baseline (i.MX6ULL)`, compatible `fsl,imx6ull` (matches `arm-imx6ul/dts/imx6ull-ccpa-baseline.dts`) |
+| CPU | `/proc/cpuinfo`: `Freescale i.MX6 Ultralite`, Cortex-A7 |
+| SoC identity | soc0 `soc_id` = i.MX6ULZ, revision 1.1; kernel log `CPU identified as i.MX6UL` |
+| RAM | MemTotal 124,600 kB |
+| Flash | `mx25l12805d`, JEDEC id c22018, 16 MiB |
+| MTD | six partitions: uboot 0x30000, env 0x10000, kernel 0x340000, rootfs 0xc60000, customer 0x10000, bootstate 0x10000 (matches the DTS) |
+| USB gadget | 1314:1520 NCM, UDC `ci_hdrc.1`, state configured |
+| MFi | `/dev/i2c-1` address 0x11 present; DeviceVersion 0x03, error register 0xff, certificate length 945, signature length 128, challenge length 20 (register reads only; no challenge, no sign) |
+| Radio, `radio up both` | ok. SDIO 02df:9159 = NXP IW416 (SD8978). Wi-Fi: `mwifiex_sdio` with `mrvl/sdiouartiw416_combo_v0.bin` (394,432 B, driver 1.0 16.92.21.p151), interface `mlan0`. Bluetooth: serdev `btnxpuart` on `ttymxc2` (`uart-has-rtscts`, `fw-init-baudrate` 3,000,000), `hci0`, BT 5.4, manufacturer Marvell (72) |
+| Wi-Fi capabilities | 2.4 GHz channels 1-14; 5 GHz 36-64, 100-140, 149-165; 20 dBm; 802.11n 1x1 HT20/40; modes managed, AP, P2P. Regulatory domain 00, so every channel shows `no IR` until a country is set |
+| `radio down` | left the Bluetooth core modules loaded. The `MODS` unload list in `arm-imx6ul/rootfs/usr/sbin/radio` was extended in ccpa_custom commit `bd78cef` (adds `rfcomm bluetooth ecdh_generic ecc`); UNTESTED on hardware |
+| Other | no debugfs in the kernel |
+
+Open: the SoC label (i.MX6UL, i.MX6ULL or i.MX6ULZ) stays undecided until the DIGPROG register is read;
+the unit's NCM link dropped before the read. The labels reported above differ: `soc_id` i.MX6ULZ,
+kernel message i.MX6UL, DT compatible i.MX6ULL, cpuinfo "Ultralite".
 
 ---
 
 ## 8. Licensing and attribution
 
-Files derived from LIVI (https://github.com/f-io/LIVI, GPL-3.0-or-later) carry a header naming the
-LIVI source path. DTS files keep the GPL-2.0 SPDX tag of the LIVI file they derive from (kernel DT
-sources). `etc/passwd` and `etc/group` are the same one-liners as LIVI's and carry no header (the
-format has no comment syntax). The four kernel patches are LIVI's, unchanged, with a header that
-`patch(1)` ignores. `common/hciup/hciup.c` copies the HCI ioctl numbers and struct layouts from the
-kernel headers (interface facts). Everything else in `baseline/` is GPL-3.0-or-later.
+Based on LIVI by Lasse Heitgres (https://github.com/f-io/LIVI)
+
+`baseline/` as a whole is GPL-3.0-or-later; the licence text is `LICENSE` in this directory, and
+`COPYING-GPL-2.0` carries the GPL-2.0 text for the DTS files and the kernel patch diff bodies (the patch files' own added header is
+GPL-3.0-or-later). LIVI (Copyright (C)
+2025-2026 Lasse Heitgres, GPL-3.0-or-later) was read at version 9.5.0; later upstream versions exist.
+The files taken from it were modified on 2026-10-19 and 2026-10-20 (git log); each derived file's
+header carries the attribution line, its modification date and what changed. The per-file provenance
+list (verbatim, modified, ported) is in the repository's `NOTICE.md`.
+
+Files derived from LIVI carry a header naming the LIVI source path. DTS files keep the GPL-2.0 SPDX
+tag of the LIVI file they derive from (kernel DT sources). `etc/passwd` and `etc/group` are the same
+one-liners as LIVI's and carry no header (the format has no comment syntax). The four kernel patches
+are LIVI's, unchanged (diff bodies GPL-2.0), with a GPL-3.0-or-later header that `patch(1)` ignores. `arm-imx6ul/rootfs/usr/sbin/radio` is
+derived from LIVI's `livi-radio`. `common/hciup/hciup.c` copies the HCI ioctl numbers and struct
+layouts from the kernel headers (interface facts). Everything else in `baseline/` is original and is
+GPL-3.0-or-later with the directory.
+
+**The OCBM overlay is not part of `baseline/` or of its image** (revision 8, §2.8). It is a separate artefact built by
+`tools/ocbm_overlay.sh` from the rest of this repository (Unlicense; the Rust programs link crates under their own
+licences) and written into the end of the same flash partition; the GPL image contains only the loader
+(`ocbm-overlay`, GPL-3.0-or-later like the rest of `baseline/`), a mount point and symlinks naming the overlay's
+programs. The two are an aggregate (GPL-3.0 §5), never linked: whoever distributes an image with an overlay owes the
+GPL corresponding source for the image only; the overlay's sources are this repository's.
 
 Third-party programs the revision-3 rootfs adds are built unmodified from the pinned upstream tarballs
-under their own licences (each project's COPYING): iw (ISC-style), wpa_supplicant (BSD), libnl
+under their own licences (each project's COPYING): iw (ISC-style), wpa_supplicant and hostapd (BSD; hostapd since
+revision 8), libnl
 (LGPL-2.1, linked statically into iw and wpa_supplicant), BlueZ tools (GPL-2.0-or-later), readline
 (GPL-3.0-or-later, linked into btmgmt), ncurses (X11-style). A distributed image should come with those
 sources (or an offer for them); `build.sh` with `common/versions.env` rebuilds every binary from them.
