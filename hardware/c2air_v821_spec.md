@@ -12,6 +12,13 @@ different ODM, different firmware lineage.
 > USB/ADB/NCM feasibility, secure boot, MFi, update mechanism) see
 > [`../documentation/01_Firmware_Architecture/c2air_v821_runtime_and_access.md`](../documentation/01_Firmware_Architecture/c2air_v821_runtime_and_access.md).
 
+**Recovery and auth (2026-10-28).** Scope: the owner has ONE C2Air unit, so everything here is single-unit.
+FEL is entered by a physical power-on button (see the `fel_confirmed` block below). MFi is a 3.x
+coprocessor: DeviceVersion 0x07, 608 B certificate, 64 B ECDSA signature (owner-supplied; the repo's own
+evidence is `c2air_v821_runtime_and_access.md` §9, which shows chips at i2c-1 0x10/0x11 and does not state
+these values). OCBM is MFi-version agnostic and has not been tested on the new baseline. Dumps:
+`../flash_dumps/c2air_v821_2026.05.14/` (stock) and `../flash_dumps/c2air_v821_2026-08-17_ocbm_baseline/`.
+
 ## SoC
 
 ```yaml

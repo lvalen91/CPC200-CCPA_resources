@@ -183,8 +183,10 @@ Mounted separately; contains the entire vendor stack:
 [`../02_Protocol_Reference/`](../02_Protocol_Reference/) for the A15W protocol work, which
 remains the better-documented side.
 
-Whether a physical MFi auth coprocessor is fitted was **not** determined from the dump — no
-`/dev/i2c` MFi probe path was identified. Open item.
+Whether a physical MFi auth coprocessor is fitted was **not** determined from the dump alone — no
+`/dev/i2c` MFi probe path was identified. *(Corrected 2026-10-28: settled by the live unit. A physical MFi
+coprocessor is on i2c-1 at 0x10 and 0x11, runtime-confirmed; see `c2air_v821_runtime_and_access.md` §9. The
+owner states MFi 3.x: DeviceVersion 0x07, 608 B certificate, 64 B ECDSA signature.)*
 
 ## 6. Wireless — WiFi 6
 
@@ -482,7 +484,7 @@ Checked before the dump was committed:
    confirm RAM, partition table, and the AIC8800 variant actually fitted.
 2. Which AIC8800 die is present — `aic8800d`, `aic8800d80`, and `aic8800dc` are all referenced in
    the kernel. `d80` is the WiFi 6 part and `ieee80211ax=1` implies it, but this is inference.
-3. Whether an MFi auth coprocessor is fitted, and on which bus.
+3. ~~Whether an MFi auth coprocessor is fitted, and on which bus.~~ Settled 2026-10-28: yes, i2c-1 at 0x10/0x11 (`c2air_v821_runtime_and_access.md` §9).
 4. Secure-boot enforcement state (§10).
 5. The `riscv0` / `riscv0-r` second-core firmware — referenced by `boot_riscv` but not found.
 6. `/sys/ly_private/` sysfs surface — only `wifi_ch` is known, from `lyLoadModule.sh`.

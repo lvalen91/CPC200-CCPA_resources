@@ -18,7 +18,7 @@ History :
 Flash Dump and rootfs decryption of 2025.02.25.1521: Credit to https://github.com/ludwig-v/wireless-carplay-dongle-reverse-engineering/
 
 2025.10
-Firmware Key: AutoPlay9uPT4n17
+Firmware Key: AutoPlay9uPT4n17 (vendor-public key, same on all A15W units, not a unit credential; `../documentation/05_Security_Analysis/crypto_stack.md`, firmware image encryption summary)
 
 ---
 
@@ -30,6 +30,7 @@ Firmware Key: AutoPlay9uPT4n17
 | `2025.10.15.1127/` | A15W / CPC200-CCPA | NXP i.MX6UL (ARM) | full dump **removed 2026-10-20, kept local**; its mtd0/mtd1 bytes are `2026.06.07.ncm/on-device_dd/mtd0.bin`/`mtd1.bin` |
 | `2026.06.07.ncm/` | A15W / CPC200-CCPA | NXP i.MX6UL (ARM) | Realtek RTL8822CS unit, CDC-NCM mode; XGecu + on-device `dd`. Only `on-device_dd/mtd0.bin`/`mtd1.bin` remain; `mtd2.bin`, `full_spi_16mb.bin` and `XGecu_dump/A15W_rt8822cs_xgecu.bin` **removed 2026-10-20, kept local** |
 | `c2air_v821_2026.05.14/` | **C2Air (VehiConn / `ly6239`)** | **Allwinner V821 (RISC-V)** | **Different platform — see below** |
+| `c2air_v821_2026-08-17_ocbm_baseline/` | **C2Air** (same unit, after repartition) | **Allwinner V821 (RISC-V)** | Post-modification dump: stripped ADB-capable baseline rootfs, `UDISK` (per-unit MFi material) redacted to 0xFF. Not an A15W image. Read its [`README.md`](c2air_v821_2026-08-17_ocbm_baseline/README.md). The OCBM stack has not been tested on it (owner) |
 | `CCPA_stripped/` | A15W / CPC200-CCPA | NXP i.MX6UL (ARM) | IW416 bench unit, 2026-07-08 vanilla state. Only `mtd0.bin`/`mtd1.bin`/`manifest.txt` remain; `mtd2.bin`, `rootfs.tar.gz`, `CPC200-CCPA_full_nor_16MB.bin` **removed 2026-10-20, kept local** ([`CCPA_stripped/RESTORE.md`](CCPA_stripped/RESTORE.md)) |
 
 ### Images removed 2026-10-20 (device credentials)

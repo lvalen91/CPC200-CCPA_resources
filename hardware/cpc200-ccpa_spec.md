@@ -90,6 +90,29 @@ Memory Specifications
     memory_available: 123MB_after_kernel_overhead
     storage_available: 12.5MB_rootfs_JFFS2
 
+  # Scope (2026-10-28): the profile above is ONE RTL8822CS unit. The CCPA is a family: NXP i.MX SoC
+  # (ARMv7), differing radios (RTL8822BS/CS, RTL8733BS, BCM4354/4335/4358, SD8987, IW416; see
+  # ../ocbm/README.md) and a unit-dependent flash part. The bench unit is an NXP IW416 (SDIO 02df:9159).
+  # i.MX6UL vs i.MX6ULL label: pending a DIGPROG read.
+  # Live probe 2026-10-28 of the IW416 bench unit (baseline image, Linux 7.2.10; record in
+  # custom/kernel_rootfs/baseline/README.md section 7.6): soc_id i.MX6ULZ rev 1.1, kernel log "CPU identified
+  # as i.MX6UL", DT compatible fsl,imx6ull; MemTotal 124,600 kB; flash driver mx25l12805d, JEDEC c22018,
+  # 16 MiB (the MX25L12835F above carries the same JEDEC id); wireless NXP IW416 (SD8978), BT 5.4;
+  # MFi DeviceVersion 0x03, certificate 945 B, signature 128 B.
+
+  Recovery and auth
+
+  recovery:
+    fel: none
+    uboot_console: none
+    recovery_methods: [kernel-initramfs recovery boot (LIVI's, or custom/kernel_rootfs/baseline), SPI programmer]
+    brick: permanent without a SPI programmer
+  mfi:
+    generation: 2.0C
+    device_version: 0x03
+    certificate: 945 B
+    signature: 128 B RSA
+
 ########################################################################
 
 RTL8822CS Theoretical vs Configured Capabilities
